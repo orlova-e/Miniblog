@@ -1,0 +1,52 @@
+/* Progress bar */
+
+.read-progress {
+    width: 100%;
+    height: 4px;
+    background: lightgray;
+    position: sticky;
+}
+
+.read-progress-bar {
+    width: 0%;
+    height: 4px;
+    background-color: gray;
+}
+
+
+#head-container {
+    /* border-bottom: 1px solid rgb(219, 219, 219); */
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+
+#menuButton {
+    outline: none;
+    border: none;
+}
+
+.blog-container {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    /* background: gray; */
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-gap: 2.5em;
+}
+
+.blog-container article {
+    box-shadow: 0 0 50px rgb(235, 235, 235);
+    padding: 40px;
+    border-radius: 15px;
+}
+
+.art {
+    transition: 0.5s linear;
+}
+
+.art:hover {
+    box-shadow: 0 0 60px rgb(207, 207, 207);
+    /* transition: 0.5s linear; */
+}

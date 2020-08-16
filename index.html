@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Blog</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;0,800;0,900;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+SC:ital,wght@0,400;0,500;0,700;0,800;0,900;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <link href="css/basic/basiclayout.css" rel="stylesheet">
+    <link href="css/basic/typography.css" rel="stylesheet">
+</head>
+<body>
+    
+    <div id="head-container" class="container-fluid head-container">
+
+        <!-- TEMPLATE -->
+        <!-- <nav id="top-navigation" class="text-roboto-style navbar navbar-expand-lg navbar-light"> -->
+        <div class="container">
+            <nav id="top-navigation" class="text-roboto-style navbar navbar-light">
+            
+                <a class="navbar-brand" href="#">
+                    <h1>Miniblog</h1>
+                </a>
+    
+                <!-- <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Sign In</a>
+                    </li>
+                </ul> -->
+    
+
+                
+                <div class="collapse navbar justify-content-end" id="navbarSupportedContent">
+    
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+    
+                    <ul class="nav">
+                        <!-- <li class="nav-item">
+                          <a class="nav-link active" href="#">Sign In</a>
+                        </li> -->
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Topics</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Authors</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        </li> -->
+                      </ul>
+    
+    
+                  <!-- <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </li>
+    
+                  </ul> -->
+    
+                </div>
+
+                <ul class="nav justify-content-start">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Sign In</a>
+                    </li>
+                </ul>
+
+                <button id="menuButton" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+              </nav>
+    
+        </div>
+
+          <div class="read-progress">
+            <div class="read-progress-bar" id="readBar"></div>
+        </div>
+    </div>
+
+
+    <div class="container">
+  
+            <div class="blog-container">
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero eum et maxime dolores amet nemo id soluta aliquam neque totam nisi magnam quod porro, odit iste fugiat optio ipsa expedita ad ratione nobis voluptatem! Sunt quisquam, culpa commodi maxime quo expedita provident iste unde omnis facere sequi asperiores, iusto doloribus!
+                            <div class="blog-meta"><a href="">
+                                <h3><b>Lorem ipsum dolor sit amet consectetur adipisicing.</b></h3>
+                            </a></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Nihil illum necessitatibus dicta, eligendi suscipit eaque similique reiciendis sed ullam accusantium labore earum consequatur totam provident esse, vitae, unde error pariatur architecto quas iure. Esse dolore ipsa itaque placeat, eos eaque, vel aperiam aut ut autem iure voluptatum fugit eum ex quae perferendis tempore quis eveniet accusantium nemo. Debitis?
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            In, distinctio quo ratione pariatur tenetur esse adipisci. Nihil, nesciunt? Beatae, veniam dolore itaque distinctio dignissimos quia amet repudiandae eligendi a qui animi autem, ipsa officia veritatis eaque. Placeat, odit magnam! Fugit corporis doloribus consequuntur distinctio et atque quis voluptatem incidunt delectus harum, voluptate, nesciunt itaque iste esse officiis accusamus.
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Repudiandae incidunt nemo aperiam perspiciatis aut, voluptate laudantium dicta ab molestias iusto enim provident omnis dignissimos placeat exercitationem beatae quidem, iure a, ipsum tempora tenetur labore excepturi. Exercitationem, earum. Minus, quo! Officia, ipsa consequatur repellendus commodi quibusdam veniam distinctio impedit magni consectetur ea voluptate laudantium deserunt suscipit ad. Sunt, fugiat.
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Aliquam accusamus cupiditate necessitatibus adipisci laudantium, saepe mollitia expedita, neque aspernatur modi hic voluptates tenetur quis rerum repellendus velit possimus vel repellat cumque voluptas magni perferendis. Quasi laborum accusamus possimus rem. Culpa eos illum saepe perferendis, quod nesciunt odit obcaecati ipsam adipisci itaque libero! Dolor necessitatibus ipsum aliquam voluptatem optio.
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Blanditiis saepe aut velit molestias perferendis, illum consequatur ipsa veniam quaerat, temporibus laborum fuga nulla recusandae nihil, sit porro veritatis reiciendis ullam in? Omnis nemo corrupti quidem molestiae error saepe assumenda possimus exercitationem, sint incidunt nobis dignissimos ab accusamus perspiciatis adipisci cum? Similique quo aliquid assumenda consequatur eos iste corporis!
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Dolores at, aut ad totam accusamus eligendi voluptatum! Asperiores incidunt eveniet facilis! Quis numquam voluptas voluptatibus suscipit et distinctio, ea vitae. Nemo commodi minus adipisci amet exercitationem iste earum, voluptates perferendis tempore consectetur molestias dolorum expedita similique enim explicabo. Sapiente est nemo necessitatibus, cumque dolorum culpa reprehenderit eligendi velit accusamus?
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Magnam corporis, quas maxime consequatur ex nulla ipsum quia aspernatur voluptatibus, vel repellat amet nostrum possimus, voluptatem repudiandae id officiis eaque ullam. Cumque maxime aliquam accusamus? Aliquam natus praesentium cumque, eos quibusdam eum libero, molestiae consectetur voluptatem a fugiat! Repellat quis assumenda iusto unde quam quo ipsum. Fuga, possimus voluptatum?
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Cumque ipsam rerum quae vero, ut nam id, dolore quos corrupti, maiores minima inventore. Laudantium reiciendis, eveniet asperiores praesentium, cumque suscipit esse ipsum obcaecati ipsa enim unde dolore facilis neque commodi consequuntur sequi omnis repellendus ea! Accusamus vitae accusantium beatae similique, voluptate praesentium est, laboriosam vero sunt in id ab.
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Similique fugit velit ipsam tempore nulla voluptatibus nobis fuga, eum dicta aut itaque, nam adipisci quas a numquam distinctio delectus iusto amet odio harum minima, perspiciatis aperiam! Voluptatibus, reiciendis. Porro eaque incidunt voluptatem quisquam quibusdam facere nam similique rerum nisi cumque doloremque beatae minima, dolorem corporis quae itaque laboriosam rem.
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Voluptatibus dolor, molestiae deleniti maxime et porro repellat, labore fugiat non, minus reprehenderit distinctio delectus vero sapiente consequatur quibusdam. Harum autem laboriosam fugiat blanditiis repellendus facilis sed, sapiente architecto doloribus, dolore repellat fugit eius reprehenderit natus neque inventore, voluptas iusto ipsa quos quas excepturi vero molestias tempore quae. Alias, dolor?
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Suscipit, consequuntur! Sit voluptates harum, quisquam, iste alias laborum neque vel reiciendis blanditiis id animi consectetur quasi quas? Dolor alias vero praesentium! Ratione qui enim, corrupti iste illo quo consequatur inventore saepe dolores! Sint amet, natus vel quidem adipisci ad magni sit alias tempore pariatur laborum maiores laudantium quas earum?
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Cum assumenda impedit sit quisquam accusantium optio quasi ut. Inventore facilis ipsa accusamus iure delectus expedita dolor recusandae. Neque, molestias asperiores harum pariatur inventore blanditiis iste ea illum rem numquam ad tempora, excepturi ex debitis dicta id. Illum consequatur optio odio incidunt tempore laboriosam, similique explicabo deleniti, ut repellendus facere.
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Animi maxime perspiciatis nostrum quos neque voluptas quidem impedit velit. Blanditiis vero aut laudantium magnam natus sunt magni minus voluptas? Cum ad possimus reiciendis harum numquam! Laudantium cumque porro praesentium quo adipisci culpa! Sed voluptatum totam placeat veniam animi natus! Earum, non? Molestiae nemo quo cupiditate placeat tenetur aut quidem.
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Maxime saepe optio eum illum, sequi cum veritatis nisi adipisci deleniti quam eaque animi dolore iusto reiciendis rem in alias, nemo obcaecati? Architecto mollitia, accusamus qui error sequi inventore! Omnis vero, consequatur sit dolorum aliquam iusto illo tempora velit, asperiores ex ipsa nostrum nobis quam veritatis deleniti? Vitae, quaerat optio?
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Voluptatem optio quis fugiat enim perspiciatis porro explicabo cumque autem deleniti nisi commodi sapiente quidem consequatur pariatur corrupti eaque, provident officia eius animi nobis tempore. Maxime nesciunt quos obcaecati, veritatis fuga deserunt necessitatibus in voluptatem doloribus modi earum, unde at sint aspernatur autem accusamus. Quibusdam, repellendus! Similique eius voluptatibus quasi!
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Maiores voluptate unde nam aperiam ratione illum, vero officia soluta veniam similique esse labore debitis quae assumenda exercitationem voluptates qui odio non? Similique qui numquam labore soluta eum quod, explicabo nulla eos consequatur ipsum maxime odit necessitatibus nostrum dolor veritatis est. Cumque, necessitatibus voluptatem omnis repellendus consequuntur vel consectetur ut.
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Praesentium veritatis similique dolores nihil ullam perspiciatis laboriosam voluptatibus minima beatae quas nam asperiores dicta autem accusantium molestias iste, deleniti dolore provident quam numquam! Aliquam magnam vero fuga perspiciatis in natus? Suscipit saepe quo aut distinctio aliquid laborum cumque numquam natus deserunt ullam, nesciunt et dolor incidunt quidem veritatis? Voluptate.
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Eum quo voluptate fugit placeat, illo sit tempora corporis minima optio ad aspernatur! Consequuntur expedita, temporibus quidem placeat esse voluptatum ullam repellendus quos, consectetur tempora voluptatem unde iusto? Quia quibusdam tempora ad repellat, quod vitae laboriosam quas, officiis dicta vel cum numquam ipsa voluptatibus debitis autem nam impedit facilis a.
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+                <article class="art text-alegreya-style">
+                    <div class="blog-content">
+                        <div class="blog-text">
+                            Deleniti sint numquam consequuntur quis nam eligendi veritatis unde ad iusto voluptatibus quas omnis nobis, nulla perspiciatis porro laborum accusamus voluptatem perferendis magnam, nostrum nisi. Amet natus aliquam saepe voluptates animi quasi, magnam, fugiat ullam delectus fugit corporis unde odio, corrupti eaque odit quas doloremque ipsam tempore officia. Natus, optio.
+                            <div class="blog-meta"><i>Lorem ipsum dolor sit amet.</i></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+    </div>
+
+
+    <!-- Scroll page USUAL -->
+    <script>
+        window.onscroll = function() { scrollPageFunction() };
+        function scrollPageFunction() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            document.getElementById("readBar").style.width = scrolled + "%";
+        }
+    </script>
+    <!-- jQuery, Popper, Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+</body>
+</html>
