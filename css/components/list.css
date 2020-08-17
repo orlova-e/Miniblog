@@ -1,0 +1,14 @@
+ul.article-info {
+    list-style-type: disc;
+    color: gray;
+}
+
+ul.article-info li {
+    float: left;
+    margin-right: 40px;
+    
+}
+
+.article-info a {
+    color: gray;
+}

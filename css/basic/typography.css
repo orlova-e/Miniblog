@@ -53,6 +53,8 @@ small {
     color: gray;
 }
 
+/* ! Color for Usual theme */
+
 a {
     text-decoration: none;
     color: burlywood;
@@ -171,3 +173,32 @@ p.text-mono-style *,
 a.text-mono-style {
     font-size: 18px;
 }
+
+/* Article header */
+
+.article-header {
+    font-variant: small-caps;
+}
+
+.article-header:hover {
+    text-decoration: none;
+}
+
+.read-action {
+    text-align: right;
+}
+
+/* ! Type color themes */
+
+.blog-theme-blue a {
+    text-decoration: none;
+    color: rgb(94, 143, 248);
+    transition: 0.8 linear;
+    /* border-bottom: 1px solid burlywood; */
+}
+
+.blog-theme-blue a:hover {
+    color: rgb(17, 93, 255);
+    /* border-bottom: 1px solid orange; */
+}
+

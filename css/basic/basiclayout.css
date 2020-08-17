@@ -10,8 +10,15 @@
 .read-progress-bar {
     width: 0%;
     height: 4px;
-    background-color: gray;
+    background-color: burlywood;
 }
+
+/* ! Themes for progress bar */
+
+.blog-theme-blue .read-progress-bar {
+    background-color: rgb(94, 143, 248);
+}
+
 
 
 #head-container {
@@ -30,16 +37,18 @@
 .blog-container {
     margin-top: 40px;
     margin-bottom: 40px;
-    /* background: gray; */
     display: grid;
-    grid-template-columns: repeat(2, auto);
+    grid-template-columns: 1fr;
     grid-gap: 2.5em;
+    /* background: gray; */
+
 }
 
 .blog-container article {
     box-shadow: 0 0 50px rgb(235, 235, 235);
-    padding: 40px;
-    border-radius: 15px;
+    /* padding: 40px; */
+
+    /* border-radius: 15px; */
 }
 
 .art {
@@ -49,4 +58,119 @@
 .art:hover {
     box-shadow: 0 0 60px rgb(207, 207, 207);
     /* transition: 0.5s linear; */
+}
+
+#topNavigation {
+    background-color: white;
+    position: sticky;
+}
+
+.read-action {
+    margin-top: 15px;
+}
+
+/* * Article */
+/* * Main page */
+
+.article-image {
+    /* position: relative; */
+    overflow: hidden;
+    width: auto;
+    min-height: 50px;
+    max-height: 400px;
+    /* height: 400px; */
+}
+
+.article-image img {
+    /* position: absolute; */
+    /* top: -80%;
+    left: -70%; */
+    /* right: 30%; */
+    /* height: 300px; */
+    margin: 0 0 0 0;
+    width: 100%;
+    object-fit: cover;
+}
+
+.blog-content .article-meta {
+    margin: 35px 40px;
+}
+
+.blog-content .blog-text {
+    margin: 35px 40px;
+}
+
+@media (min-width: 576px) {
+    .blog-container {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 2.5em;
+        /* background: gray; */
+    
+    }
+    
+    .blog-container article {
+        box-shadow: 0 0 50px rgb(235, 235, 235);
+        /* padding: 40px; */
+        /* border-radius: 15px; */
+    }
+}
+
+ /* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .blog-container {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        display: grid;
+        grid-template-columns: repeat(1, auto);
+        grid-gap: 2.5em;
+        /* background: gray; */
+    
+    }
+    
+    .blog-container article {
+        box-shadow: 0 0 50px rgb(235, 235, 235);
+        /* padding: 40px; */
+        /* border-radius: 15px; */
+    }
+}
+
+ /* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .blog-container {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        grid-gap: 2.5em;
+        /* background: gray; */
+    
+    }
+    
+    .blog-container article {
+        box-shadow: 0 0 50px rgb(235, 235, 235);
+        /* padding: 40px; */
+        /* border-radius: 15px; */
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .blog-container {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 2.5em;
+        /* background: gray; */
+    
+    }
+    
+    .blog-container article {
+        box-shadow: 0 0 50px rgb(235, 235, 235);
+        /* padding: 40px; */
+        /* border-radius: 15px; */
+    }
 }
