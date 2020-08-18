@@ -44,18 +44,17 @@
 
 }
 
-.blog-container article {
+.blog-container article,
+section {
     box-shadow: 0 0 50px rgb(235, 235, 235);
+    transition: 0.5s linear;
     /* padding: 40px; */
 
     /* border-radius: 15px; */
 }
 
-.art {
-    transition: 0.5s linear;
-}
-
-.art:hover {
+.art:hover,
+section:hover {
     box-shadow: 0 0 60px rgb(207, 207, 207);
     /* transition: 0.5s linear; */
 }
@@ -99,6 +98,75 @@
 .blog-content .blog-text {
     margin: 35px 40px;
 }
+
+/* * Article */
+/* * Article page */
+
+.article-page-container .article-meta {
+    margin: 100px 80px 40px 80px;
+    text-align: center;
+}
+
+.article-page-container .article-image {
+    height: 80%;
+    min-height: 100%;
+    max-height: 100%;
+    width: 80%;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.article-page-container .article-image img {
+    object-fit: contain;
+}
+
+.article-page-container ul.article-info {
+    list-style-type: none;
+}
+
+.article-page-container ul.article-info li {
+    /* margin: 0 auto; */
+    text-align: center;
+    float: none;
+}
+
+.article-page-container .blog-text {
+    margin: 35px 80px 120px 80px;
+}
+
+.article-page-container .blog-text * {
+    text-indent: 60px;
+}
+
+.article-circles {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.article-circle {
+    content: "";
+    height: 8px;
+    width: 8px;
+    margin-left: 15px;
+    border-radius: 50%;
+    display: inline-block;
+
+}
+
+.blog-theme-blue .article-circle {
+    background-color: rgb(94, 143, 248);
+}
+
+/* * Section (Article page) */
+
+section.article-comments {
+    padding: 100px 80px;
+}
+
+.article-comments {
+    /* margin: 100px 80px; */
+}
+
 
 @media (min-width: 576px) {
     .blog-container {

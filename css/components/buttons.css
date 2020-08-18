@@ -25,7 +25,26 @@ button {
     text-decoration: none;
 }
 
-/* .menu {
-    float: right;
-} */
+/* * Comments */
+/* * Comments input */
 
+.comment-form .comment-input {
+    outline: transparent;
+    display: block;
+    margin: 20px 0;
+    padding: 2px 10px;
+    border: 1px solid rgb(199, 199, 199);
+    font-size: 16px;
+    
+    /* border-radius: 5px; */
+    /* font-family: 'IBM Plex Mono', monospace;; */
+
+}
+
+/* ? Color themes for inputs */
+
+.blog-theme-blue .comment-input {
+    /* outline: 1px solid; */
+    /* outline-color: rgb(94, 143, 248); */
+    
+}
