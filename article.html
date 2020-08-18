@@ -87,7 +87,7 @@
   
             <div class="blog-container article-page-container">
 
-                <article class="art text-alegreya-style">
+                <article style="display: none;" class="art text-alegreya-style">
                     <div class="blog-content">
 
                         <div class="article-meta text-sans-style">
@@ -101,20 +101,20 @@
                         </div>
 
                         <div class="article-image">
-                            <img src="img/source/156785432.jpg" alt="India">
+                            <!-- <img src="img/source/156785432.jpg" alt="India"> -->
                         </div>
 
                         <div class="blog-text">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, autem!</p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima in autem aperiam! Quidem tempora quod eius eaque quas laborum odio, enim, aliquid ab sed cum harum accusantium illum corporis id illo esse autem. Officiis eaque odio recusandae repellendus iusto voluptas accusamus dolore, corrupti est voluptate, nulla aliquam mollitia placeat officia.</p>
-                            <h4>Lorem ipsum dolor sit.</h4>
+                            <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, autem!</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima in autem aperiam! Quidem tempora quod eius eaque quas laborum odio, enim, aliquid ab sed cum harum accusantium illum corporis id illo esse autem. Officiis eaque odio recusandae repellendus iusto voluptas accusamus dolore, corrupti est voluptate, nulla aliquam mollitia placeat officia.</p> -->
+                            <!-- <h4>Lorem ipsum dolor sit.</h4>
                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi ipsum quos officia praesentium molestiae ab illo non! Perspiciatis, tempora totam tempore sed dignissimos ea rem dolore eius numquam perferendis fugit nemo laboriosam natus amet exercitationem distinctio ut voluptatum nesciunt recusandae. Ipsum doloribus optio quos? Quidem quisquam qui ut laudantium doloremque sapiente. Sit natus placeat commodi iure fuga porro aspernatur, expedita voluptatibus in aperiam debitis quae eos sint dolores voluptatem impedit nisi architecto enim vitae tempore ut. Reprehenderit ratione molestias repellat necessitatibus aliquid ad.</p>
                             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit rerum ipsum unde culpa alias placeat officiis, earum obcaecati a autem at asperiores debitis doloribus beatae quas dolores assumenda incidunt deleniti.</p>
                             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid facere consequuntur incidunt. Sunt iure sapiente, iste magnam, ab excepturi laborum nulla consequuntur aspernatur aut adipisci quam? Maiores in at doloribus provident tenetur cupiditate totam debitis, obcaecati culpa soluta magni sint impedit? Nihil non aliquam fuga vero saepe minima nemo, adipisci atque deleniti enim quos tempora nam quibusdam perferendis ab soluta, quas voluptate, eveniet earum. Impedit, distinctio iste ex quod consequuntur molestiae, odit sit vero amet, cumque laborum numquam vel dolor sequi? Aspernatur totam molestias consectetur eaque hic, assumenda voluptatum culpa commodi modi similique veritatis? Aliquam cupiditate incidunt optio debitis facere.</p>
                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto numquam debitis dolor totam id ratione corrupti nihil optio eius rerum!</p>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus quod neque voluptate ex, inventore blanditiis molestiae similique aliquam sint illo, obcaecati culpa doloribus tempore, aspernatur et laudantium iste unde assumenda.</p>
                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium quisquam et magni vel, nihil ab nulla esse quasi amet quia aperiam, sunt delectus magnam? Optio accusantium, necessitatibus dolore dolorum, fugit repellendus officia modi numquam dolor molestiae ad omnis earum quo iste. Nobis, quas. Maiores corporis consectetur ducimus reprehenderit voluptatum aspernatur commodi obcaecati ipsum accusantium laboriosam magnam aliquid iure nostrum, accusamus non quos nam, voluptatibus dolorem sit ratione perferendis suscipit. Quam odit, aliquid cupiditate beatae commodi facere. Numquam temporibus a rem nulla. Ab voluptatibus aliquam adipisci, quaerat non id. Ea sed ducimus distinctio voluptatum beatae necessitatibus soluta adipisci tenetur quibusdam amet odit cupiditate ipsa deserunt neque quis eaque odio, accusantium et quo earum vel? Earum hic totam quibusdam debitis corrupti. Nostrum dolorem illum unde voluptatem soluta iure dicta nam aliquam doloremque praesentium rerum inventore explicabo optio, cum omnis debitis earum? Quasi, voluptatum magnam. Veniam quisquam exercitationem, ad, molestias culpa, amet vel unde eum minus quam rem magni dicta id assumenda et eligendi aspernatur inventore nihil porro hic. Officiis commodi tempore vero numquam atque nostrum? Enim, ab quasi dolorum minus adipisci in rerum eum laborum obcaecati quia asperiores placeat ut vero mollitia, dignissimos reprehenderit aliquid inventore debitis! Quis modi necessitatibus blanditiis voluptates?</p>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui dolores hic laudantium?</p>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui dolores hic laudantium?</p> -->
 
 
                             
@@ -138,31 +138,145 @@
 
               <div class="article-comments">
 
-                <div class="comment-appeal text-roboto-style">
-                  <!-- ! SELECT FONT SIZE'S FOR A!! -->
-                  <h3>Fill out the form or <a href="#">Sign In...</a></h3>
+                <div class="comment-appeal text-alegreya-style">
+                  <!-- TODO: SELECT FONT SIZE'S FOR A!! -->
+                  <h3>Сomment anonymously or <a href="#">Sign In...</a></h3>
                 </div>
 
                 <form action="/addcomment" method="POST" class="comment-form">
                   
-                  <input type="text" placeholder="Name" class="comment-input comment-input-text">
+                  <label class="comment-label" for="">Name</label>
+                  <input type="text" id="nameInput" class="comment-input comment-input-text">
+                  <span class="text-sans-style"></span>
 
-                  <input type="text" placeholder="Email" class="comment-input comment-input-text">
+                  <label class="comment-label" for="">Email</label>
+                  <input type="email" class="comment-input comment-input-text">
+                  <span class="comment-error-message text-sans-style">Required</span>
 
-                  <textarea name="" id="" class="comment-input comment-input-textarea"></textarea>
+                  <label class="comment-label" for="">Comment</label>
+                  <textarea name="" id="commentTextarea" class="comment-input comment-input-textarea comment-input-error"></textarea>
+                  <span class="comment-error-message text-sans-style">Required</span>
 
-                  <button type="submit" class="comment-button">Submit</button>
+                  <button type="submit" class="usual-submit-button comment-button">Submit</button>
 
                 </form>
 
+                
+
               </div>
 
+              <div class="blog-comments text-alegreya-style">
 
+                <h3>Comments</h3>
+
+
+                <div class="blog-comment">
+
+                  <div class="user-info-container">
+                      <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+                  </div>
+
+                  <div class="text-comment-container clearfix">
+
+                    <!-- <ul class="comment-meta">
+                      <li>
+                        <a class="comment-username" href="#">
+                          lorem_ipsumsdfsdfsdf
+                        </a>
+                      </li>
+                      <li>
+                        <span>20.20.2020</span>
+                      </li>
+                    </ul> -->
+
+                    <a class="comment-username" href="#">
+                      lorem_ipsumsdfsdfsdf
+                    </a>
+
+                    <span class="comment-time-info">20.20.2020</span>
+
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit illum alias quia natus repellendus ab dolores aut similique aliquid consectetur voluptatum, reiciendis voluptatibus ipsa consequuntur neque? Quod totam nobis consequatur in doloremque sed, illo eos porro laudantium ut officia aliquid dolore repudiandae soluta! Ut blanditiis laborum incidunt ratione? Praesentium, sunt.
+                    </p>
+                    <a class="reply-comment" href="#">Reply &#11176;</a>
+
+                  </div>
+
+                </div>
+
+                <div class="blog-comment">
+
+                  <div class="user-info-container">
+                    <a href="#">
+                      lorem_ipsum
+                    </a>
+                    <div class="user-container">
+  
+                      <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+                    </div>
+                  </div>
+
+                  <div class="text-comment-container">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit illum alias quia natus repellendus ab dolores aut similique aliquid consectetur voluptatum, reiciendis voluptatibus ipsa consequuntur neque? Quod totam nobis consequatur in doloremque sed, illo eos porro laudantium ut officia aliquid dolore repudiandae soluta! Ut blanditiis laborum incidunt ratione? Praesentium, sunt.</p>
+                  </div>
+
+                </div>
+
+              </div>
 
             </section>
 
     </div>
 
+    <!-- Comment Validation -->
+    <!-- <script>
+
+      function nameChanged(value) {
+        var elem = document.getElementById("nameInput");
+        if(String(value).length < 4) {
+          if(!elem.classList.contains("comment-input-error")) {
+            elem.classList.add("comment-input-error");
+
+            var nextSpanElement;
+            var currentSpan = elem.nextElementSibling;
+            var spanCollection = document.getElementsByClassName("previous-error-element");
+
+            for(var i = 0; i < spanCollection.length; i++) {
+              if(nextSpanElement == spanCollection[i]) {
+                currentSpan = spanCollection[i];
+                break;
+              }
+            }
+
+              if(!nextSpanElement.classList.contains("comment-error-message")) {
+                nextSpanElement.classList.add("comment-error-message");
+                nextSpanElement.value.add("At least 4 characters");
+            }
+
+            // var nextSpanElement = elem.nextElementSibling;
+            
+            // if(!nextSpanElement.classList.contains("comment-error-message")) {
+            //   nextSpanElement.classList.add("comment-error-message");
+            //   nextSpanElement.value.add("At least 4 characters");
+            // }
+          }
+        }
+        else if(String(value).length >= 4) {
+          if(elem.classList.contains("comment-input-error")) {
+            elem.classList.remove("comment-input-error");
+
+            var nextSpanElement = elem.nextElementSibling;
+            if(nextSpanElement.classList.contains("comment-error-message")) {
+              nextSpanElement.classList.remove("comment-error-message");
+              nextSpanElement.value.remove;
+            }
+          }
+          
+        }
+      }
+
+
+
+    </script> -->
 
     <!-- Scroll page USUAL -->
     <script src="js/scrollFunction.js"></script>
