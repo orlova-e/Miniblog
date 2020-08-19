@@ -13,8 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+SC:ital,wght@0,400;0,500;0,700;0,800;0,900;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
-    <link href="css/basic/basiclayout.css" rel="stylesheet">
-    <link href="css/basic/typography.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/basic/basiclayout.css">
+    <link rel="stylesheet" href="css/basic/typography.css">
     <link rel="stylesheet" href="css/components/buttons.css">
     <link rel="stylesheet" href="css/components/list.css">
 
@@ -33,11 +33,11 @@
                 <a class="text-roboto-style navbar-brand" href="#">
                     <h2>Miniblog</h2>
                 </a>
-                <button id="menuButton" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button id="menuButton" class="navbar-toggler justify-content-end" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
               
-                <div class=" collapse navbar-collapse " id="navbarSupportedContent">
+                <div class=" collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                   <ul class="navbar-nav mr-auto">
                     <!-- <li class="nav-item active">
                       <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
@@ -151,23 +151,21 @@
 
                   <label class="comment-label" for="">Email</label>
                   <input type="email" class="comment-input comment-input-text">
-                  <span class="comment-error-message text-sans-style">Required</span>
+                  <!-- <span class="comment-error-message text-sans-style">Required</span> -->
 
                   <label class="comment-label" for="">Comment</label>
                   <textarea name="" id="commentTextarea" class="comment-input comment-input-textarea comment-input-error"></textarea>
-                  <span class="comment-error-message text-sans-style">Required</span>
+                  <!-- <span class="comment-error-message text-sans-style">Required</span> -->
 
                   <button type="submit" class="usual-submit-button comment-button">Submit</button>
 
                 </form>
 
-                
-
               </div>
 
               <div class="blog-comments text-alegreya-style">
 
-                <h3>Comments</h3>
+                <h3>Comments</h3 >
 
 
                 <div class="blog-comment">
@@ -178,32 +176,150 @@
 
                   <div class="text-comment-container clearfix">
 
-                    <!-- <ul class="comment-meta">
-                      <li>
-                        <a class="comment-username" href="#">
-                          lorem_ipsumsdfsdfsdf
-                        </a>
-                      </li>
-                      <li>
-                        <span>20.20.2020</span>
-                      </li>
-                    </ul> -->
+                    <div class="blog-comment-meta">
+                      <a class="comment-username" href="#">
+                        lorem_ipsumsdfsdfsdf
+                      </a>
+                      <span class="comment-time-info">20.20.2020 01:38</span>
+                    </div>
 
-                    <a class="comment-username" href="#">
-                      lorem_ipsumsdfsdfsdf
-                    </a>
+                    <div class="comment-container">
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit illum alias quia natus repellendus ab dolores aut similique aliquid consectetur voluptatum, reiciendis voluptatibus ipsa consequuntur neque? Quod totam nobis consequatur in doloremque sed, illo eos porro laudantium ut officia aliquid dolore repudiandae soluta! Ut blanditiis laborum incidunt ratione? Praesentium, sunt.
+                      </p>
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit illum alias quia natus repellendus ab dolores aut similique aliquid consectetur voluptatum, reiciendis voluptatibus ipsa consequuntur neque? Quod totam nobis consequatur in doloremque sed, illo eos porro laudantium ut officia aliquid dolore repudiandae soluta! Ut blanditiis laborum incidunt ratione? Praesentium, sunt.
+                      </p>
+                    </div>
 
-                    <span class="comment-time-info">20.20.2020</span>
+                    <div class="comment-actions-container">
+                      <div class="hearts">
+                        <button type="button" onclick="heartClick()" id="heartNotclicked">
+                          <img src="/img/buttons/heart.png" alt="like">
+                        </button>
 
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit illum alias quia natus repellendus ab dolores aut similique aliquid consectetur voluptatum, reiciendis voluptatibus ipsa consequuntur neque? Quod totam nobis consequatur in doloremque sed, illo eos porro laudantium ut officia aliquid dolore repudiandae soluta! Ut blanditiis laborum incidunt ratione? Praesentium, sunt.
-                    </p>
-                    <a class="reply-comment" href="#">Reply &#11176;</a>
+                        <button type="button" onclick="heartClick()" id="heartClicked">
+                          <img src="/img/buttons/heart red.png" alt="like">
+                        </button>
+
+                        <span id="heartsCounter" class="text-sans-style comment-hearts-count">5</span>
+                      </div>
+
+                      <div class="comment-reply">
+                        <button type="button" onclick="replyClick()" id="replyButton">
+                          <img src="/img/buttons/next.png" alt="reply">
+                        </button>
+                      </div>
+                    </div>
+                    <!-- <a class="reply-comment" href="#">Reply &#11176;</a> -->
+                    <div class="comment-answer">
+
+                      <div class="user-info-container">
+                        <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+                      </div>
+
+                      <form action="/addcomment" method="POST" class="answer-form comment-form">
+      
+                        <!-- <label class="comment-label" for="">Comment</label> -->
+
+                        <div>
+                          <textarea id="" placeholder="Add comment..." class="comment-input comment-input-textarea"></textarea>
+                          <!-- <span class="comment-error-message text-sans-style">Required</span> -->
+                        </div>
+
+                        <button type="submit" class="usual-submit-button comment-button">
+                          <img src="img/buttons/send.png" alt="send by Kidiladon from the Noun Project">
+                        </button>
+                        
+                      </form>
+
+                    </div>
+                    
+                    <!-- ??? USERS' COMMENTS COLLECTION -->
+                    <div class="users-comment-answer-collection">
+
+                        <div class="blog-comment">
+
+                            <div class="user-info-container">
+                                <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+                            </div>
+          
+                            <div class="text-comment-container clearfix">
+          
+                              <div class="blog-comment-meta">
+                                <a class="comment-username" href="#">
+                                  lorem_ipsumsdfsdfsdf
+                                </a>
+                                <span class="comment-time-info">20.20.2020 01:38</span>
+                              </div>
+          
+                              <div class="comment-container">
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit illum alias quia natus repellendus ab dolores aut similique aliquid consectetur voluptatum, reiciendis voluptatibus ipsa consequuntur neque? Quod totam nobis consequatur in doloremque sed, illo eos porro laudantium ut officia aliquid dolore repudiandae soluta! Ut blanditiis laborum incidunt ratione? Praesentium, sunt.
+                                </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit illum alias quia natus repellendus ab dolores aut similique aliquid consectetur voluptatum, reiciendis voluptatibus ipsa consequuntur neque? Quod totam nobis consequatur in doloremque sed, illo eos porro laudantium ut officia aliquid dolore repudiandae soluta! Ut blanditiis laborum incidunt ratione? Praesentium, sunt.
+                                </p>
+                              </div>
+          
+                              <div class="comment-actions-container">
+                                <div class="hearts">
+                                  <button type="button" onclick="heartClick()" id="heartNotclicked">
+                                    <img src="/img/buttons/heart.png" alt="like">
+                                  </button>
+          
+                                  <button type="button" onclick="heartClick()" id="heartClicked">
+                                    <img src="/img/buttons/heart red.png" alt="like">
+                                  </button>
+          
+                                  <span id="heartsCounter" class="text-sans-style comment-hearts-count">5</span>
+                                </div>
+          
+                                <div class="comment-reply">
+                                  <button type="button" onclick="replyClick()" id="replyButton">
+                                    <img src="/img/buttons/next.png" alt="reply">
+                                  </button>
+                                </div>
+                              </div>
+                              <!-- <a class="reply-comment" href="#">Reply &#11176;</a> -->
+                              <div class="comment-answer">
+          
+                                <div class="user-info-container">
+                                  <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+                                </div>
+          
+                                <form action="/addcomment" method="POST" class="answer-form comment-form">
+                
+                                  <!-- <label class="comment-label" for="">Comment</label> -->
+          
+                                  <div>
+                                    <textarea id="" placeholder="Add comment..." class="comment-input comment-input-textarea"></textarea>
+                                    <span class="comment-error-message text-sans-style">Required</span>
+                                  </div>
+          
+                                  <button type="submit" class="usual-submit-button comment-button">
+                                    <img src="img/buttons/send.png" alt="send by Kidiladon from the Noun Project">
+                                  </button>
+                                  
+                                </form>
+          
+                              </div>
+                              
+                              <div class="users-comment-answer-collection">
+                                  
+
+                                
+                              </div>
+          
+          
+                            </div>
+          
+                          </div>
+
+                    </div>
+
 
                   </div>
 
                 </div>
 
-                <div class="blog-comment">
+                <!-- <div class="blog-comment">
 
                   <div class="user-info-container">
                     <a href="#">
@@ -219,13 +335,52 @@
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit illum alias quia natus repellendus ab dolores aut similique aliquid consectetur voluptatum, reiciendis voluptatibus ipsa consequuntur neque? Quod totam nobis consequatur in doloremque sed, illo eos porro laudantium ut officia aliquid dolore repudiandae soluta! Ut blanditiis laborum incidunt ratione? Praesentium, sunt.</p>
                   </div>
 
-                </div>
+                </div> -->
 
               </div>
 
             </section>
 
     </div>
+
+    <!-- ? HTML Templates -->
+
+    <!-- ? JS -->
+    <!-- Heart (like) click artions -->
+    <script>
+      "use strict";
+
+      function heartClick() {
+        let whiteHeart = document.getElementById("heartNotclicked");
+        let redHeart = document.getElementById("heartClicked");
+        let counterNumb = document.getElementById("heartsCounter");
+        if(whiteHeart.style.display !== "none") {
+          whiteHeart.style.display = "none";
+            redHeart.style.display = "inline-block";
+          let count = Number(counterNumb.innerText);
+          count++;
+          
+          counterNumb.innerText = count;
+        }
+        else if (redHeart.style.display === "inline-block") {
+          redHeart.style.display = "none";
+          whiteHeart.style.display = "inline-block";
+          let count2 = Number(counterNumb.innerText);
+          count2--;
+          counterNumb.innerText = count2;
+        }
+
+        // + sent to server
+        
+      }
+
+    </script>
+    <!-- Reply action -->
+    <script>
+      function replyClick() {
+
+      }
+    </script>
 
     <!-- Comment Validation -->
     <!-- <script>

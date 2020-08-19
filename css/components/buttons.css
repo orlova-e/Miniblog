@@ -132,3 +132,37 @@ button {
 
 /* ? END */
 
+/* * COMMENT ACTIONS buttons */
+
+.comment-actions-container img {
+    height: 30px;
+    width: 30px;
+}
+
+.comment-actions-container button,
+.comment-actions-container div {
+    display: inline-block;
+}
+
+#heartClicked {
+    display: none;
+}
+
+.comment-actions-container button {
+    outline: none;
+}
+
+/* * COMMENT ANSWER form */
+
+.answer-form .usual-submit-button {
+    background-color: transparent;
+    height: 30px;
+    width: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.answer-form .usual-submit-button img {
+    height: 30px;
+    width: 30px;
+}
