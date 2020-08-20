@@ -144,7 +144,7 @@ button {
     display: inline-block;
 }
 
-#heartClicked {
+.comment-actions-container .heart-clicked {
     display: none;
 }
 

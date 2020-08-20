@@ -136,7 +136,7 @@
 
             <section class="article-comments text-sans-style">
 
-              <div class="article-comments">
+              <div style="display: none;" class="article-comments">
 
                 <div class="comment-appeal text-alegreya-style">
                   <!-- TODO: SELECT FONT SIZE'S FOR A!! -->
@@ -168,7 +168,7 @@
                 <h3>Comments</h3 >
 
 
-                <div class="blog-comment">
+                <div id="123456" class="blog-comment">
 
                   <div class="user-info-container">
                       <img src="img/users/35FPa7SRJoI.jpg" alt="User">
@@ -192,49 +192,28 @@
 
                     <div class="comment-actions-container">
                       <div class="hearts">
-                        <button type="button" onclick="heartClick()" id="heartNotclicked">
+                        <button type="button" class="heart-not-clicked" onclick="heartClick(this)">
                           <img src="/img/buttons/heart.png" alt="like">
                         </button>
 
-                        <button type="button" onclick="heartClick()" id="heartClicked">
+                        <button type="button" onclick="heartClick(this)" class="heart-clicked">
                           <img src="/img/buttons/heart red.png" alt="like">
                         </button>
 
-                        <span id="heartsCounter" class="text-sans-style comment-hearts-count">5</span>
+                        <span class="hearts-counter text-sans-style comment-hearts-count">8</span>
                       </div>
 
                       <div class="comment-reply">
-                        <button type="button" onclick="replyClick()" id="replyButton">
+                        <button type="button" onclick="replyComment(this)" class="reply-button">
                           <img src="/img/buttons/next.png" alt="reply">
                         </button>
                       </div>
                     </div>
                     <!-- <a class="reply-comment" href="#">Reply &#11176;</a> -->
-                    <div class="comment-answer">
-
-                      <div class="user-info-container">
-                        <img src="img/users/35FPa7SRJoI.jpg" alt="User">
-                      </div>
-
-                      <form action="/addcomment" method="POST" class="answer-form comment-form">
-      
-                        <!-- <label class="comment-label" for="">Comment</label> -->
-
-                        <div>
-                          <textarea id="" placeholder="Add comment..." class="comment-input comment-input-textarea"></textarea>
-                          <!-- <span class="comment-error-message text-sans-style">Required</span> -->
-                        </div>
-
-                        <button type="submit" class="usual-submit-button comment-button">
-                          <img src="img/buttons/send.png" alt="send by Kidiladon from the Noun Project">
-                        </button>
-                        
-                      </form>
-
-                    </div>
+                    <!-- <div style="display: none;" class="comment -answer"> -->
                     
                     <!-- ??? USERS' COMMENTS COLLECTION -->
-                    <div class="users-comment-answer-collection">
+                    <div style="display: none;" class="users-comment-answer-collection">
 
                         <div class="blog-comment">
 
@@ -260,25 +239,25 @@
           
                               <div class="comment-actions-container">
                                 <div class="hearts">
-                                  <button type="button" onclick="heartClick()" id="heartNotclicked">
+                                  <button type="button" class="heart-not-clicked" onclick="heartClick(this)">
                                     <img src="/img/buttons/heart.png" alt="like">
                                   </button>
           
-                                  <button type="button" onclick="heartClick()" id="heartClicked">
+                                  <button type="button" onclick="heartClick(this)" class="heart-clicked">
                                     <img src="/img/buttons/heart red.png" alt="like">
                                   </button>
           
-                                  <span id="heartsCounter" class="text-sans-style comment-hearts-count">5</span>
+                                  <span class="hearts-counter text-sans-style comment-hearts-count">56</span>
                                 </div>
           
                                 <div class="comment-reply">
-                                  <button type="button" onclick="replyClick()" id="replyButton">
+                                  <button type="button" onclick="replyComment(this)" class="reply-button">
                                     <img src="/img/buttons/next.png" alt="reply">
                                   </button>
                                 </div>
                               </div>
                               <!-- <a class="reply-comment" href="#">Reply &#11176;</a> -->
-                              <div class="comment-answer">
+                              <div style="display: none;" class="comment-answer">
           
                                 <div class="user-info-container">
                                   <img src="img/users/35FPa7SRJoI.jpg" alt="User">
@@ -310,7 +289,7 @@
           
                             </div>
           
-                          </div>
+                        </div>
 
                     </div>
 
@@ -344,43 +323,79 @@
     </div>
 
     <!-- ? HTML Templates -->
+    <!-- ? HTML comment-answer -->
+    <div style="display: none;" class="template-comment-answer comment-answer">
 
+      <div class="user-info-container">
+        <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+      </div>
+
+      <form action="/addcomment" method="POST" class="answer-form comment-form">
+        <div>
+          <textarea id="" placeholder="Add comment..." class="comment-input comment-input-textarea"></textarea>
+          <span class="comment-error-message text-sans-style">Required</span>
+        </div>
+
+        <button type="submit" class="usual-submit-button comment-button">
+          <img src="img/buttons/send.png" alt="send by Kidiladon from the Noun Project">
+        </button>
+      </form>
+
+    </div>
+    <!-- ? HTML blog-comment template -->
+    <div style="display: none;" class="template-blog-comment blog-comment">
+
+      <div class="user-info-container">
+          <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+      </div>
+
+      <div class="text-comment-container clearfix">
+
+        <div class="blog-comment-meta">
+          <a class="comment-username" href="#">
+            EMPTY
+          </a>
+          <span class="comment-time-info">DATETIME</span>
+        </div>
+
+        <div class="comment-container">
+          <p>
+            EMPTY
+          </p>
+        </div>
+
+        <div class="comment-actions-container">
+          <div class="hearts">
+            <button type="button" class="heart-not-clicked" onclick="heartClick(this)">
+              <img src="/img/buttons/heart.png" alt="like">
+            </button>
+
+            <button type="button" onclick="heartClick(this)" class="heart-clicked">
+              <img src="/img/buttons/heart red.png" alt="like">
+            </button>
+
+            <span class="hearts-counter text-sans-style comment-hearts-count">0</span>
+          </div>
+
+          <div class="comment-reply">
+            <button type="button" onclick="replyComment(this)" class="reply-button">
+              <img src="/img/buttons/next.png" alt="reply">
+            </button>
+          </div>
+        </div>
+
+        <!-- comment answer -->
+        
+        <div class="users-comment-answer-collection">
+
+        </div>
+      </div>
+    </div>
     <!-- ? JS -->
     <!-- Heart (like) click artions -->
-    <script>
-      "use strict";
-
-      function heartClick() {
-        let whiteHeart = document.getElementById("heartNotclicked");
-        let redHeart = document.getElementById("heartClicked");
-        let counterNumb = document.getElementById("heartsCounter");
-        if(whiteHeart.style.display !== "none") {
-          whiteHeart.style.display = "none";
-            redHeart.style.display = "inline-block";
-          let count = Number(counterNumb.innerText);
-          count++;
-          
-          counterNumb.innerText = count;
-        }
-        else if (redHeart.style.display === "inline-block") {
-          redHeart.style.display = "none";
-          whiteHeart.style.display = "inline-block";
-          let count2 = Number(counterNumb.innerText);
-          count2--;
-          counterNumb.innerText = count2;
-        }
-
-        // + sent to server
-        
-      }
-
-    </script>
-    <!-- Reply action -->
-    <script>
-      function replyClick() {
-
-      }
-    </script>
+    <script src="js/comment_actions/likeActions.js"></script>
+    <!-- Reply (add comment) action -->
+    <script src="js/comment_actions/replyComment.js"></script>
 
     <!-- Comment Validation -->
     <!-- <script>
