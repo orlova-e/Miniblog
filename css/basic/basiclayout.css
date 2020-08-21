@@ -146,7 +146,11 @@ section:hover {
 }
 
 .article-page-container .blog-text {
-    margin: 35px 80px 120px 80px;
+    margin: 35px 80px 70px 80px;
+}
+
+.article-user-actions {
+    margin: 0 auto 120px auto;
 }
 
 .article-page-container .blog-text * {
@@ -296,8 +300,9 @@ form.comment-answer.comment-form {
 
 .answer-form {
     display: grid;
-    grid-template-columns: 18fr 1fr;
+    grid-template-columns: 17fr 1fr;
     grid-gap: 0.5em;
+    /* background-color: lightgray; */
 }
 
 .answer-form.comment-form .usual-submit-button {
@@ -305,6 +310,33 @@ form.comment-answer.comment-form {
     /* margin-bottom: -20px; */
     margin-top: 15px;
 }
+
+/* * ROOT COMMENT answer */
+
+.root-comment-answer {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    margin: 0 0 60px 0;
+}
+
+.root-comment-answer .user-info-container {
+    justify-self: center;
+}
+
+.root-comment-answer .user-info-container img {
+    width: 120px;
+    height: 120px;
+}
+
+.root-comment-answer .answer-form.comment-form .comment-input-textarea {
+    height: 120px;
+    max-height: 120px;
+}
+
+.article-comments .root-answer-form.comment-form {
+    margin: 0;
+}
+
 
 /* * USERS COMMENT COLLECTION */
 
@@ -332,7 +364,6 @@ form.comment-answer.comment-form {
 .comment-form .comment-error-message {
     line-height: 1.0;
 }
-
 
 @media (min-width: 576px) {
     .blog-container {
