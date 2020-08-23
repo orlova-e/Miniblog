@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Blog</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;0,800;0,900;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+SC:ital,wght@0,400;0,500;0,700;0,800;0,900;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/basic/basiclayout.css">
+    <link rel="stylesheet" href="css/basic/typography.css">
+    <link rel="stylesheet" href="css/components/buttons.css">
+    <link rel="stylesheet" href="css/components/inputs.css">
+    <link rel="stylesheet" href="css/components/list.css">
+    <link rel="stylesheet" href="css/components/nav.css">
+</head>
+<body class="blog-theme-blue">
+    
+    <div id="head-container" class="container-fluid head-container">
+        <div class="container">
+            <nav class="text-sans-style navbar navbar-expand-lg navbar-light bg-white">
+                <a class="text-roboto-style navbar-brand" href="#">
+                    <h2>Miniblog</h2>
+                </a>
+                <button id="menuButton" class="navbar-toggler justify-content-end" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+              
+                <div class=" collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link user-info" href="#">
+                                <div class="user-info-container">
+                                    <img src="img/users/35FPa7SRJoI.jpg" width="30px" alt="User">
+                                    <span>lorem_ipsum</span>
+                                </div>
+
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item">
+                        <a class="nav-link" href="#">Sign In</a>
+                        </li> -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
+                            <div class="dropdown-menu" style="min-width: auto;" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Topics</a>
+                                <a class="dropdown-item" href="#">Authors</a>
+                                <div class="dropdown-divider"></div>
+                                <div class="dropdown-item" href="#">
+                                    <form action="" class="inline-form">
+                                        <input style="display: inline-block; width: min-content;" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="read-progress">
+            <div class="read-progress-bar" id="readBar"></div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="blog-container">
+            <div class="page-container text-alegreya-style">
+                <div class="author-container">
+                    <div class="author-info-container">
+                        <div class="user-info-container">
+                            <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+                        </div>
+        
+                        <div class="author-info">
+                            <h3 class=""><b>Listique</b><span class="auhor-name-info"> // Elizaveta Orlova</span></h3>
+                            <span class="author-expirience">1 year 2 month 2 days</span>
+                            <div>
+                                <span class="author-place">Place: Volgograd</span>
+                            </div>
+                            <div class="statistics">
+                                <span class="author-articles-number">
+                                    <span class="author-articles-count"><b>34</b></span>
+                                    <span class="author-articles-word">articles</span>
+                                </span>
+                                <br>
+                                <span class="author-subscribers"><span class="author-subscribers-count"><b>29</b></span>
+                                <span class="author-subscribers-word">subscribers</span></span>
+                            </div>
+                            <button class="usual-button usual-button-reverse">Chat</button>
+                            <button class="subscribe-button usual-button">Subscribe</button>
+                        </div>    
+                    </div>
+    
+                    <div class="author-description">
+                        <h3><b>About</b></h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus veritatis nobis eum cumque labore veniam delectus qui vitae officia totam aliquam dolore vel at iure praesentium ullam, molestiae, reprehenderit reiciendis doloremque consectetur architecto deleniti nam! Aspernatur, corrupti! Obcaecati, veniam porro totam magnam quaerat, optio ab minus odio atque repellendus commodi.</p>
+                    </div>
+    
+                </div>
+                    <a id="articlesLink" href="#author-articles"><h4>&#709; Articles</h4></a>
+                    <a name="author-articles"></a>
+            </div>
+        </div>
+
+        <div class="blog-container">
+
+            <article class="text-alegreya-style">
+                <div class="blog-content">
+
+                    <div class="article-meta text-roboto-style">
+                        <a href="#" class="article-header">
+                            <h2><b>Article header simply</b></h2>
+                        </a>
+                        <ul class="article-info clearfix">
+                            <li href="#"><a href="#">Elizaveta Orlova</a></li>
+                            <li href="#"><a href="#">20.08.2020</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="article-image">
+                        <img src="img/source/156785432.jpg" alt="India">
+                    </div>
+
+                    <div class="blog-text">
+                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sit voluptas suscipit nostrum ipsum ducimus reprehenderit, sapiente at earum, exercitationem aliquam distinctio saepe ut excepturi vel non blanditiis a rem! Nulla beatae, rem voluptate quae neque autem? Dolor eum, assumenda laboriosam nihil repellat corporis repudiandae magnam, molestiae reprehenderit fugit ducimus perferendis rem tenetur ipsum nesciunt laudantium quisquam cumque maxime quo, ipsam neque voluptate sed nobis! Magnam incidunt quidem repellendus, ratione labore excepturi! Voluptatum perferendis dolorum accusantium ab quod, deserunt aspernatur, repellat aperiam maxime incidunt minus dolor eos consequatur atque iste, et facere commodi consequuntur. Amet suscipit similique totam quo, qui hic?</p>
+                        <div class="read-action">
+                            <a href="#">Read more &RightArrow; &RightAngleBracket;</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="art text-alegreya-style">
+                <div class="blog-content">
+
+                    <div class="article-meta text-roboto-style">
+                        <a href="#" class="article-header">
+                            <h3><b>Article header simply</b></h3>
+                        </a>
+                        <ul class="article-info clearfix">
+                            <li href="#"><a href="#">Elizaveta Orlova</a></li>
+                            <li href="#"><a href="#">20.08.2020</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="article-image">
+                        <img src="img/source/156785433.jpg" alt="India">
+                    </div>
+
+                    <div class="blog-text">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ducimus repudiandae consequuntur alias accusamus eligendi incidunt sunt explicabo asperiores dolorem, nisi atque recusandae obcaecati, temporibus officiis enim sit in. Accusamus aspernatur aut illo placeat! Unde fugit nam animi ad, neque possimus modi a inventore alias eaque velit, soluta nobis deleniti.</p>
+                        <div class="read-action">
+                            <a href="#">Read more &RightArrow; &RightAngleBracket;</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="art text-alegreya-style">
+                <div class="blog-content">
+
+                    <div class="article-meta text-roboto-style">
+                        <a href="#" class="article-header">
+                            <h3><b>Article header simply</b></h3>
+                        </a>
+                        <ul class="article-info clearfix">
+                            <li href="#"><a href="#">Elizaveta Orlova</a></li>
+                            <li href="#"><a href="#">20.08.2020</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="article-image">
+                        <img src="img/source/aman-dhakal-YkWz_coLm84-unsplash.jpg" alt="India">
+                    </div>
+
+                    <div class="blog-text">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ducimus repudiandae consequuntur alias accusamus eligendi incidunt sunt explicabo asperiores dolorem, nisi atque recusandae obcaecati, temporibus officiis enim sit in. Accusamus aspernatur aut illo placeat! Unde fugit nam animi ad, neque possimus modi a inventore alias eaque velit, soluta nobis deleniti.</p>
+                        <div class="read-action">
+                            <a href="#">Read more &RightArrow; &RightAngleBracket;</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="art text-alegreya-style">
+                <div class="blog-content">
+
+                    <div class="article-meta text-roboto-style">
+                        <a href="#" class="article-header">
+                            <h3><b>Article header simply</b></h3>
+                        </a>
+                        <ul class="article-info clearfix">
+                            <li href="#"><a href="#">Elizaveta Orlova</a></li>
+                            <li href="#"><a href="#">20.08.2020</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="article-image">
+                        <img src="img/source/7SuDnh0pwfk.jpg" alt="India">
+                    </div>
+
+                    <div class="blog-text">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ducimus repudiandae consequuntur alias accusamus eligendi incidunt sunt explicabo asperiores dolorem, nisi atque recusandae obcaecati, temporibus officiis enim sit in. Accusamus aspernatur aut illo placeat! Unde fugit nam animi ad, neque possimus modi a inventore alias eaque velit, soluta nobis deleniti.</p>
+                        <div class="read-action">
+                            <a href="#">Read more &RightArrow; &RightAngleBracket;</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="art text-alegreya-style">
+                <div class="blog-content">
+
+                    <div class="article-meta text-roboto-style">
+                        <a href="#" class="article-header">
+                            <h3><b>Article header simply</b></h3>
+                        </a>
+                        <ul class="article-info clearfix">
+                            <li href="#"><a href="#">Elizaveta Orlova</a></li>
+                            <li href="#"><a href="#">20.08.2020</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="article-image">
+                        <img src="img/source/daniel-olah-6KQETG8J-zI-unsplash.jpg" alt="India">
+                    </div>
+
+                    <div class="blog-text">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ducimus repudiandae consequuntur alias accusamus eligendi incidunt sunt explicabo asperiores dolorem, nisi atque recusandae obcaecati, temporibus officiis enim sit in. Accusamus aspernatur aut illo placeat! Unde fugit nam animi ad, neque possimus modi a inventore alias eaque velit, soluta nobis deleniti.</p>
+                        <div class="read-action">
+                            <a href="#">Read more &RightArrow; &RightAngleBracket;</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="art text-alegreya-style">
+                <div class="blog-content">
+
+                    <div class="article-meta text-roboto-style">
+                        <a href="#" class="article-header">
+                            <h3><b>Article header simply</b></h3>
+                        </a>
+                        <ul class="article-info clearfix">
+                            <li href="#"><a href="#">Elizaveta Orlova</a></li>
+                            <li href="#"><a href="#">20.08.2020</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="article-image">
+                        <img src="img/source/daniel-olah-PQwhtnon5R0-unsplash.jpg" alt="India">
+                    </div>
+
+                    <div class="blog-text">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ducimus repudiandae consequuntur alias accusamus eligendi incidunt sunt explicabo asperiores dolorem, nisi atque recusandae obcaecati, temporibus officiis enim sit in. Accusamus aspernatur aut illo placeat! Unde fugit nam animi ad, neque possimus modi a inventore alias eaque velit, soluta nobis deleniti.</p>
+                        <div class="read-action">
+                            <a href="#">Read more &RightArrow; &RightAngleBracket;</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="art text-alegreya-style">
+                <div class="blog-content">
+
+                    <div class="article-meta text-roboto-style">
+                        <a href="#" class="article-header">
+                            <h3><b>Article header simply</b></h3>
+                        </a>
+                        <ul class="article-info clearfix">
+                            <li href="#"><a href="#">Elizaveta Orlova</a></li>
+                            <li href="#"><a href="#">20.08.2020</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="article-image">
+                        <img src="img/source/daniel-olah-TYpX940GS_U-unsplash.jpg" alt="India">
+                    </div>
+
+                    <div class="blog-text">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ducimus repudiandae consequuntur alias accusamus eligendi incidunt sunt explicabo asperiores dolorem, nisi atque recusandae obcaecati, temporibus officiis enim sit in. Accusamus aspernatur aut illo placeat! Unde fugit nam animi ad, neque possimus modi a inventore alias eaque velit, soluta nobis deleniti.</p>
+                        <div class="read-action">
+                            <a href="#">Read more &RightArrow; &RightAngleBracket;</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </div>
+
+    <!-- Scroll page USUAL -->
+    <script src="js/scrollFunction.js"></script>
+    <!-- jQuery, Popper, Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>

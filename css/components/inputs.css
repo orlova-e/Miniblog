@@ -1,0 +1,70 @@
+/* * Usual inputs */
+
+.usual-form .usual-label {
+    font-size: 18px;
+    margin: 15px 0 0 0px;
+    display: block;
+}
+
+.usual-form .usual-input {
+    outline: transparent;
+    display: inline-block;
+    margin: 10px 8px 5px 0;
+    padding: 7px 10px;
+    width: 60%;
+    border: 1px solid rgb(199, 199, 199);
+    border-radius: 4px;
+    font-size: 15px;
+    color: rgb(58, 58, 58);
+}
+
+.usual-form .usual-input:focus {
+    border: 1px solid burlywood;
+    box-shadow: 0 0 0 3px rgb(255, 230, 197);
+}
+
+.usual-form .usual-input-textarea {
+    width: 100%;
+    min-height: 100px;
+    height: 100px;
+    max-height: 200px;
+}
+
+/* ? Color themes for inputs */
+
+.blog-theme-blue .usual-input:focus {
+    border: 1px solid rgb(94, 143, 248);
+    box-shadow: 0 0 0 3px rgb(174, 200, 255);
+}
+
+/* .blog-theme-red .usual-form .usual-input.usual-input-error {
+    border: 1px solid black;
+    box-shadow: 0 0 0 3px rgb(185, 185, 185)
+} */
+
+.blog-theme-red .usual-input:focus {
+    border: 1px solid rgb(255, 113, 113);
+    box-shadow: 0 0 0 3px rgb(255, 208, 208);
+}
+
+/* ? Theme's definitions END */
+
+/* ? Error's definitions */
+
+.usual-form .usual-input.usual-input-error {
+    border: 1px solid red;
+}
+
+.usual-form .usual-input.usual-input-error:focus {
+    border: 1px solid rgb(255, 113, 113);
+    box-shadow: 0 0 0 3px rgb(255, 208, 208);
+}
+
+.usual-form .usual-error-message {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: red;
+    margin: 0;
+}
+

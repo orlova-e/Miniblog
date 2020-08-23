@@ -60,15 +60,24 @@
 }
 
 .blog-container article,
+.blog-container .page-container,
+.sign-container div,
 section {
     box-shadow: 0 0 50px rgb(235, 235, 235);
     transition: 0.5s linear;
+    /* padding: 100px 80px 120px 80px; */
     /* padding: 40px; */
 
     /* border-radius: 15px; */
 }
 
-.art:hover,
+.page-container {
+    padding: 100px 80px 120px 80px;
+}
+
+.blog-container article:hover,
+.blog-container .page-container:hover,
+.sign-container div:hover,
 section:hover {
     box-shadow: 0 0 60px rgb(207, 207, 207);
     /* transition: 0.5s linear; */
@@ -212,7 +221,9 @@ section.article-comments {
 
 .user-info-container {
     justify-self: center;
-    margin-top: 10px;
+    display: inline-block;
+    /* margin-top: 10px; */
+    margin: 0;
     /* margin: 20px 0; */
 }
 
@@ -365,6 +376,156 @@ form.comment-answer.comment-form {
     line-height: 1.0;
 }
 
+/* * SIGN IN page */
+
+.sign-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    grid-gap: 2em;
+    /* justify-content: center; */
+}
+
+.sign-container div {
+    /* background-color: lightgray; */
+    /* border: 1px solid rgb(236, 236, 236); */
+    background-color: white;
+    padding: 67px 0;
+    text-align: center;
+    width: 100%;
+}
+
+.sign-container .usual-submit-button {
+    margin: 40px auto 0 auto;
+}
+
+.sign-container form.usual-form {
+    margin-top: 40px;
+}
+
+.sign-container .usual-submit-button {
+    width: 30%;
+    padding: 10px;
+    /* height: 40px; */
+}
+
+.sign-container input {
+    text-align: center;
+}
+
+/* * AUTHOR page */
+
+.author-info-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-gap: 2em;
+    /* background-color: lightgray; */
+    justify-items: left;
+    margin-bottom: 40px;
+}
+
+.author-info-container .user-info-container {
+    justify-self: right;
+}
+
+.author-info-container .user-info-container img {
+    height: 100%;
+    width: auto;
+    max-height: 200px;
+    min-width: 200px;
+}
+
+.author-container .subscribe-button {
+    margin-bottom: 10px;
+    
+}
+
+.author-info .usual-button {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+#articlesLink {
+    text-align: center;
+}
+
+.articles-menu-container {
+    margin-top: 20px;
+}
+
+/* * FAVOURITES page */
+
+.menu-links-collection a,
+.menu-links-collection .active-page {
+    display: inline-block;
+    margin-right: 25px;
+
+}
+
+.menu-links-collection .active-page {
+    color: rgb(184, 184, 184);
+    font-size: 34px;
+    cursor: default;
+}
+
+/* * DISPLAY ARTICLE PARAMETERS */
+
+.display-parameters {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+
+}
+
+.display-character {
+    justify-self: right;
+}
+
+.drop-button {
+    color: rgb(167, 167, 167);
+    padding: 10px 16px 10px 0;
+    cursor: pointer;
+    outline: none;
+}
+
+.display-parameters .drop-menu .drop-button {
+    outline: none;
+}
+
+.drop-menu {
+    display: inline-block;
+    position: relative;
+}
+
+.display-sort-menu-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    z-index: 1;
+    width: 230px;
+    border: 1px solid rgb(224, 224, 224);
+    color: gray;
+    /* right: 0; */
+}
+
+.display-sort-menu-content img {
+    width: 30px;
+    height: 30px;
+}
+
+.display-sort-menu-content button {
+    display: block;
+    outline: none;
+    width: 100%;
+    padding: 8px 15px;
+    text-align: left;
+    color: gray;
+}
+
+.display-sort-menu-content button:hover {
+    color: rgb(97, 97, 97);
+}
+
 @media (min-width: 576px) {
     .blog-container {
         margin-top: 40px;
@@ -447,7 +608,8 @@ form.comment-answer.comment-form {
     
     }
     
-    .blog-container article {
+    .blog-container article,
+    .sign-container div {
         box-shadow: 0 0 50px rgb(235, 235, 235);
         /* padding: 40px; */
         /* border-radius: 15px; */
