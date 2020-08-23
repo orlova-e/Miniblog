@@ -1,5 +1,5 @@
 "use strict";
-
+const sortArticlesType = "SortArticlesType";
 function sortArticles(btn) {
     // let el = document.elementFromPoint(event.clientX, event.clientX);
 
@@ -10,6 +10,10 @@ function sortArticles(btn) {
 
     let spanText = document.getElementById("sortCharacter");
     spanText.innerText = btn.innerText;
+
+    if(localStorage.getItem(sortArticlesType) !== btn.innerText) {
+        localStorage.setItem(sortArticlesType, btn.innerText);
+    }
 
     let articlesSortList = document.getElementById("sortListDropdown");
     if(articlesSortList.style.display !== "none") {
@@ -52,13 +56,13 @@ function sortArticles(btn) {
             for(let i = 0; i < j; i++) {
                 let articleHeader1 = articlesCollection[i].querySelector('.article-header b').innerText;
                 let articleHeader2 = articlesCollection[i + 1].querySelector('.article-header b').innerText;
-                if(!sortMethod.includes("descending") && (articleHeader1.localeCompare(articleHeader2) < 0)) {
+                if(!sortMethod.includes("\u2193") && (articleHeader1.localeCompare(articleHeader2) < 0)) {
                     wasPassed = true;
                     let temp = articlesCollection[i];
                     articlesCollection[i] = articlesCollection[i + 1];
                     articlesCollection[i + 1] = temp;
                 }
-                else if(sortMethod.includes("descending") && (articleHeader1.localeCompare(articleHeader2) > 0)) {
+                else if(sortMethod.includes("\u2193") && (articleHeader1.localeCompare(articleHeader2) > 0)) {
                     wasPassed = true;
                     let temp = articlesCollection[i];
                     articlesCollection[i] = articlesCollection[i + 1];
@@ -80,5 +84,16 @@ function sortArticles(btn) {
         newArticle.classList.add('art', 'text-alegreya-style');
         newArticle.innerHTML = articlesCollection[i].innerHTML;
         newBlogContainer.prepend(newArticle);
+    }
+
+    if(localStorage.getItem(layoutType) !== null) {
+        if(localStorage.getItem(layoutType) === "grid") {
+            let btn = document.getElementById("gridArticlesLayout");
+            articlesLayoutVisibility(btn);
+        }
+        else {
+            let btn = document.getElementById("rowArticlesLayout");
+            articlesLayoutVisibility(btn);
+        }
     }
 }
