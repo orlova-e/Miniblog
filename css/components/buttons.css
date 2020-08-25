@@ -224,3 +224,18 @@ div.article-user-actions {
 button {
     outline: none;
 }
+
+.icon-button img {
+    width: 30px;
+    height: 30px;
+}
+
+.icon-button.block-button img,
+.icon-button.delete-button img {
+    width: 26px;
+    height: 26px;
+}
+
+.icon-button {
+    margin-top: 2px;
+}

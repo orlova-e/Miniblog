@@ -526,6 +526,14 @@ form.comment-answer.comment-form {
     color: rgb(97, 97, 97);
 }
 
+/* * OPTIONS page */
+
+.options-content .usual-form .usual-input {
+    width: 80%;
+}
+
+
+
 @media (min-width: 576px) {
     .blog-container {
         margin-top: 40px;

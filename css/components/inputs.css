@@ -1,24 +1,32 @@
 /* * Usual inputs */
 
+.usual-input {
+    outline: none;
+}
+
 .usual-form .usual-label {
     font-size: 18px;
     margin: 15px 0 0 0px;
     display: block;
 }
 
-.usual-form .usual-input {
-    outline: transparent;
+
+
+/* .usual-form .usual-input */
+.usual-input {
+    outline: none;
     display: inline-block;
     margin: 10px 8px 5px 0;
     padding: 7px 10px;
     width: 60%;
     border: 1px solid rgb(199, 199, 199);
     border-radius: 4px;
-    font-size: 15px;
+    font-size: 18px;
     color: rgb(58, 58, 58);
 }
 
-.usual-form .usual-input:focus {
+/* .usual-form .usual-input:focus */
+.usual-input:focus {
     border: 1px solid burlywood;
     box-shadow: 0 0 0 3px rgb(255, 230, 197);
 }
@@ -51,11 +59,13 @@
 
 /* ? Error's definitions */
 
-.usual-form .usual-input.usual-input-error {
+/* .usual-form .usual-input.usual-input-error */
+.usual-input.usual-input-error {
     border: 1px solid red;
 }
 
-.usual-form .usual-input.usual-input-error:focus {
+/* .usual-form .usual-input.usual-input-error:focus */
+.usual-input.usual-input-error:focus {
     border: 1px solid rgb(255, 113, 113);
     box-shadow: 0 0 0 3px rgb(255, 208, 208);
 }
@@ -68,3 +78,16 @@
     margin: 0;
 }
 
+.usual-input-textarea-middle {
+    height: 150px;
+    min-height: 70px;
+    max-height: 500px;
+}
+
+/* * SEARCH input */
+
+input[type="search"] {
+    min-width: 240px;
+    width: 100px;
+    max-width: 350px;
+}

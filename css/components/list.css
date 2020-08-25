@@ -12,21 +12,4 @@ ul.article-info li {
 .article-info a {
     color: gray;
 }
-/* 
-ul.comment-meta {
-    float: left;
-    list-style-type: disc;
-    color: blue;
-}
 
-ul.comment-meta:first-child {
-    list-style-type: none;
-}
-
-ul.comment-meta:last-child {
-    text-align: rig;
-}
-
-ul.comment-meta li {
-    float: left;
-} */

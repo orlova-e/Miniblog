@@ -1,0 +1,148 @@
+ul {
+    display: block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul li {
+    margin: 0;
+    padding: 0;
+    padding: 6px 0px;
+    word-break: break-all;
+}
+
+ul.usual-ul {
+    padding: 0 20px;
+    list-style-type: disc;
+}
+
+input[type=radio],
+input[type=checkbox] {
+    margin-right: 5px;
+}
+
+input[type=file] {
+    /* background-color:green; */
+}
+
+select {
+    outline: none;
+    margin: 5px 0;
+    padding: 2px 5px;
+    border-radius: 5px;
+    border: 1px solid rgb(201, 201, 201);
+}
+
+/* select option {
+    font-family: 'Open Sans', sans-serif;
+} */
+
+.usual-label.radio-label,
+.usual-label.checkbox-label {
+    margin: 5px 0;
+}
+
+fieldset {
+    margin: 0 0 30px 0;
+}
+
+legend {
+    display: block;
+    margin: 5px 0;
+}
+
+/* * DISPLAY ARTICLE PARAMETERS */
+
+.options-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-gap: 1.5em;
+}
+
+.options-container:first-child aside {
+    border-right: 1px solid lightgray;
+}
+
+.options-content div {
+    margin-bottom: 20px;
+}
+
+/* ! DISPLAYING??? */
+
+.options-content:last-child div { 
+    margin-bottom: 0;
+}
+
+/* ! */
+
+.drop-menu .drop-button {
+    padding: 0px 0 0 0;
+    margin: 0;
+    line-height: 1.0;
+    cursor: pointer;
+    outline: none;
+}
+
+.display-parameters .drop-menu .drop-button {
+    outline: none;
+}
+
+.drop-menu {
+    display: inline-block;
+    position: relative;
+
+}
+
+.blog-links-list {
+    display: none;
+    position: absolute;
+    background-color: white;
+    z-index: 1;
+    width: 230px;
+    color: gray;
+    margin: 0;
+}
+
+.blog-links-list img {
+    width: 30px;
+    height: 30px;
+}
+
+.blog-links-list a {
+    color: rgb(90, 90, 90);
+}
+
+.blog-links-list li {
+    display: block;
+    text-align: left;
+}
+
+.blog-links-list a:hover {
+    color: rgb(158, 158, 158);
+}
+
+/* * OPTIONS page */
+
+.options-menu-bar .drop-menu {
+    display: block;
+    position: unset;
+}
+
+.options-menu-bar .blog-links-list {
+    display: block;
+    position: unset;
+}
+
+.options-container .options-content .usual-input {
+    width: 100%;
+}
+
+.options-container .options-content .usual-form textarea.usual-input-textarea {
+    /* margin: 10px; */
+    resize: none;
+    /* min-width: auto; */
+    width: 15em;
+    max-width: 100%;
+    display: block;
+}

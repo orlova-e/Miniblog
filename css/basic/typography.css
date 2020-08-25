@@ -73,6 +73,10 @@ a:hover {
     /* display: inline; */
 }
 
+.blog-info-span {
+    color: gray;
+}
+
 p {
     padding-top: 8px;
 }
