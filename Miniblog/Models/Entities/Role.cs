@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Miniblog.Models.Entities
+{
+    public class Role
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public RoleType Type { get; set; }
+        public Opportunities Opportunities { get; set; }
+        public List<User> Users { get; set; }
+        public Role()
+        {
+            Users = new List<User>();
+        }
+    }
+    public enum RoleType
+    {
+        User,
+        Editor,
+        Administrator
+    }
+}

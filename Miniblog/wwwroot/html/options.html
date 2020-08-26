@@ -13,14 +13,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+SC:ital,wght@0,400;0,500;0,700;0,800;0,900;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/basic/basiclayout.css">
-    <link rel="stylesheet" href="css/basic/typography.css">
-    <link rel="stylesheet" href="css/components/buttons.css">
-    <link rel="stylesheet" href="css/components/inputs.css">
-    <link rel="stylesheet" href="css/components/list.css">
-    <link rel="stylesheet" href="css/components/list2.css">
-    <link rel="stylesheet" href="css/components/nav.css">
-    <link rel="stylesheet" href="css/components/tables.css">
+    <link rel="stylesheet" href="/Miniblog/wwwroot/css/basic/basiclayout.css">
+    <link rel="stylesheet" href="/Miniblog/wwwroot/css/basic/typography.css">
+    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/buttons.css">
+    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/inputs.css">
+    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/list.css">
+    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/list2.css">
+    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/nav.css">
+    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/tables.css">
 </head>
 <body class="blog-theme-blue">
     
@@ -39,7 +39,7 @@
                         <li class="nav-item">
                             <a class="nav-link user-info" href="#">
                                 <div class="user-info-container">
-                                    <img src="img/users/35FPa7SRJoI.jpg" width="30px" alt="User">
+                                    <img src="/Miniblog/wwwroot/img/users/35FPa7SRJoI.jpg" width="30px" alt="User">
                                     <span>lorem_ipsum</span>
                                 </div>
 
@@ -57,7 +57,7 @@
                                 <div class="dropdown-item" href="#">
                                     <form action="" class="inline-form">
                                         <input style="display: inline-block; width: min-content;" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                        <a href="#"class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</a>
+                                        <a href="#" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</a>
                                     </form>
                                 </div>
                             </div>
@@ -78,7 +78,7 @@
                 <div class="author-container">
                     <div class="author-info-container">
                         <div class="user-info-container">
-                            <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+                            <img src="/Miniblog/wwwroot/img/users/35FPa7SRJoI.jpg" alt="User">
                         </div>
         
                         <div class="author-info">
@@ -140,8 +140,8 @@
                     </div>
                 </div>
                 <div class="display-character">
-                    <a href="#"id="rowArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="img/ico/rows2.png" alt=""></a>
-                    <a href="#"id="gridArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="img/ico/grid nonactive.png" alt=""></a>
+                    <a href="#"id="rowArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="/Miniblog/wwwroot/img/ico/rows2.png" alt=""></a>
+                    <a href="#"id="gridArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="/Miniblog/wwwroot/img/ico/grid nonactive.png" alt=""></a>
                 </div>
             </div>            
         </div> -->
@@ -284,7 +284,7 @@
                         <div style="display: block;" class="options-content">
 
                             <!-- * General -->
-                            <form style="display: none;" method="POST" action="/options/general" class="usual-form">
+                            <form style="display: block;" method="POST" action="/options/general" class="usual-form">
 
                                 <!-- ! PREDEFINED ERROR class names:
                                   TODO: SWITCH it to jQUERY erorr class names
@@ -348,16 +348,16 @@
 
                                 <fieldset>
                                     <legend>Language</legend>
-                                    <label  class="usual-label radio-label">
-                                        <input type="radio" name="siteLanguage" class="usual-radiobutton">
+                                    <label class="usual-label radio-label">
+                                        <input checked type="radio" name="siteLanguage" class="usual-radiobutton">
                                         English
                                     </label>
                                     <label  class="usual-label radio-label">
                                         <input type="radio" name="siteLanguage" class="usual-radiobutton">
                                         Русский
                                     </label>
-                                    <label  class="usual-label checkbox-label">
-                                        <input type="checkbox" name="" class="usual-checkbox">
+                                    <label  class="usual-label radio-label">
+                                        <input type="radio" name="siteLanguage" class="usual-radiobutton">
                                         Based on user's culture
                                     </label>
                                 </fieldset>
@@ -366,7 +366,7 @@
                             </form>
 
                             <!-- * Activity -->
-                            <form style="display: none;" method="POST" action="/options/activity" class="usual-form">
+                            <form style="display: block;" method="POST" action="/options/activity" class="usual-form">
                                 <fieldset>
                                     <legend>Notice board</legend>
                                     <ul class="usual-ul">
@@ -396,7 +396,7 @@
                             </div> -->
 
                             <!-- * Writing -->
-                            <form style="display: none;" method="POST" action="/options/writing" class="usual-form">
+                            <form style="display: block;" method="POST" action="/options/writing" class="usual-form">
                                 <fieldset>
                                     <legend>Who can write articles</legend>
                                     <label class="usual-label radio-label">
@@ -432,10 +432,10 @@
                                         <input disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
                                         Topics are moderated by administrators
                                     </label>
-                                    <label class="usual-label radio-label">
+                                    <!-- <label class="usual-label radio-label">
                                         <input disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
                                         Topics are moderated by editors
-                                    </label>
+                                    </label> -->
                                     <label class="usual-label radio-label">
                                         <input disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
                                         Topics are moderated by administrators and editors
@@ -443,31 +443,31 @@
                                 </fieldset>
 
                                 <fieldset>
-                                    <legend>Who can create articles' marks</legend>
+                                    <legend>Who can create articles' tags</legend>
                                     <label class="usual-label radio-label">
-                                        <input type="radio" name="createMarksRole" class="usual-radiobutton">
+                                        <input type="radio" name="createTagsRole" class="usual-radiobutton">
                                         Administrators
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input checked type="radio" name="createMarksRole" class="usual-radiobutton">
+                                        <input checked type="radio" name="createTagsRole" class="usual-radiobutton">
                                         Editors and administrators
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input type="radio" name="createMarksRole" class="usual-radiobutton">
+                                        <input type="radio" name="createTagsRole" class="usual-radiobutton">
                                         All users
                                     </label>
 
                                     <label class="usual-label radio-label">
-                                        <input disabled type="radio" name="moderateMarksRole" class="usual-radiobutton">
-                                        Marks are moderated by administrators
+                                        <input disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                        Tags are moderated by administrators
                                     </label>
+                                    <!-- <label class="usual-label radio-label">
+                                        <input disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                        Tags are moderated by editors
+                                    </label> -->
                                     <label class="usual-label radio-label">
-                                        <input disabled type="radio" name="moderateMarksRole" class="usual-radiobutton">
-                                        Marks are moderated by editors
-                                    </label>
-                                    <label class="usual-label radio-label">
-                                        <input disabled type="radio" name="moderateMarksRole" class="usual-radiobutton">
-                                        Marks are moderated by administrators and editors
+                                        <input disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                        Tags are moderated by administrators and editors
                                     </label>
                                 </fieldset>
 
@@ -496,7 +496,7 @@
                             </form>
 
                             <!-- * Reading -->
-                            <form style="display: none;" method="POST" action="/options/reading" class="usual-form">
+                            <form style="display: block;" method="POST" action="/options/reading" class="usual-form">
                                 <fieldset>
                                     <legend>The main page displays:</legend>
                                     <label class="usual-label radio-label">
@@ -697,23 +697,23 @@
                             </form>
 
                             <!-- * Chats -->
-                            <form style="display: none;" method="POST" action="/options/chats" class="usual-form">
+                            <form style="display: block;" method="POST" action="/options/chats" class="usual-form">
                                 <fieldset>
                                     <legend>Users who can use the chat:</legend>
                                     <label class="usual-label radio-label">
-                                        <input checked type="radio" name="mainPage" class="usual-radiobutton">
+                                        <input checked type="radio" name="chatUsers" class="usual-radiobutton">
                                         Nobody
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input type="radio" name="mainPage" class="usual-radiobutton">
+                                        <input type="radio" name="chatUsers" class="usual-radiobutton">
                                         Administrators
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input type="radio" name="mainPage" class="usual-radiobutton">
+                                        <input type="radio" name="chatUsers" class="usual-radiobutton">
                                         Editors and administrators
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input type="radio" name="mainPage" class="usual-radiobutton">
+                                        <input type="radio" name="chatUsers" class="usual-radiobutton">
                                         All users
                                     </label>
 
@@ -733,7 +733,7 @@
                             </form>
 
                             <!-- * Discussion -->
-                            <form style="display: none;" method="POST" action="/options/discussion" class="usual-form">
+                            <form style="display: block;" method="POST" action="/options/discussion" class="usual-form">
                                 
                                 <fieldset>
                                     <legend>Sorting comments</legend>
@@ -886,17 +886,17 @@
                                         <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, amet!</td>
                                         <td>
                                             <button type="button" class="icon-button">
-                                                <img src="img/ico/pass.png" alt="">
+                                                <img src="/Miniblog/wwwroot/img/ico/pass.png" alt="">
                                             </button>
                                         </td>
                                         <td>
                                             <button type="button" class="icon-button block-button">
-                                                <img src="img/ico/block.png" alt="">
+                                                <img src="/Miniblog/wwwroot/img/ico/block.png" alt="">
                                             </button>
                                         </td>
                                         <td>
                                             <button type="button" class="icon-button delete-button">
-                                                <img src="img/ico/delete5.png" alt="">
+                                                <img src="/Miniblog/wwwroot/img/ico/delete5.png" alt="">
                                             </button>
                                         </td>
                                     </tr>
@@ -906,17 +906,17 @@
                                         <td>Lorem iasdfasdfsdfasdfsdfsdfasdfsdfsdfsdfsdfasdfsdfsadfsdfasdfsadfsdfsdfsdf</td>
                                         <td>
                                             <button type="button" class="icon-button">
-                                                <img src="img/ico/pass.png" alt="">
+                                                <img src="/Miniblog/wwwroot/img/ico/pass.png" alt="">
                                             </button>
                                         </td>
                                         <td>
                                             <button type="button" class="icon-button block-button">
-                                                <img src="img/ico/block.png" alt="">
+                                                <img src="/Miniblog/wwwroot/img/ico/block.png" alt="">
                                             </button>
                                         </td>
                                         <td>
                                             <button type="button" class="icon-button delete-button">
-                                                <img src="img/ico/delete5.png" alt="">
+                                                <img src="/Miniblog/wwwroot/img/ico/delete5.png" alt="">
                                             </button>
                                         </td>
                                     </tr>
@@ -926,17 +926,17 @@
                                         <td>Lorem, ipsum dolor.</td>
                                         <td>
                                             <button type="button" class="icon-button">
-                                                <img src="img/ico/pass.png" alt="">
+                                                <img src="/Miniblog/wwwroot/img/ico/pass.png" alt="">
                                             </button>
                                         </td>
                                         <td>
                                             <button type="button" class="icon-button block-button">
-                                                <img src="img/ico/block.png" alt="">
+                                                <img src="/Miniblog/wwwroot/img/ico/block.png" alt="">
                                             </button>
                                         </td>
                                         <td>
                                             <button type="button" class="icon-button delete-button">
-                                                <img src="img/ico/delete5.png" alt="">
+                                                <img src="/Miniblog/wwwroot/img/ico/delete5.png" alt="">
                                             </button>
                                         </td>
                                     </tr>
@@ -966,16 +966,16 @@
     </div>
 
     <!-- Scroll page USUAL -->
-    <script src="js/scrollFunction.js"></script>
-    <script src="js/sortArticlesList.js"></script>
-    <script src="js/sortArticles.js"></script>
-    <script src="js/closeSortList.js"></script>
-    <!-- <script src="js/articlesLayoutVisibility.js"></script>
-    <script src="js/sortArticlesList.js"></script>
-    <script src="js/sortArticles.js"></script>
-    <script src="js/closeSortList.js"></script>
-    <script src="js/windowClickEvent.js"></script>
-    <script src="js/handlers.js"></script> -->
+    <script src="/Miniblog/wwwroot/js/scrollFunction.js"></script>
+    <script src="/Miniblog/wwwroot/js/sortArticlesList.js"></script>
+    <script src="/Miniblog/wwwroot/js/sortArticles.js"></script>
+    <script src="/Miniblog/wwwroot/js/closeSortList.js"></script>
+    <!-- <script src="Miniblog/wwwroot/js/articlesLayoutVisibility.js"></script>
+    <script src="Miniblog/wwwroot/js/sortArticlesList.js"></script>
+    <script src="Miniblog/wwwroot/js/sortArticles.js"></script>
+    <script src="Miniblog/wwwroot/js/closeSortList.js"></script>
+    <script src="Miniblog/wwwroot/js/windowClickEvent.js"></script>
+    <script src="Miniblog/wwwroot/js/handlers.js"></script> -->
     <!-- jQuery, Popper, Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
