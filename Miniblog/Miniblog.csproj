@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Services\" />
     <Folder Include="Models\App\" />
     <Folder Include="wwwroot\" />
     <Folder Include="Views\" />

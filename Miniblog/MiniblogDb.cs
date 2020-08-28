@@ -19,7 +19,7 @@ namespace Miniblog
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Series> Series { get; set; }
-        public DbSet<Tag> Tags { get; set; }
+        //public DbSet<Tag> Tags { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<WebsiteDisplayOptions> WebsiteDisplayOptions { get; set; }
         public DbSet<ArticlesDisplayOptions> ArticlesDisplayOptions { get; set; }
@@ -81,18 +81,18 @@ namespace Miniblog
                 .WithMany(ar => ar.Images)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ArticleTag>()
-                .HasKey(t => new { t.ArticleId, t.TagId });
-            modelBuilder.Entity<ArticleTag>()
-                .HasOne(at => at.Article)
-                .WithMany(a => a.ArticleTags)
-                .HasForeignKey(at => at.ArticleId)
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<ArticleTag>()
-                .HasOne(at => at.Tag)
-                .WithMany(t => t.ArticleTags)
-                .HasForeignKey(at => at.TagId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<ArticleTag>()
+            //    .HasKey(t => new { t.ArticleId, t.TagId });
+            //modelBuilder.Entity<ArticleTag>()
+            //    .HasOne(at => at.Article)
+            //    .WithMany(a => a.ArticleTags)
+            //    .HasForeignKey(at => at.ArticleId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<ArticleTag>()
+            //    .HasOne(at => at.Tag)
+            //    .WithMany(t => t.ArticleTags)
+            //    .HasForeignKey(at => at.TagId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
 
             //UserArticlesDisplayOptions

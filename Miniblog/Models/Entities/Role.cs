@@ -7,7 +7,7 @@ namespace Miniblog.Models.Entities
     public class Role
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public RoleType Type { get; set; }
         public Opportunities Opportunities { get; set; }
         public List<User> Users { get; set; }

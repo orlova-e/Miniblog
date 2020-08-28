@@ -6,8 +6,8 @@ namespace Miniblog.Models.Entities
     public class Opportunities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public int RoleId { get; set; }
+        public Guid Id { get; set; }
+        public Guid RoleId { get; set; }
         public Role Role { get; set; }
         public string Discriminator { get; }
         public bool WriteArticles { get; set; }

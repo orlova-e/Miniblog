@@ -16,7 +16,7 @@ namespace Miniblog.Models.Entities
         public DateTimeOffset DateTime { get; set; }
         public Guid? TopicId { get; set; }
         public Topic Topic { get; set; }
-        public List<ArticleTag> ArticleTags { get; set; }
+        //public List<ArticleTag> ArticleTags { get; set; }
         public Guid? SeriesId { get; set; }
         public Series Series { get; set; }
         public List<Image> Images { get; set; }
@@ -26,7 +26,7 @@ namespace Miniblog.Models.Entities
         {
             Images = new List<Image>();
             Comments = new List<Comment>();
-            ArticleTags = new List<ArticleTag>();
+            //ArticleTags = new List<ArticleTag>();
         }
     }
 }

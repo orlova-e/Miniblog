@@ -17,20 +17,20 @@ namespace Miniblog.Models.Entities
         public string Hash { get; set; }
         [NotMapped]
         public string Password { get; set; }
-        public int RoleId { get; set; }
+        public Guid RoleId { get; set; }
         public Role Role { get; set; }
         public DateTimeOffset DateOfRegistration { get; set; }
         public string City { get; set; }
         public List<Comment> Comments { get; set; }
         public List<Article> Articles { get; set; }
         public List<Topic> Topics { get; set; }
-        public List<Tag> Tags { get; set; }
+        //public List<Tag> Tags { get; set; }
         public User()
         {
             Comments = new List<Comment>();
             Articles = new List<Article>();
             Topics = new List<Topic>();
-            Tags = new List<Tag>();
+            //Tags = new List<Tag>();
         }
     }
 }
