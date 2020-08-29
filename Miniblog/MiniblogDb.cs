@@ -12,13 +12,14 @@ namespace Miniblog
     public class MiniblogDb : DbContext
     {
         public DbSet<Role> Roles { get; set; }
-        public DbSet<Opportunities> Opportunities { get; set; }
-        public DbSet<JobOpportunities> JobOpportunities { get; set; }
+        public DbSet<ExtendedRole> ExtendedRoles { get; set; }
+        //public DbSet<Opportunities> Opportunities { get; set; }
+        //public DbSet<JobOpportunities> JobOpportunities { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
-        public DbSet<Series> Series { get; set; }
+        //public DbSet<Series> Series { get; set; }
         //public DbSet<Tag> Tags { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<WebsiteDisplayOptions> WebsiteDisplayOptions { get; set; }
@@ -46,14 +47,6 @@ namespace Miniblog
                 .HasConversion(
                 v => v.ToString(),
                 v => (RoleType)Enum.Parse(typeof(RoleType), v));
-
-            modelBuilder.Entity<Role>()
-                .HasOne(r => r.Opportunities)
-                .WithOne(o => o.Role)
-                .HasForeignKey<Opportunities>(f => f.Id);
-            modelBuilder.Entity<Role>().ToTable("Roles");
-            modelBuilder.Entity<Opportunities>().ToTable("Roles");
-
 
             modelBuilder.Entity<WebsiteDisplayOptions>()
                 .Property(e => e.WebsiteLanguage)
@@ -137,63 +130,55 @@ namespace Miniblog
                 v => v.ToString(),
                 v => (SortingComments)Enum.Parse(typeof(SortingComments), v));
 
+            modelBuilder.Entity<Topic>()
+                .HasOne(t => t.Author)
+                .WithMany(u => u.Topics)
+                .OnDelete(DeleteBehavior.SetNull);
 
-            //modelBuilder.Entity<Topic>()
-            //    .HasOne(t => t.Author)
-            //    .WithMany(u => u.Topics)
-            //    .OnDelete(DeleteBehavior.SetNull);
+            Role User = new Role()
+            {
+                Id = Guid.NewGuid(),
+                Type = RoleType.User,
+                WriteArticles = true,
+                WriteComments = true,
+                WriteMessages = true,
+                ReadComments = true,
+                CreateTopics = true,
+                CreateTags = true
+            };
+            ExtendedRole Editor = new ExtendedRole()
+            {
+                Id = Guid.NewGuid(),
+                Type = RoleType.Editor,
+                WriteArticles = true,
+                WriteComments = true,
+                WriteMessages = true,
+                ReadComments = true,
+                CreateTopics = true,
+                CreateTags = true,
+                ModerateArticles = true,
+                ModerateComments = true,
+                ModerateTopics = true,
+                ModerateTags = true
+            };
+            ExtendedRole Administrator = new ExtendedRole()
+            {
+                Id = Guid.NewGuid(),
+                Type = RoleType.Administrator,
+                WriteArticles = true,
+                WriteComments = true,
+                WriteMessages = true,
+                ReadComments = true,
+                CreateTopics = true,
+                CreateTags = true,
+                ModerateArticles = true,
+                ModerateComments = true,
+                ModerateTopics = true,
+                ModerateTags = true
+            };
 
-
-
-
-            //modelBuilder.Entity<Role>()
-            //    .HasOne(r => r.Opportunities)
-            //    .WithOne(o => o.Role)
-            //    .HasForeignKey<Opportunities>(f => f.Id);
-            //modelBuilder.Entity<Role>().ToTable("Roles");
-            //modelBuilder.Entity<Opportunities>().ToTable("Roles");
-
-            //Role User = new Role()
-            //{
-            //    RoleName = Role.Roles.User,
-            //};
-            //Role Editor = new Role()
-            //{
-            //    RoleName = Role.Roles.Editor,
-            //};
-            //Role Administrator = new Role()
-            //{
-            //    RoleName = Role.Roles.Administrator,
-            //};
-
-            //Opportunities userOpportunities = new Opportunities()
-            //{
-            //    Role = User,
-            //    WriteArticles = true,
-            //    WriteComments = true,
-            //    WriteMessages = true,
-            //    ReadComments = true,
-            //    CreateTopics = true,
-            //    CreateTags = true
-            //};
-            //JobOpportunities editorOpportunities = new JobOpportunities()
-            //{
-            //    Role = Editor,
-            //    WriteArticles = true,
-            //    WriteComments = true,
-            //    WriteMessages = true,
-            //    ReadComments = true,
-            //    CreateTopics = true,
-            //    CreateTags = true,
-            //    ModerateArticles = true,
-            //    ModerateComments = true,
-            //    ModerateTopics = true,
-            //    ModerateTags = true
-            //};
-            //JobOpportunities administratorOpportunities = editorOpportunities;
-            //administratorOpportunities.Role = Administrator;
-
-            //modelBuilder.Entity<Role>().HasData(User, Editor, Administrator);
+            modelBuilder.Entity<Role>().HasData(User);
+            modelBuilder.Entity<ExtendedRole>().HasData(Editor, Administrator);
         }
     }
 }

@@ -1,6 +1,11 @@
-﻿namespace Miniblog.Models.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Miniblog.Models.Entities
 {
-    public class JobOpportunities : Opportunities
+    public class ExtendedRole : Role
     {
         public bool ModerateArticles { get; set; }
         public bool ModerateComments { get; set; }

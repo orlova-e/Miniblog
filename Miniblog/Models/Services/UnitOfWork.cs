@@ -14,7 +14,8 @@ namespace Miniblog.Models.Services
         private IPlainRepository<Article> articles;
         private IPlainRepository<Comment> comments;
         private IPlainRepository<Topic> topics;
-        private IOptionRepository<Opportunities> opportunities;
+        private IOptionRepository<Role> roles;
+        //private IOptionRepository<Opportunities> opportunities;
         private IOptionRepository<ArticlesListDisplayOptions> articlesListDisplay;
         private IOptionRepository<UserArticleDisplayOptions> userArticleDisplayOptions;
         private IOptionRepository<WebsiteDisplayOptions> websiteDisplayOptions;
@@ -58,15 +59,24 @@ namespace Miniblog.Models.Services
                 return topics;
             }
         }
-        public IOptionRepository<Opportunities> Opportunities
+        public IOptionRepository<Role> Roles
         {
             get
             {
-                if (opportunities == null)
-                    opportunities = new OpportinitiesRepository(Db);
-                return opportunities;
+                if (roles == null)
+                    roles = new RolesRepository(Db);
+                return roles;
             }
         }
+        //public IOptionRepository<Opportunities> Opportunities
+        //{
+        //    get
+        //    {
+        //        if (opportunities == null)
+        //            opportunities = new OpportinitiesRepository(Db);
+        //        return opportunities;
+        //    }
+        //}
         public IOptionRepository<ArticlesListDisplayOptions> ArticlesListOptions
         {
             get

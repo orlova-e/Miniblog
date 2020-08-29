@@ -1,0 +1,55 @@
+﻿@model Miniblog.ViewModels.RegisterViewModel
+
+<div class="blog-container">
+
+    <div class="text-sans-style">
+
+        <div class="sign-container">
+
+            <div class="registration-container">
+                <h2 class="text-roboto-style">Sign Up</h2>
+
+                <form class="usual-form" method="post"
+                      asp-action="SignUp"
+                      asp-controller="Account"
+                      asp-antiforgery="true">
+
+                    <div style="display: none;" asp-validation-summary="All"></div>
+
+                    <label class="usual-label" asp-for="Username"></label>
+                    <input class="usual-input usual-input-text" asp-for="Username">
+                    <span class="text-sans-style" asp-validation-for="Username"></span>
+
+                    <label class="usual-label" asp-for="Email"></label>
+                    <input class="usual-input usual-input-text" asp-for="Email">
+                    <span class="text-sans-style" asp-validation-for="Email"></span>
+
+                    <label class="usual-label" asp-for="Password"></label>
+                    <input class="usual-input usual-input-text" asp-for="Password">
+                    <span class="text-sans-style" asp-validation-for="Password"></span>
+
+                    <label class="usual-label" asp-for="PasswordConfirmation"></label>
+                    <input class="usual-input usual-input-text" asp-for="PasswordConfirmation">
+                    <span class="text-sans-style" asp-validation-for="PasswordConfirmation"></span>
+
+                    <button type="submit" class="usual-submit-button usual-button">Let's start!</button>
+
+                    <a class="sign-suggestion"
+                       asp-action="SignIn"
+                       asp-controller="Account">or Sign In</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"
+            asp-fallback-src="~/lib/jquery-validate/jquery.validate.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"
+            asp-fallback-src="~/lib/jquery-validation-unobtrusive/query.validate.unobtrusive.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"></script>
+}

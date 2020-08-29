@@ -23,11 +23,11 @@
     color: rgb(58, 58, 58);
 }
 
-/* .usual-form .usual-input:focus */
-.usual-input:focus {
-    border: 1px solid burlywood;
-    box-shadow: 0 0 0 3px rgb(255, 230, 197);
-}
+    /* .usual-form .usual-input:focus */
+    .usual-input:focus {
+        border: 1px solid burlywood;
+        box-shadow: 0 0 0 3px rgb(255, 230, 197);
+    }
 
 .usual-form .usual-input-textarea {
     width: 100%;
@@ -58,17 +58,25 @@
 /* ? Error's definitions */
 
 /* .usual-form .usual-input.usual-input-error */
-.usual-input.usual-input-error {
+/* .usual-input.usual-input-error, */
+.usual-form .usual-input.usual-input-error
+.usual-input.input-validation-error,
+input.input-validation-error {
+    color: red;
     border: 1px solid red;
 }
 
-/* .usual-form .usual-input.usual-input-error:focus */
-.usual-input.usual-input-error:focus {
-    border: 1px solid rgb(255, 113, 113);
-    box-shadow: 0 0 0 3px rgb(255, 208, 208);
-}
+    /* .usual-form .usual-input.usual-input-error:focus */
+    /* .usual-input.usual-input-error:focus, */
+    .usual-input.input-validation-error:focus,
+    input.input-validation-error:focus {
+        border: 1px solid rgb(255, 113, 113);
+        box-shadow: 0 0 0 3px rgb(255, 208, 208);
+    }
 
-.usual-form .usual-error-message {
+/* .usual-form .usual-error-message, */
+.usual-form .field-validation-error,
+form .field-validation-error {
     display: block;
     font-size: 14px;
     font-weight: 500;
@@ -76,16 +84,23 @@
     margin: 0;
 }
 
-.usual-input-textarea-middle {
-    height: 150px;
-    min-height: 70px;
-    max-height: 500px;
+.validation-summary-errors {
+    color: red;
+}
+
+.validation-summary-valid {
+    display: none;
 }
 
 /* * SEARCH input */
-
 input[type="search"] {
     min-width: 240px;
     width: 100px;
     max-width: 350px;
+}
+
+.usual-input-textarea-middle {
+    height: 150px;
+    min-height: 70px;
+    max-height: 500px;
 }

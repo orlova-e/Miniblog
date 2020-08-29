@@ -1,0 +1,108 @@
+﻿@using Miniblog.Models.Entities
+@{
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Blog</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;0,800;0,900;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+SC:ital,wght@0,400;0,500;0,700;0,800;0,900;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/css/basic/basiclayout.css">
+    <link rel="stylesheet" href="~/css/basic/typography.css">
+    <link rel="stylesheet" href="~/css/basic/colortheme.css">
+    <link rel="stylesheet" href="~/css/components/buttons.css">
+    <link rel="stylesheet" href="~/css/components/inputs.css">
+    <link rel="stylesheet" href="~/css/components/list.css">
+    <link rel="stylesheet" href="~/css/components/list2.css">
+    <link rel="stylesheet" href="~/css/components/nav.css">
+    <link rel="stylesheet" href="~/css/components/tables.css">
+</head>
+<body class="blog-theme-blue">
+
+    <div id="head-container" class="container-fluid head-container">
+        <div class="container">
+            <nav class="text-sans-style navbar navbar-expand-lg navbar-light bg-white">
+                <a class="text-roboto-style navbar-brand" href="#">
+                    <h2>Miniblog</h2>
+                </a>
+                <a href="#" id="menuButton" class="navbar-toggler justify-content-end" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </a>
+
+                <div class=" collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link user-info" href="#">
+                                <div class="user-info-container">
+                                    <img src="~/img/users/35FPa7SRJoI.jpg" width="30px" alt="User">
+                                    <span>lorem_ipsum</span>
+                                </div>
+
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Sign In</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
+                            <div class="dropdown-menu" style="min-width: auto;" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Topics</a>
+                                <a class="dropdown-item" href="#">Authors</a>
+                                <div class="dropdown-divider"></div>
+                                <div class="dropdown-item" href="#">
+                                    <form action="" class="inline-form">
+                                        <input style="display: inline-block; width: min-content;" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                                        <a href="#" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</a>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="read-progress">
+            <div class="read-progress-bar" id="readBar"></div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <!-- Scroll page USUAL -->
+
+    <script src="~/js/scrollFunction.js"></script>
+    <script src="~/js/listpage_actions/articlesLayoutVisibility.js"></script>
+    <script src="~/js/listpage_actions/sortArticlesList.js"></script>
+    <script src="~/js/listpage_actions/sortArticles.js"></script>
+    <script src="~/js/listpage_actions/closeSortList.js"></script>
+    <script src="~/js/listpage_actions/windowClickEvent.js"></script>
+    <script src="~/js/options_actions/openList.js"></script>
+    <script src="~/js/options_actions/openCloseOption.js"></script>
+    <script src="~/js/options_actions/handlers.js"></script>
+    <!-- <script src="~/Miniblog/wwwroot/js/articlesLayoutVisibility.js"></script>
+    <script src="~/Miniblog/wwwroot/js/sortArticlesList.js"></script>
+    <script src="~/Miniblog/wwwroot/js/sortArticles.js"></script>
+    <script src="~/Miniblog/wwwroot/js/closeSortList.js"></script>
+    <script src="~/Miniblog/wwwroot/js/windowClickEvent.js"></script>
+    <script src="~/Miniblog/wwwroot/js/handlers.js"></script> -->
+    <!-- jQuery, Popper, Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    @RenderSection("Scripts", false)
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>

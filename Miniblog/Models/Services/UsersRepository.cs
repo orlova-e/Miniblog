@@ -15,15 +15,15 @@ namespace Miniblog.Models.Services
         {
             Db = db;
         }
-        /// <returns>User with role and opportunities.</returns>
+        /// <returns>User with role.</returns>
         public async Task<User> GetByIdAsync(Guid id)
         {
             var user = await Db.Users.FindAsync(id);
             await Db.Entry(user).Reference(u => u.Role).LoadAsync();
-            var role = (from r in await Db.Roles.ToArrayAsync()
-                        where r.Id == user.RoleId
-                        select r).First();
-            await Db.Entry(role).Reference(r => r.Opportunities).LoadAsync();
+            //var role = (from r in await Db.Roles.ToArrayAsync()
+            //            where r.Id == user.RoleId
+            //            select r).First();
+            //await Db.Entry(role).Reference(r => r.Opportunities).LoadAsync();
             return user;
         }
         public async Task<IEnumerable<User>> GetAllAsync()

@@ -13,14 +13,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+SC:ital,wght@0,400;0,500;0,700;0,800;0,900;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/Miniblog/wwwroot/css/basic/basiclayout.css">
-    <link rel="stylesheet" href="/Miniblog/wwwroot/css/basic/typography.css">
-    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/buttons.css">
-    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/inputs.css">
-    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/list.css">
-    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/list2.css">
-    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/nav.css">
-    <link rel="stylesheet" href="/Miniblog/wwwroot/css/components/tables.css">
+    <link rel="stylesheet" href="D:/Dev/Miniblog/Miniblog/wwwroot/css/basic/basiclayout.css">
+    <link rel="stylesheet" href="D:/Dev/Miniblog/Miniblog/wwwroot/css/basic/typography.css">
+    <link rel="stylesheet" href="D:/Dev/Miniblog/Miniblog/wwwroot/css/components/buttons.css">
+    <link rel="stylesheet" href="D:/Dev/Miniblog/Miniblog/wwwroot/css/components/inputs.css">
+    <link rel="stylesheet" href="D:/Dev/Miniblog/Miniblog/wwwroot/css/components/list.css">
+    <link rel="stylesheet" href="D:/Dev/Miniblog/Miniblog/wwwroot/css/components/list2.css">
+    <link rel="stylesheet" href="D:/Dev/Miniblog/Miniblog/wwwroot/css/components/nav.css">
+    <link rel="stylesheet" href="D:/Dev/Miniblog/Miniblog/wwwroot/css/components/tables.css">
 </head>
 <body class="blog-theme-blue">
     
@@ -125,16 +125,16 @@
                 <div class="drop-menu">
                     <a href="#" onclick="sortArticlesList()" class="drop-button text-alegreya-style"><h5>Sort by: <span id="sortCharacter">First the old ones</span></h5></a>
                     <div id="sortListDropdown" class="blog-links-list">
-                        <a href="#" onclick="sortArticles(this)">
+                        <a href="#" onclick="openList(this)">
                             First the old ones
                         </a>
-                        <a href="#" onclick="sortArticles(this)">
+                        <a href="#" onclick="openList(this)">
                             First the new ones
                         </a>
-                        <a href="#" onclick="sortArticles(this)">
+                        <a href="#" onclick="openList(this)">
                             Alphabetically &DownArrow;
                         </a>
-                        <a href="#" onclick="sortArticles(this)">
+                        <a href="#" onclick="openList(this)">
                             Alphabetically &UpArrow;
                         </a>
                     </div>
@@ -155,127 +155,82 @@
                         <aside class="options-menu-bar">
 
                             <ul class="blog-menu-list">
-                                <li class="blog-menu-list-point drop-menu">
-                                    <button href="#" onclick="sortArticlesList()" class="drop-button text-alegreya-style"><h5>Main</h5></button>
+                                <li class="blog-menu-list-point drop-menu actual-menu-list">
+                                    <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Main</h5></button>
 
                                     <ul id="sortListDropdown" class="blog-links-list">
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Activity</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            General</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Writing</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Reading</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Chats</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Discussion</a></li>
-                                        <!-- <li><a href="#" onclick="sortArticles(this)">
-                                            Share</a></li> -->
+                                        <li><a href="#">Activity</a></li>
+                                        <li><a href="#">General</a></li>
+                                        <li><a href="#">Writing</a></li>
+                                        <li><a href="#">Reading</a></li>
+                                        <li><a href="#">Chats</a></li>
+                                        <li><a href="#">Discussion</a></li>
+                                        <!-- <li><a href="#">Share</a></li> -->
                                     </ul>
                                 </li>
 
                                 <li class="blog-menu-list-point drop-menu">
-                                    <button href="#" onclick="sortArticlesList()" class="drop-button text-alegreya-style"><h5>Articles</h5></button>
+                                    <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Articles</h5></button>
 
                                     <ul id="" class="blog-links-list">
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Add new</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Topics</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Tags</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Queue for moderation</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Manage</a></li>
+                                        <li><a href="#">Add new</a></li>
+                                        <li><a href="#">Topics</a></li>
+                                        <li><a href="#">Tags</a></li>
+                                        <li><a href="#">Queue for moderation</a></li>
+                                        <li><a href="#">Manage</a></li>
                                     </ul>
                                 </li>
                                 
                                 <li class="blog-menu-list-point drop-menu">
-                                    <button href="#" onclick="sortArticlesList()" class="drop-button text-alegreya-style"><h5>Pages</h5></button>
+                                    <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Pages</h5></button>
 
                                     <ul id="" class="blog-links-list">
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Add new</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Queue for moderation</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Manage</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            All pages</a></li>
+                                        <li><a href="#">Add new</a></li>
+                                        <li><a href="#">Queue for moderation</a></li>
+                                        <li><a href="#">Manage</a></li>
+                                        <li><a href="#">All pages</a></li>
                                     </ul>
                                 </li>
 
                                 <li class="blog-menu-list-point drop-menu">
-                                    <button href="#" onclick="sortArticlesList()" class="drop-button text-alegreya-style"><h5>Comments</h5></button>
+                                    <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Comments</h5></button>
 
                                     <ul id="" class="blog-links-list">
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Queue for moderation</a></li>
-                                        <!-- <li><a href="#" onclick="sortArticles(this)">
-                                            Sorting rules</a></li> -->
+                                        <li><a href="#">Queue for moderation</a></li>
+                                        <!-- <li><a href="#">Sorting rules</a></li> -->
                                     </ul>
                                 </li>
 
                                 <li class="blog-menu-list-point drop-menu">
-                                    <button href="#" onclick="sortArticlesList()" class="drop-button text-alegreya-style"><h5>Users</h5></button>
+                                    <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Users</h5></button>
 
                                     <ul id="" class="blog-links-list">
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            With roles</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Blocked</a></li>
+                                        <li><a href="#">With roles</a></li>
+                                        <li><a href="#">Blocked</a></li>
                                     </ul>
                                     <!-- <ul id="" class="blog-links-list">
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Invite</a></li>
+                                        <li><a href="#">Invite</a></li>
                                     </ul> -->
 
                                 </li>
 
                                 <li class="blog-menu-list-point drop-menu">
-                                    <button href="#" onclick="sortArticlesList()" class="drop-button text-alegreya-style"><h5>Media files</h5></button>
+                                    <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Media files</h5></button>
 
                                     <ul id="" class="blog-links-list">
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            All files</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Content rules</a></li>
+                                        <li><a href="#">All files</a></li>
+                                        <li><a href="#">Content rules</a></li>
                                     </ul>
                                 </li>
 
                                 <li class="blog-menu-list-point drop-menu">
-                                    <button href="#" onclick="sortArticlesList()" class="drop-button text-alegreya-style"><h5>Feedback</h5></button>
+                                    <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Feedback</h5></button>
 
                                     <ul id="" class="blog-links-list">
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            All messages</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Surveys</a></li>
+                                        <li><a href="#">All messages</a></li>
+                                        <li><a href="#">Surveys</a></li>
                                     </ul>
                                 </li>
-
-                                <!-- <li class="blog-menu-list-point drop-menu">
-                                    <button href="#" onclick="sortArticlesList()" class="drop-button text-alegreya-style"><h5>Other options</h5></button>
-
-                                    <ul id="" class="blog-links-list">
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            General</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Writing</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Reading</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Chats</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Discussion</a></li>
-                                        <li><a href="#" onclick="sortArticles(this)">
-                                            Share</a></li>
-                                    </ul>
-                                </li> -->
-
 
                             </ul>
 
@@ -424,12 +379,12 @@
                                         Editors and administrators
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input type="radio" name="createTopicsRole" class="usual-radiobutton">
+                                        <input data-display-switcher="moderateTopicsRole" type="radio" name="createTopicsRole" class="usual-radiobutton">
                                         All users
                                     </label>
 
                                     <label class="usual-label radio-label">
-                                        <input disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
+                                        <input data-display-dependent-object="moderateTopicsRole" disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
                                         Topics are moderated by administrators
                                     </label>
                                     <!-- <label class="usual-label radio-label">
@@ -437,7 +392,7 @@
                                         Topics are moderated by editors
                                     </label> -->
                                     <label class="usual-label radio-label">
-                                        <input disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
+                                        <input data-display-dependent-object="moderateTopicsRole" disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
                                         Topics are moderated by administrators and editors
                                     </label>
                                 </fieldset>
@@ -453,20 +408,20 @@
                                         Editors and administrators
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input type="radio" name="createTagsRole" class="usual-radiobutton">
+                                        <input data-display-switcher="moderateTagsRole" type="radio" name="createTagsRole" class="usual-radiobutton">
                                         All users
                                     </label>
 
                                     <label class="usual-label radio-label">
-                                        <input disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                        <input data-display-dependent-object="moderateTagsRole" disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
                                         Tags are moderated by administrators
                                     </label>
                                     <!-- <label class="usual-label radio-label">
-                                        <input disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                        <input data-display-dependent-object="moderateTagsRole" disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
                                         Tags are moderated by editors
                                     </label> -->
                                     <label class="usual-label radio-label">
-                                        <input disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                        <input data-display-dependent-object="moderateTagsRole" disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
                                         Tags are moderated by administrators and editors
                                     </label>
                                 </fieldset>
@@ -504,13 +459,13 @@
                                         List of articles
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input type="radio" name="mainPage" class="usual-radiobutton">
+                                        <input data-display-switcher="homePage" type="radio" name="mainPage" class="usual-radiobutton">
                                         Static page (select below):
                                     </label>
 
                                     <label class="usual-label">
                                         Home page
-                                        <select name="homePage" disabled>
+                                        <select data-display-dependent-object="homePage" name="homePage" disabled>
                                             <option value="1">Page 1</option>
                                             <option value="2">Page 2</option>
                                             <option value="3">Lorem ipsum dolor sit.</option>
@@ -556,13 +511,13 @@
                                         Full text
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input checked type="radio" name="siteDisplayingType" class="usual-radiobutton">
+                                        <input data-display-switcher="numberOfWords" checked type="radio" name="siteDisplayingType" class="usual-radiobutton">
                                         Preview
                                     </label>
 
                                     <label class="usual-label">
                                         Number of words in the preview
-                                        <select name="numberOfArticles">
+                                        <select data-display-dependent-object="numberOfWords" name="numberOfWords">
                                             <option value="25">25</option>
                                             <option value="40">40</option>
                                             <option value="50">50</option>
@@ -574,7 +529,7 @@
                                     </label>
 
                                     <label class="usual-label checkbox-label">
-                                        <input checked type="checkbox" name="" class="usual-checkbox">
+                                        <input data-display-dependent-object="numberOfWords" checked type="checkbox" name="" class="usual-checkbox">
                                         Add an image if possible
                                     </label>
                                 </fieldset>
@@ -713,18 +668,18 @@
                                         Editors and administrators
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input type="radio" name="chatUsers" class="usual-radiobutton">
+                                        <input data-display-switcher="usersCanWriteTo" type="radio" name="chatUsers" class="usual-radiobutton">
                                         All users
                                     </label>
 
                                     <label class="usual-label checkbox-label">
-                                        <input disabled type="checkbox" name="" class="usual-checkbox">
+                                        <input data-display-dependent-object="usersCanWriteTo" disabled type="checkbox" name="" class="usual-checkbox">
                                         Users can write to editors
                                     </label>
 
                                     <label class="usual-label checkbox-label">
-                                        <input disabled type="checkbox" name="" class="usual-checkbox">
-                                        Users can write to administrators
+                                        <input data-display-dependent-object="usersCanWriteTo" disabled type="checkbox" name="" class="usual-checkbox">
+                                        Users can write to administrators and editors
                                     </label>
 
                                 </fieldset>
@@ -755,13 +710,13 @@
                                     <legend>Displaying comments</legend>
 
                                     <label class="usual-label checkbox-label">
-                                        <input type="checkbox" name="" class="usual-checkbox">
+                                        <input data-display-switcher="nestedCommentsDepth" type="checkbox" name="" class="usual-checkbox">
                                         Allow nested comments
                                     </label>
 
                                     <label class="usual-label">
                                         Depth of nested comments:
-                                        <select disabled name="nestedCommentsDepth">
+                                        <select data-display-dependent-object="nestedCommentsDepth" disabled name="nestedCommentsDepth">
                                             <option value="2">2</option>
                                             <option value="3">3</option>
                                             <option value="4">4</option>
@@ -787,15 +742,15 @@
                                         Editors and administrators
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input checked type="radio" name="writeCommentsRole" class="usual-radiobutton">
+                                        <input data-display-switcher="moderateCommentsRole" checked type="radio" name="writeCommentsRole" class="usual-radiobutton">
                                         All authorized users
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input checked type="radio" name="writeCommentsRole" class="usual-radiobutton">
+                                        <input data-display-switcher="moderateCommentsRole" checked type="radio" name="writeCommentsRole" class="usual-radiobutton">
                                         All users (including anonymous users)
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
+                                        <input data-display-dependent-object="moderateCommentsRole" disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
                                         Comments are moderated by administrators
                                     </label>
                                     <!-- <label class="usual-label radio-label">
@@ -803,13 +758,13 @@
                                         Comments are moderated by editors
                                     </label> -->
                                     <label class="usual-label radio-label">
-                                        <input disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
+                                        <input data-display-dependent-object="moderateCommentsRole" disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
                                         Comments are moderated by administrators and editors
                                     </label>
-                                    <label class="usual-label checkbox-label">
+                                    <!-- <label class="usual-label checkbox-label">
                                         <input disabled type="checkbox" name="" class="usual-checkbox">
                                         The author of the comment must specify an e-mail address
-                                    </label>
+                                    </label> -->
 
                                     <span class="blog-info-span text-alegreya-style"><mark>Note:</mark> If comments are available only to administrators or only to editors and administrators, then only administrators can moderate comments.</span>
 
@@ -843,15 +798,15 @@
                                         Using Markdown in comments
                                     </label>
                                     <label class="usual-label checkbox-label">
-                                        <input type="checkbox" name="" class="usual-checkbox">
+                                        <input data-display-switcher="urlCommentsModeration" type="checkbox" name="" class="usual-checkbox">
                                         Avoid comments containing third-party links
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input disabled checked type="radio" name="urlCommentsModeration" class="usual-radiobutton">
+                                        <input data-display-dependent-object="urlCommentsModeration" disabled checked type="radio" name="urlCommentsModeration" class="usual-radiobutton">
                                         Add these comments to the moderation queue
                                     </label>
                                     <label class="usual-label radio-label">
-                                        <input disabled type="radio" name="urlCommentsModeration" class="usual-radiobutton">
+                                        <input data-display-dependent-object="urlCommentsModeration" disabled type="radio" name="urlCommentsModeration" class="usual-radiobutton">
                                         Add these comments to the blacklist
                                     </label>
 
@@ -948,17 +903,6 @@
                         </div>
                     </div>
 
-
-
-                    <!-- <div class="article-meta text-roboto-style">
-                        <a href="#" class="article-header">
-                            <h2><b>JArticle header simply</b></h2>
-                        </a>
-                    </div> -->
-
-                    <!-- <div class="blog-text">
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sit voluptas suscipit nostrum ipsum ducimus reprehenderit, sapiente at earum, exercitationem aliquam distinctio saepe ut excepturi vel non blanditiis a rem! Nulla beatae, rem voluptate quae neque autem? Dolor eum, assumenda laboriosam nihil repellat corporis repudiandae magnam, molestiae reprehenderit fugit ducimus perferendis rem tenetur ipsum nesciunt laudantium quisquam cumque maxime quo, ipsam neque voluptate sed nobis! Magnam incidunt quidem repellendus, ratione labore excepturi! Voluptatum perferendis dolorum accusantium ab quod, deserunt aspernatur, repellat aperiam maxime incidunt minus dolor eos consequatur atque iste, et facere commodi consequuntur. Amet suscipit similique totam quo, qui hic?</p>
-                    </div> -->
                 </div>
             </div>
 
@@ -966,10 +910,13 @@
     </div>
 
     <!-- Scroll page USUAL -->
-    <script src="/Miniblog/wwwroot/js/scrollFunction.js"></script>
-    <script src="/Miniblog/wwwroot/js/sortArticlesList.js"></script>
+    <script src="D:/Dev/Miniblog/Miniblog/wwwroot/js/scrollFunction.js"></script>
+    <!-- <script src="/Miniblog/wwwroot/js/sortArticlesList.js"></script>
     <script src="/Miniblog/wwwroot/js/sortArticles.js"></script>
-    <script src="/Miniblog/wwwroot/js/closeSortList.js"></script>
+    <script src="/Miniblog/wwwroot/js/closeSortList.js"></script> -->
+    <script src="D:/Dev/Miniblog/Miniblog/wwwroot/js/options_actions/openList.js"></script>
+    <script src="D:/Dev/Miniblog/Miniblog/wwwroot/js/options_actions/openCloseOption.js"></script>
+    <script src="D:/Dev/Miniblog/Miniblog/wwwroot/js/options_actions/handlers.js"></script>
     <!-- <script src="Miniblog/wwwroot/js/articlesLayoutVisibility.js"></script>
     <script src="Miniblog/wwwroot/js/sortArticlesList.js"></script>
     <script src="Miniblog/wwwroot/js/sortArticles.js"></script>

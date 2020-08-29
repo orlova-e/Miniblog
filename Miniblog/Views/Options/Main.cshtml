@@ -1,0 +1,758 @@
+﻿<div class="blog-container">
+    <div class="page-container text-alegreya-style">
+        <div class="blog-content">
+            <div class="options-container">
+
+                <aside class="options-menu-bar">
+                    <ul class="blog-menu-list">
+                        <li class="blog-menu-list-point drop-menu actual-menu-list">
+                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Main</h5></button>
+
+                            <ul id="sortListDropdown" class="blog-links-list">
+                                <li><a href="#">Activity</a></li>
+                                <li><a href="#">General</a></li>
+                                <li><a href="#">Writing</a></li>
+                                <li><a href="#">Reading</a></li>
+                                <li><a href="#">Chats</a></li>
+                                <li><a href="#">Discussion</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="blog-menu-list-point drop-menu">
+                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Articles</h5></button>
+
+                            <ul id="" class="blog-links-list">
+                                <li><a href="#">Add new</a></li>
+                                <li><a href="#">Topics</a></li>
+                                <li><a href="#">Tags</a></li>
+                                <li><a href="#">Queue for moderation</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="blog-menu-list-point drop-menu">
+                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Pages</h5></button>
+
+                            <ul id="" class="blog-links-list">
+                                <li><a href="#">Add new</a></li>
+                                <li><a href="#">Queue for moderation</a></li>
+                                <li><a href="#">Manage</a></li>
+                                <li><a href="#">All pages</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="blog-menu-list-point drop-menu">
+                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Comments</h5></button>
+
+                            <ul id="" class="blog-links-list">
+                                <li><a href="#">Queue for moderation</a></li>
+                                <!-- <li><a href="#">Sorting rules</a></li> -->
+                            </ul>
+                        </li>
+
+                        <li class="blog-menu-list-point drop-menu">
+                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Users</h5></button>
+
+                            <ul id="" class="blog-links-list">
+                                <li><a href="#">With roles</a></li>
+                                <li><a href="#">Blocked</a></li>
+                            </ul>
+                            <!-- <ul id="" class="blog-links-list">
+                                <li><a href="#">Invite</a></li>
+                            </ul> -->
+
+                        </li>
+
+                        <li class="blog-menu-list-point drop-menu">
+                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Media files</h5></button>
+
+                            <ul id="" class="blog-links-list">
+                                <li><a href="#">All files</a></li>
+                                <li><a href="#">Content rules</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="blog-menu-list-point drop-menu">
+                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Feedback</h5></button>
+
+                            <ul id="" class="blog-links-list">
+                                <li><a href="#">All messages</a></li>
+                                <li><a href="#">Surveys</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                </aside>
+
+                <div style="display: block;" class="options-content">
+
+                    <!-- * General -->
+                    <form style="display: block;" method="POST" action="/options/general" class="usual-form">
+
+                        <!-- ! PREDEFINED ERROR class names:
+                          TODO: SWITCH it to jQUERY erorr class names
+                          * INPUT/TEXTAREA: usual-input-error
+                          * SPAN: usual-error-message -->
+
+                        <fieldset>
+                            <legend>Title</legend>
+                            <label class="usual-label" for="">Site name</label>
+                            <input required type="text" class="usual-input usual-input-text">
+                            <span class="text-sans-style"></span>
+
+                            <label class="usual-label" for="">Subtitle</label>
+                            <input type="text" class="usual-input usual-input-text">
+                            <span class="text-sans-style"></span>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Icon</legend>
+                            <label class="usual-label">
+                                <input type="file" name="file">
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Date format</legend>
+                            <label class="usual-label radio-label" for="date1">
+                                <input type="radio" id="date1" name="dateFormat" class="usual-radiobutton">
+                                23.08.2020
+                            </label>
+                            <label class="usual-label radio-label" for="date2">
+                                <input type="radio" id="date2" name="dateFormat" class="usual-radiobutton">
+                                23/08/2020
+                            </label>
+                            <label class="usual-label radio-label" for="date4">
+                                <input type="radio" id="date4" name="dateFormat" class="usual-radiobutton">
+                                08/23/2020
+                            </label>
+                            <label class="usual-label radio-label" for="date3">
+                                <input type="radio" id="date3" name="dateFormat" class="usual-radiobutton">
+                                2020-08-23
+                            </label>
+                            <!-- <span class="text-sans-style"></span> -->
+                        </fieldset>
+
+                        <!-- <input type="radio" name="dateFormat" class="usual-radiobutton">23/08/2020
+                        <input type="radio" name="dateFormat" class="usual-radiobutton">08/23/2020
+                        <input type="radio" name="dateFormat" class="usual-radiobutton">2020-08-23 -->
+
+                        <fieldset>
+                            <legend>Time format</legend>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="timeFormat" class="usual-radiobutton">
+                                01:05 PM
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="timeFormat" class="usual-radiobutton">
+                                13:05 PM
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Language</legend>
+                            <label class="usual-label radio-label">
+                                <input checked type="radio" name="siteLanguage" class="usual-radiobutton">
+                                English
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="siteLanguage" class="usual-radiobutton">
+                                Русский
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="siteLanguage" class="usual-radiobutton">
+                                Based on user's culture
+                            </label>
+                        </fieldset>
+
+                        <button type="button" class="usual-submit-button usual-button">Save</button>
+                    </form>
+
+                    <!-- * Activity -->
+                    <form style="display: block;" method="POST" action="/options/activity" class="usual-form">
+                        <fieldset>
+                            <legend>Notice board</legend>
+                            <ul class="usual-ul">
+                                <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore, cumque?</li>
+                                <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore, cumque?</li>
+                                <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore, cumque?</li>
+                            </ul>
+                            <label>
+                                <textarea type="text" value="" placeholder="Message to staff" class="usual-input usual-input-textarea"></textarea>
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" name="" class="usual-checkbox">
+                                Use a pop-up notification
+                            </label>
+                            <button type="button" onclick="addRootComment(this)" class="usual-submit-button comment-button">Send</button>
+                        </fieldset>
+                    </form>
+
+
+                    <!-- <div class="blog-statistics">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis, est.
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis, est.
+                    </div>
+
+                    <div class="blog-activity">
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta, voluptatum sapiente necessitatibus dolores provident, harum ullam distinctio quae sequi inventore excepturi a sit placeat ad.
+                    </div> -->
+                    <!-- * Writing -->
+                    <form style="display: block;" method="POST" action="/options/writing" class="usual-form">
+                        <fieldset>
+                            <legend>Who can write articles</legend>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="writeArticlesRole" class="usual-radiobutton">
+                                Administrators
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="writeArticlesRole" class="usual-radiobutton">
+                                Editors and administrators
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input checked type="radio" name="writeArticlesRole" class="usual-radiobutton">
+                                All users
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Who can create topics</legend>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="createTopicsRole" class="usual-radiobutton">
+                                Administrators
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input checked type="radio" name="createTopicsRole" class="usual-radiobutton">
+                                Editors and administrators
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input data-display-switcher="moderateTopicsRole" type="radio" name="createTopicsRole" class="usual-radiobutton">
+                                All users
+                            </label>
+
+                            <label class="usual-label radio-label">
+                                <input data-display-dependent-object="moderateTopicsRole" disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
+                                Topics are moderated by administrators
+                            </label>
+                            <!-- <label class="usual-label radio-label">
+                                <input disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
+                                Topics are moderated by editors
+                            </label> -->
+                            <label class="usual-label radio-label">
+                                <input data-display-dependent-object="moderateTopicsRole" disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
+                                Topics are moderated by administrators and editors
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Who can create articles' tags</legend>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="createTagsRole" class="usual-radiobutton">
+                                Administrators
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input checked type="radio" name="createTagsRole" class="usual-radiobutton">
+                                Editors and administrators
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input data-display-switcher="moderateTagsRole" type="radio" name="createTagsRole" class="usual-radiobutton">
+                                All users
+                            </label>
+
+                            <label class="usual-label radio-label">
+                                <input data-display-dependent-object="moderateTagsRole" disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                Tags are moderated by administrators
+                            </label>
+                            <!-- <label class="usual-label radio-label">
+                                <input data-display-dependent-object="moderateTagsRole" disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                Tags are moderated by editors
+                            </label> -->
+                            <label class="usual-label radio-label">
+                                <input data-display-dependent-object="moderateTagsRole" disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                Tags are moderated by administrators and editors
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Articles' moderation</legend>
+
+                            <label class="usual-label">
+                                <span class="blog-info-span text-alegreya-style">A list of words separated by a string (it can also be URLs, phone numbers, email addresses, and so on) that will allow the article to be <b>moderated</b></span>
+                                <textarea class="usual-input usual-input-text usual-input-textarea-middle"></textarea>
+                            </label>
+
+
+                            <label class="usual-label">
+                                <span class="blog-info-span text-alegreya-style">A list of words separated by a string (it can also be URLs, phone numbers, email addresses, and so on) that make the article <b>blacklisted</b></span>
+                                <textarea class="usual-input usual-input-text usual-input-textarea-middle"></textarea>
+                            </label>
+
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" name="" class="usual-checkbox">
+                                Delete articles from the blacklist immediately
+                            </label>
+
+                        </fieldset>
+
+                        <button type="button" class="usual-submit-button usual-button">Save</button>
+                    </form>
+
+                    <!-- * Reading -->
+                    <form style="display: block;" method="POST" action="/options/reading" class="usual-form">
+                        <fieldset>
+                            <legend>The main page displays:</legend>
+                            <label class="usual-label radio-label">
+                                <input checked type="radio" name="mainPage" class="usual-radiobutton">
+                                List of articles
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input data-display-switcher="homePage" type="radio" name="mainPage" class="usual-radiobutton">
+                                Static page (select below):
+                            </label>
+
+                            <label class="usual-label">
+                                Home page
+                                <select data-display-dependent-object="homePage" name="homePage" disabled>
+                                    <option value="1">Page 1</option>
+                                    <option value="2">Page 2</option>
+                                    <option value="3">Lorem ipsum dolor sit.</option>
+                                    <option value="4">Lorem, ipsum dolor.</option>
+                                </select>
+                            </label>
+
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" name="" class="usual-checkbox">
+                                Hide the list of popular and recent articles
+                            </label>
+
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" name="" class="usual-checkbox">
+                                Hide the search option
+                            </label>
+
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Number of articles per page</legend>
+                            <select name="numberOfArticles">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="30">30</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
+                            </select>
+
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Any user can override for themselves
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Articles list displaying type</legend>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="siteDisplayingType" class="usual-radiobutton">
+                                Full text
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input data-display-switcher="numberOfWords" checked type="radio" name="siteDisplayingType" class="usual-radiobutton">
+                                Preview
+                            </label>
+
+                            <label class="usual-label">
+                                Number of words in the preview
+                                <select data-display-dependent-object="numberOfWords" name="numberOfWords">
+                                    <option value="25">25</option>
+                                    <option value="40">40</option>
+                                    <option value="50">50</option>
+                                    <option value="75">75</option>
+                                    <option value="100">100</option>
+                                    <option value="150">150</option>
+                                    <option value="200">200</option>
+                                </select>
+                            </label>
+
+                            <label class="usual-label checkbox-label">
+                                <input data-display-dependent-object="numberOfWords" checked type="checkbox" name="" class="usual-checkbox">
+                                Add an image if possible
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Displaying data in any articles' list</legend>
+
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Username
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                User's avatar
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Date
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" name="" class="usual-checkbox">
+                                Time
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" name="" class="usual-checkbox">
+                                Tags
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Topic
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Article' series (if it exists)
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Likes' number
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" name="" class="usual-checkbox">
+                                Bookmarks' number
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Comments' number
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                <b>User can override some elements for their articles</b>
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Displaying data in any article</legend>
+
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Username
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                User's avatar
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Date
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Time
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Tags
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Topic
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Article' series (if it exists)
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Likes' number
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Bookmarks' number
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Comments
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                <b>User can override some elements for their articles</b>
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>The visibility of the website</legend>
+                            <label class="usual-label radio-label">
+                                <input checked type="radio" name="siteVisibility" class="usual-radiobutton">
+                                Public
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="siteVisibility" class="usual-radiobutton">
+                                Private (the site content is only available to authorized users)
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="siteVisibility" class="usual-radiobutton">
+                                Technical work (the site content is only available to editors and administrators. All users will receive a message about technical work)
+                            </label>
+                        </fieldset>
+
+                        <button type="button" class="usual-submit-button usual-button">Save</button>
+                    </form>
+
+                    <!-- * Chats -->
+                    <form style="display: block;" method="POST" action="/options/chats" class="usual-form">
+                        <fieldset>
+                            <legend>Users who can use the chat:</legend>
+                            <label class="usual-label radio-label">
+                                <input checked type="radio" name="chatUsers" class="usual-radiobutton">
+                                Nobody
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="chatUsers" class="usual-radiobutton">
+                                Administrators
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input type="radio" name="chatUsers" class="usual-radiobutton">
+                                Editors and administrators
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input data-display-switcher="usersCanWriteTo" type="radio" name="chatUsers" class="usual-radiobutton">
+                                All users
+                            </label>
+
+                            <label class="usual-label checkbox-label">
+                                <input data-display-dependent-object="usersCanWriteTo" disabled type="checkbox" name="" class="usual-checkbox">
+                                Users can write to editors
+                            </label>
+
+                            <label class="usual-label checkbox-label">
+                                <input data-display-dependent-object="usersCanWriteTo" disabled type="checkbox" name="" class="usual-checkbox">
+                                Users can write to administrators and editors
+                            </label>
+
+                        </fieldset>
+
+                        <button type="button" class="usual-submit-button usual-button">Save</button>
+                    </form>
+
+                    <!-- * Discussion -->
+                    <form style="display: block;" method="POST" action="/options/discussion" class="usual-form">
+
+                        <fieldset>
+                            <legend>Sorting comments</legend>
+
+                            <select name="commentsSorting">
+                                <option value="MostLiked">Most liked</option>
+                                <option value="OldFirst">First the old ones</option>
+                                <option value="NewFirst">First the new ones</option>
+                            </select>
+
+                            <label class="usual-label checkbox-label">
+                                <input checked type="checkbox" name="" class="usual-checkbox">
+                                Users can override sorting
+                            </label>
+
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Displaying comments</legend>
+
+                            <label class="usual-label checkbox-label">
+                                <input data-display-switcher="nestedCommentsDepth" type="checkbox" name="" class="usual-checkbox">
+                                Allow nested comments
+                            </label>
+
+                            <label class="usual-label">
+                                Depth of nested comments:
+                                <select data-display-dependent-object="nestedCommentsDepth" disabled name="nestedCommentsDepth">
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </label>
+
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Who can write comments</legend>
+
+                            <label class="usual-label radio-label">
+                                <input checked type="radio" name="writeCommentsRole" class="usual-radiobutton">
+                                Nobody
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input checked type="radio" name="writeCommentsRole" class="usual-radiobutton">
+                                Administrators
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input checked type="radio" name="writeCommentsRole" class="usual-radiobutton">
+                                Editors and administrators
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input data-display-switcher="moderateCommentsRole" checked type="radio" name="writeCommentsRole" class="usual-radiobutton">
+                                All authorized users
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input data-display-switcher="moderateCommentsRole" checked type="radio" name="writeCommentsRole" class="usual-radiobutton">
+                                All users (including anonymous users)
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input data-display-dependent-object="moderateCommentsRole" disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
+                                Comments are moderated by administrators
+                            </label>
+                            <!-- <label class="usual-label radio-label">
+                                <input disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
+                                Comments are moderated by editors
+                            </label> -->
+                            <label class="usual-label radio-label">
+                                <input data-display-dependent-object="moderateCommentsRole" disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
+                                Comments are moderated by administrators and editors
+                            </label>
+                            <!-- <label class="usual-label checkbox-label">
+                                <input disabled type="checkbox" name="" class="usual-checkbox">
+                                The author of the comment must specify an e-mail address
+                            </label> -->
+
+                            <span class="blog-info-span text-alegreya-style"><mark>Note:</mark> If comments are available only to administrators or only to editors and administrators, then only administrators can moderate comments.</span>
+
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Comments' moderation</legend>
+
+                            <label class="usual-label">
+                                <span class="blog-info-span text-alegreya-style">A list of words separated by a string (it can also be URLs, phone numbers, email addresses, and so on) that will allow the comment to be <b>moderated</b></span>
+                                <textarea class="usual-input usual-input-text usual-input-textarea-middle"></textarea>
+                            </label>
+
+
+                            <label class="usual-label">
+                                <span class="blog-info-span text-alegreya-style">A list of words separated by a string (it can also be URLs, phone numbers, email addresses, and so on) that make the comment <b>blacklisted</b></span>
+                                <textarea class="usual-input usual-input-text usual-input-textarea-middle"></textarea>
+                            </label>
+
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" name="" class="usual-checkbox">
+                                Delete comments from the blacklist immediately
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Comments options</legend>
+
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" name="" class="usual-checkbox">
+                                Using Markdown in comments
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input data-display-switcher="urlCommentsModeration" type="checkbox" name="" class="usual-checkbox">
+                                Avoid comments containing third-party links
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input data-display-dependent-object="urlCommentsModeration" disabled checked type="radio" name="urlCommentsModeration" class="usual-radiobutton">
+                                Add these comments to the moderation queue
+                            </label>
+                            <label class="usual-label radio-label">
+                                <input data-display-dependent-object="urlCommentsModeration" disabled type="radio" name="urlCommentsModeration" class="usual-radiobutton">
+                                Add these comments to the blacklist
+                            </label>
+
+                        </fieldset>
+
+                        <button type="button" class="usual-submit-button usual-button">Save</button>
+                    </form>
+
+                    <!-- * Share -->
+                    <!-- <form method="POST" action="/options/share" class="usual-form">
+
+                    </form> -->
+
+                    <input class="usual-input" placeholder="Search article..." type="search">
+
+                    <table>
+                        <caption><h3>Articles</h3></caption>
+                        <thead>
+                            <tr>
+                                <th>Author/Title</th>
+                                <th>Words for moderation</th>
+                                <th>Words from blacklist</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="blog-article-author"><mark><i>listique</i></mark></span> Lorem, ipsum dolor..</td>
+                                <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et, doloremque laboriosam.</td>
+                                <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, amet!</td>
+                                <td>
+                                    <button type="button" class="icon-button">
+                                        <img src="~/img/ico/pass.png" alt="">
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="icon-button block-button">
+                                        <img src="~/img/ico/block.png" alt="">
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="icon-button delete-button">
+                                        <img src="~/img/ico/delete5.png" alt="">
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="blog-article-author"><mark><i>listique</i></mark></span>Lorem, ipsum.</td>
+                                <td>Lorem</td>
+                                <td>Lorem iasdfasdfsdfasdfsdfsdfasdfsdfsdfsdfsdfasdfsdfsadfsdfasdfsadfsdfsdfsdf</td>
+                                <td>
+                                    <button type="button" class="icon-button">
+                                        <img src="~/img/ico/pass.png" alt="">
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="icon-button block-button">
+                                        <img src="~/img/ico/block.png" alt="">
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="icon-button delete-button">
+                                        <img src="~/img/ico/delete5.png" alt="">
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="blog-article-author"><mark><i>listique</i></mark></span> Lorem Lordwefwefwefwefem, werwerwerweripsum dolor.</td>
+                                <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, accusamus.</td>
+                                <td>Lorem, ipsum dolor.</td>
+                                <td>
+                                    <button type="button" class="icon-button">
+                                        <img src="~/img/ico/pass.png" alt="">
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="icon-button block-button">
+                                        <img src="~/img/ico/block.png" alt="">
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="icon-button delete-button">
+                                        <img src="~/img/ico/delete5.png" alt="">
+                                    </button>
+                                </td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+

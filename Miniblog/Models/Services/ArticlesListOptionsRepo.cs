@@ -14,7 +14,7 @@ namespace Miniblog.Models.Services
         {
             Db = db;
         }
-        public async Task<ArticlesListDisplayOptions> GetByIdAsync(int id)
+        public async Task<ArticlesListDisplayOptions> GetByIdAsync(Guid id)
         {
             return await Db.ArticlesListDisplayOptions.FindAsync(id);
         }

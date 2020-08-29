@@ -24,7 +24,6 @@ if(window.onload == null) {
     }
 }
 
-window.addEventListener("scroll", scrollPageFunction);
 window.addEventListener("scroll", closeSortList);
 
 window.addEventListener("click", windowClickEvent.bind(event));

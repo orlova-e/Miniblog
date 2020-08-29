@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Miniblog.Models.Services;
+using Miniblog.Models.Services.Interfaces;
 
 namespace Miniblog
 {
@@ -23,6 +25,7 @@ namespace Miniblog
         {
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<MiniblogDb>(options => options.UseSqlServer(connectionString));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddControllersWithViews();
         }
@@ -33,6 +36,8 @@ namespace Miniblog
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 
