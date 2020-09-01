@@ -23,5 +23,10 @@ namespace Miniblog.Models.Services
             Db.ArticlesListDisplayOptions.Update(entity);
             await Db.SaveChangesAsync();
         }
+
+        public IEnumerable<ArticlesListDisplayOptions> Find(Func<ArticlesListDisplayOptions, bool> predicate)
+        {
+            return Db.ArticlesListDisplayOptions.Where(predicate).ToList();
+        }
     }
 }

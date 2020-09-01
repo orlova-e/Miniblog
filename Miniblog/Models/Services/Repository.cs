@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace Miniblog.Models.Services
 {
-    public class UnitOfWork : IUnitOfWork
+    public class Repository : IRepository
     {
         public MiniblogDb Db { get; }
         private IPlainRepository<User> users;
+        private IPlainRepository<RefreshToken> refreshTokens;
         private IPlainRepository<Article> articles;
         private IPlainRepository<Comment> comments;
         private IPlainRepository<Topic> topics;
@@ -19,7 +20,7 @@ namespace Miniblog.Models.Services
         private IOptionRepository<ArticlesListDisplayOptions> articlesListDisplay;
         private IOptionRepository<UserArticleDisplayOptions> userArticleDisplayOptions;
         private IOptionRepository<WebsiteDisplayOptions> websiteDisplayOptions;
-        public UnitOfWork(MiniblogDb miniblogDb)
+        public Repository(MiniblogDb miniblogDb)
         {
             Db = miniblogDb;
         }
@@ -30,6 +31,15 @@ namespace Miniblog.Models.Services
                 if (users == null)
                     users = new UsersRepository(Db);
                 return users;
+            }
+        }
+        public IPlainRepository<RefreshToken> RefreshTokens
+        {
+            get
+            {
+                if (refreshTokens == null)
+                    refreshTokens = new RefreshTokenRepository(Db);
+                return refreshTokens;
             }
         }
         public IPlainRepository<Article> Articles

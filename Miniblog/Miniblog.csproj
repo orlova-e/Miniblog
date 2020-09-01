@@ -5,16 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200828113036_Initial.cs" />
-    <Compile Remove="Migrations\20200828113036_Initial.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Models\Services\UsersRepository.cs~RF115f6df.TMP" />
     <None Remove="Views\Account\SignIn.cshtml~RF758544.TMP" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7">
       <PrivateAssets>all</PrivateAssets>

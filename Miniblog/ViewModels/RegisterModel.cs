@@ -2,7 +2,7 @@
 
 namespace Miniblog.ViewModels
 {
-    public class RegisterViewModel
+    public class RegisterModel
     {
         [Required(ErrorMessage = "Username is required")]
         [MinLength(4, ErrorMessage = "The minimum length is 4 characters")]
@@ -22,5 +22,7 @@ namespace Miniblog.ViewModels
         [DataType(DataType.Password)]
         [Compare(nameof(Password), ErrorMessage = "The value must be identical to the password")]
         public string PasswordConfirmation { get; set; }
+        [UIHint("HiddenInput")]
+        public string userId { get; set; }
     }
 }

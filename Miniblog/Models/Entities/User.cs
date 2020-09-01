@@ -15,11 +15,12 @@ namespace Miniblog.Models.Entities
         public string Email { get; set; }
         [Required]
         public string Hash { get; set; }
-        private string password;
-        [NotMapped, DataType(DataType.Password)]
-        public string Password { get; set; }
+        //private string password;
+        //[NotMapped, DataType(DataType.Password)]
+        //public string Password { get; set; }
         public Guid RoleId { get; set; }
         public Role Role { get; set; }
+        public List<RefreshToken> RefreshTokens { get; set; }
         public DateTimeOffset DateOfRegistration { get; set; }
         public string City { get; set; }
         public List<Comment> Comments { get; set; }
@@ -33,6 +34,7 @@ namespace Miniblog.Models.Entities
             Comments = new List<Comment>();
             Articles = new List<Article>();
             Topics = new List<Topic>();
+            RefreshTokens = new List<RefreshToken>();
             //Tags = new List<Tag>();
         }
 

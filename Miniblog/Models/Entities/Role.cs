@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Miniblog.Models.Entities.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,11 +22,5 @@ namespace Miniblog.Models.Entities
         {
             Users = new List<User>();
         }
-    }
-    public enum RoleType
-    {
-        User,
-        Editor,
-        Administrator
     }
 }

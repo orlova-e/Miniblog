@@ -2,7 +2,7 @@
 
 namespace Miniblog.ViewModels
 {
-    public class LoginViewModel
+    public class LoginModel
     {
         [Required(ErrorMessage = "Email is required")]
         [DataType(DataType.Text)]

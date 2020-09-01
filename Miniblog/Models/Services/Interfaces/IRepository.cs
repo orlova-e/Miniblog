@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace Miniblog.Models.Services.Interfaces
 {
-    public interface IUnitOfWork
+    /// <summary>
+    /// UnitOfWork pattern.
+    /// </summary>
+    public interface IRepository
     {
         IPlainRepository<User> Users { get; }
+        IPlainRepository<RefreshToken> RefreshTokens { get; }
         IPlainRepository<Article> Articles { get; }
         IPlainRepository<Comment> Comments { get; }
         IPlainRepository<Topic> Topics { get; }

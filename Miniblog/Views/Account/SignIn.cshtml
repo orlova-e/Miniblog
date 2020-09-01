@@ -1,4 +1,11 @@
-﻿@model Miniblog.ViewModels.LoginViewModel
+﻿@model Miniblog.ViewModels.LoginModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
 
 <div class="blog-container">
 
@@ -8,6 +15,9 @@
 
             <div class="signin-container">
                 <h2 class="text-roboto-style">Sign In</h2>
+
+                <input type="hidden" id="RequestVerificationToken"
+                       name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
 
                 <form asp-action="SignIn"
                       asp-controller="Account"
@@ -43,4 +53,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"
             asp-fallback-src="~/lib/jquery-validation-unobtrusive/query.validate.unobtrusive.min.js"
             asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"></script>
+    <script src="~/js/account_actions/constants.js"></script>
+    <script src="~/js/account_actions/login.js"></script>
 }
