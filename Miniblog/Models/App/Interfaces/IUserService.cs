@@ -10,11 +10,11 @@ namespace Miniblog.Models.App.Interfaces
     {
         //Task<bool> AvailableInDb();
         //string GetHash();
-        IEnumerable<string> ParametersAlreadyExist(RegisterModel registerModel);
-        bool CheckForExistence(RegisterModel registerModel, Guid guid);
-        bool CheckForExistence(LoginModel loginModel, Guid guid);
-        Task<User> CreateIntoDbAsync(RegisterModel registerModel);
-        User GetFromDb(LoginModel loginModel);
+        IEnumerable<string> ParametersAlreadyExist(RegisterViewModel registerModel);
+        bool CheckForExistence(RegisterViewModel registerModel, Guid guid);
+        bool CheckForExistence(LoginViewModel loginModel, Guid guid);
+        Task<User> CreateIntoDbAsync(RegisterViewModel registerModel);
+        User GetFromDb(LoginViewModel loginModel);
         Task<User> GetFromDbAsync(Guid id);
         Task PutRefreshTokenIntoDb(User user, string refreshToken, DateTimeOffset expiration);
         //Task ValidateRefreshTokenb(User user, string refreshToken);

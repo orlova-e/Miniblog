@@ -15,6 +15,9 @@ namespace Miniblog.Models.Entities
         public string Email { get; set; }
         [Required]
         public string Hash { get; set; }
+        //[Required]
+        //public string Link { get; set; }
+        public byte[] Avatar { get; set; }
         //private string password;
         //[NotMapped, DataType(DataType.Password)]
         //public string Password { get; set; }

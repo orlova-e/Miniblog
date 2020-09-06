@@ -17,21 +17,23 @@ namespace Miniblog
         //public DbSet<Opportunities> Opportunities { get; set; }
         //public DbSet<JobOpportunities> JobOpportunities { get; set; }
         public DbSet<User> Users { get; set; }
+        //public DbSet<Entry> Entries { get; set; }
+        //public DbSet<Page> Pages { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
         //public DbSet<Series> Series { get; set; }
         //public DbSet<Tag> Tags { get; set; }
         public DbSet<Topic> Topics { get; set; }
-        public DbSet<WebsiteDisplayOptions> WebsiteDisplayOptions { get; set; }
-        public DbSet<ArticlesDisplayOptions> ArticlesDisplayOptions { get; set; }
-        public DbSet<UserArticleDisplayOptions> UserArticleDisplayOptions { get; set; }
-        public DbSet<ArticlesListDisplayOptions> ArticlesListDisplayOptions { get; set; }
-        public DbSet<CommentsDisplayOptions> CommentsDisplayOptions { get; set; }
+        public DbSet<WebsiteOptions> WebsiteOptions { get; set; }
+        public DbSet<BaseArticlesOptions> BaseArticlesOptions { get; set; }
+        public DbSet<ArticleOptions> ArticleOptions { get; set; }
+        public DbSet<ListDisplayOptions> ListDisplayOptions { get; set; }
+        public DbSet<CommentsOptions> CommentsOptions { get; set; }
 
         public MiniblogDb(DbContextOptions options) : base(options)
         {
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
         //public MiniblogDb()
         //{
@@ -49,17 +51,23 @@ namespace Miniblog
                 v => v.ToString(),
                 v => (RoleType)Enum.Parse(typeof(RoleType), v));
 
-            modelBuilder.Entity<WebsiteDisplayOptions>()
+            modelBuilder.Entity<Article>()
+                .Property(a => a.EntryType)
+                .HasConversion(
+                v => v.ToString(),
+                v => (EntryType)Enum.Parse(typeof(EntryType), v));
+
+            modelBuilder.Entity<WebsiteOptions>()
                 .Property(e => e.WebsiteLanguage)
                 .HasConversion(
                 v => v.ToString(),
                 v => (Languages)Enum.Parse(typeof(Languages), v));
-            modelBuilder.Entity<WebsiteDisplayOptions>()
+            modelBuilder.Entity<WebsiteOptions>()
                 .Property(e => e.WebsiteVisibility)
                 .HasConversion(
                 v => v.ToString(),
                 v => (Visibility)Enum.Parse(typeof(Visibility), v));
-            modelBuilder.Entity<WebsiteDisplayOptions>()
+            modelBuilder.Entity<WebsiteOptions>()
                 .Property(e => e.ColorTheme)
                 .HasConversion(
                 v => v.ToString(),
@@ -88,14 +96,13 @@ namespace Miniblog
             //    .HasForeignKey(at => at.TagId)
             //    .OnDelete(DeleteBehavior.Restrict);
 
-
             //UserArticlesDisplayOptions
-            modelBuilder.Entity<UserArticleDisplayOptions>()
+            modelBuilder.Entity<ArticleOptions>()
                 .HasOne(u => u.Article)
                 .WithOne(ar => ar.UserArticleDisplayOptions)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<UserArticleDisplayOptions>()
+            modelBuilder.Entity<ArticleOptions>()
                 .Property(e => e.ColorTheme)
                 .HasConversion(
                 v => v.ToString(),
@@ -108,24 +115,24 @@ namespace Miniblog
             //    //.HasForeignKey(f=>f.)
             //    .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ArticlesListDisplayOptions>()
+            modelBuilder.Entity<ListDisplayOptions>()
                 .Property(e => e.ListDisplayDefaultType)
                 .HasConversion(
                 v => v.ToString(),
                 v => (DisplayType)Enum.Parse(typeof(DisplayType), v));
-            modelBuilder.Entity<ArticlesListDisplayOptions>()
+            modelBuilder.Entity<ListDisplayOptions>()
                 .Property(e => e.LayoutDefaultType)
                 .HasConversion(
                 v => v.ToString(),
                 v => (ListLayoutType)Enum.Parse(typeof(ListLayoutType), v));
-            modelBuilder.Entity<ArticlesListDisplayOptions>()
+            modelBuilder.Entity<ListDisplayOptions>()
                 .Property(e => e.ArticlesListSortingDefaultType)
                 .HasConversion(
                 v => v.ToString(),
                 v => (ListSortingType)Enum.Parse(typeof(ListSortingType), v));
 
             //CommentsDisplayOptions
-            modelBuilder.Entity<CommentsDisplayOptions>()
+            modelBuilder.Entity<CommentsOptions>()
                 .Property(e => e.SortingCommentsDefaultType)
                 .HasConversion(
                 v => v.ToString(),
@@ -136,7 +143,12 @@ namespace Miniblog
                 .WithMany(u => u.Topics)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            Role User = new Role()
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Role)
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.RoleId);
+
+            Role UserRole = new Role()
             {
                 Id = Guid.NewGuid(),
                 Type = RoleType.User,
@@ -147,7 +159,7 @@ namespace Miniblog
                 CreateTopics = true,
                 CreateTags = true
             };
-            ExtendedRole Editor = new ExtendedRole()
+            ExtendedRole EditorRole = new ExtendedRole()
             {
                 Id = Guid.NewGuid(),
                 Type = RoleType.Editor,
@@ -162,7 +174,7 @@ namespace Miniblog
                 ModerateTopics = true,
                 ModerateTags = true
             };
-            ExtendedRole Administrator = new ExtendedRole()
+            ExtendedRole AdministratorRole = new ExtendedRole()
             {
                 Id = Guid.NewGuid(),
                 Type = RoleType.Administrator,
@@ -178,8 +190,81 @@ namespace Miniblog
                 ModerateTags = true
             };
 
-            modelBuilder.Entity<Role>().HasData(User);
-            modelBuilder.Entity<ExtendedRole>().HasData(Editor, Administrator);
+            modelBuilder.Entity<Role>().HasData(UserRole);
+            modelBuilder.Entity<ExtendedRole>().HasData(EditorRole, AdministratorRole);
+
+            User Administrator = new User()
+            {
+                Id = Guid.NewGuid(),
+                Username = "Administrator",
+                Email = "test@test.com",
+                Hash = "?y|??-?d??]??v#??=S,?\\^???O",
+                RoleId = AdministratorRole.Id,
+                //Role = AdministratorRole,
+                DateOfRegistration = DateTimeOffset.UtcNow
+            };
+            User Editor = new User()
+            {
+                Id = Guid.NewGuid(),
+                Username = "Editor",
+                Email = "editor@test.com",
+                Hash = "?y|??-?d??]??v#??=S,?\\^???O",
+                RoleId = EditorRole.Id,
+                //Role = EditorRole,
+                DateOfRegistration = DateTimeOffset.UtcNow
+            };
+            User User = new User()
+            {
+                Id = Guid.NewGuid(),
+                Username = "User",
+                Email = "user@test.com",
+                Hash = "?y|??-?d??]??v#??=S,?\\^???O",
+                RoleId = UserRole.Id,
+                //Role = UserRole,
+                DateOfRegistration = DateTimeOffset.UtcNow
+            };
+
+            modelBuilder.Entity<User>().HasData(Administrator, Editor, User);
+
+            WebsiteOptions websiteDisplayOptions = new WebsiteOptions()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Miniblog",
+                Subtitle = string.Empty,
+                ShowListOfPopularAndRecent = true,
+                ShowAuthors = true,
+                ShowSearchOption = true,
+                ShowTopics = true,
+                ColorTheme = ColorTheme.Blue,
+                WebsiteLanguage = Languages.English,
+                WebsiteVisibility = Visibility.Public,
+                WebsiteDateFormat = "dd.MM.yyyy"
+            };
+
+            modelBuilder.Entity<WebsiteOptions>().HasData(websiteDisplayOptions);
+
+            ListDisplayOptions articlesListDisplayOptions = new ListDisplayOptions()
+            {
+                Id = Guid.NewGuid(),
+                OverrideForUserArticle = false,
+                ArticlesPerPage = 10,
+                WordsPerPreview = 50,
+                ListDisplayDefaultType = DisplayType.Preview,
+                LayoutDefaultType = ListLayoutType.Row,
+                ArticlesListSortingDefaultType = ListSortingType.NewFirst
+            };
+
+            modelBuilder.Entity<ListDisplayOptions>().HasData(articlesListDisplayOptions);
+
+            CommentsOptions commentsDisplayOptions = new CommentsOptions()
+            {
+                Id = Guid.NewGuid(),
+                AllowNestedComments = true,
+                DepthOfNestedComments = 3,
+                SortingCommentsDefaultType = SortingComments.NewFirst
+            };
+
+            modelBuilder.Entity<CommentsOptions>().HasData(commentsDisplayOptions);
         }
     }
 }

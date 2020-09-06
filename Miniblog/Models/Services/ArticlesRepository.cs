@@ -25,6 +25,7 @@ namespace Miniblog.Models.Services
             //await Db.Entry(article).Reference(a => a.Series).LoadAsync();
             //await Db.Entry(article).Collection(a => a.Comments).LoadAsync();
             await Db.Entry(article).Collection(a => a.Images).LoadAsync();
+            await Db.Entry(article).Collection(a => a.Comments).LoadAsync();
             return article;
         }
         /// <returns>List of articles with explicitly loaded images.</returns>

@@ -1,4 +1,5 @@
-﻿using Miniblog.Models.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Miniblog.Models.Entities;
 using Miniblog.Models.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,11 @@ namespace Miniblog.Models.Services
                 Db.Roles.Update(entity);
             //}
             await Db.SaveChangesAsync();
+        }
+
+        public async Task<Role> FirstOrDefaultAsync()
+        {
+            return (await Db.Roles.ToArrayAsync()).FirstOrDefault();
         }
     }
 }

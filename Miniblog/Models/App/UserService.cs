@@ -23,7 +23,7 @@ namespace Miniblog.Models.App
         /// </summary>
         /// <param name="registerModel"></param>
         /// <returns>List of errors.</returns>
-        public IEnumerable<string> ParametersAlreadyExist(RegisterModel registerModel)
+        public IEnumerable<string> ParametersAlreadyExist(RegisterViewModel registerModel)
         {
             var sameUsername = _repository.Users.Find(u => u.Username == registerModel.Username);
             var sameEmail = _repository.Users.Find(u => u.Email == registerModel.Email);
@@ -43,7 +43,7 @@ namespace Miniblog.Models.App
         /// </summary>
         /// <param name="registerModel"></param>
         /// <returns>New user object</returns>
-        public async Task<User> CreateIntoDbAsync(RegisterModel registerModel)
+        public async Task<User> CreateIntoDbAsync(RegisterViewModel registerModel)
         {
             // проверка (есть ли др. пользователи) происходит до выполнения этого метода
             User newUser = ToUser(registerModel);
@@ -63,7 +63,7 @@ namespace Miniblog.Models.App
             }
             return hash;
         }
-        private User ToUser(RegisterModel registerModel)
+        private User ToUser(RegisterViewModel registerModel)
         {
             Role userRole = _repository.Roles.Find(r=> r.Type == Entities.Enums.RoleType.User).First();
 
@@ -79,14 +79,14 @@ namespace Miniblog.Models.App
 
             return newUser;
         }
-        public User GetFromDb(LoginModel loginModel)
+        public User GetFromDb(LoginViewModel loginModel)
         {
             string hash = GetHash(loginModel.Password);
             var user = _repository.Users.Find(u => u.Username == loginModel.Username && u.Hash == hash).First();
             return user;
         }
 
-        public bool CheckForExistence(RegisterModel registerModel, Guid guid)
+        public bool CheckForExistence(RegisterViewModel registerModel, Guid guid)
         {
             string hash = GetHash(registerModel.Password);
             var user = _repository.Users.Find(u => u.Username == registerModel.Username
@@ -101,7 +101,7 @@ namespace Miniblog.Models.App
             return false;
         }
 
-        public bool CheckForExistence(LoginModel loginModel, Guid guid)
+        public bool CheckForExistence(LoginViewModel loginModel, Guid guid)
         {
             string hash = GetHash(loginModel.Password);
             var user = _repository.Users.Find(u => u.Username == loginModel.Username

@@ -3,7 +3,7 @@ using Miniblog.Models.Entities.Enums;
 
 namespace Miniblog.Models.Entities
 {
-    public class UserArticleDisplayOptions : ArticlesDisplayOptions
+    public class ArticleOptions : BaseArticlesOptions
     {
         public Guid ArticleId { get; set; }
         public Article Article { get; set; }

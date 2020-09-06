@@ -7,6 +7,7 @@ namespace Miniblog.Models.Services.Interfaces
 {
     public interface IOptionRepository<T> where T: class
     {
+        Task<T> FirstOrDefaultAsync();
         Task<T> GetByIdAsync(Guid id);
         IEnumerable<T> Find(Func<T, bool> predicate);
         //T FindFirst(Func<T, bool> predicate);

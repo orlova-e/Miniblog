@@ -1,4 +1,5 @@
-﻿using Miniblog.Models.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Miniblog.Models.Entities;
 using Miniblog.Models.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -7,26 +8,31 @@ using System.Threading.Tasks;
 
 namespace Miniblog.Models.Services
 {
-    public class WebsiteOptionsRepo : IOptionRepository<WebsiteDisplayOptions>
+    public class WebsiteOptionsRepo : IOptionRepository<WebsiteOptions>
     {
         public MiniblogDb Db { get; }
         public WebsiteOptionsRepo(MiniblogDb db)
         {
             Db = db;
         }
-        public async Task<WebsiteDisplayOptions> GetByIdAsync(Guid id)
+        public async Task<WebsiteOptions> GetByIdAsync(Guid id)
         {
-            return await Db.WebsiteDisplayOptions.FindAsync(id);
+            return await Db.WebsiteOptions.FindAsync(id);
         }
-        public async Task UpdateAsync(WebsiteDisplayOptions entity)
+        public async Task UpdateAsync(WebsiteOptions entity)
         {
             Db.Update(entity);
             await Db.SaveChangesAsync();
         }
 
-        public IEnumerable<WebsiteDisplayOptions> Find(Func<WebsiteDisplayOptions, bool> predicate)
+        public IEnumerable<WebsiteOptions> Find(Func<WebsiteOptions, bool> predicate)
         {
-            return Db.WebsiteDisplayOptions.Where(predicate).ToList();
+            return Db.WebsiteOptions.Where(predicate).ToList();
+        }
+
+        public async Task<WebsiteOptions> FirstOrDefaultAsync()
+        {
+            return (await Db.WebsiteOptions.ToArrayAsync()).FirstOrDefault();
         }
     }
 }

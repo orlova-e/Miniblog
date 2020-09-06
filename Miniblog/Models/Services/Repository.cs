@@ -17,9 +17,9 @@ namespace Miniblog.Models.Services
         private IPlainRepository<Topic> topics;
         private IOptionRepository<Role> roles;
         //private IOptionRepository<Opportunities> opportunities;
-        private IOptionRepository<ArticlesListDisplayOptions> articlesListDisplay;
-        private IOptionRepository<UserArticleDisplayOptions> userArticleDisplayOptions;
-        private IOptionRepository<WebsiteDisplayOptions> websiteDisplayOptions;
+        private IOptionRepository<ListDisplayOptions> listDisplayOptions;
+        private IOptionRepository<ArticleOptions> articleOptions;
+        private IOptionRepository<WebsiteOptions> websiteOptions;
         public Repository(MiniblogDb miniblogDb)
         {
             Db = miniblogDb;
@@ -87,32 +87,44 @@ namespace Miniblog.Models.Services
         //        return opportunities;
         //    }
         //}
-        public IOptionRepository<ArticlesListDisplayOptions> ArticlesListOptions
+        public IOptionRepository<ListDisplayOptions> ListDisplayOptions
         {
             get
             {
-                if (articlesListDisplay == null)
-                    articlesListDisplay = new ArticlesListOptionsRepo(Db);
-                return articlesListDisplay;
+                if (listDisplayOptions == null)
+                    listDisplayOptions = new ListOptionsRepo(Db);
+                return listDisplayOptions;
             }
         }
-        public IOptionRepository<UserArticleDisplayOptions> UserArticleOptions
+        public IOptionRepository<ArticleOptions> ArticleOptions
         {
             get
             {
-                if (userArticleDisplayOptions == null)
-                    userArticleDisplayOptions = new UserArticleOptionsRepo(Db);
-                return userArticleDisplayOptions;
+                if (articleOptions == null)
+                    articleOptions = new ArticleOptionsRepo(Db);
+                return articleOptions;
             }
         }
-        public IOptionRepository<WebsiteDisplayOptions> WebsiteDisplayOptions
+        public IOptionRepository<WebsiteOptions> WebsiteOptions
         {
             get
             {
-                if (websiteDisplayOptions == null)
-                    websiteDisplayOptions = new WebsiteOptionsRepo(Db);
-                return websiteDisplayOptions;
+                if (websiteOptions == null)
+                    websiteOptions = new WebsiteOptionsRepo(Db);
+                return websiteOptions;
             }
+        }
+        private bool disposed = false;
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+                Db.Dispose();
+            this.disposed = true;
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

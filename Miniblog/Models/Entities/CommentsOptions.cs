@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Miniblog.Models.Entities
 {
-    public class CommentsDisplayOptions
+    public class CommentsOptions
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }

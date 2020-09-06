@@ -3,7 +3,7 @@ using System;
 
 namespace Miniblog.Models.Entities
 {
-    public class ArticlesListDisplayOptions : ArticlesDisplayOptions
+    public class ListDisplayOptions : BaseArticlesOptions
     {
         //public Guid WebsiteDisplayOptionsId { get; set; }
         //public WebsiteDisplayOptions WebsiteDisplayOptions { get; set; }
