@@ -1,3 +1,5 @@
 "use strict";
 
-window.addEventListener("click", openCloseOption.bind(event));
+let options = document.getElementById("optionsContent");
+options.addEventListener("click", hideOptions.bind(event));
+
