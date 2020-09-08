@@ -12,7 +12,6 @@ namespace Miniblog.Models.Services.Interfaces
     public interface IRepository : IDisposable
     {
         IPlainRepository<User> Users { get; }
-        IPlainRepository<RefreshToken> RefreshTokens { get; }
         IPlainRepository<Article> Articles { get; }
         IPlainRepository<Comment> Comments { get; }
         IPlainRepository<Topic> Topics { get; }

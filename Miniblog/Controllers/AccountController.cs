@@ -27,7 +27,7 @@ namespace Miniblog.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async  Task<IActionResult> SignInAsync([FromForm]LoginModel loginModel)
+        public async  Task<IActionResult> SignInAsync([FromForm]LoginViewModel loginModel)
         {
             if (!ModelState.IsValid)
             {
@@ -44,7 +44,7 @@ namespace Miniblog.Controllers
 
             await Authenticate(user);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToRoute("default", new { controller = "Home", action = "Index" });
         }
         [HttpGet]
         public IActionResult SignUp()
@@ -53,7 +53,7 @@ namespace Miniblog.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignUpAsync([FromForm]RegisterModel registerModel/*, string userId = null*/)
+        public async Task<IActionResult> SignUpAsync([FromForm]RegisterViewModel registerModel/*, string userId = null*/)
         {
             if(!ModelState.IsValid)
             {
@@ -94,7 +94,7 @@ namespace Miniblog.Controllers
 
             await Authenticate(user);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToRoute("default", new { controller = "Home", action = "Index" });
         }
         private async Task Authenticate(User user)
         {

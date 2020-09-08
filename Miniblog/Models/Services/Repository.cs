@@ -11,7 +11,6 @@ namespace Miniblog.Models.Services
     {
         public MiniblogDb Db { get; }
         private IPlainRepository<User> users;
-        private IPlainRepository<RefreshToken> refreshTokens;
         private IPlainRepository<Article> articles;
         private IPlainRepository<Comment> comments;
         private IPlainRepository<Topic> topics;
@@ -31,15 +30,6 @@ namespace Miniblog.Models.Services
                 if (users == null)
                     users = new UsersRepository(Db);
                 return users;
-            }
-        }
-        public IPlainRepository<RefreshToken> RefreshTokens
-        {
-            get
-            {
-                if (refreshTokens == null)
-                    refreshTokens = new RefreshTokenRepository(Db);
-                return refreshTokens;
             }
         }
         public IPlainRepository<Article> Articles

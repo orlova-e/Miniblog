@@ -1,11 +1,4 @@
-﻿@model Miniblog.ViewModels.LoginModel
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
-@functions{
-    public string GetAntiXsrfRequestToken()
-    {
-        return Xsrf.GetAndStoreTokens(Context).RequestToken;
-    }
-}
+﻿@model Miniblog.ViewModels.LoginViewModel
 
 <div class="blog-container">
 
@@ -15,9 +8,6 @@
 
             <div class="signin-container">
                 <h2 class="text-roboto-style">Sign In</h2>
-
-                <input type="hidden" id="RequestVerificationToken"
-                       name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
 
                 <form asp-action="SignIn"
                       asp-controller="Account"
@@ -35,9 +25,7 @@
 
                     <button type="submit" class="usual-submit-button usual-button">Sign In</button>
 
-                    <a class="sign-suggestion"
-                       asp-action="SignUp"
-                       asp-controller="Account">or Sign Up</a>
+                    <a class="sign-suggestion" href="@Url.RouteUrl("default", new { controller = "Account", action = "SignUp" })">or Sign Up</a>
                 </form>
             </div>
         </div>

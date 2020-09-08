@@ -16,8 +16,6 @@ namespace Miniblog.Models.App.Interfaces
         Task<User> CreateIntoDbAsync(RegisterViewModel registerModel);
         User GetFromDb(LoginViewModel loginModel);
         Task<User> GetFromDbAsync(Guid id);
-        Task PutRefreshTokenIntoDb(User user, string refreshToken, DateTimeOffset expiration);
-        //Task ValidateRefreshTokenb(User user, string refreshToken);
 
         //Task<(User, IEnumerable<Article>)> GetAllUserInfoAsync(Guid id);
         //Task<(User, IEnumerable<Article>)> GetAllUserInfoAsync(User user);

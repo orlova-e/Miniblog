@@ -2,7 +2,7 @@
 
 namespace Miniblog.ViewModels
 {
-    public class RegisterModel
+    public class RegisterViewModel
     {
         [Required(ErrorMessage = "Username is required")]
         [MinLength(4, ErrorMessage = "The minimum length is 4 characters")]

@@ -1,0 +1,74 @@
+﻿@model HeaderViewModel
+
+<div id="head-container" class="container-fluid head-container">
+    <div class="container">
+        <nav class="text-sans-style navbar navbar-expand-lg navbar-light bg-white">
+            <a class="text-roboto-style navbar-brand" href="#">
+                <h2>@Model.Title</h2>
+            </a>
+            <a href="#" id="menuButton" class="navbar-toggler justify-content-end" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </a>
+            <div class=" collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link user-info" href="@Url.Action("User", "Account", new { username = Model.Username })">
+                                <div class="user-info-container">
+                                    @if (Model.Avatar != null)
+                                    {
+                                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Avatar))" width="30px" alt="User">
+                                    }
+                                    else
+                                    {
+                                        <img src="@Url.Content("~/img/social_line/anonymous_user.png")" width="30px" alt="User">
+                                    }
+                                    <span>@Model.Username</span>
+                                </div>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.RouteUrl("default", new { controller = "Account", action = "SignIn" })">Sign In</a>
+                        </li>
+                    }
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
+                        <div class="dropdown-menu" style="min-width: auto;" aria-labelledby="navbarDropdown">
+
+                            @if (Model.Pages != null)
+                            {
+                                foreach (KeyValuePair<string, string> pg in Model.Pages)
+                                {
+                                    <a class="dropdown-item" href="@pg.Value">@pg.Key</a>
+                                }
+                            }
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a class="dropdown-item" id="signOut" href="@Url.Action("SignOut", "Account")">Sign Out</a>
+                            }
+                            @*<a class="dropdown-item" href="#">Topics</a>
+                            <a class="dropdown-item" href="#">Authors</a>*@
+                            @if (Model.ShowSearch)
+                            {
+                                <div class="dropdown-divider"></div>
+                                <div class="dropdown-item" href="#">
+                                    <form action="" class="inline-form">
+                                        <input style="display: inline-block; width: min-content;" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                                        <a href="#" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</a>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="read-progress">
+        <div class="read-progress-bar" id="readBar"></div>
+    </div>
+</div>

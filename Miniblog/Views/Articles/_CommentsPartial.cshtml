@@ -1,0 +1,134 @@
+﻿@*@model List<Comment>*@
+
+@{
+    //int Depth = (int)ViewData["Depth"];
+    List<Comment> articleComments = (List<Comment>)ViewData["Comments"];
+}
+
+@{
+    void GetComment(List<Comment> children, int currentDepth)
+    {
+        int depth = (int)ViewData["Depth"];
+        bool canWrite = (bool)ViewData["CanWrite"];
+        ++currentDepth;
+        if (children.Any())
+        {
+            for (int i = 1; i <= children.Count(); i++)
+            {
+                <div data-comment-id="@children[i].Id.ToString()"
+                    data-parent-id="@children[i].ParentId?.ToString()"
+                    class="blog-comment">
+
+                    <div class="user-info-container">
+                        @if (children[i].Author.Avatar != null)
+                        {
+                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(children[i].Author.Avatar))" alt="@children[i].Author.Username">
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/img/social_line/anonymous_user.png")" alt="user">
+                        }
+                    </div>
+
+                    <div class="text-comment-container clearfix">
+
+                        <div class="blog-comment-meta">
+                            <a class="comment-username" href="#">
+                                @children[i].Author.Username
+                            </a>
+                            <span class="comment-time-info">@children[i].DateTime.Date @children[i].DateTime.TimeOfDay</span>
+                        </div>
+
+                        <div class="comment-container">
+                            @{
+                                string[] commentText = children[i].Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                                foreach (string txt in commentText)
+                                {
+                                    <p>@txt</p>
+                                }
+                            }
+                        </div>
+
+                        <div class="comment-actions-container">
+                            <div class="hearts">
+                                <button type="button" class="heart-not-clicked" onclick="heartClick(this)">
+                                    <img src="/img/buttons/heart.png" alt="like">
+                                </button>
+
+                                <button type="button" onclick="heartClick(this)" class="heart-clicked">
+                                    <img src="/img/buttons/heart red.png" alt="like">
+                                </button>
+
+                                <span class="hearts-counter text-sans-style comment-hearts-count">56</span>
+                            </div>
+
+                            @if (canWrite)
+                            {
+                                <div class="comment-reply">
+                                    <button type="button" onclick="replyComment(this)" class="reply-button">
+                                        <img src="/img/buttons/next.png" alt="reply">
+                                    </button>
+                                </div>
+                            }
+                        </div>
+
+                        @{
+                            if (currentDepth <= depth)
+                                if (children[i].Children.Any())
+                                {
+                                    <div class="users-comment-answer-collection">
+                                        @{
+                                            GetComment(children[i].Children, currentDepth);
+                                        }
+                                    </div>
+                                }
+                        }
+                    </div>
+
+                </div>
+
+                if (currentDepth > depth)
+                {
+                    if (children[i].Children.Any())
+                    {
+                        <div class="users-comment-answer-collection">
+                            @{
+                                GetComment(children[i].Children, currentDepth);
+                            }
+                        </div>
+                    }
+                }
+            }
+        }
+        --currentDepth;
+    }
+}
+
+<div class="blog-comments text-alegreya-style">
+
+    <a name="commentsAnch"></a>
+
+    @{
+        IEnumerable<Comment> comments = articleComments;
+        if (!comments.Any())
+        {
+            <h4>Leave a comment first!</h4>
+        }
+        else
+        {
+            <h3>Comments</h3>
+
+            <div class="article-comments-collection">
+                @{
+                    List<Comment> rootComments = (from comment in comments
+                                                  where comment.ParentId == null
+                                                  orderby comment.DateTime.Ticks
+                                                  select comment).ToList();
+                    GetComment(rootComments, -1);
+
+                    ////
+                }
+            </div>
+        }
+    }
+</div>

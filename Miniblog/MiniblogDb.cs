@@ -13,7 +13,6 @@ namespace Miniblog
     {
         public DbSet<Role> Roles { get; set; }
         public DbSet<ExtendedRole> ExtendedRoles { get; set; }
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
         //public DbSet<Opportunities> Opportunities { get; set; }
         //public DbSet<JobOpportunities> JobOpportunities { get; set; }
         public DbSet<User> Users { get; set; }

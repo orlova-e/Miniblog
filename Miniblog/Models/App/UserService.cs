@@ -82,7 +82,9 @@ namespace Miniblog.Models.App
         public User GetFromDb(LoginViewModel loginModel)
         {
             string hash = GetHash(loginModel.Password);
-            var user = _repository.Users.Find(u => u.Username == loginModel.Username && u.Hash == hash).First();
+            User user = _repository.Users.Find(u => u.Username == loginModel.Username && u.Hash == hash).First();
+            Role role = _repository.Roles.GetByIdAsync(user.RoleId).Result;
+            user.Role = role;
             return user;
         }
 
@@ -118,17 +120,6 @@ namespace Miniblog.Models.App
         public async Task<User> GetFromDbAsync(Guid id)
         {
             return await _repository.Users.GetByIdAsync(id);
-        }
-
-        public async Task PutRefreshTokenIntoDb(User user, string refreshToken, DateTimeOffset expiration)
-        {
-            RefreshToken token = new RefreshToken()
-            {
-                User = user,
-                AccessTokenExpiration = expiration,
-                Token = refreshToken
-            };
-            await _repository.RefreshTokens.CreateAsync(token);
         }
     }
 }
