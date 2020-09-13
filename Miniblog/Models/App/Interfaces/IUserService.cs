@@ -16,6 +16,7 @@ namespace Miniblog.Models.App.Interfaces
         Task<User> CreateIntoDbAsync(RegisterViewModel registerModel);
         User GetFromDb(LoginViewModel loginModel);
         Task<User> GetFromDbAsync(Guid id);
+        string GetHash(string password);
 
         //Task<(User, IEnumerable<Article>)> GetAllUserInfoAsync(Guid id);
         //Task<(User, IEnumerable<Article>)> GetAllUserInfoAsync(User user);
