@@ -5,6 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200908115818_Initial.cs" />
+    <Compile Remove="Migrations\20200908115818_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200908161516_Initial.cs" />
+    <Compile Remove="Migrations\20200908161516_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200910062302_Initial.cs" />
+    <Compile Remove="Migrations\20200910062302_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200910062428_v1.cs" />
+    <Compile Remove="Migrations\20200910062428_v1.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Models\Services\UsersRepository.cs~RF115f6df.TMP" />
     <None Remove="Views\Account\SignIn.cshtml~RF758544.TMP" />
     <None Remove="Views\Shared\_Layout.cshtml~RF598f9c.TMP" />
@@ -21,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Home\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

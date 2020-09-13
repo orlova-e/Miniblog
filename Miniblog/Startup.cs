@@ -14,10 +14,12 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Miniblog.Filters;
 using Miniblog.Hubs;
 using Miniblog.Models;
 using Miniblog.Models.App;
 using Miniblog.Models.App.Interfaces;
+using Miniblog.Models.Entities;
 using Miniblog.Models.Services;
 using Miniblog.Models.Services.Interfaces;
 
@@ -40,6 +42,10 @@ namespace Miniblog
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<IUserService, UserService>();
             services.AddTransient<ITextService, TextService>();
+            services.AddScoped<IOptionRepository<Role>, RolesRepository>();
+            services.AddScoped<IOptionRepository<WebsiteOptions>, WebsiteOptionsRepo>();
+            //services.AddScoped<AccessAttribute>();
+            //services.AddTransient(typeof(IOptionRepository<Role>), typeof(RolesRepository));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
