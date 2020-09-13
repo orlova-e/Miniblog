@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Miniblog.Models.Services.Interfaces
 {
     /// <summary>
-    /// UnitOfWork pattern.
+    /// Unit of work.
     /// </summary>
     public interface IRepository : IDisposable
     {
@@ -22,5 +22,8 @@ namespace Miniblog.Models.Services.Interfaces
         IOptionRepository<ListDisplayOptions> ListDisplayOptions { get; }
         IOptionRepository<ArticleOptions> ArticleOptions { get; }
         IOptionRepository<WebsiteOptions> WebsiteOptions { get; }
+        IRelatedRepository<UserFavourite, Article> ArticleLikes { get; }
+        IRelatedRepository<UserBookmark, Article> ArticleBookmarks { get; }
+        IRelatedRepository<CommentLikes, Comment> CommentLikes { get; }
     }
 }

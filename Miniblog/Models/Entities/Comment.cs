@@ -19,6 +19,7 @@ namespace Miniblog.Models.Entities
         public Guid? ParentId { get; set; }
         public Comment Parent { get; set; }
         public List<Comment> Children { get; set; }
+        public List<CommentLikes> Likes { get; set; }
         public Comment()
         {
             Children = new List<Comment>();

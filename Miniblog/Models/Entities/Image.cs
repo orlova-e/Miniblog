@@ -13,6 +13,9 @@ namespace Miniblog.Models.Entities
         public int Position { get; set; } // Article's paragraph
         [Required]
         public string Name { get; set; }
+        [Required]
         public byte[] File { get; set; }
+        [Required]
+        public string FileExtension { get; set; }
     }
 }

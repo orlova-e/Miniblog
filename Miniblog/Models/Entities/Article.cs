@@ -17,6 +17,7 @@ namespace Miniblog.Models.Entities
         [Required]
         public string Text { get; set; }
         public bool Visibility { get; set; }
+        public bool MenuVisibility { get; set; }
         public EntryType EntryType { get; set; }
         //[Required]
         public string Link { get; set; }
@@ -28,13 +29,16 @@ namespace Miniblog.Models.Entities
         //public List<ArticleTag> ArticleTags { get; set; }
         //public Guid? SeriesId { get; set; }
         //public Series Series { get; set; }
-        
         public List<Comment> Comments { get; set; }
-        public ArticleOptions UserArticleDisplayOptions { get; set; }
+        public List<UserBookmark> Bookmarks { get; set; }
+        public List<UserFavourite> Likes { get; set; }
+        public ArticleOptions DisplayOptions { get; set; }
         public Article()
         {
             Images = new List<Image>();
             Comments = new List<Comment>();
+            Bookmarks = new List<UserBookmark>();
+            Likes = new List<UserFavourite>();
             //ArticleTags = new List<ArticleTag>();
         }
     }

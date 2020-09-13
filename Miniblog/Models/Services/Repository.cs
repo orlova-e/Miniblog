@@ -9,7 +9,7 @@ namespace Miniblog.Models.Services
 {
     public class Repository : IRepository
     {
-        public MiniblogDb Db { get; }
+        public MiniblogDb Db { get; private set; }
         private IPlainRepository<User> users;
         private IPlainRepository<Article> articles;
         private IPlainRepository<Comment> comments;
@@ -19,6 +19,9 @@ namespace Miniblog.Models.Services
         private IOptionRepository<ListDisplayOptions> listDisplayOptions;
         private IOptionRepository<ArticleOptions> articleOptions;
         private IOptionRepository<WebsiteOptions> websiteOptions;
+        private IRelatedRepository<UserFavourite, Article> articleLikes;
+        private IRelatedRepository<UserBookmark, Article> articleBookmarks;
+        private IRelatedRepository<CommentLikes, Comment> commentLikes;
         public Repository(MiniblogDb miniblogDb)
         {
             Db = miniblogDb;
@@ -102,6 +105,33 @@ namespace Miniblog.Models.Services
                 if (websiteOptions == null)
                     websiteOptions = new WebsiteOptionsRepo(Db);
                 return websiteOptions;
+            }
+        }
+        public IRelatedRepository<UserFavourite, Article> ArticleLikes
+        {
+            get
+            {
+                if (articleLikes == null)
+                    articleLikes = new ArticleLikesRepo(Db);
+                return articleLikes;
+            }
+        }
+        public IRelatedRepository<UserBookmark, Article> ArticleBookmarks
+        {
+            get
+            {
+                if (articleBookmarks == null)
+                    articleBookmarks = new ArticleBookmarksRepo(Db);
+                return articleBookmarks;
+            }
+        }
+        public IRelatedRepository<CommentLikes, Comment> CommentLikes
+        {
+            get
+            {
+                if (commentLikes == null)
+                    commentLikes = new CommentLikeRepo(Db);
+                return commentLikes;
             }
         }
         private bool disposed = false;

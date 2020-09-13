@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Miniblog.Models.Entities
+﻿namespace Miniblog.Models.Entities
 {
     public class ExtendedRole : Role
     {
@@ -11,5 +6,6 @@ namespace Miniblog.Models.Entities
         public bool ModerateComments { get; set; }
         public bool ModerateTopics { get; set; }
         public bool ModerateTags { get; set; }
+        public bool OverrideMenu { get; set; }
     }
 }

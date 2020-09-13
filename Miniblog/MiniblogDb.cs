@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Miniblog.Models.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Miniblog.Models.Entities.Enums;
+using System;
 
 namespace Miniblog
 {
@@ -56,6 +52,68 @@ namespace Miniblog
                 v => v.ToString(),
                 v => (EntryType)Enum.Parse(typeof(EntryType), v));
 
+            modelBuilder.Entity<Article>()
+                .HasOne(a => a.User)
+                .WithMany(u => u.Articles)
+                .HasForeignKey(a => a.UserId);
+
+            //modelBuilder.Entity<User>()
+            //    .HasMany(u => u.Articles)
+            //    .WithOne(a => a.User);
+
+            //bookmarks
+            modelBuilder.Entity<UserBookmark>()
+                .HasKey(k => new { k.UserId, k.ArticleId });
+
+            modelBuilder.Entity<UserBookmark>()
+                .HasOne(u => u.User)
+                .WithMany(a => a.Bookmarked)
+                .HasForeignKey(ub => ub.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserBookmark>()
+                .HasOne(a => a.Article)
+                .WithMany(u => u.Bookmarks)
+                .HasForeignKey(ub => ub.ArticleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //likes
+            modelBuilder.Entity<UserFavourite>()
+                .HasKey(k => new { k.UserId, k.ArticleId });
+
+            modelBuilder.Entity<UserFavourite>()
+                .HasOne(a => a.User)
+                .WithMany(uf => uf.Liked)
+                .HasForeignKey(k => k.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserFavourite>()
+                .HasOne(uf => uf.Article)
+                .WithMany(a => a.Likes)
+                .HasForeignKey(uf => uf.ArticleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Author)
+                .WithMany(a => a.Comments)
+                .HasForeignKey(c => c.AuthorId);
+
+            //likes
+            modelBuilder.Entity<CommentLikes>()
+                .HasKey(k => new { k.UserId, k.CommentId });
+
+            modelBuilder.Entity<CommentLikes>()
+                .HasOne(cl => cl.User)
+                .WithMany(u => u.LikedComments)
+                .HasForeignKey(cl => cl.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CommentLikes>()
+                .HasOne(cl => cl.Comment)
+                .WithMany(c => c.Likes)
+                .HasForeignKey(cl => cl.CommentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<WebsiteOptions>()
                 .Property(e => e.WebsiteLanguage)
                 .HasConversion(
@@ -98,7 +156,7 @@ namespace Miniblog
             //UserArticlesDisplayOptions
             modelBuilder.Entity<ArticleOptions>()
                 .HasOne(u => u.Article)
-                .WithOne(ar => ar.UserArticleDisplayOptions)
+                .WithOne(ar => ar.DisplayOptions)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ArticleOptions>()
@@ -156,7 +214,8 @@ namespace Miniblog
                 WriteMessages = true,
                 ReadComments = true,
                 CreateTopics = true,
-                CreateTags = true
+                CreateTags = true,
+                OverrideOwnArticle = true
             };
             ExtendedRole EditorRole = new ExtendedRole()
             {
@@ -171,7 +230,9 @@ namespace Miniblog
                 ModerateArticles = true,
                 ModerateComments = true,
                 ModerateTopics = true,
-                ModerateTags = true
+                ModerateTags = true,
+                OverrideMenu = true,
+                OverrideOwnArticle = true
             };
             ExtendedRole AdministratorRole = new ExtendedRole()
             {
@@ -186,7 +247,9 @@ namespace Miniblog
                 ModerateArticles = true,
                 ModerateComments = true,
                 ModerateTopics = true,
-                ModerateTags = true
+                ModerateTags = true,
+                OverrideMenu = true,
+                OverrideOwnArticle = true
             };
 
             modelBuilder.Entity<Role>().HasData(UserRole);
@@ -197,7 +260,7 @@ namespace Miniblog
                 Id = Guid.NewGuid(),
                 Username = "Administrator",
                 Email = "test@test.com",
-                Hash = "?y|??-?d??]??v#??=S,?\\^???O",
+                Hash = "�y|�\u0018�-�d�\a�]?�v#\u0004��\u0006=S,�\\^ר��O",
                 RoleId = AdministratorRole.Id,
                 //Role = AdministratorRole,
                 DateOfRegistration = DateTimeOffset.UtcNow
@@ -207,7 +270,7 @@ namespace Miniblog
                 Id = Guid.NewGuid(),
                 Username = "Editor",
                 Email = "editor@test.com",
-                Hash = "?y|??-?d??]??v#??=S,?\\^???O",
+                Hash = "�y|�\u0018�-�d�\a�]?�v#\u0004��\u0006=S,�\\^ר��O",
                 RoleId = EditorRole.Id,
                 //Role = EditorRole,
                 DateOfRegistration = DateTimeOffset.UtcNow
@@ -217,7 +280,7 @@ namespace Miniblog
                 Id = Guid.NewGuid(),
                 Username = "User",
                 Email = "user@test.com",
-                Hash = "?y|??-?d??]??v#??=S,?\\^???O",
+                Hash = "�y|�\u0018�-�d�\a�]?�v#\u0004��\u0006=S,�\\^ר��O",
                 RoleId = UserRole.Id,
                 //Role = UserRole,
                 DateOfRegistration = DateTimeOffset.UtcNow
