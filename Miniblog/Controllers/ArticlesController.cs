@@ -1,34 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Miniblog.Filters;
 using Miniblog.Models.Entities;
 using Miniblog.Models.Services.Interfaces;
 using Miniblog.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Miniblog.Controllers
 {
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class ArticlesController : Controller
     {
-        public IRepository _repository { get; private set; }
+        public IRepository repository { get; private set; }
         public ArticlesController(IRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
+
         [AllowAnonymous]
-        [Route("[controller]/{header}")]
-        public async Task<IActionResult> GetArticleAsync(string header)
+        [Route("[controller]/{link}")]
+        public async Task<IActionResult> Article([FromRoute] string link)
         {
-            Article article = _repository.Articles.Find(a => a.Header == header).First();
+            Article article = repository.Articles.Find(a => a.Link == link).FirstOrDefault();
+            
+            if(article == null)
+            {
+                return NotFound();
+            }            
+            
+            ListDisplayOptions globalArticleOptions = await repository.ListDisplayOptions.FirstOrDefaultAsync();
+            if (!globalArticleOptions.OverrideForUserArticle)
+                article.DisplayOptions = (ArticleOptions)globalArticleOptions;
+
+            // ! test !     // SHOULD INCLUDE USERS' AVATARS (USERS' INSTANSES) !!!!!
             if (article.Comments == null)
             {
-                List<Comment> comments = _repository.Comments.Find(c => c.ArticleId == article.Id).ToList();
+                List<Comment> comments = repository.Comments.Find(c => c.ArticleId == article.Id).ToList();
                 article.Comments = comments;
             }
             if (article.Images == null)
@@ -37,19 +49,27 @@ namespace Miniblog.Controllers
             }
             if (article.Topic == null && article.TopicId != null)
             {
-                Topic topic = await _repository.Topics.GetByIdAsync((Guid)article.TopicId);
+                Topic topic = await repository.Topics.GetByIdAsync((Guid)article.TopicId);
                 article.Topic = topic;
             }
             if (article.User == null)
             {
-                User user = await _repository.Users.GetByIdAsync(article.UserId);
+                User user = await repository.Users.GetByIdAsync(article.UserId);
                 article.User = user;
             }
 
-            Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            User currentUser = await _repository.Users.GetByIdAsync(userId);
+            article.Likes = await repository.ArticleLikes.GetAsync(article.Id);
+            article.Bookmarks = await repository.ArticleBookmarks.GetAsync(article.Id);
 
-            ArticleViewModel articleViewModel = new ArticleViewModel()
+            for (int i = 0; i < article.Comments.Count; i++)
+            {
+                article.Comments[i].Likes = await repository.CommentLikes.GetAsync(article.Comments[i].Id);
+            }
+
+            Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
+            User currentUser = await repository.Users.GetByIdAsync(userId);
+
+            ArticleReadViewModel articleViewModel = new ArticleReadViewModel()
             {
                 Article = article,
                 //CommentForm = new CommentViewModel(),
@@ -59,23 +79,49 @@ namespace Miniblog.Controllers
 
             return View(articleViewModel);
         }
-        // auth requirements
+
+        [AllowAnonymous]
+        public async Task<IActionResult> List([FromRoute] string listName = "Recent")
+        {
+            ListDisplayOptions listOptions = await repository.ListDisplayOptions.FirstOrDefaultAsync();
+            List<ArticleFromListViewModel> articlesModel = new List<ArticleFromListViewModel>();
+            List<Article> articles = (await repository.Articles.GetAllAsync()).OrderByDescending(a => a.DateTime.Ticks).ToList();
+            for (int i = 0; i < articles.Count; i++)
+            {
+                if (articles[i].User == null)
+                    articles[i].User = await repository.Users.GetByIdAsync(articles[i].UserId);
+                if (listOptions.OverrideForUserArticle && articles[i].DisplayOptions == null)
+                    articles[i].DisplayOptions = repository.ArticleOptions.Find(d => d.ArticleId == articles[i].Id).FirstOrDefault();
+                if (articles[i].Topic == null)
+                    articles[i].Topic = await repository.Topics.GetByIdAsync((Guid)articles[i].TopicId);
+
+                if (!articles[i].Comments.Any())
+                    articles[i].Comments = repository.Comments.Find(c => c.ArticleId == articles[i].Id).ToList();
+                if (!articles[i].Bookmarks.Any())
+                    articles[i].Bookmarks = await repository.ArticleBookmarks.GetAsync(articles[i].Id);
+                if (!articles[i].Likes.Any())
+                    articles[i].Likes = await repository.ArticleLikes.GetAsync(articles[i].Id);
+            }
+
+            return View(articles);
+        }
+        
         [HttpGet]
-        public IActionResult AddArticle()
+        [TypeFilter(typeof(AccessAttribute), Arguments = new[] { "WriteArticles" })]
+        public IActionResult Add()
         {
             //ViewBag.Article = new Article();
             //ViewBag.ArticleOptions = new UserArticleDisplayOptions();
             //return View(ViewBag);
             return View();
         }
+
         [HttpPost]
-        public IActionResult AddArticle(Article article, ArticleOptions articleOptions = null)
+        [TypeFilter(typeof(AccessAttribute), Arguments = new[] { "WriteArticles" })]
+        public IActionResult Add(ArticleWriteViewModel article)
         {
             if (!ModelState.IsValid)
             {
-                //ViewBag.Article = article;
-                //ViewBag.ArticleOptions = articleOptions;
-                //return View(ViewBag);
                 return View(article);
             }
 

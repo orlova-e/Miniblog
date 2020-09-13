@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Miniblog.Models.Services.Interfaces;
 
 namespace Miniblog.Controllers
 {
     public class HomeController : Controller
     {
+        public IRepository _repository { get; private set; }
+        public HomeController(IRepository repository)
+        {
+            _repository = repository;
+        }
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("List", "Articles");
+            //return View("~/Views/Articles/List.cs");
         }
     }
 }

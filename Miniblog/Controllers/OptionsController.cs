@@ -14,7 +14,7 @@ using Miniblog.Models.Services.Interfaces;
 namespace Miniblog.Controllers
 {
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme,
-        Roles = nameof(RoleType.Administrator) + nameof(RoleType.Editor))]
+        Roles = nameof(RoleType.Administrator) + "," + nameof(RoleType.Editor))]
     public class OptionsController : Controller                 // +++ SURE that you added AUTHORIZATION requirements
     {
         public IUserService _userService { get; private set; }
@@ -24,13 +24,12 @@ namespace Miniblog.Controllers
             _userService = userService;
             _repository = repository;
         }
-        [Authorize(Roles = nameof(RoleType.User))]
-        [Route("UserOptions")]
         [HttpGet]
-        public async Task<IActionResult> UserOptionsAsync()
+        [Authorize(Roles = nameof(RoleType.Administrator) + "," + nameof(RoleType.Editor) + "," + nameof(RoleType.User))]
+        public async Task<IActionResult> Account()            // SURE that you created VIEW
         {
             User user = await _repository.Users.GetByIdAsync(Guid.Parse(User.FindFirstValue("Id")));
-            return View(user);                                          // SURE that you created VIEW
+            return View(user);
         }
         [Authorize(Roles = nameof(RoleType.Administrator))]
         [Route("Main")]

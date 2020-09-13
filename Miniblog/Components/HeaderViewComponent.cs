@@ -23,10 +23,28 @@ namespace Miniblog.Components
             {
                 Title = websiteDisplayOptions.Name,
                 ShowSearch = websiteDisplayOptions.ShowSearchOption,
-
+                
             };
-            //await _repository.Pages.GetAllAsync();
+
             Dictionary<string, string> pages = new Dictionary<string, string>();
+
+            ClaimsPrincipal principal;
+            User user;
+            Role role = null;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                principal = User as ClaimsPrincipal;
+                Guid.TryParse(principal.FindFirstValue("Id"), out Guid id);
+                user = await _repository.Users.GetByIdAsync(id);
+                header.Username = user.Username;
+                header.Avatar = user.Avatar;
+                role = await _repository.Roles.GetByIdAsync(user.RoleId);
+                if (role.WriteArticles)
+                {
+                    pages.Add("Add", Url.Action("Add", "Articles"));
+                }
+            }
 
             if (websiteDisplayOptions.ShowListOfPopularAndRecent)
             {
@@ -40,27 +58,17 @@ namespace Miniblog.Components
             {
                 pages.Add("Topics", Url.Action("List", "Articles", new { listName = "Topics" }));
             }
-            //List<Page> madePagesList = new List<Page>();
-            //foreach (Page page in madePagesList)
-            //{
-            //    if (page.Visibility)
-            //    {
-            //        pages.Add(page.Header, Url.Action("Show", "Pages", new { pageName = page.Header }));
-            //    }
-            //}
-            ClaimsPrincipal claimsPrincipal = User as ClaimsPrincipal;
-            
+
             if (User.Identity.IsAuthenticated)
             {
-                pages.Add("Sign Out", Url.RouteUrl("default", new { controller = "Account", action = "SignOut" }));
-                ClaimsPrincipal principal = User as ClaimsPrincipal;
-                Guid.TryParse(principal.FindFirstValue("Id"), out Guid id);
-                //Guid id = Guid.Parse(principal.FindFirstValue("Id"));
-                User user = await _repository.Users.GetByIdAsync(id);
-                header.Username = user.Username;
-                header.Avatar = user.Avatar;
-                //header.Link = Url.Action("User", "Account", new { username = user.Username });
+                pages.Add("Account", Url.Action("Account", "Options"));
+                if(role.Discriminator == "ExtendedRole")
+                {
+                    pages.Add("Options", Url.Action("Main", "Options"));
+                }
+                pages.Add("Sign Out", Url.Action("SignOut", "Account"));
             }
+
             header.Pages = pages;
             return View(header);
         }
