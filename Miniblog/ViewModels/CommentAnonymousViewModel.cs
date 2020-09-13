@@ -2,7 +2,7 @@
 
 namespace Miniblog.ViewModels
 {
-    public class AnonymousCommentViewModel
+    public class CommentAnonymousViewModel
     {
         [Required(ErrorMessage = "Email is required")]
         [DataType(DataType.EmailAddress)]
