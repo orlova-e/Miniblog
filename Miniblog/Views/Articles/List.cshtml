@@ -1,0 +1,51 @@
+﻿@model List<Article>
+
+@if (Model.Any())
+{
+    <div class="articles-menu-container text-roboto-style">
+        @await Html.PartialAsync("_ListParametersPartial")
+    </div>
+}
+
+<div id="articlesContainer" class="blog-container">
+
+    @if (!Model.Any())
+    {
+        ServerMessage serverMessage = new ServerMessage()
+        {
+            ShowSmile = true,
+            MessageText = "No articles yet"
+        };
+        await Html.RenderPartialAsync("_ServerMessagePartial", serverMessage);
+    }
+    else
+    {
+        foreach (var article in Model)
+        {
+            await Html.RenderPartialAsync("_PreviewArticlePartial", article);
+        }
+    }
+
+</div>
+
+@if (Model.Any())
+{
+    <div class="load-more-container">
+        <button type="button" class="usual-button usual-button-reverse" id="loadMoreButton">Load more</button>
+    </div>
+
+    @section Scripts {
+        <script src="~/js/listpage_actions/articlesLayoutVisibility.js"></script>
+        <script src="~/js/listpage_actions/sortArticlesList.js"></script>
+        <script src="~/js/listpage_actions/sortArticles.js"></script>
+        <script src="~/js/listpage_actions/closeSortList.js"></script>
+        <script src="~/js/listpage_actions/windowClickEvent.js"></script>
+        @*<script src="~/js/listpage_actions/handlers.js"></script>*@
+    }
+}
+else
+{
+    <div class="load-more-container">
+        <a asp-action="Add" asp-controller="Articles" class="usual-button usual-button-reverse">Add</a>
+    </div>
+}

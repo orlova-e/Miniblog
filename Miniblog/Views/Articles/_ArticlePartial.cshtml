@@ -1,0 +1,66 @@
+﻿@using Miniblog.Models.Entities
+@using Miniblog.ViewModels
+@model ArticleReadViewModel
+
+<article class="art text-alegreya-style" id="@Model.Article.Id.ToString()">
+    <div class="blog-content">
+        <div class="article-meta text-sans-style">
+            <a href="@Url.Action("GetArticleAsync", "Articles", new { link = Model.Article.Link })" class="article-header">
+                <h2><b>@Model.Article.Header</b></h2>
+            </a>
+            <ul class="article-info clearfix">
+                <li><a href="@Url.Action("User", "Account", new { username = Model.Article.User.Username })">@Model.Article.User.Username</a></li>
+                <li><a href="#">@Model.Article.DateTime.DateTime</a></li>
+            </ul>
+        </div>
+        @{
+            string[] paragraphs = Model.Article.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            int imagesNumber = Model.Article.Images.Count;
+            for (int i = 0; i < paragraphs.Length + imagesNumber; i++)
+            {
+                Image currentImage = (from image in Model.Article.Images
+                                      where image.Position == i
+                                      select image).FirstOrDefault();
+                if (currentImage != null)
+                {
+                    <div class="article-image">
+                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(currentImage.File))" alt="@currentImage.Name">
+                    </div>
+                }
+                else
+                {
+                    <div class="blog-text">
+                        <p>@paragraphs[i]</p>
+                    </div>
+                }
+            }
+        }
+
+        <div class="article-user-actions text-roboto-style">
+            <div class="like-action">
+                <button type="button">
+                    <img src="/img/buttons/heart.png" alt="like">
+                </button>
+                <span id="article-likes-count">0</span>
+            </div>
+
+            <div class="bookmark-action">
+                <a href="#commentsAnch">
+                    <img src="/img/ico/bookmark5.png" alt="bookmark by Calvin Goodman from the Noun Project">
+                </a>
+                <span id="article-bookmark-count">0</span>
+            </div>
+
+            @if (Model.CurrentUser.Role.ReadComments)
+            {
+                <div class="comment-action">
+                    <button type="button">
+                        <img src="/img/ico/chat.png" alt="from the Noun Project">
+                    </button>
+                    <span id="article-comments-count">@Model.Article.Comments.Count</span>
+                </div>
+            }
+
+        </div>
+    </div>
+</article>

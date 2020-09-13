@@ -1,0 +1,26 @@
+﻿<div class="display-parameters">
+    <div class="drop-menu">
+        <button onclick="sortArticlesList()" class="drop-button text-alegreya-style"><h5>Sort by: <span id="sortCharacter">First the old ones</span></h5></button>
+        <div id="sortListDropdown" class="display-sort-menu-content">
+            <!-- <button>
+                Most liked
+            </button> -->
+            <button onclick="sortArticles(this)">
+                First the old ones
+            </button>
+            <button onclick="sortArticles(this)">
+                First the new ones
+            </button>
+            <button onclick="sortArticles(this)">
+                Alphabetically &DownArrow;
+            </button>
+            <button onclick="sortArticles(this)">
+                Alphabetically &UpArrow;
+            </button>
+        </div>
+    </div>
+    <div class="display-character">
+        <button id="rowArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="img/ico/rows2.png" alt=""></button>
+        <button id="gridArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="img/ico/grid nonactive.png" alt=""></button>
+    </div>
+</div>

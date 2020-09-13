@@ -1,0 +1,37 @@
+﻿@using Miniblog.Models.Entities
+@model Article
+
+<article class="art text-alegreya-style">
+    <div class="blog-content">
+
+        <div class="article-meta text-roboto-style">
+            <a href="@Url.Action("GetArticleAsync", "Articles", new { link = Model.Link })" class="article-header">
+                <h2><b>@Model.Header</b></h2>
+            </a>
+            <ul class="article-info clearfix">
+                <li><a href="@Url.Action("User", "Account", new { username = Model.User.Username })">@Model.User.Username</a></li>
+                <li class="article-datetime"><a href="#">@Model.DateTime.DateTime</a></li>
+            </ul>
+        </div>
+
+        @{
+            if (Model.Images.Any())
+            {
+                <div class="article-image">
+                    <img src="data:image/@Model.Images[0].FileExtension;base64,@(Convert.ToBase64String(Model.Images[0].File))" alt="preview image">
+                </div>
+            }
+        }
+
+        <div class="blog-text">
+            @{
+                string[] words = Model.Text.Split(new char[] { ' ' }, 50, StringSplitOptions.RemoveEmptyEntries);
+                string previewText = string.Join(' ', words);
+                <p>@previewText</p>
+            }
+            <div class="read-action">
+                <a href="@Url.Action("GetArticleAsync", "Articles", new { link = Model.Link })">Read more &RightArrow;</a>
+            </div>
+        </div>
+    </div>
+</article>

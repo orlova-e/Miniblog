@@ -1,0 +1,141 @@
+﻿@using Miniblog.Models.Entities.Enums
+@using Miniblog.Models.Services.Interfaces
+@using System.Security.Claims
+
+@inject IOptionRepository<Role> rolesRepository
+@model ArticleWriteViewModel
+
+@{
+    RoleType type = (RoleType)Enum.Parse(typeof(RoleType), User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value);
+    Role role = rolesRepository.Find(r => r.Type == type).FirstOrDefault();
+}
+
+<div class="blog-container">
+    <div class="page-container text-alegreya-style">
+        <div class="add-article-container">
+            <form asp-action="Add" asp-controller="Articles" method="post">
+
+                <fieldset>
+                    <input autofocus type="text" placeholder="Header" asp-for="@Model.Header" class="usual-input usual-input-text input-center">
+                    <span asp-validation-for="@Model.Header" class="text-sans-style"></span>
+
+                    @if (role.CreateTopics)
+                    {
+                        <input type="text" placeholder="Topic" asp-for="@Model.Topic" class="usual-input usual-input-text input-center">
+                        <span asp-validation-for="@Model.Topic" class="text-sans-style"></span>
+                    }
+
+                    <textarea placeholder="Write something there..." asp-for="@Model.Text" class="usual-input usual-input-textarea article-text-input"></textarea>
+                    <span asp-validation-for="@Model.Text" class="text-sans-style"></span>
+
+                    @if (role.CreateTags)
+                    {
+                        <input type="text" placeholder="Tags" asp-for="@Model.Tags" class="usual-input usual-input-text">
+                        <span class="text-sans-style"></span>
+                    }
+                </fieldset>
+
+                @if (role.OverrideOwnArticle)
+                {
+                    <fieldset id="optionsContent">
+
+                        <button onclick="openOptions(this)" type="button" class="drop-button text-alegreya-style">
+                            <h5>
+                                Display options
+                            </h5>
+                        </button>
+
+                        <div style="display: none;" class="article-display-options">
+
+                            <h6>Display as</h6>
+
+                            @if ((bool)(role as ExtendedRole)?.OverrideMenu)
+                            {
+                                @foreach (var entryType in Enum.GetValues(typeof(EntryType)))
+                                {
+                                    <label class="usual-label radio-label">
+                                        <input type="radio" asp-for="@Model.EntryType" value="@((int)entryType)" checked="@((int)entryType == (int)EntryType.Article)">
+                                        @Enum.GetName(typeof(EntryType), entryType)
+                                    </label>
+                                }
+                            }
+
+                            <h6>Color</h6>
+
+                            <div class="article-circles">
+                                @foreach (var theme in Enum.GetValues(typeof(ColorTheme)))
+                                {
+                                    <button id="@theme" onclick="selectTheme(this)" type="button" class="article-circle blog-theme-@(theme.ToString().ToLower())"></button>
+                                }
+                            </div>
+
+                            <input type="hidden" asp-for="@Model.ColorTheme">
+
+                            <h6>Data</h6>
+
+                            <input checked type="checkbox" asp-for="@Model.DisplayOptions.Username" class="usual-checkbox">
+                            <label class="usual-label checkbox-label" asp-for="@Model.DisplayOptions.Username"></label>
+
+                            <input checked type="checkbox" asp-for="@Model.DisplayOptions.DateAndTime" class="usual-checkbox">
+                            <label class="usual-label checkbox-label" asp-for="@Model.DisplayOptions.DateAndTime"></label>
+
+                            <input checked type="checkbox" asp-for="@Model.DisplayOptions.Topic" class="usual-checkbox">
+                            <label class="usual-label checkbox-label" asp-for="@Model.DisplayOptions.Topic"></label>
+
+                            <input checked type="checkbox" asp-for="@Model.DisplayOptions.Tags" class="usual-checkbox">
+                            <label class="usual-label checkbox-label" asp-for="@Model.DisplayOptions.Tags"></label>
+
+                            <input checked type="checkbox" asp-for="@Model.DisplayOptions.Series" class="usual-checkbox">
+                            <label class="usual-label checkbox-label" asp-for="@Model.DisplayOptions.Series"></label>
+
+                            <input checked type="checkbox" asp-for="@Model.DisplayOptions.Likes" class="usual-checkbox">
+                            <label class="usual-label checkbox-label" asp-for="@Model.DisplayOptions.Likes"></label>
+
+                            <input checked type="checkbox" asp-for="@Model.DisplayOptions.Bookmarks" class="usual-checkbox">
+                            <label class="usual-label checkbox-label" asp-for="@Model.DisplayOptions.Bookmarks"></label>
+
+                            <input checked type="checkbox" asp-for="@Model.DisplayOptions.Comments" class="usual-checkbox">
+                            <label class="usual-label checkbox-label" asp-for="@Model.DisplayOptions.Comments"></label>
+
+                            <h6>Visibility</h6>
+
+                            <label class="usual-label radio-label">
+                                @Html.RadioButton(nameof(Model.Visibility), "true", true)
+                                Visible
+                            </label>
+
+                            <label class="usual-label radio-label">
+                                @Html.RadioButton(nameof(Model.Visibility), "false")
+                                Hidden
+                            </label>
+
+                            @if ((role as ExtendedRole).OverrideMenu)
+                            {
+                                Html.CheckBoxFor(model => model.MenuVisibility);
+                                Html.LabelFor(model => model.MenuVisibility);
+                            }
+
+                        </div>
+
+                    </fieldset>
+                }
+
+                <button type="submit" class="usual-submit-button usual-button">Add</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section ProgressBar {
+    <div class="read-progress-bar-container" id="read-bar-container">
+        <div class="read-progress">
+            <div class="read-progress-bar" id="readBar"></div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/add_article_actions/openOptions.js"></script>
+    <script src="~/js/add_article_actions/selectTheme.js"></script>
+}
