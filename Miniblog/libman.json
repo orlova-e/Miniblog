@@ -17,6 +17,14 @@
         "jquery.validate.unobtrusive.min.js",
         "jquery.validate.unobtrusive.js"
       ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "@microsoft/signalr@3.1.7",
+      "destination": "wwwroot/lib/microsoft/signalr/",
+      "files": [
+        "dist/browser/signalr.min.js"
+      ]
     }
   ]
 }
