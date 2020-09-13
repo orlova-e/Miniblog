@@ -2,7 +2,6 @@ button {
     background-color: transparent;
     border: none;
     outline: none;
-    /* color: gray; */
 }
 
 /* ! Dropdown panel (NOT using now) */
@@ -13,12 +12,8 @@ button {
 }
 
 .drpdown-content {
-    /* display: none; */
-    /* position: absolute; */
     z-index: 1;
-    /* background-color: white; */
     min-width: 160px;
-    
 }
 
 .drpdown-content a {
@@ -67,33 +62,12 @@ button {
     min-height: 100px;
     height: 100px;
     max-height: 200px;
-    /* margin-bottom: 0; */
 }
-
-/* ? Color themes for inputs */
-
-.blog-theme-blue .comment-input:focus {
-    border: 1px solid rgb(94, 143, 248);
-    box-shadow: 0 0 0 3px rgb(174, 200, 255);
-}
-
-/* .blog-theme-red .comment-form .comment-input.comment-input-error {
-    border: 1px solid black;
-    box-shadow: 0 0 0 3px rgb(185, 185, 185)
-} */
-
-.blog-theme-red .comment-input:focus {
-    border: 1px solid rgb(255, 113, 113);
-    box-shadow: 0 0 0 3px rgb(255, 208, 208);
-}
-
-/* ? Theme's definitions END */
 
 /* ? Error's definitions */
 
 .comment-form .comment-input.comment-input-error {
     border: 1px solid red;
-    /* box-shadow: 0 0 0 3px rgb(255, 176, 176); */
     
 }
 
@@ -238,4 +212,45 @@ button {
 
 .icon-button {
     margin-top: 2px;
+}
+
+.add-article-container button {
+    outline: none;
+}
+
+/* * Color buttons */
+
+.article-circle {
+    /* vertical-align: center; */
+    /* box-shadow: 0 0 0 2px transparent; */
+    border: 2px solid transparent;
+}
+
+.blog-theme-gray.article-circle {
+    background-color: rgb(190, 190, 190);
+}
+
+.blog-theme-blue.article-circle {
+    background-color: rgb(94, 143, 248);
+}
+
+.blog-theme-red.article-circle {
+    background-color: rgb(255, 113, 113);
+}
+
+.blog-theme-yellow.article-circle {
+    background-color: burlywood;
+}
+
+.blog-theme-green.article-circle {
+    background-color: rgb(98, 228, 98);
+}
+
+.blog-theme-purple.article-circle {
+    background-color: rgb(241, 89, 241);
+}
+
+.selected-circle.article-circle {
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px rgb(196, 196, 196);
 }

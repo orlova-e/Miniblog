@@ -1,3 +1,7 @@
+/* label {
+    display: inline;
+} */
+
 /* * Usual inputs */
 
 .usual-input {
@@ -23,11 +27,11 @@
     color: rgb(58, 58, 58);
 }
 
-    /* .usual-form .usual-input:focus */
-    .usual-input:focus {
-        border: 1px solid burlywood;
-        box-shadow: 0 0 0 3px rgb(255, 230, 197);
-    }
+/* .usual-form .usual-input:focus */
+.usual-input:focus {
+    border: 1px solid burlywood;
+    box-shadow: 0 0 0 3px rgb(255, 230, 197);
+}
 
 .usual-form .usual-input-textarea {
     width: 100%;
@@ -66,13 +70,13 @@ input.input-validation-error {
     border: 1px solid red;
 }
 
-    /* .usual-form .usual-input.usual-input-error:focus */
-    /* .usual-input.usual-input-error:focus, */
-    .usual-input.input-validation-error:focus,
-    input.input-validation-error:focus {
-        border: 1px solid rgb(255, 113, 113);
-        box-shadow: 0 0 0 3px rgb(255, 208, 208);
-    }
+/* .usual-form .usual-input.usual-input-error:focus */
+/* .usual-input.usual-input-error:focus, */
+.usual-input.input-validation-error:focus,
+input.input-validation-error:focus {
+    border: 1px solid rgb(255, 113, 113);
+    box-shadow: 0 0 0 3px rgb(255, 208, 208);
+}
 
 /* .usual-form .usual-error-message, */
 .usual-form .field-validation-error,
@@ -103,4 +107,46 @@ input[type="search"] {
     height: 150px;
     min-height: 70px;
     max-height: 500px;
+}
+
+.article-text-input {
+    width: 100%;
+    max-height: 300px;
+    height: 300px;
+}
+
+/* * OPTIONS page */
+
+.options-content .usual-form .usual-input {
+    width: 80%;
+}
+
+.add-article-container input.usual-input,
+.add-article-container .usual-input-textarea,
+.add-article-container .usual-input:focus,
+.add-article-container .usual-input-textarea:focus {
+    border: none;
+    border-color: transparent;
+    box-shadow: 0 0 0 0;
+    outline: none;
+    width: 100%;
+    outline-color: transparent;
+    
+}
+
+.add-article-container input.usual-input::placeholder,
+.add-article-container .usual-input-textarea::placeholder {
+    font-style: italic;
+}
+
+.add-article-container .usual-input-textarea {
+    min-height: 150px;
+    height: auto;
+    max-height: 300px;
+}
+
+.input-center {
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
 }

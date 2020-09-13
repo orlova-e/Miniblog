@@ -198,11 +198,9 @@ a.text-mono-style {
     text-decoration: none;
     color: rgb(94, 143, 248);
     transition: 0.8 linear;
-    /* border-bottom: 1px solid burlywood; */
 }
 
 .blog-theme-blue a:hover {
     color: rgb(17, 93, 255);
-    /* border-bottom: 1px solid orange; */
 }
 
