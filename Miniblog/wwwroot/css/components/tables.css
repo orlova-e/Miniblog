@@ -1,12 +1,10 @@
 table {
     border-collapse: collapse;
     table-layout: fixed;
-    /* margin: 0 auto; */
 }
 
 caption {
     caption-side: top;
-    /* text-align: center; */
 }
 
 tr {
@@ -34,12 +32,10 @@ tbody tr:nth-child(even) {
     background-color: rgb(247, 247, 247);
 }
 
-/* thead, */
 tbody tr:hover {
     background-color: rgb(238, 238, 238);
 }
 
-/* tr th:first-child, */
 tr td:first-child {
     min-width: 200px;
     max-width: 200px;

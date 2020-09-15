@@ -1,57 +1,3 @@
-ul {
-    display: block;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-ul li {
-    margin: 0;
-    padding: 0;
-    padding: 6px 0px;
-    word-break: break-all;
-}
-
-ul.usual-ul {
-    padding: 0 20px;
-    list-style-type: disc;
-}
-
-input[type=radio],
-input[type=checkbox] {
-    margin-right: 5px;
-}
-
-input[type=file] {
-    /* background-color:green; */
-}
-
-select {
-    outline: none;
-    margin: 5px 0;
-    padding: 2px 5px;
-    border-radius: 5px;
-    border: 1px solid rgb(201, 201, 201);
-}
-
-/* select option {
-    font-family: 'Open Sans', sans-serif;
-} */
-
-.usual-label.radio-label,
-.usual-label.checkbox-label {
-    margin: 5px 0;
-}
-
-fieldset {
-    margin: 0 0 30px 0;
-}
-
-legend {
-    display: block;
-    margin: 5px 0;
-}
-
 /* * DISPLAY ARTICLE PARAMETERS */
 
 .options-container {
@@ -68,13 +14,9 @@ legend {
     margin-bottom: 20px;
 }
 
-/* ! DISPLAYING??? */
-
 .options-content:last-child div { 
     margin-bottom: 0;
 }
-
-/* ! */
 
 .drop-menu .drop-button {
     padding: 0px 0 0 0;
@@ -91,7 +33,6 @@ legend {
 .drop-menu {
     display: inline-block;
     position: relative;
-
 }
 
 .blog-links-list {
@@ -139,9 +80,7 @@ legend {
 }
 
 .options-container .options-content .usual-form textarea.usual-input-textarea {
-    /* margin: 10px; */
     resize: none;
-    /* min-width: auto; */
     width: 15em;
     max-width: 100%;
     display: block;

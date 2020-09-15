@@ -150,3 +150,30 @@ input[type="search"] {
     width: 100%;
     max-width: 100%;
 }
+
+input[type=radio],
+input[type=checkbox] {
+    margin-right: 5px;
+}
+
+select {
+    outline: none;
+    margin: 5px 0;
+    padding: 2px 5px;
+    border-radius: 5px;
+    border: 1px solid rgb(201, 201, 201);
+}
+
+.usual-label.radio-label,
+.usual-label.checkbox-label {
+    margin: 5px 0;
+}
+
+fieldset {
+    margin: 0 0 30px 0;
+}
+
+legend {
+    display: block;
+    margin: 5px 0;
+}

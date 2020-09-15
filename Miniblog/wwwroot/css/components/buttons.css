@@ -88,6 +88,8 @@ button {
 
 button.usual-button,
 button.usual-button-reverse,
+a.usual-button,
+a.usual-button-reverse,
 .usual-submit-button {
     display: block;
     background-color: burlywood;
@@ -100,7 +102,8 @@ button.usual-button-reverse,
     outline: none;
 }
 
-button.usual-button-reverse {
+button.usual-button-reverse,
+a.usual-button-reverse {
     background-color: transparent;
     color: burlywood;
     border: 1px solid burlywood;
@@ -113,7 +116,8 @@ button.usual-button-reverse {
     background-color: rgb(94, 143, 248);
 }
 
-.blog-theme-blue button.usual-button-reverse {
+.blog-theme-blue button.usual-button-reverse,
+.blog-theme-blue a.usual-button-reverse {
     color: rgb(94, 143, 248);
     background-color: transparent;
     border: 1px solid rgb(94, 143, 248);

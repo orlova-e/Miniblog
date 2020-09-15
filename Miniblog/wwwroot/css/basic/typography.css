@@ -38,13 +38,15 @@ h4 {
     font-size: 34px;
 }
 
-h5 {
+h5,
+h5 span {
     font-size: 28px;
 }
 
 h6,
 p,
-a {
+a,
+span {
     font-size: 22px;
 }
 
