@@ -1,195 +1,198 @@
-﻿@using Miniblog.ViewModels
-@model ArticleReadViewModel
+﻿@*@using System.Security.Claims*@
+@using Miniblog.Models.Entities
+@*@using Miniblog.Models.Entities.Enums*@
+@*@using Miniblog.Models.Services.Interfaces*@
+@using Miniblog.ViewModels
+
+@model Article
+
+@{
+    User user = ViewBag.CurrentUser;
+    Article article = ViewBag.Article;
+
+    ArticleReadViewModel articleReadView = new ArticleReadViewModel() { Article = article, CurrentUser = user };
+}
+
 
 <div class="blog-container article-page-container">
 
-    @await Html.PartialAsync("_ArticlePartial", Model);
+    @await Html.PartialAsync("_ArticlePartial", articleReadView)
 
 </div>
 
-@if (Model.CurrentUser.Role.ReadComments)
-{
-    <section class="article-comments text-sans-style">
+<section class="article-comments text-sans-style">
 
-        @if (Model.CurrentUser.Role.WriteComments)
+    <div class="article-comments">
+
+        <div class="comment-appeal text-alegreya-style">
+            @if (!article.DisplayOptions.Comments)
+            {
+                <h3>Comments are hidden by author</h3>
+            }
+            else if (!User.Identity.IsAuthenticated)
+            {
+                <h3><a href="@Url.Action("signin", "account")">Sign In</a> to leave a comment</h3>
+            }
+            else if (User.Identity.IsAuthenticated && user.Role.WriteComments)
+            {
+                <h3>Comment</h3>
+            }
+        </div>
+
+        @if (User.Identity.IsAuthenticated && user.Role.WriteComments)
         {
-            <div class="article-comments">
-                <div class="comment-appeal text-alegreya-style">
-                    <!-- TODO: CHANGE FONT SIZE'S FOR ANCHORS!! -->
-                    @if (!User.Identity.IsAuthenticated)
+            <div class="root-comment-answer comment-answer">
+
+                <div class="user-info-container">
+                    @if (user.Avatar != null)
                     {
-                        <h3>Сomment anonymously or <a href="#">Sign In...</a></h3>
+                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(user.Avatar))" alt="User">
                     }
                     else
                     {
-                        <h3>Comment</h3>
+                        <img src="@Url.Content("~/img/social_line/anonymous_user.png")" alt="User">
                     }
                 </div>
-                @if (!User.Identity.IsAuthenticated)
-                {
-                    <form style="display: none;" class="comment-form">
-                        <label class="comment-label" asp-for="@Model.AnonymousCommentForm.Username"></label>
-                        <input type="text" id="nameInput" class="comment-input comment-input-text" asp-for="@Model.AnonymousCommentForm.Username">
-                        <span class="text-sans-style" asp-validation-for="@Model.AnonymousCommentForm.Username"></span>
 
-                        <label class="comment-label" asp-for="@Model.AnonymousCommentForm.Email"></label>
-                        <input class="comment-input comment-input-text" asp-for="@Model.AnonymousCommentForm.Email">
-                        <span class="text-sans-style" asp-validation-for="@Model.AnonymousCommentForm.Email"></span>
-
-                        <label class="comment-label" asp-for="@Model.AnonymousCommentForm.Text"></label>
-                        <!-- DOES ASP OVERRIDE ID?? : -->
-                        <textarea name="" id="commentTextarea" class="comment-input comment-input-textarea" asp-for="@Model.AnonymousCommentForm.Text"></textarea>
-                        <span class="text-sans-style" asp-validation-for="@Model.AnonymousCommentForm.Text"></span>
-
-                        <button type="button" onclick="addRootComment(this)" class="usual-submit-button comment-button">Submit</button>
-                    </form>
-                }
-                else
-                {
-                    <!-- action="/addcomment" method="POST" -->
-                    <div class="root-comment-answer comment-answer">
-
-                        <div class="user-info-container">
-                            @if (Model.CurrentUser.Avatar != null)
-                            {
-                                <img src="img/users/35FPa7SRJoI.jpg" alt="User">
-                            }
-                            else
-                            {
-                                <img src="img/users/35FPa7SRJoI.jpg" alt="User">
-                            }
-                        </div>
-                        <!-- action="/addcomment" method="POST" -->
-                        <form class="root-answer-form comment-form">
-                            <input type="hidden" value="lorem_ipsum">
-                            <div>
-                                <textarea placeholder="Add comment..." class="comment-input comment-input-textarea" asp-for="@Model.CommentForm.Text"></textarea>
-                                <span style="display: none;" class="text-sans-style" asp-validation-for="@Model.CommentForm.Text"></span>
-                            </div>
-
-                            <button type="button" onclick="addRootComment(this)" class="usual-submit-button comment-button">Add comment</button>
-
-                            <!-- <button type="button" class="usual-submit-button comment-button">
-                              <img src="img/buttons/send.png" alt="send by Kidiladon from the Noun Project">
-                            </button> -->
-                        </form>
+                <form asp-action="add" asp-controller="comments" method="post" class="root-answer-form comment-form">
+                    <input type="hidden" asp-for="@user.Username" value="@user.Username">
+                    <div>
+                        @{
+                            CommentViewModel commentViewModel = new CommentViewModel();
+                        }
+                        <textarea placeholder="Add comment..." class="comment-input comment-input-textarea" asp-for="@commentViewModel.Text"></textarea>
+                        <span style="display: none;" class="text-sans-style" asp-validation-for="@commentViewModel.Text"></span>
                     </div>
-                }
+
+                    <button type="button" onclick="addRootComment(this)" class="usual-submit-button comment-button">Add comment</button>
+                </form>
+
             </div>
         }
+    </div>
 
-        @{
-            ViewData["Depth"] = 7;
-            ViewData["CanWrite"] = Model.CurrentUser.Role.WriteComments;
-            ViewData["Comments"] = Model.Article.Comments;
-        }
+    @{
+        ViewData["Depth"] = 7;
+        ViewData["CanWrite"] = (bool)(user?.Role?.WriteComments ?? false);
+        ViewData["Comments"] = article.Comments;
+    }
 
-        @await Html.PartialAsync("_CommentsPartial", ViewData)
+    @await Html.PartialAsync("_CommentsPartial"@*, ViewData*@)
 
-    </section>
+</section>
 
-    @section CommentTemplates {
-        <!-- * HTML Templates -->
-
-        @if (Model.CurrentUser.Role.WriteComments)
-        {
-            <!-- ? HTML comment-answer FORM -->
-            <!-- TODO: RAZOR: switch IMG SOURCE in TEMPLATE -->
-            <template id="template-comment-answer">
-                <div class="template-comment-answer comment-answer">
-
-                    <div class="user-info-container">
-                        @if (Model.CurrentUser.Avatar != null)
-                        {
-                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.CurrentUser.Avatar))" alt="@Model.CurrentUser.Username">
-                        }
-                        else
-                        {
-                            <img src="@Url.Content("~/img/social_line/anonymous_user.png")" alt="user">
-                        }
-                    </div>
-                    <!-- action="/addcomment" method="POST" -->
-                    <form class="answer-form comment-form">
-
-                        <input type="hidden" value="lorem_ipsum">
-                        <div>
-                            <textarea asp-for="@Model.CommentForm.Text" placeholder="Add comment..." class="comment-input comment-input-textarea"></textarea>
-                            <span asp-validation-for="@Model.CommentForm.Text" class="text-sans-style">Required</span>
-                        </div>
-
-                        <button type="button" onclick="addComment(this)" class="usual-submit-button comment-button">
-                            <img src="img/buttons/send.png" alt="send by Kidiladon from the Noun Project">
-                        </button>
-                    </form>
-
-                </div>
-            </template>
-        }
-
-        <!-- ? HTML blog-comment template -->
+@section CommentTemplates {
+    @* * HTML Templates *@
+    @if (User.Identity.IsAuthenticated && (bool)user.Role?.WriteComments)
+    {
+        <!-- ? HTML comment-answer FORM -->
         <!-- TODO: RAZOR: switch IMG SOURCE in TEMPLATE -->
-        <template id="template-blog-comment">
-            <div class="template-blog-comment blog-comment"
-                 data-comment-id=""
-                 data-parent-id="">
+        <template id="template-comment-answer">
+            <div class="template-comment-answer comment-answer">
 
                 <div class="user-info-container">
-                    <!-- TODO: PUT user or anonymous user img -->
-                    <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+                    @if (user.Avatar != null)
+                    {
+                        <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+                    }
+                    else
+                    {
+                        <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+                    }
                 </div>
 
-                <div class="text-comment-container clearfix">
-
-                    <div class="blog-comment-meta">
-                        <a class="comment-username" href="#">
-
-                        </a>
-                        <span class="comment-time-info"></span>
-                    </div>
-
-                    <div class="comment-container">
-
-                    </div>
-
-                    <div class="comment-actions-container">
-                        <div class="hearts">
-                            <button type="button" class="heart-not-clicked" onclick="heartClick(this)">
-                                <img src="/img/buttons/heart.png" alt="like">
-                            </button>
-
-                            <button type="button" onclick="heartClick(this)" class="heart-clicked">
-                                <img src="/img/buttons/heart red.png" alt="like">
-                            </button>
-
-                            <span class="hearts-counter text-sans-style comment-hearts-count">0</span>
-                        </div>
-
-                        @if (Model.CurrentUser.Role.WriteComments)
-                        {
-                            <div class="comment-reply">
-                                <button type="button" onclick="replyComment(this)" class="reply-button">
-                                    <img src="/img/buttons/next.png" alt="reply">
-                                </button>
-                            </div>
+                <form asp-action="add" asp-controller="comments" method="post" class="root-answer-form comment-form">
+                    <input type="hidden" asp-for="@user.Username" value="@user.Username">
+                    <div>
+                        @{
+                            CommentViewModel commentViewModel = new CommentViewModel();
                         }
+                        <textarea placeholder="Add comment..." class="comment-input comment-input-textarea" asp-for="@commentViewModel.Text"></textarea>
+                        <span style="display: none;" class="text-sans-style" asp-validation-for="@commentViewModel.Text"></span>
                     </div>
 
-                    <!-- comment answer -->
-
-                    <div class="users-comment-answer-collection">
-
-                    </div>
-                </div>
-
+                    <button type="button" onclick="addRootComment(this)" class="usual-submit-button comment-button">Add comment</button>
+                </form>
 
             </div>
-
-
         </template>
     }
 
-    @section ArticleActions {
-        <script src="~/js/scrollFunction.js"></script>
+    @*? HTML blog-comment template
+        TODO: RAZOR: switch IMG SOURCE in TEMPLATE*@
+    <template id="template-blog-comment">
+        <div class="template-blog-comment blog-comment"
+             data-comment-id=""
+             data-parent-id="">
+
+            <div class="user-info-container">
+                <!-- TODO: PUT user or anonymous user img -->
+                <img src="img/users/35FPa7SRJoI.jpg" alt="User">
+            </div>
+
+            <div class="text-comment-container clearfix">
+
+                <div class="blog-comment-meta">
+                    <a class="comment-username" href="#">
+
+                    </a>
+                    <span class="comment-time-info"></span>
+                </div>
+
+                <div class="comment-container">
+
+                </div>
+
+                <div class="comment-actions-container">
+
+                    <div class="hearts">
+                        @{
+                            string userLikeClick = string.Empty;
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                userLikeClick = "onclick=\"heartClick(this)\"";
+                            }
+                        }
+                        <button type="button" class="heart-not-clicked" @userLikeClick>
+                            <img src="/img/buttons/heart.png" alt="like">
+                        </button>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button type="button" onclick="heartClick(this)" class="heart-clicked">
+                                <img src="/img/buttons/heart red.png" alt="like">
+                            </button>
+                        }
+
+                        <span class="hearts-counter text-sans-style comment-hearts-count">0</span>
+                    </div>
+
+                    @if (User.Identity.IsAuthenticated && (bool)user.Role?.WriteComments)
+                    {
+                        <div class="comment-reply">
+                            <button type="button" onclick="replyComment(this)" class="reply-button">
+                                <img src="/img/buttons/next.png" alt="reply">
+                            </button>
+                        </div>
+                    }
+                </div>
+
+                <!-- comment answer -->
+                <div class="users-comment-answer-collection">
+
+                </div>
+            </div>
+
+        </div>
+    </template>
+
+}
+
+@section Scripts {
+    <script src="~/js/scrollFunction.js"></script>
+
+    @if (article.DisplayOptions.Comments && User.Identity.IsAuthenticated && user.Role.WriteComments)
+    {
         <script src="~/js/comment_actions/likeActions.js"></script>
         <script src="~/js/comment_actions/replyComment.js"></script>
         <script src="~/js/comment_actions/addComment.js"></script>
@@ -203,4 +206,16 @@
             <div class="read-progress-bar" id="readBar"></div>
         </div>
     </div>
+}
+
+@if (article.DisplayOptions.Comments && User.Identity.IsAuthenticated && user.Role.WriteComments)
+{
+    @section Validation {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"
+                asp-fallback-src="~/lib/jquery-validate/jquery.validate.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.validator"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"
+                asp-fallback-src="~/lib/jquery-validation-unobtrusive/query.validate.unobtrusive.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"></script>
+    }
 }

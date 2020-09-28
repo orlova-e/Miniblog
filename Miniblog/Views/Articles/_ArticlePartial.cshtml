@@ -1,40 +1,115 @@
 ﻿@using Miniblog.Models.Entities
+@using Miniblog.Models.Services.Interfaces
 @using Miniblog.ViewModels
+
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject IOptionRepository<ListDisplayOptions> listDisplayRepo
+
+
 @model ArticleReadViewModel
+
+@{
+    ListDisplayOptions listOptions = await listDisplayRepo.FirstOrDefaultAsync();
+    ArticleOptions articleOptions = Model.Article.DisplayOptions;
+    if (listOptions.OverrideForUserArticle)
+    {
+        listOptions = (ListDisplayOptions)articleOptions;
+    }
+}
 
 <article class="art text-alegreya-style" id="@Model.Article.Id.ToString()">
     <div class="blog-content">
         <div class="article-meta text-sans-style">
-            <a href="@Url.Action("GetArticleAsync", "Articles", new { link = Model.Article.Link })" class="article-header">
-                <h2><b>@Model.Article.Header</b></h2>
-            </a>
             <ul class="article-info clearfix">
-                <li><a href="@Url.Action("User", "Account", new { username = Model.Article.User.Username })">@Model.Article.User.Username</a></li>
-                <li><a href="#">@Model.Article.DateTime.DateTime</a></li>
+                <li class="article-info-user">
+                    @if (listOptions.Username)
+                    {
+                        <a href="@Url.Action("Account", "Users", new { username = Model.Article.User.Username })">
+                            <div class="user-info-container">
+                                @if (Model.Article.User.Avatar != null)
+                                {
+                                    <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Article.User.Avatar))" width="10px" height="10px" alt="@Model.Article.User.Username">
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content("~/img/social_line/anonymous_user.png")" width="10px" height="10px" alt="User">
+                                }
+                                <span>@Model.Article.User.Username</span>
+                            </div>
+                        </a>
+                    }
+                    @if (listOptions.DateAndTime)
+                    {
+                        //var th = System.Globalization.CultureInfo.CurrentCulture
+                        <a href="@Url.Action("List", "Articles", new { date = Model.Article.DateTime.ToString("yyyy/MM/dd") })">
+                            @Model.Article.DateTime.ToString()
+                        </a>
+                    }
+                </li>
+                <li>
+                    @if (listOptions.Likes)
+                    {
+                        <img src="/img/buttons/heart.png" alt="likes" height="20px" width="20px">
+                        <span>@Model.Article.Likes.Count</span>
+                    }
+                    @if (listOptions.Bookmarks)
+                    {
+                        <img src="/img/ico/bookmark5.png" alt="bookmarks" height="20px" width="20px">
+                        <span>@Model.Article.Bookmarks.Count</span>
+                    }
+                    @if (listOptions.Comments)
+                    {
+                        <img src="/img/buttons/chat-2.png" alt="comments" height="18px" width="18px">
+                        <span>@Model.Article.Comments.Count</span>
+                    }
+                    @if (listOptions.Topic)
+                    {
+                        <span>Topic: </span><a href="#">@Model.Article.Topic.Name</a>
+                    }
+                    @if (listOptions.Series)
+                    {
+                        <span>Series: </span><a href="#">@Model.Article.Series.Name</a>
+                    }
+                </li>
+                @if (listOptions.Tags)
+                {
+                    <li>
+                        Tags:
+                        @{ 
+                            string[] tags = Model.Article.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                            for(int i = 0; i < tags.Length; i++)
+                                tags[i] = tags[i].Trim();
+                            for(int i = 0; i < tags.Length; i++)
+                            {
+                                <a href="#">@tags[i]</a>
+                            }
+                        }
+                    </li>
+                }
             </ul>
         </div>
-        @{
-            string[] paragraphs = Model.Article.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            int imagesNumber = Model.Article.Images.Count;
-            for (int i = 0; i < paragraphs.Length + imagesNumber; i++)
-            {
-                Image currentImage = (from image in Model.Article.Images
-                                      where image.Position == i
-                                      select image).FirstOrDefault();
-                if (currentImage != null)
+        <div class="blog-text">
+            @{
+                string[] paragraphs = Model.Article.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                int imagesNumber = Model.Article.Images.Count;
+                for (int i = 0; i < paragraphs.Length + imagesNumber; i++)
                 {
-                    <div class="article-image">
-                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(currentImage.File))" alt="@currentImage.Name">
-                    </div>
-                }
-                else
-                {
-                    <div class="blog-text">
+                    Image currentImage = (from image in Model.Article.Images
+                                          where image.Position == i
+                                          select image).FirstOrDefault();
+                    if (currentImage != null)
+                    {
+                        <div class="article-image">
+                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(currentImage.File))" alt="@currentImage.Name">
+                        </div>
+                    }
+                    else
+                    {
                         <p>@paragraphs[i]</p>
-                    </div>
+                    }
                 }
             }
-        }
+        </div>
 
         <div class="article-user-actions text-roboto-style">
             <div class="like-action">
@@ -51,7 +126,7 @@
                 <span id="article-bookmark-count">0</span>
             </div>
 
-            @if (Model.CurrentUser.Role.ReadComments)
+            @if (Model.Article.DisplayOptions.Comments)
             {
                 <div class="comment-action">
                     <button type="button">

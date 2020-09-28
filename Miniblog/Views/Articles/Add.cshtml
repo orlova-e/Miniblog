@@ -3,11 +3,13 @@
 @using System.Security.Claims
 
 @inject IOptionRepository<Role> rolesRepository
+@inject IOptionRepository<WebsiteOptions> websiteOptionsRepo
 @model ArticleWriteViewModel
 
 @{
-    RoleType type = (RoleType)Enum.Parse(typeof(RoleType), User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value);
+    RoleType type = (RoleType)Enum.Parse(typeof(RoleType), User.FindFirst(ClaimsIdentity.DefaultRoleClaimType).Value);
     Role role = rolesRepository.Find(r => r.Type == type).FirstOrDefault();
+    WebsiteOptions websiteOptions = await websiteOptionsRepo.FirstOrDefaultAsync();
 }
 
 <div class="blog-container">
@@ -33,6 +35,10 @@
                         <input type="text" placeholder="Tags" asp-for="@Model.Tags" class="usual-input usual-input-text">
                         <span class="text-sans-style"></span>
                     }
+
+                    <input type="text" placeholder="Series" asp-for="@Model.Series" class="usual-input usual-input-text input-center">
+                    <span asp-validation-for="@Model.Series" class="text-sans-style"></span>
+
                 </fieldset>
 
                 @if (role.OverrideOwnArticle)
@@ -63,13 +69,21 @@
                             <h6>Color</h6>
 
                             <div class="article-circles">
-                                @foreach (var theme in Enum.GetValues(typeof(ColorTheme)))
-                                {
-                                    <button id="@theme" onclick="selectTheme(this)" type="button" class="article-circle blog-theme-@(theme.ToString().ToLower())"></button>
+                                @{
+                                    ColorTheme currentTheme = websiteOptions.ColorTheme;
+                                    string accent = string.Empty;
+                                    foreach (var theme in Enum.GetValues(typeof(ColorTheme)))
+                                    {
+                                        if((int)theme == (int)currentTheme)
+                                            accent = "selected-circle";
+                                        else
+                                            accent = string.Empty;
+                                        <button onclick="selectTheme(this)" data-theme-value="@((int)theme)" type="button" class="article-circle @accent blog-theme-@(theme.ToString().ToLower())"></button>
+                                    }
                                 }
                             </div>
 
-                            <input type="hidden" asp-for="@Model.ColorTheme">
+                            <input type="hidden" asp-for="@Model.DisplayOptions.ColorTheme" value="@((int)currentTheme)">
 
                             <h6>Data</h6>
 

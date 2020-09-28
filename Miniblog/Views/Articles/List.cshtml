@@ -1,28 +1,45 @@
-﻿@model List<Article>
+﻿@using System.Security.Claims
+@using Miniblog.Models.Services.Interfaces
+
+@inject IOptionRepository<Role> rolesRepository
+@inject IOptionRepository<ListDisplayOptions> listDisplayRepo
+
+@model List<Article>
+
+@{
+    ListDisplayOptions listOptions = await listDisplayRepo.FirstOrDefaultAsync();
+    //ArticleOptions articleOptions = Model.DisplayOptions;
+    //if (!listOptions.OverrideForUserArticle)
+    //{
+    //    articleOptions = (ArticleOptions)listOptions;
+    //}
+}
 
 @if (Model.Any())
 {
     <div class="articles-menu-container text-roboto-style">
-        @await Html.PartialAsync("_ListParametersPartial")
+        @await Html.PartialAsync("~/Views/Articles/_ListParametersPartial.cshtml")
     </div>
 }
 
 <div id="articlesContainer" class="blog-container">
 
-    @if (!Model.Any())
-    {
-        ServerMessage serverMessage = new ServerMessage()
+    @{
+        if (!Model.Any())
         {
-            ShowSmile = true,
-            MessageText = "No articles yet"
-        };
-        await Html.RenderPartialAsync("_ServerMessagePartial", serverMessage);
-    }
-    else
-    {
-        foreach (var article in Model)
+            ServerMessage serverMessage = new ServerMessage()
+            {
+                ShowSmile = true,
+                MessageText = "No articles yet"
+            };
+            await Html.RenderPartialAsync("_ServerMessagePartial", serverMessage);
+        }
+        else
         {
-            await Html.RenderPartialAsync("_PreviewArticlePartial", article);
+            foreach (var article in Model)
+            {
+                await Html.RenderPartialAsync("~/Views/Articles/_PreviewArticlePartial.cshtml", article);
+            }
         }
     }
 
@@ -35,17 +52,21 @@
     </div>
 
     @section Scripts {
+        @Html.Partial("_ListScripts")
+    }
+
+    @*@section Scripts {
         <script src="~/js/listpage_actions/articlesLayoutVisibility.js"></script>
         <script src="~/js/listpage_actions/sortArticlesList.js"></script>
         <script src="~/js/listpage_actions/sortArticles.js"></script>
         <script src="~/js/listpage_actions/closeSortList.js"></script>
         <script src="~/js/listpage_actions/windowClickEvent.js"></script>
-        @*<script src="~/js/listpage_actions/handlers.js"></script>*@
-    }
+        <script src="~/js/listpage_actions/handlers.js"></script>
+    }*@
 }
 else
 {
     <div class="load-more-container">
-        <a asp-action="Add" asp-controller="Articles" class="usual-button usual-button-reverse">Add</a>
+        <a asp-action="Add" asp-controller="Articles" class="usual-button usual-button-reverse">Add new</a>
     </div>
 }
