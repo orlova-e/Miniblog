@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Miniblog.Models.Entities;
+using Miniblog.Models.Entities.Enums;
 using Miniblog.Models.Services.Interfaces;
 using Miniblog.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -23,7 +27,6 @@ namespace Miniblog.Components
             {
                 Title = websiteDisplayOptions.Name,
                 ShowSearch = websiteDisplayOptions.ShowSearchOption,
-                
             };
 
             Dictionary<string, string> pages = new Dictionary<string, string>();
@@ -48,15 +51,24 @@ namespace Miniblog.Components
 
             if (websiteDisplayOptions.ShowListOfPopularAndRecent)
             {
-                pages.Add("Popular", Url.Action("List", "Articles", new { listName = "Popular" }));
+                pages.Add("Popular", Url.Action("List", "Articles", new { name = "Popular" }));
             }
             if (websiteDisplayOptions.ShowAuthors)
             {
-                pages.Add("Authors", Url.Action("List", "Articles", new { listName = "Authors" }));
+                pages.Add("Authors", Url.Action("List", "Articles", new { name = "Authors" }));
             }
             if (websiteDisplayOptions.ShowTopics)
             {
-                pages.Add("Topics", Url.Action("List", "Articles", new { listName = "Topics" }));
+                pages.Add("Topics", Url.Action("List", "Articles", new { name = "Topics" }));
+            }
+
+            List<Article> pagesDb = _repository.Articles
+                .Find(page => page.EntryType == EntryType.Page && page.Visibility == true && page.MenuVisibility == true)
+                .ToList();
+
+            foreach(Article page in pagesDb)
+            {
+                pages.Add(page.Header, Url.Action("Article", "Articles", new { link = page.Link }));
             }
 
             if (User.Identity.IsAuthenticated)
