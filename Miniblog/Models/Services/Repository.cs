@@ -1,27 +1,28 @@
 ﻿using Miniblog.Models.Entities;
 using Miniblog.Models.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Miniblog.Models.Services
 {
     public class Repository : IRepository
     {
         public MiniblogDb Db { get; private set; }
-        private IPlainRepository<User> users;
-        private IPlainRepository<Article> articles;
-        private IPlainRepository<Comment> comments;
-        private IPlainRepository<Topic> topics;
-        private IOptionRepository<Role> roles;
-        //private IOptionRepository<Opportunities> opportunities;
-        private IOptionRepository<ListDisplayOptions> listDisplayOptions;
-        private IOptionRepository<ArticleOptions> articleOptions;
-        private IOptionRepository<WebsiteOptions> websiteOptions;
-        private IRelatedRepository<UserFavourite, Article> articleLikes;
-        private IRelatedRepository<UserBookmark, Article> articleBookmarks;
-        private IRelatedRepository<CommentLikes, Comment> commentLikes;
+
+        IPlainRepository<User> users;
+        IPlainRepository<Article> articles;
+        IPlainRepository<Comment> comments;
+        IPlainRepository<Topic> topics;
+        IPlainRepository<Series> series;
+
+        IOptionRepository<Role> roles;
+        IOptionRepository<ListDisplayOptions> listDisplayOptions;
+        IOptionRepository<ArticleOptions> articleOptions;
+        IOptionRepository<WebsiteOptions> websiteOptions;
+
+        IRelatedRepository<UserFavourite, Article> articleLikes;
+        IRelatedRepository<UserBookmark, Article> articleBookmarks;
+        IRelatedRepository<CommentLikes, Comment> commentLikes;
+
         public Repository(MiniblogDb miniblogDb)
         {
             Db = miniblogDb;
@@ -71,15 +72,6 @@ namespace Miniblog.Models.Services
                 return roles;
             }
         }
-        //public IOptionRepository<Opportunities> Opportunities
-        //{
-        //    get
-        //    {
-        //        if (opportunities == null)
-        //            opportunities = new OpportinitiesRepository(Db);
-        //        return opportunities;
-        //    }
-        //}
         public IOptionRepository<ListDisplayOptions> ListDisplayOptions
         {
             get
@@ -134,6 +126,17 @@ namespace Miniblog.Models.Services
                 return commentLikes;
             }
         }
+
+        public IPlainRepository<Series> Series
+        {
+            get
+            {
+                if (series == null)
+                    series = new SeriesRepository(Db);
+                return series;
+            }
+        }
+
         private bool disposed = false;
         public virtual void Dispose(bool disposing)
         {

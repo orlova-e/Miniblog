@@ -12,14 +12,14 @@ namespace Miniblog.Models.Entities
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }
-        [Required]
+        [Required, StringLength(200, ErrorMessage = "Header's maximum length is 50 characters")]
         public string Header { get; set; }
         [Required]
         public string Text { get; set; }
         public bool Visibility { get; set; }
         public bool MenuVisibility { get; set; }
         public EntryType EntryType { get; set; }
-        //[Required]
+        [Required]
         public string Link { get; set; }
         public string Tags { get; set; }
         public DateTimeOffset DateTime { get; set; }
@@ -27,8 +27,8 @@ namespace Miniblog.Models.Entities
         public Guid? TopicId { get; set; }
         public Topic Topic { get; set; }
         //public List<ArticleTag> ArticleTags { get; set; }
-        //public Guid? SeriesId { get; set; }
-        //public Series Series { get; set; }
+        public Guid? SeriesId { get; set; }
+        public Series Series { get; set; }
         public List<Comment> Comments { get; set; }
         public List<UserBookmark> Bookmarks { get; set; }
         public List<UserFavourite> Likes { get; set; }

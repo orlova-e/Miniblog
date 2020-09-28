@@ -17,7 +17,7 @@ namespace Miniblog
         public DbSet<Article> Articles { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
-        //public DbSet<Series> Series { get; set; }
+        public DbSet<Series> Series { get; set; }
         //public DbSet<Tag> Tags { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<WebsiteOptions> WebsiteOptions { get; set; }
@@ -183,7 +183,7 @@ namespace Miniblog
                 v => v.ToString(),
                 v => (ListLayoutType)Enum.Parse(typeof(ListLayoutType), v));
             modelBuilder.Entity<ListDisplayOptions>()
-                .Property(e => e.ArticlesListSortingDefaultType)
+                .Property(e => e.ListSortingDefaultType)
                 .HasConversion(
                 v => v.ToString(),
                 v => (ListSortingType)Enum.Parse(typeof(ListSortingType), v));
@@ -212,7 +212,7 @@ namespace Miniblog
                 WriteArticles = true,
                 WriteComments = true,
                 WriteMessages = true,
-                ReadComments = true,
+                //ReadComments = true,
                 CreateTopics = true,
                 CreateTags = true,
                 OverrideOwnArticle = true
@@ -224,7 +224,7 @@ namespace Miniblog
                 WriteArticles = true,
                 WriteComments = true,
                 WriteMessages = true,
-                ReadComments = true,
+                //ReadComments = true,
                 CreateTopics = true,
                 CreateTags = true,
                 ModerateArticles = true,
@@ -241,7 +241,7 @@ namespace Miniblog
                 WriteArticles = true,
                 WriteComments = true,
                 WriteMessages = true,
-                ReadComments = true,
+                //ReadComments = true,
                 CreateTopics = true,
                 CreateTags = true,
                 ModerateArticles = true,
@@ -305,18 +305,26 @@ namespace Miniblog
 
             modelBuilder.Entity<WebsiteOptions>().HasData(websiteDisplayOptions);
 
-            ListDisplayOptions articlesListDisplayOptions = new ListDisplayOptions()
+            ListDisplayOptions listDisplayOptions = new ListDisplayOptions()
             {
                 Id = Guid.NewGuid(),
+                Username = true,
+                DateAndTime = true,
+                Tags = true,
+                Topic = true,
+                Series = true,
+                Likes = true,
+                Bookmarks = true,
+                Comments = true,
                 OverrideForUserArticle = false,
                 ArticlesPerPage = 10,
                 WordsPerPreview = 50,
                 ListDisplayDefaultType = DisplayType.Preview,
                 LayoutDefaultType = ListLayoutType.Row,
-                ArticlesListSortingDefaultType = ListSortingType.NewFirst
+                ListSortingDefaultType = ListSortingType.NewFirst
             };
 
-            modelBuilder.Entity<ListDisplayOptions>().HasData(articlesListDisplayOptions);
+            modelBuilder.Entity<ListDisplayOptions>().HasData(listDisplayOptions);
 
             CommentsOptions commentsDisplayOptions = new CommentsOptions()
             {

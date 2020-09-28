@@ -72,6 +72,11 @@ namespace Miniblog.Models.Services
             Db.Users.Update(user);
             await Db.SaveChangesAsync();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entryId">Comment's id</param>
+        /// <returns></returns>
         public async Task<List<CommentLikes>> GetAsync(Guid entryId)
         {
             var entry = (await Db.Comments
@@ -81,11 +86,20 @@ namespace Miniblog.Models.Services
                 .FirstOrDefault();
             return entry.Likes;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entryId">Comment's id</param>
+        /// <returns></returns>
         public int Count(Guid entryId)
         {
-            var article = Db.Articles.Where(a => a.Id == entryId).Include(a => a.Comments).FirstOrDefault();
-            var number = article.Comments.Count;
+            var comment = Db.Comments.Where(c => c.Id == entryId).Include(a => a.Likes).FirstOrDefault();
+            var number = comment.Likes.Count;
             return number;
+
+            //var article = Db.Articles.Where(a => a.Id == entryId).Include(a => a.Comments).FirstOrDefault();
+            //var number = article.Comments.Count;
+            //return number;
         }
     }
 }

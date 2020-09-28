@@ -13,16 +13,31 @@ namespace Miniblog.Models.Entities
             ArticleOptions articleOptions = new ArticleOptions()
             {
                 Username = globalOptions.Username,
-                //UserIcon = globalOptions.UserIcon,
                 DateAndTime = globalOptions.DateAndTime,
-                //Time = globalOptions.Time,
                 Tags = globalOptions.Tags,
                 Topic = globalOptions.Topic,
+                Series = globalOptions.Series,
                 Likes = globalOptions.Likes,
                 Bookmarks = globalOptions.Bookmarks,
                 Comments = globalOptions.Comments
             };
             return articleOptions;
+        }
+
+        public static explicit operator ListDisplayOptions(ArticleOptions articleOptions)
+        {
+            ListDisplayOptions listDisplayOptions = new ListDisplayOptions()
+            {
+                Username = articleOptions.Username,
+                DateAndTime = articleOptions.DateAndTime,
+                Tags = articleOptions.Tags,
+                Topic = articleOptions.Topic,
+                Series = articleOptions.Series,
+                Likes = articleOptions.Likes,
+                Bookmarks = articleOptions.Bookmarks,
+                Comments = articleOptions.Comments
+            };
+            return listDisplayOptions;
         }
     }
 }

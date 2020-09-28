@@ -21,7 +21,7 @@ namespace Miniblog.Models.Services
             var comment = await Db.Comments.FindAsync(id);
             await Db.Entry(comment).Reference(c => c.Author).LoadAsync();
             await Db.Entry(comment).Reference(c => c.Parent).LoadAsync();
-            return await Db.Comments.FindAsync(id);
+            return comment;
         }
         public async Task<IEnumerable<Comment>> GetAllAsync()
         {
@@ -38,7 +38,7 @@ namespace Miniblog.Models.Services
         }
         public async Task UpdateAsync(Comment entity)
         {
-            Db.Comments.Add(entity);
+            Db.Comments.Update(entity);
             await Db.SaveChangesAsync();
         }
         public async Task DeleteAsync(Guid id)
