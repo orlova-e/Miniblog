@@ -4,7 +4,7 @@
     <div id="head-container" class="container-fluid head-container">
         <div class="container">
             <nav class="text-sans-style navbar navbar-expand-lg navbar-light bg-white">
-                <a class="text-roboto-style navbar-brand" href="#">
+                <a class="text-roboto-style navbar-brand" href="@Url.Action("Index", "Home")">
                     <h2>@Model.Title</h2>
                 </a>
                 <a href="#" id="menuButton" class="navbar-toggler justify-content-end" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,7 +15,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link user-info" href="@Url.Action("User", "Account", new { username = Model.Username })">
+                                <a class="nav-link user-info" href="@Url.Action("Account", "Users", new { username = Model.Username })">
                                     <div class="user-info-container">
                                         @if (Model.Avatar != null)
                                         {
