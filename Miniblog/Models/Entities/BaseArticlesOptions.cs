@@ -10,14 +10,11 @@ namespace Miniblog.Models.Entities
         public Guid Id { get; set; }
         public string Discriminator { get; }
         public bool Username { get; set; }
-        //public bool UserIcon { get; set; }
         [Display(Name = "Date and time")]
         public bool DateAndTime { get; set; }
-        //public bool Time { get; set; }
         public bool Tags { get; set; }
         public bool Topic { get; set; }
         public bool Series { get; set; }
-        //public bool ArticlesSeries { get; set; }
         public bool Likes { get; set; }
         public bool Bookmarks { get; set; }
         public bool Comments { get; set; }

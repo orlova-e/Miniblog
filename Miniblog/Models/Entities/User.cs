@@ -19,7 +19,9 @@ namespace Miniblog.Models.Entities
         public Guid RoleId { get; set; }
         public Role Role { get; set; }
         public DateTimeOffset DateOfRegistration { get; set; }
+        public string FullName { get; set; }
         public string City { get; set; }
+        public string Description { get; set; }
         public List<Comment> Comments { get; set; }
         public List<Article> Articles { get; set; }
         //public List<Article> Favourites { get; set; }
