@@ -1,99 +1,18 @@
-﻿<div class="blog-container">
+﻿@using Miniblog.ViewModels.Options
+@model MainViewModel
+
+<div class="blog-container">
     <div class="page-container text-alegreya-style">
         <div class="blog-content">
+
             <div class="options-container">
 
-                <aside class="options-menu-bar">
-                    <ul class="blog-menu-list">
-                        <li class="blog-menu-list-point drop-menu actual-menu-list">
-                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Main</h5></button>
+                @await Html.PartialAsync("_OptionsMenuPartial")
 
-                            <ul id="sortListDropdown" class="blog-links-list">
-                                <li><a href="#">Activity</a></li>
-                                <li><a href="#">General</a></li>
-                                <li><a href="#">Writing</a></li>
-                                <li><a href="#">Reading</a></li>
-                                <li><a href="#">Chats</a></li>
-                                <li><a href="#">Discussion</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="blog-menu-list-point drop-menu">
-                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Articles</h5></button>
-
-                            <ul id="" class="blog-links-list">
-                                <li><a href="#">Add new</a></li>
-                                <li><a href="#">Topics</a></li>
-                                <li><a href="#">Tags</a></li>
-                                <li><a href="#">Queue for moderation</a></li>
-                                <li><a href="#">Manage</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="blog-menu-list-point drop-menu">
-                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Pages</h5></button>
-
-                            <ul id="" class="blog-links-list">
-                                <li><a href="#">Add new</a></li>
-                                <li><a href="#">Queue for moderation</a></li>
-                                <li><a href="#">Manage</a></li>
-                                <li><a href="#">All pages</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="blog-menu-list-point drop-menu">
-                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Comments</h5></button>
-
-                            <ul id="" class="blog-links-list">
-                                <li><a href="#">Queue for moderation</a></li>
-                                <!-- <li><a href="#">Sorting rules</a></li> -->
-                            </ul>
-                        </li>
-
-                        <li class="blog-menu-list-point drop-menu">
-                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Users</h5></button>
-
-                            <ul id="" class="blog-links-list">
-                                <li><a href="#">With roles</a></li>
-                                <li><a href="#">Blocked</a></li>
-                            </ul>
-                            <!-- <ul id="" class="blog-links-list">
-                                <li><a href="#">Invite</a></li>
-                            </ul> -->
-
-                        </li>
-
-                        <li class="blog-menu-list-point drop-menu">
-                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Media files</h5></button>
-
-                            <ul id="" class="blog-links-list">
-                                <li><a href="#">All files</a></li>
-                                <li><a href="#">Content rules</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="blog-menu-list-point drop-menu">
-                            <button href="#" onclick="openList(btn)" class="drop-button text-alegreya-style"><h5>Feedback</h5></button>
-
-                            <ul id="" class="blog-links-list">
-                                <li><a href="#">All messages</a></li>
-                                <li><a href="#">Surveys</a></li>
-                            </ul>
-                        </li>
-
-                    </ul>
-
-                </aside>
-
-                <div style="display: block;" class="options-content">
+                <div id="optionsContent" class="options-content">
 
                     <!-- * General -->
-                    <form style="display: block;" method="POST" action="/options/general" class="usual-form">
-
-                        <!-- ! PREDEFINED ERROR class names:
-                          TODO: SWITCH it to jQUERY erorr class names
-                          * INPUT/TEXTAREA: usual-input-error
-                          * SPAN: usual-error-message -->
+                    <form method="post" asp-action="Main" asp-controller="Options" class="usual-form">
 
                         <fieldset>
                             <legend>Title</legend>
@@ -170,7 +89,7 @@
                     </form>
 
                     <!-- * Activity -->
-                    <form style="display: block;" method="POST" action="/options/activity" class="usual-form">
+                    <form style="display: none;" method="POST" action="/options/activity" class="usual-form">
                         <fieldset>
                             <legend>Notice board</legend>
                             <ul class="usual-ul">
@@ -198,8 +117,9 @@
                     <div class="blog-activity">
                         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta, voluptatum sapiente necessitatibus dolores provident, harum ullam distinctio quae sequi inventore excepturi a sit placeat ad.
                     </div> -->
+
                     <!-- * Writing -->
-                    <form style="display: block;" method="POST" action="/options/writing" class="usual-form">
+                    <form style="display: none;" method="POST" action="/options/writing" class="usual-form">
                         <fieldset>
                             <legend>Who can write articles</legend>
                             <label class="usual-label radio-label">
@@ -231,18 +151,21 @@
                                 All users
                             </label>
 
-                            <label class="usual-label radio-label">
-                                <input data-display-dependent-object="moderateTopicsRole" disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
-                                Topics are moderated by administrators
-                            </label>
-                            <!-- <label class="usual-label radio-label">
-                                <input disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
-                                Topics are moderated by editors
-                            </label> -->
-                            <label class="usual-label radio-label">
-                                <input data-display-dependent-object="moderateTopicsRole" disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
-                                Topics are moderated by administrators and editors
-                            </label>
+                            <div data-display-dependent-object="moderateTopicsRole">
+                                <label class="usual-label radio-label">
+                                    <input disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
+                                    Topics are moderated by administrators
+                                </label>
+                                <!-- <label class="usual-label radio-label">
+                                    <input disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
+                                    Topics are moderated by editors
+                                </label> -->
+                                <label class="usual-label radio-label">
+                                    <input disabled type="radio" name="moderateTopicsRole" class="usual-radiobutton">
+                                    Topics are moderated by administrators and editors
+                                </label>
+                            </div>
+
                         </fieldset>
 
                         <fieldset>
@@ -260,18 +183,21 @@
                                 All users
                             </label>
 
-                            <label class="usual-label radio-label">
-                                <input data-display-dependent-object="moderateTagsRole" disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
-                                Tags are moderated by administrators
-                            </label>
-                            <!-- <label class="usual-label radio-label">
-                                <input data-display-dependent-object="moderateTagsRole" disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
-                                Tags are moderated by editors
-                            </label> -->
-                            <label class="usual-label radio-label">
-                                <input data-display-dependent-object="moderateTagsRole" disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
-                                Tags are moderated by administrators and editors
-                            </label>
+                            <div data-display-dependent-object="moderateTagsRole">
+                                <label class="usual-label radio-label">
+                                    <input disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                    Tags are moderated by administrators
+                                </label>
+                                <!-- <label class="usual-label radio-label">
+                                    <input disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                    Tags are moderated by editors
+                                </label> -->
+                                <label class="usual-label radio-label">
+                                    <input disabled type="radio" name="moderateTagsRole" class="usual-radiobutton">
+                                    Tags are moderated by administrators and editors
+                                </label>
+                            </div>
+
                         </fieldset>
 
                         <fieldset>
@@ -303,33 +229,40 @@
                         <fieldset>
                             <legend>The main page displays:</legend>
                             <label class="usual-label radio-label">
-                                <input checked type="radio" name="mainPage" class="usual-radiobutton">
                                 List of articles
                             </label>
+                            <input checked type="radio" name="mainPage" class="usual-radiobutton">
+
                             <label class="usual-label radio-label">
-                                <input data-display-switcher="homePage" type="radio" name="mainPage" class="usual-radiobutton">
                                 Static page (select below):
                             </label>
+                            <input data-display-switcher="homePage" type="radio" name="mainPage" class="usual-radiobutton">
 
-                            <label class="usual-label">
-                                Home page
-                                <select data-display-dependent-object="homePage" name="homePage" disabled>
+
+                            <div data-display-dependent-object="homePage">
+                                <label class="usual-label">
+                                    Home page
+                                </label>
+                                <select disabled name="homePage">
                                     <option value="1">Page 1</option>
                                     <option value="2">Page 2</option>
                                     <option value="3">Lorem ipsum dolor sit.</option>
                                     <option value="4">Lorem, ipsum dolor.</option>
                                 </select>
-                            </label>
+                                <label class="usual-label checkbox-label">
+                                    <input disabled type="checkbox" name="" class="usual-checkbox">
+                                    Hide the list of popular and recent articles
+                                </label>
 
-                            <label class="usual-label checkbox-label">
-                                <input type="checkbox" name="" class="usual-checkbox">
-                                Hide the list of popular and recent articles
-                            </label>
 
-                            <label class="usual-label checkbox-label">
-                                <input type="checkbox" name="" class="usual-checkbox">
-                                Hide the search option
-                            </label>
+                            </div>
+
+                            <div data-display-dependent-object="ignore">
+                                <label class="usual-label checkbox-label">
+                                    <input type="checkbox" name="" class="usual-checkbox">
+                                    Hide the search option
+                                </label>
+                            </div>
 
                         </fieldset>
 
@@ -363,23 +296,26 @@
                                 Preview
                             </label>
 
-                            <label class="usual-label">
-                                Number of words in the preview
-                                <select data-display-dependent-object="numberOfWords" name="numberOfWords">
-                                    <option value="25">25</option>
-                                    <option value="40">40</option>
-                                    <option value="50">50</option>
-                                    <option value="75">75</option>
-                                    <option value="100">100</option>
-                                    <option value="150">150</option>
-                                    <option value="200">200</option>
-                                </select>
-                            </label>
+                            <div data-display-dependent-object="numberOfWords">
+                                <label class="usual-label">
+                                    Number of words in the preview
+                                    <select name="numberOfWords">
+                                        <option value="25">25</option>
+                                        <option value="40">40</option>
+                                        <option value="50">50</option>
+                                        <option value="75">75</option>
+                                        <option value="100">100</option>
+                                        <option value="150">150</option>
+                                        <option value="200">200</option>
+                                    </select>
+                                </label>
 
-                            <label class="usual-label checkbox-label">
-                                <input data-display-dependent-object="numberOfWords" checked type="checkbox" name="" class="usual-checkbox">
-                                Add an image if possible
-                            </label>
+                                <label class="usual-label checkbox-label">
+                                    <input checked type="checkbox" name="" class="usual-checkbox">
+                                    Add an image if possible
+                                </label>
+
+                            </div>
                         </fieldset>
 
                         <fieldset>
@@ -500,7 +436,7 @@
                     </form>
 
                     <!-- * Chats -->
-                    <form style="display: block;" method="POST" action="/options/chats" class="usual-form">
+                    <form style="display: none;" method="POST" action="/options/chats" class="usual-form">
                         <fieldset>
                             <legend>Users who can use the chat:</legend>
                             <label class="usual-label radio-label">
@@ -520,15 +456,17 @@
                                 All users
                             </label>
 
-                            <label class="usual-label checkbox-label">
-                                <input data-display-dependent-object="usersCanWriteTo" disabled type="checkbox" name="" class="usual-checkbox">
-                                Users can write to editors
-                            </label>
+                            <div data-display-dependent-object="usersCanWriteTo">
+                                <label class="usual-label checkbox-label">
+                                    <input disabled type="checkbox" name="" class="usual-checkbox">
+                                    Users can write to editors
+                                </label>
 
-                            <label class="usual-label checkbox-label">
-                                <input data-display-dependent-object="usersCanWriteTo" disabled type="checkbox" name="" class="usual-checkbox">
-                                Users can write to administrators and editors
-                            </label>
+                                <label class="usual-label checkbox-label">
+                                    <input disabled type="checkbox" name="" class="usual-checkbox">
+                                    Users can write to administrators and editors
+                                </label>
+                            </div>
 
                         </fieldset>
 
@@ -536,7 +474,7 @@
                     </form>
 
                     <!-- * Discussion -->
-                    <form style="display: block;" method="POST" action="/options/discussion" class="usual-form">
+                    <form style="display: none;" method="POST" action="/options/discussion" class="usual-form">
 
                         <fieldset>
                             <legend>Sorting comments</legend>
@@ -562,15 +500,18 @@
                                 Allow nested comments
                             </label>
 
-                            <label class="usual-label">
-                                Depth of nested comments:
-                                <select data-display-dependent-object="nestedCommentsDepth" disabled name="nestedCommentsDepth">
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </label>
+                            <div data-display-dependent-object="nestedCommentsDepth">
+                                <label class="usual-label">
+                                    Depth of nested comments:
+                                    <select disabled name="nestedCommentsDepth">
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </label>
+                            </div>
+
 
                         </fieldset>
 
@@ -597,22 +538,27 @@
                                 <input data-display-switcher="moderateCommentsRole" checked type="radio" name="writeCommentsRole" class="usual-radiobutton">
                                 All users (including anonymous users)
                             </label>
-                            <label class="usual-label radio-label">
-                                <input data-display-dependent-object="moderateCommentsRole" disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
-                                Comments are moderated by administrators
-                            </label>
-                            <!-- <label class="usual-label radio-label">
-                                <input disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
-                                Comments are moderated by editors
-                            </label> -->
-                            <label class="usual-label radio-label">
-                                <input data-display-dependent-object="moderateCommentsRole" disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
-                                Comments are moderated by administrators and editors
-                            </label>
-                            <!-- <label class="usual-label checkbox-label">
-                                <input disabled type="checkbox" name="" class="usual-checkbox">
-                                The author of the comment must specify an e-mail address
-                            </label> -->
+
+                            <div data-display-dependent-object="moderateCommentsRole">
+                                <label class="usual-label radio-label">
+                                    <input disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
+                                    Comments are moderated by administrators
+                                </label>
+                                <!-- <label class="usual-label radio-label">
+                                    <input disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
+                                    Comments are moderated by editors
+                                </label> -->
+                                <label class="usual-label radio-label">
+                                    <input disabled type="radio" name="moderateCommentsRole" class="usual-radiobutton">
+                                    Comments are moderated by administrators and editors
+                                </label>
+                                <!-- <label class="usual-label checkbox-label">
+                                    <input disabled type="checkbox" name="" class="usual-checkbox">
+                                    The author of the comment must specify an e-mail address
+                                </label> -->
+
+                            </div>
+
 
                             <span class="blog-info-span text-alegreya-style"><mark>Note:</mark> If comments are available only to administrators or only to editors and administrators, then only administrators can moderate comments.</span>
 
@@ -641,22 +587,29 @@
                         <fieldset>
                             <legend>Comments options</legend>
 
-                            <label class="usual-label checkbox-label">
-                                <input type="checkbox" name="" class="usual-checkbox">
-                                Using Markdown in comments
-                            </label>
+                            <div data-display-dependent-object="ignore">
+                                <label class="usual-label checkbox-label">
+                                    <input type="checkbox" name="" class="usual-checkbox">
+                                    Using styles in comments
+                                </label>
+                            </div>
+
                             <label class="usual-label checkbox-label">
                                 <input data-display-switcher="urlCommentsModeration" type="checkbox" name="" class="usual-checkbox">
                                 Avoid comments containing third-party links
                             </label>
-                            <label class="usual-label radio-label">
-                                <input data-display-dependent-object="urlCommentsModeration" disabled checked type="radio" name="urlCommentsModeration" class="usual-radiobutton">
-                                Add these comments to the moderation queue
-                            </label>
-                            <label class="usual-label radio-label">
-                                <input data-display-dependent-object="urlCommentsModeration" disabled type="radio" name="urlCommentsModeration" class="usual-radiobutton">
-                                Add these comments to the blacklist
-                            </label>
+
+                            <div data-display-dependent-object="urlCommentsModeration">
+                                <label class="usual-label radio-label">
+                                    <input data-display-dependent-object="urlCommentsModeration" disabled checked type="radio" name="urlCommentsModeration" class="usual-radiobutton">
+                                    Add these comments to the moderation queue
+                                </label>
+                                <label class="usual-label radio-label">
+                                    <input data-display-dependent-object="urlCommentsModeration" disabled type="radio" name="urlCommentsModeration" class="usual-radiobutton">
+                                    Add these comments to the blacklist
+                                </label>
+                            </div>
+
 
                         </fieldset>
 
@@ -668,9 +621,9 @@
 
                     </form> -->
 
-                    <input class="usual-input" placeholder="Search article..." type="search">
+                    @*<input style="display: none;" class="usual-input" placeholder="Search article..." type="search">*@
 
-                    <table>
+                    <!-- <table style="display: none;">
                         <caption><h3>Articles</h3></caption>
                         <thead>
                             <tr>
@@ -689,17 +642,17 @@
                                 <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, amet!</td>
                                 <td>
                                     <button type="button" class="icon-button">
-                                        <img src="~/img/ico/pass.png" alt="">
+                                        <img src="img/ico/pass.png" alt="">
                                     </button>
                                 </td>
                                 <td>
                                     <button type="button" class="icon-button block-button">
-                                        <img src="~/img/ico/block.png" alt="">
+                                        <img src="img/ico/block.png" alt="">
                                     </button>
                                 </td>
                                 <td>
                                     <button type="button" class="icon-button delete-button">
-                                        <img src="~/img/ico/delete5.png" alt="">
+                                        <img src="img/ico/delete5.png" alt="">
                                     </button>
                                 </td>
                             </tr>
@@ -709,17 +662,17 @@
                                 <td>Lorem iasdfasdfsdfasdfsdfsdfasdfsdfsdfsdfsdfasdfsdfsadfsdfasdfsadfsdfsdfsdf</td>
                                 <td>
                                     <button type="button" class="icon-button">
-                                        <img src="~/img/ico/pass.png" alt="">
+                                        <img src="img/ico/pass.png" alt="">
                                     </button>
                                 </td>
                                 <td>
                                     <button type="button" class="icon-button block-button">
-                                        <img src="~/img/ico/block.png" alt="">
+                                        <img src="img/ico/block.png" alt="">
                                     </button>
                                 </td>
                                 <td>
                                     <button type="button" class="icon-button delete-button">
-                                        <img src="~/img/ico/delete5.png" alt="">
+                                        <img src="img/ico/delete5.png" alt="">
                                     </button>
                                 </td>
                             </tr>
@@ -729,30 +682,29 @@
                                 <td>Lorem, ipsum dolor.</td>
                                 <td>
                                     <button type="button" class="icon-button">
-                                        <img src="~/img/ico/pass.png" alt="">
+                                        <img src="img/ico/pass.png" alt="">
                                     </button>
                                 </td>
                                 <td>
                                     <button type="button" class="icon-button block-button">
-                                        <img src="~/img/ico/block.png" alt="">
+                                        <img src="img/ico/block.png" alt="">
                                     </button>
                                 </td>
                                 <td>
                                     <button type="button" class="icon-button delete-button">
-                                        <img src="~/img/ico/delete5.png" alt="">
+                                        <img src="img/ico/delete5.png" alt="">
                                     </button>
                                 </td>
                             </tr>
 
 
                         </tbody>
-                    </table>
+                    </table> -->
 
                 </div>
+            
             </div>
 
         </div>
     </div>
-
 </div>
-
