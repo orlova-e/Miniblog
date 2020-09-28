@@ -15,10 +15,10 @@ namespace Miniblog.Controllers
 {
     public class AccountController : Controller
     {
-        public IUserService _userService { get; private set; }
+        public IUserService userService { get; private set; }
         public AccountController(IUserService userService)
         {
-            _userService = userService;
+            this.userService = userService;
         }
         [HttpGet]
         public IActionResult SignIn()
@@ -34,7 +34,7 @@ namespace Miniblog.Controllers
                 return View(loginModel);
             }
 
-            User user = _userService.GetFromDb(loginModel);
+            User user = userService.GetFromDb(loginModel);
 
             if(user == null)
             {
@@ -60,23 +60,22 @@ namespace Miniblog.Controllers
                 return View(registerModel);
             }
 
-            Guid guid;
             bool alreadyRegisteredInJwtAccount = false;
             User user;
-            bool guidParsed = Guid.TryParse(registerModel.userId, out guid);
+            bool guidParsed = Guid.TryParse(registerModel.userId, out Guid guid);
 
             if (guidParsed)
             {
-                alreadyRegisteredInJwtAccount = _userService.CheckForExistence(registerModel, guid);
+                alreadyRegisteredInJwtAccount = userService.CheckForExistence(registerModel, guid);
             }
 
             if (alreadyRegisteredInJwtAccount)
             {
-                user = await _userService.GetFromDbAsync(guid);
+                user = await userService.GetFromDbAsync(guid);
             }
             else // если JwtAccountController.SignUp не отработал
             {
-                IEnumerable<string> errors = _userService.ParametersAlreadyExist(registerModel);
+                IEnumerable<string> errors = userService.ParametersAlreadyExist(registerModel);
                 if (errors.Any())
                 {
                     if (errors.Contains("Username"))
@@ -89,7 +88,7 @@ namespace Miniblog.Controllers
                     }
                     return View("SignUp", registerModel);
                 }
-                user = await _userService.CreateIntoDbAsync(registerModel);
+                user = await userService.CreateIntoDbAsync(registerModel);
             }
 
             await Authenticate(user);

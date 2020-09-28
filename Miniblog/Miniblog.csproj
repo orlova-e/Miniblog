@@ -13,9 +13,18 @@
     <Compile Remove="Migrations\20200910062302_Initial.Designer.cs" />
     <Compile Remove="Migrations\20200910062428_v1.cs" />
     <Compile Remove="Migrations\20200910062428_v1.Designer.cs" />
+    <Compile Remove="Migrations\20200913113540_Initial.cs" />
+    <Compile Remove="Migrations\20200913113540_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200914132513_Initial.cs" />
+    <Compile Remove="Migrations\20200914132513_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200914205312_Intal.cs" />
+    <Compile Remove="Migrations\20200914205312_Intal.Designer.cs" />
+    <Compile Remove="Migrations\20200914205344_Initial.cs" />
+    <Compile Remove="Migrations\20200914205344_Initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Models\App\Interfaces\IArticlesService.cs~RFebb58d.TMP" />
     <None Remove="Models\Services\UsersRepository.cs~RF115f6df.TMP" />
     <None Remove="Views\Account\SignIn.cshtml~RF758544.TMP" />
     <None Remove="Views\Shared\_Layout.cshtml~RF598f9c.TMP" />
