@@ -10,7 +10,6 @@ using Miniblog.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -29,15 +28,15 @@ namespace Miniblog.Controllers
         }
 
         [AllowAnonymous]
-        [Route("[controller]/{link}")]
-        public async Task<IActionResult> Article([FromRoute] string link)
+        [Route("[controller]/")]
+        public async Task<IActionResult> Article([FromQuery] string title)
         {
-            if (!articlesService.HasArticle(a => a.Link == link)) // ???????????? будет ли линк декодирована???
+            if (!articlesService.HasArticle(a => a.Link == title)) // ???????????? будет ли линк декодирована???
             {
                 return NotFound();
             }
 
-            Article article = await articlesService.GetArticleByLinkAsync(link);
+            Article article = await articlesService.GetArticleByLinkAsync(title);
 
             User currentUser = null;
             if (User.Identity.IsAuthenticated)
@@ -95,7 +94,7 @@ namespace Miniblog.Controllers
 
             Article article = await articlesService.CreateArticleAsync(userId, articleViewModel);
 
-            return RedirectToAction("Article", "Articles", article.Link);
+            return RedirectToAction("Article", "Articles", new { title = article.Link });
         }
     }
 }

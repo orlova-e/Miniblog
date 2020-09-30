@@ -18,7 +18,7 @@
     <div class="blog-content">
 
         <div class="article-meta text-roboto-style">
-            <a href="@Url.Action("Article", "Articles", new { link = Model.Link })" class="article-header">
+            <a href="@Url.Action("Article", "Articles", new { title = Model.Link })" class="article-header">
                 <h2><b>@Model.Header</b></h2>
             </a>
             <ul class="article-info clearfix">
@@ -70,34 +70,36 @@
                 }
                 @if (listOptions.Topic)
                 {
-                    <li><span>Topic: </span><a href="#">@Model.Topic.Name</a></li>
+                    <li><span>Topic: </span><a href="#">@(Model.Topic?.Name ?? "no topic")</a></li>
                 }
                 @if (listOptions.Series)
                 {
-                    <li><span>Series: </span><a href="#">@Model.Series.Name</a></li>
+                    <li><span>Series: </span><a href="#">@(Model.Series?.Name ?? "no series")</a></li>
                 }
                 @if (listOptions.Tags)
                 {
-            <li>
-                Tags:
-                @{
-                    string[] tags = Model.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                    int counter = tags.Length <= 5 ? tags.Length : 5;
-                    for (int i = 0; i < counter; i++)
-                        tags[i] = tags[i].Trim();
-                    for (int i = 0; i < counter; i++)
-                    {
-                        if (i != counter - 1)
-                        {
-                            <a href="#">@tags[i],</a>
+                    <li>
+                        Tags:
+                        @{
+                            string[] tags = Model.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                            int counter = tags.Length <= 5 ? tags.Length : 5;
+                            for (int i = 0; i < counter; i++)
+                            {
+                                if (i != counter - 1)
+                                {
+                                    <a href="#">@tags[i],</a>
+                                }
+                                else
+                                {
+                                    <a href="#">@tags[i]</a>
+                                }
+                            }
+                            if(counter == 0)
+                            {
+                                <span>no tags</span>
+                            }
                         }
-                        else
-                        {
-                            <a href="#">@tags[i]</a>
-                        }
-                    }
-                }
-            </li>
+                    </li>
                 }
             </ul>
         </div>
@@ -113,12 +115,12 @@
 
         <div class="blog-text">
             @{
-                string[] words = Model.Text.Split(new char[] { ' ' }, 50, StringSplitOptions.RemoveEmptyEntries);
-                string previewText = string.Join(' ', words);
+                string[] words = Model.Text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                string previewText = string.Join(' ', words, 0, 30);
                 <p>@previewText</p>
             }
             <div class="read-action">
-                <a href="@Url.Action("Article", "Articles", new { link = Model.Link })">Read more &RightArrow;</a>
+                <a href="@Url.Action("Article", "Articles", new { title = Model.Link })">Read more &RightArrow;</a>
             </div>
         </div>
     </div>

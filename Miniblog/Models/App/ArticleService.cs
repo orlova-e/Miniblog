@@ -1,4 +1,5 @@
-﻿using Miniblog.Models.App.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Miniblog.Models.App.Interfaces;
 using Miniblog.Models.Entities;
 using Miniblog.Models.Services.Interfaces;
 using Miniblog.ViewModels;
@@ -53,7 +54,6 @@ namespace Miniblog.Models.App
                 }
             }
 
-            //series
             Series series = null;
             if (articleViewModel.Series != null)
             {
@@ -84,7 +84,12 @@ namespace Miniblog.Models.App
                 }
             }
 
-            //tags?
+            string[] tags = articleViewModel.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            for(int i = 0; i < tags.Length; i++)
+            {
+                tags[i] = tags[i].Trim();
+            }
+            string tagsStr = string.Join(',', tags);
 
             string link = WebUtility.UrlEncode(articleViewModel.Header);
             var otherArticle = repository.Articles.Find(a => a.Link == link).FirstOrDefault();
@@ -110,9 +115,9 @@ namespace Miniblog.Models.App
                 User = currentUser,
                 Header = articleViewModel.Header,
                 Text = articleViewModel.Text,
-                Topic = topic ?? null,
-                Series = series ?? null,
-                Tags = articleViewModel.Tags,
+                Topic = topic,
+                Series = series,
+                Tags = tagsStr,
                 Link = link,
                 Visibility = articleViewModel.Visibility,
                 MenuVisibility = articleViewModel.MenuVisibility,
@@ -130,7 +135,7 @@ namespace Miniblog.Models.App
         public bool HasArticle(Func<Article, bool> predicate)
         {
             var article = repository.Articles.Find(predicate).FirstOrDefault();
-            if (article != null)
+            if (article == null)
                 return false;
             return true;
         }
@@ -147,8 +152,6 @@ namespace Miniblog.Models.App
 
         public async Task<List<Article>> FindArticlesAsync(Func<Article, bool> predicate)
         {
-            ListDisplayOptions listOptions = await repository.ListDisplayOptions.FirstOrDefaultAsync();
-
             List<Article> articles = (await repository.Articles.GetAllAsync())
                  .Where(predicate)
                  .OrderByDescending(a => a.DateTime.Ticks)

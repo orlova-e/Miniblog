@@ -5,7 +5,6 @@
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @inject IOptionRepository<ListDisplayOptions> listDisplayRepo
 
-
 @model ArticleReadViewModel
 
 @{
@@ -20,6 +19,9 @@
 <article class="art text-alegreya-style" id="@Model.Article.Id.ToString()">
     <div class="blog-content">
         <div class="article-meta text-sans-style">
+            <a href="#" class="article-header">
+                <h2><b>@Model.Article.Header</b></h2>
+            </a>
             <ul class="article-info clearfix">
                 <li class="article-info-user">
                     @if (listOptions.Username)
@@ -42,7 +44,7 @@
                     {
                         //var th = System.Globalization.CultureInfo.CurrentCulture
                         <a href="@Url.Action("List", "Articles", new { date = Model.Article.DateTime.ToString("yyyy/MM/dd") })">
-                            @Model.Article.DateTime.ToString()
+                            @Model.Article.DateTime.ToString("d", CultureInfo.CurrentCulture)
                         </a>
                     }
                 </li>
@@ -64,24 +66,26 @@
                     }
                     @if (listOptions.Topic)
                     {
-                        <span>Topic: </span><a href="#">@Model.Article.Topic.Name</a>
+                        <span>Topic: </span><a href="#">@(Model.Article.Topic?.Name ?? "no topic")</a>
                     }
                     @if (listOptions.Series)
                     {
-                        <span>Series: </span><a href="#">@Model.Article.Series.Name</a>
+                        <span>Series: </span><a href="#">@(Model.Article.Series?.Name ?? "no series")</a>
                     }
                 </li>
                 @if (listOptions.Tags)
                 {
                     <li>
                         Tags:
-                        @{ 
+                        @{
                             string[] tags = Model.Article.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                            for(int i = 0; i < tags.Length; i++)
-                                tags[i] = tags[i].Trim();
-                            for(int i = 0; i < tags.Length; i++)
+                            for (int i = 0; i < tags.Length; i++)
                             {
                                 <a href="#">@tags[i]</a>
+                            }
+                            if(tags.Length == 0)
+                            {
+                                <span>no tags</span>
                             }
                         }
                     </li>
