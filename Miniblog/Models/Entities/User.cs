@@ -22,16 +22,17 @@ namespace Miniblog.Models.Entities
         public string FullName { get; set; }
         public string City { get; set; }
         public string Description { get; set; }
+        public List<User> Subscribers { get; set; }
         public List<Comment> Comments { get; set; }
         public List<Article> Articles { get; set; }
-        //public List<Article> Favourites { get; set; }
-        public List<UserBookmark> Bookmarked { get; set; }
         public List<UserFavourite> Liked { get; set; }
+        public List<UserBookmark> Bookmarked { get; set; }
         public List<CommentLikes> LikedComments { get; set; }
         public List<Topic> Topics { get; set; }
         //public List<Tag> Tags { get; set; }
         public User()
         {
+            Subscribers = new List<User>();
             Comments = new List<Comment>();
             Articles = new List<Article>();
             Topics = new List<Topic>();

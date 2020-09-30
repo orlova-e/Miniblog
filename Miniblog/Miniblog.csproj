@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\subscription\subscribe.js~RFad697e.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Models\App\Interfaces\IArticlesService.cs~RFebb58d.TMP" />
     <None Remove="Models\Services\UsersRepository.cs~RF115f6df.TMP" />
     <None Remove="Views\Account\SignIn.cshtml~RF758544.TMP" />

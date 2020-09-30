@@ -20,10 +20,7 @@ namespace Miniblog.Models.Services
         {
             var user = await Db.Users.FindAsync(id);
             await Db.Entry(user).Reference(u => u.Role).LoadAsync();
-            //var role = (from r in await Db.Roles.ToArrayAsync()
-            //            where r.Id == user.RoleId
-            //            select r).First();
-            //await Db.Entry(role).Reference(r => r.Opportunities).LoadAsync();
+            await Db.Entry(user).Collection(u => u.Subscribers).LoadAsync();
             return user;
         }
         public async Task<IEnumerable<User>> GetAllAsync()
@@ -32,7 +29,7 @@ namespace Miniblog.Models.Services
         }
         public IEnumerable<User> Find(Func<User, bool> predicate)
         {
-            return Db.Users.Where(predicate).ToList();
+            return Db.Users.Include(u => u.Subscribers).Where(predicate).ToList();
         }
         public async Task CreateAsync(User entity)
         {

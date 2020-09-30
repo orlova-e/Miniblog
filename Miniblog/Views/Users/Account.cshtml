@@ -1,0 +1,117 @@
+﻿@using System.Security.Claims 
+
+@{
+    User user = ViewBag.Author;
+    List<Article> articles = ViewBag.Articles;
+    bool subscribed = ViewBag.Subscribed;
+}
+
+<div class="blog-container">
+    <div class="page-container text-alegreya-style">
+        <div class="author-container">
+            <div class="author-info-container">
+                <div class="user-info-container">
+                    @if (user.Avatar != null)
+                    {
+                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Avatar))" alt="@user.Username">
+                    }
+                    else
+                    {
+                        <img src="@Url.Content("~/img/social_line/anonymous_user.png")" alt="User">
+                    }
+                </div>
+
+                <div class="author-info">
+                    <h3 class="">
+                        <b id="author_username">@user.Username</b>
+                        @if (user.FullName != null)
+                        {
+                            <span class="auhor-name-info">
+                                // @user.FullName
+                            </span>
+                        }
+                    </h3>
+                    @if (CultureInfo.CurrentCulture.Equals(new CultureInfo("en")))
+                    {
+                        <span class="author-expirience">
+                            With us from @user.DateOfRegistration.ToString("D", CultureInfo.CurrentCulture)
+                        </span>
+                    }
+                    else if (CultureInfo.CurrentCulture.Equals(new CultureInfo("ru")))
+                    {
+                        <span class="author-expirience">
+                            С нами с @user.DateOfRegistration.ToString("D", CultureInfo.CurrentCulture)
+                        </span>
+                    }
+                    @if (user.City != null)
+                    {
+                        <div>
+                            <span class="author-place">Place: @user.City</span>
+                        </div>
+                    }
+                    <div class="statistics">
+                        <span class="author-articles-number">
+                            <span class="author-articles-count"><b>@articles.Count</b></span>
+                            <span class="author-articles-word">articles</span>
+                        </span>
+                        <br>
+                        <span class="author-subscribers">
+                            <span class="author-subscribers-count"><b id="subscribersNumber">@(user.Subscribers?.Count ?? 0)</b></span>
+                            @{
+                                string subscribers = "subscribers";
+                                if ((user.Subscribers?.Count ?? 0) == 1)
+                                    subscribers = "subscriber";
+                            }
+                            <span class="author-subscribers-word">@subscribers</span>
+                        </span>
+                    </div>
+                    @*<button class="usual-button usual-button-reverse">Chat</button>*@
+                    @if (!User.Identity.IsAuthenticated || !user.Username.Equals(User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value))
+                    {
+                        @if (subscribed)
+                        {
+                            <button id="subscribeButton" onclick="unsubscribe()" class="subscribe-button usual-button usual-button-reverse">Subscribed</button>
+                        }
+                        else
+                        {
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                <button id="subscribeButton" onclick="subscribe()" class="subscribe-button usual-button">+ Subscribe</button>
+                            }
+                            else
+                            {
+                                <button id="subscribeButton" class="subscribe-button usual-button">+ Subscribe</button>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+
+            @if (user.Description != null)
+            {
+                <div class="author-description">
+                    <h3><b>About</b></h3>
+                    <p>@user.Description</p>
+                </div>
+            }
+
+        </div>
+        <a id="articlesLink" href="#author-articles"><h4>&#709; Articles</h4></a>
+    </div>
+</div>
+
+<a name="author-articles"></a>
+
+@await Html.PartialAsync("~/Views/Articles/List.cshtml", articles)
+
+@section Scripts {
+    @Html.Partial("_ListScripts")
+}
+
+@if (User.Identity.IsAuthenticated && !user.Username.Equals(User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value))
+{
+    @section Hubs {
+        <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+        <script src="~/js/subscription/subscribe.js"></script>
+    }
+}

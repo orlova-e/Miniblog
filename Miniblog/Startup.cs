@@ -53,8 +53,12 @@ namespace Miniblog
 
             services.AddScoped<IdAttribute>();
 
-
-            services.AddSignalR();
+            services.AddSignalR()
+                .AddHubOptions<SubscriptionHub>(options =>
+                {
+                    options.ClientTimeoutInterval = TimeSpan.FromMinutes(15);
+                    options.KeepAliveInterval = TimeSpan.FromMinutes(15);
+                });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -89,18 +93,18 @@ namespace Miniblog
                 app.UseHsts();
             }
 
-            //CultureInfo[] supportedCultures = new[]
-            //{
-            //    new CultureInfo("en"),
-            //    new CultureInfo("ru")
-            //};
+            CultureInfo[] supportedCultures = new[]
+            {
+                new CultureInfo("en"),
+                new CultureInfo("ru")
+            };
 
-            //app.UseRequestLocalization(new RequestLocalizationOptions
-            //{
-            //    DefaultRequestCulture = new RequestCulture("en"),
-            //    SupportedCultures = supportedCultures,
-            //    SupportedUICultures = supportedCultures
-            //});
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -113,6 +117,7 @@ namespace Miniblog
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<CommentsHub>("/comments");
+                endpoints.MapHub<SubscriptionHub>("/subscription");
 
                 //endpoints.MapHub<MessagesHub>("/messages");
 
