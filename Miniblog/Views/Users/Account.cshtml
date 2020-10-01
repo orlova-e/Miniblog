@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims 
+﻿@using System.Security.Claims
 
 @{
     User user = ViewBag.Author;
@@ -108,10 +108,14 @@
     @Html.Partial("_ListScripts")
 }
 
-@if (User.Identity.IsAuthenticated && !user.Username.Equals(User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value))
-{
-    @section Hubs {
-        <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+@section Hubs {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    @if (User.Identity.IsAuthenticated && !user.Username.Equals(User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value))
+    {
         <script src="~/js/subscription/subscribe.js"></script>
+    }
+    else
+    {
+        <script src="~/js/subscription/subscriptionInfo.js"></script>
     }
 }

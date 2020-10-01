@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Miniblog.Hubs
 {
-    [Authorize]
+    [AllowAnonymous]
     public class SubscriptionHub : Hub
     {
         public IUserService userService { get; private set; }
@@ -18,6 +18,8 @@ namespace Miniblog.Hubs
         {
             this.userService = userService;
         }
+
+        [Authorize]
         public async Task Subscribe(string authorName)
         {
             int statusCode = StatusCodes.Status404NotFound;
@@ -33,8 +35,11 @@ namespace Miniblog.Hubs
                 statusCode = StatusCodes.Status200OK;
             }
 
-            await Clients.Caller.SendAsync("Subscribed", statusCode);
+            //await Clients.Caller.SendAsync("Subscribed", statusCode);
+            await Clients.User(Context.UserIdentifier).SendAsync("Subscribed", statusCode);
         }
+
+        [Authorize]
         public async Task Unsubscribe(string authorName)
         {
             int statusCode = StatusCodes.Status404NotFound;
@@ -50,8 +55,10 @@ namespace Miniblog.Hubs
                 statusCode = StatusCodes.Status200OK;
             }
 
-            await Clients.Caller.SendAsync("Unsubscribed", statusCode);
+            //await Clients.Caller.SendAsync("Unsubscribed", statusCode);
+            await Clients.User(Context.UserIdentifier).SendAsync("Unsubscribed", statusCode);
         }
+
         [AllowAnonymous]
         public async Task Count(string authorName)
         {

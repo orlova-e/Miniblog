@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
@@ -53,12 +54,19 @@ namespace Miniblog
 
             services.AddScoped<IdAttribute>();
 
+            services.AddSingleton<IUserIdProvider, UserNameProvider>();
+
             services.AddSignalR()
                 .AddHubOptions<SubscriptionHub>(options =>
                 {
                     options.ClientTimeoutInterval = TimeSpan.FromMinutes(15);
                     options.KeepAliveInterval = TimeSpan.FromMinutes(15);
                 });
+                //.AddHubOptions<CommentsHub>(options =>
+                //{
+                //    options.ClientTimeoutInterval = TimeSpan.FromMinutes(25);
+                //    options.KeepAliveInterval = TimeSpan.FromMinutes(30);
+                //});
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -116,7 +124,7 @@ namespace Miniblog
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<CommentsHub>("/comments");
+                //endpoints.MapHub<CommentsHub>("/comments");
                 endpoints.MapHub<SubscriptionHub>("/subscription");
 
                 //endpoints.MapHub<MessagesHub>("/messages");
