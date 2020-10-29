@@ -1,0 +1,31 @@
+﻿@*@model User 
+
+<template id="template-comment-answer">
+    <div class="template-comment-answer comment-answer">
+
+        <div class="user-info-container">
+            @if (Model?.Avatar != null)
+            {
+                <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Avatar))" alt="@Model.Username">
+            }
+            else
+            {
+                <img src="@Url.Content("~/img/social_line/anonymous_user.png")" alt="User">
+            }
+        </div>
+
+        <form asp-action="add" asp-controller="comments" method="post" class="root-answer-form comment-form">
+            <input type="hidden" asp-for="@Model.Username" value="@Model.Username">
+            <div>
+                @{
+                    CommentViewModel commentViewModel = new CommentViewModel();
+                }
+                <textarea placeholder="Add comment..." class="comment-input comment-input-textarea" asp-for="@commentViewModel.Text"></textarea>
+                <span class="text-sans-style" asp-validation-for="@commentViewModel.Text"></span>
+            </div>
+
+            <button type="button" onclick="sendComment(this)" class="usual-submit-button comment-button">Add comment</button>
+        </form>
+
+    </div>
+</template>*@

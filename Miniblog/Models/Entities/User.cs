@@ -10,6 +10,7 @@ namespace Miniblog.Models.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         [Required, MinLength(4), MaxLength(25)]
+        //[RegularExpression(@"^(?=[a-zA-Z])[-\w.]{0,23}([a-zA-Z\d]|(?<![-.])_)$")]
         public string Username { get; set; }
         [Required, DataType(DataType.EmailAddress)]
         public string Email { get; set; }

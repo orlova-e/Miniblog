@@ -31,7 +31,7 @@ namespace Miniblog.Controllers
         [Route("[controller]/")]
         public async Task<IActionResult> Article([FromQuery] string title)
         {
-            if (!articlesService.HasArticle(a => a.Link == title)) // ???????????? будет ли линк декодирована???
+            if (!articlesService.HasArticle(a => a.Link == title))
             {
                 return NotFound();
             }
@@ -43,7 +43,7 @@ namespace Miniblog.Controllers
             {
                 Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
                 currentUser = await repository.Users.GetByIdAsync(userId);
-                if(currentUser.Role == null)
+                if(currentUser?.Role == null)
                 {
                     Role role = await repository.Roles.GetByIdAsync(currentUser.RoleId);
                     currentUser.Role = role;
@@ -52,14 +52,7 @@ namespace Miniblog.Controllers
 
             ViewBag.CurrentUser = currentUser;
             ViewBag.Article = article;
-
-            //ArticleReadViewModel articleViewModel = new ArticleReadViewModel()
-            //{
-            //    Article = article,
-            //    CurrentUser = currentUser,
-            //    //CommentForm = new CommentViewModel(),
-            //    //Comments 
-            //};
+            ViewBag.CommentsOptions = await repository.CommentsOptions.FirstOrDefaultAsync();
 
             return View();
         }

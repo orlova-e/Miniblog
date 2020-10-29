@@ -46,6 +46,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Home\" />
+    <Folder Include="wwwroot\js\list\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

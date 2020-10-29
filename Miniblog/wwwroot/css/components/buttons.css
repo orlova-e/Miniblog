@@ -16,11 +16,11 @@ button {
     min-width: 160px;
 }
 
-.drpdown-content a {
-    color: gray;
-    display: block;
-    text-decoration: none;
-}
+    .drpdown-content a {
+        color: gray;
+        display: block;
+        text-decoration: none;
+    }
 
 /* ! END of dropdown panel */
 
@@ -52,10 +52,10 @@ button {
     color: rgb(58, 58, 58);
 }
 
-.comment-form .comment-input:focus {
-    border: 1px solid burlywood;
-    box-shadow: 0 0 0 3px rgb(255, 230, 197);
-}
+    .comment-form .comment-input:focus {
+        border: 1px solid burlywood;
+        box-shadow: 0 0 0 3px rgb(255, 230, 197);
+    }
 
 .comment-form .comment-input-textarea {
     width: 100%;
@@ -68,13 +68,12 @@ button {
 
 .comment-form .comment-input.comment-input-error {
     border: 1px solid red;
-    
 }
 
-.comment-form .comment-input.comment-input-error:focus {
-    border: 1px solid rgb(255, 113, 113);
-    box-shadow: 0 0 0 3px rgb(255, 208, 208);
-}
+    .comment-form .comment-input.comment-input-error:focus {
+        border: 1px solid rgb(255, 113, 113);
+        box-shadow: 0 0 0 3px rgb(255, 208, 208);
+    }
 
 .comment-form .comment-error-message {
     display: block;
@@ -127,9 +126,26 @@ a.usual-button-reverse {
 
 /* * COMMENT ACTIONS buttons */
 
+.blog-comment-meta .comment-change {
+    margin: 0;
+    padding: 0;
+}
+
 .comment-actions-container img {
     height: 30px;
     width: 30px;
+}
+
+.comment-change img {
+    height: 25px;
+    width: 25px;
+}
+
+.comment-change .comment-change-delete img {
+    height: 22px;
+    width: 22px;
+    margin: 0;
+    padding: 0;
 }
 
 .comment-actions-container button,
@@ -155,10 +171,10 @@ a.usual-button-reverse {
     padding: 0;
 }
 
-.answer-form .usual-submit-button img {
-    height: 30px;
-    width: 30px;
-}
+    .answer-form .usual-submit-button img {
+        height: 30px;
+        width: 30px;
+    }
 
 /* * ARTICLE USER ACTIONS
     * (like, bookmark)    */

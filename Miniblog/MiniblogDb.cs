@@ -326,15 +326,15 @@ namespace Miniblog
 
             modelBuilder.Entity<ListDisplayOptions>().HasData(listDisplayOptions);
 
-            CommentsOptions commentsDisplayOptions = new CommentsOptions()
+            CommentsOptions commentsOptions = new CommentsOptions()
             {
                 Id = Guid.NewGuid(),
-                AllowNestedComments = true,
-                DepthOfNestedComments = 3,
+                AllowNesting = true,
+                Depth = 3,
                 SortingCommentsDefaultType = SortingComments.NewFirst
             };
 
-            modelBuilder.Entity<CommentsOptions>().HasData(commentsDisplayOptions);
+            modelBuilder.Entity<CommentsOptions>().HasData(commentsOptions);
         }
     }
 }

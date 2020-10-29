@@ -32,7 +32,7 @@ namespace Miniblog.Models.Services
 
         public async Task<ListDisplayOptions> FirstOrDefaultAsync()
         {
-            return (await Db.ListDisplayOptions.ToArrayAsync()).FirstOrDefault();
+            return await Db.ListDisplayOptions.FirstOrDefaultAsync();
         }
     }
 }

@@ -13,9 +13,11 @@ namespace Miniblog.Models.Entities
         public User Author { get; set; }
         public Guid ArticleId { get; set; }
         public Article Article { get; set; }
+        public bool IsDeleted { get; set; }
         [Required]
         public string Text { get; set; }
         public DateTimeOffset DateTime { get; set; }
+        public DateTimeOffset? UpdatedDateTime { get; set; }
         public Guid? ParentId { get; set; }
         public Comment Parent { get; set; }
         public List<Comment> Children { get; set; }

@@ -216,8 +216,8 @@ section.article-comments {
 
 .user-info-container img {
     object-fit: cover;
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     word-break: keep-all;
 }
@@ -253,20 +253,26 @@ section.article-comments {
 }
 
 .comment-container p {
-    font-size: 20px;
+    font-size: 18px;
     margin: 0;
     padding: 4px 0px;
 }
 
 /* * COMMENT ACTIONS container */
 
-.comment-actions-container {
+.comment-actions-container,
+.comment-change {
     margin: 15px 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* display: grid;
+    grid-template-columns: 1fr 1fr; */
 }
 
-    .comment-actions-container .comment-reply {
+.comment-actions-container {
+    margin: 5px 0 12px 0;
+}
+
+    .comment-actions-container .comment-reply,
+    .comment-change {
         justify-self: right;
     }
 
@@ -277,11 +283,25 @@ section.article-comments {
 
 /* * COMMENT ANSWER container */
 
+.text-comment-container .comment-container p {
+    word-wrap: break-word;
+    word-break: break-all;
+    /* overflow-wrap: break-word; */
+}
+
 .text-comment-container .comment-answer {
     display: grid;
     grid-template-columns: 1fr 9fr;
     grid-row: 0.5em;
-    margin: 20px 0;
+    margin: 0;
+    padding: 0;
+    /* margin: 20px 0; */
+}
+
+.text-comment-container .comment-update-form {
+    grid-template-columns: 1fr;
+    /* margin: 30px; */
+    /* margin-top: 100px; */
 }
 
 .comment-answer .user-info-container {
@@ -310,13 +330,14 @@ form.comment-answer.comment-form {
 }
 
 .article-comments .answer-form.comment-form {
-    margin-top: 0px;
+    /* margin-top: 0px; */
+    margin-top: 10px;
 }
 
 .answer-form {
     display: grid;
-    grid-template-columns: 17fr 1fr;
-    grid-gap: 0.5em;
+    /* grid-template-columns: 17fr 1fr; */
+    /* grid-gap: 0.5em; */
 }
 
     .answer-form.comment-form .usual-submit-button {
@@ -327,7 +348,7 @@ form.comment-answer.comment-form {
 
 .root-comment-answer {
     display: grid;
-    grid-template-columns: 1fr 5fr;
+    grid-template-columns: 1fr 6fr;
     margin: 0 0 60px 0;
 }
 
@@ -336,8 +357,8 @@ form.comment-answer.comment-form {
     }
 
         .root-comment-answer .user-info-container img {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
         }
 
     .root-comment-answer .answer-form.comment-form .comment-input-textarea {
@@ -357,26 +378,48 @@ form.comment-answer.comment-form {
 }
 
     .users-comment-answer-collection .blog-comment {
-        margin: 5px 0;
+        margin: 10px 0;
         grid-template-columns: 1fr 9fr;
     }
 
-    .users-comment-answer-collection.comment-not-nested .blog-comment {
-        grid-template-columns: 1fr;
-    }
+.update-comment-actions {
+    margin-bottom: 10px;
+}
 
-    .users-comment-answer-collection .user-info-container {
+.users-comment-answer-collection.comment-not-nested .blog-comment {
+    grid-template-columns: 1fr;
+}
+
+.users-comment-answer-collection .user-info-container {
+    justify-self: left;
+}
+
+    .users-comment-answer-collection .user-info-container img {
+        width: 60px;
+        height: 60px;
         justify-self: left;
     }
 
-        .users-comment-answer-collection .user-info-container img {
-            width: 60px;
-            height: 60px;
-            justify-self: left;
-        }
-
 .comment-form .comment-error-message {
     line-height: 1.0;
+    padding: 0;
+}
+
+.blog-comment-meta .comment-time-info {
+    text-align: left;
+    font-size: 18px;
+}
+
+.time-info-utc {
+    display: none;
+}
+
+.comment-update-form .update-comment-actions button {
+    display: inline;
+    float: none;
+    margin: 0 12px 0 0;
+    padding: 6px 18px;
+    font-size: 18px;
 }
 
 /* * SIGN IN page */

@@ -1,5 +1,7 @@
-﻿using Miniblog.Models.Services.Interfaces;
+﻿//using Microsoft.EntityFrameworkCore.Internal;
+using Miniblog.Models.Services.Interfaces;
 using System;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 
@@ -25,6 +27,20 @@ namespace Miniblog.Models.Services
                 }
             }
             return obj;
+        }
+
+        public string FixLines(string text)
+        {
+            string[] paragraphs = text.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.None);
+            text = string.Join(Environment.NewLine, paragraphs);
+            return text;
+        }
+
+        public string GetPrepared(string text)
+        {
+            text = GetEncoded(text);
+            text = FixLines(text);
+            return text;
         }
     }
 }

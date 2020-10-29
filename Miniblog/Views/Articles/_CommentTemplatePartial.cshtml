@@ -1,0 +1,97 @@
+﻿@using Miniblog.Models.Entities 
+@model User
+
+<template id="templateBlogComment">
+    <div class="blog-comment"
+         data-comment-id=""
+         data-parent-id="">
+
+        <div class="user-info-container">
+            @*@if (Model?.Avatar != null)
+            {
+                <img name="avatar" src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Avatar))" alt="@Model.Username">
+            }
+            else
+            {
+                <img name="avatar" src="@Url.Content("~/img/social_line/anonymous_user.png")" alt="User">
+            }*@
+        </div>
+
+        <div class="text-comment-container clearfix">
+
+            <div class="blog-comment-meta">
+                <a class="comment-username" href="#">
+
+                </a>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="comment-change">
+                        @if (Model.Role?.WriteComments ?? default)
+                        {
+                            <button type="button" onclick="getUpdateCommentForm(this)" class="reply-button">
+                                <img src="/img/ico/rewrite.png" alt="reply">
+                            </button>
+                        }
+
+                        @if ((Model.Role?.WriteComments ?? default) || ((Model.Role as ExtendedRole)?.ModerateComments ?? default))
+                        {
+                            <button class="comment-change-delete reply-button" type="button" onclick="invokeDeletingComment(this)">
+                                <img src="/img/ico/delete7.png" alt="reply">
+                            </button>
+                        }
+                    </div>
+                }
+
+                <span class="comment-time-info time-info"></span>
+                <span class="time-info-utc time-info-created"></span>
+                <span class="time-info-utc time-info-updated"></span>
+
+            </div>
+
+            <div class="comment-container">
+
+            </div>
+
+
+            <div class="comment-actions-container">
+
+                <div class="hearts">
+                    @{
+                        string userLikeClick = string.Empty;
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            userLikeClick = "onclick=\"heartClick(this)\"";
+                        }
+                    }
+                    <button type="button" class="heart-not-clicked" @userLikeClick>
+                        <img src="/img/buttons/heart.png" alt="like">
+                    </button>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button type="button" onclick="heartClick(this)" class="heart-clicked">
+                            <img src="/img/buttons/heart red.png" alt="like">
+                        </button>
+                    }
+
+                    <span name="commentLikesNumber" class="hearts-counter text-sans-style comment-hearts-count">0</span>
+                </div>
+
+                @if (User.Identity.IsAuthenticated && (Model.Role?.WriteComments ?? default))
+                {
+                    <div class="comment-reply">
+                        <button type="button" onclick="getReplyCommentForm(this)" class="reply-button">
+                            <img src="/img/buttons/next.png" alt="reply">
+                        </button>
+                    </div>
+                }
+            </div>
+
+            <div class="users-comment-answer-collection">
+
+            </div>
+        </div>
+
+    </div>
+</template>

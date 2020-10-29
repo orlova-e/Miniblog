@@ -94,7 +94,7 @@
         </div>
         <div class="blog-text">
             @{
-                string[] paragraphs = Model.Article.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                string[] paragraphs = Model.Article.Text.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.None);
                 int imagesNumber = Model.Article.Images.Count;
                 for (int i = 0; i < paragraphs.Length + imagesNumber; i++)
                 {
@@ -120,23 +120,23 @@
                 <button type="button">
                     <img src="/img/buttons/heart.png" alt="like">
                 </button>
-                <span id="article-likes-count">0</span>
+                <span id="articleLikesNumber">0</span> @*ID changed*@
             </div>
 
             <div class="bookmark-action">
-                <a href="#commentsAnch">
+                <button>
                     <img src="/img/ico/bookmark5.png" alt="bookmark by Calvin Goodman from the Noun Project">
-                </a>
-                <span id="article-bookmark-count">0</span>
+                </button>
+                <span id="articleBookmarksNumber">0</span> @*ID changed*@
             </div>
 
             @if (Model.Article.DisplayOptions.Comments)
             {
                 <div class="comment-action">
-                    <button type="button">
+                    <a href="#commentsAnch">
                         <img src="/img/ico/chat.png" alt="from the Noun Project">
-                    </button>
-                    <span id="article-comments-count">@Model.Article.Comments.Count</span>
+                    </a>
+                    <span id="articleCommentsNumber">@Model.Article.Comments.Count</span>
                 </div>
             }
 

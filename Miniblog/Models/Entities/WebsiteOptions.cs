@@ -13,7 +13,6 @@ namespace Miniblog.Models.Entities
         public string Name { get; set; }
         public string Subtitle { get; set; }
         public byte[] Icon { get; set; }
-        //public ArticlesListDisplayOptions ArticlesListDisplayOptions { get; set; }
         public string HomePage { get; set; }
         public bool ShowListOfPopularAndRecent { get; set; }
         public bool ShowAuthors { get; set; }

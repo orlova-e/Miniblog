@@ -61,12 +61,12 @@ namespace Miniblog
                 {
                     options.ClientTimeoutInterval = TimeSpan.FromMinutes(15);
                     options.KeepAliveInterval = TimeSpan.FromMinutes(15);
+                })
+                .AddHubOptions<ArticleHub>(options =>
+                {
+                    options.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
+                    options.KeepAliveInterval = TimeSpan.FromMinutes(30);
                 });
-                //.AddHubOptions<CommentsHub>(options =>
-                //{
-                //    options.ClientTimeoutInterval = TimeSpan.FromMinutes(25);
-                //    options.KeepAliveInterval = TimeSpan.FromMinutes(30);
-                //});
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -124,7 +124,7 @@ namespace Miniblog
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapHub<CommentsHub>("/comments");
+                endpoints.MapHub<ArticleHub>("/articlehub");
                 endpoints.MapHub<SubscriptionHub>("/subscription");
 
                 //endpoints.MapHub<MessagesHub>("/messages");

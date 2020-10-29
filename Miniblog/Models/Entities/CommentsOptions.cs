@@ -8,10 +8,8 @@ namespace Miniblog.Models.Entities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        //public Guid WebsiteDisplayOptionsId { get; set; }
-        //public WebsiteDisplayOptions WebsiteDisplayOptions { get; set; }
-        public bool AllowNestedComments { get; set; }
-        public int DepthOfNestedComments { get; set; }
+        public bool AllowNesting { get; set; }
+        public int Depth { get; set; }
         public SortingComments SortingCommentsDefaultType { get; set; }
     }
 }

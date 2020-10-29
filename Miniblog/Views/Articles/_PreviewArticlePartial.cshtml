@@ -115,8 +115,9 @@
 
         <div class="blog-text">
             @{
-                string[] words = Model.Text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                string previewText = string.Join(' ', words, 0, 30);
+                string[] words = Model.Text.Split(new string[] { " ", Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                int count = words.Length < 30 ? words.Length : 30;
+                string previewText = string.Join(" ", words, 0, count);
                 <p>@previewText</p>
             }
             <div class="read-action">

@@ -15,7 +15,7 @@ namespace Miniblog.Models.Services
         {
             Db = db;
         }
-        public async Task<IEnumerable<Article>> GetAllForAsync(Guid userId)
+        public async Task<IEnumerable<Article>> GetAllEntriesForAsync(Guid userId)
         {
             var user = (await Db.Users
                 .Where(u => u.Id == userId)
@@ -31,7 +31,7 @@ namespace Miniblog.Models.Services
             return articles;
         }
 
-        public async Task<IEnumerable<User>> GetAllUserForAsync(Guid entryId)
+        public async Task<IEnumerable<User>> GetAllUsersForAsync(Guid entryId)
         {
             var entry = (await Db.Articles
                 .Where(a => a.Id == entryId)
@@ -47,7 +47,7 @@ namespace Miniblog.Models.Services
             return users;
         }
 
-        public async Task AddFor(Guid entryId, Guid userId)
+        public async Task AddForAsync(Guid entryId, Guid userId)
         {
             var user = (await Db.Users
                 .Where(u => u.Id == userId)
@@ -60,7 +60,7 @@ namespace Miniblog.Models.Services
             await Db.SaveChangesAsync();
         }
 
-        public async Task RemoveFor(Guid entryId, Guid userId)
+        public async Task RemoveForAsync(Guid entryId, Guid userId)
         {
             var user = (await Db.Users
                 .Where(u => u.Id == userId)
@@ -91,6 +91,18 @@ namespace Miniblog.Models.Services
             var article = Db.Articles.Where(a => a.Id == entryId).Include(a => a.Likes).FirstOrDefault();
             var number = article.Likes.Count;
             return number;
+        }
+
+        public async Task<bool> ContainsAsync(Guid entryId, Guid userId)
+        {
+            var relation = (from article in await Db.Articles.ToArrayAsync()
+                            where article.Id.Equals(entryId)
+                            from like in article.Likes
+                            where like.UserId.Equals(userId)
+                            select like).FirstOrDefault();
+            if (relation != null)
+                return true;
+            return false;
         }
     }
 }
