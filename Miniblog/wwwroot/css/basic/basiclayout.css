@@ -222,11 +222,46 @@ section.article-comments {
     word-break: keep-all;
 }
 
+.parental .user-info-container img {
+    width: 60px;
+    height: 60px;
+}
+
+.article-comments-collection {
+    margin: 40px 0 0 0;
+}
+
 .blog-comments .blog-comment {
     display: grid;
     grid-template-columns: 1fr 5fr;
     grid-gap: 0.3em;
-    margin-top: 40px;
+    margin-top: 10px;
+}
+
+.blog-comment.parental {
+    grid-template-columns: 1fr 8fr;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.blog-comment.parental-1 {
+    width: 85%;
+}
+
+.blog-comment.parental-2 {
+    width: 80%;
+}
+
+.blog-comment.parental-3 {
+    width: 75%;
+}
+
+.blog-comment.parental-4 {
+    width: 70%;
+}
+
+.blog-comment.parental-5 {
+    width: 65%;
 }
 
 .user-info-container {
@@ -268,7 +303,7 @@ section.article-comments {
 }
 
 .comment-actions-container {
-    margin: 5px 0 12px 0;
+    margin: 10px 0 5px 0;
 }
 
     .comment-actions-container .comment-reply,
@@ -286,7 +321,6 @@ section.article-comments {
 .text-comment-container .comment-container p {
     word-wrap: break-word;
     word-break: break-all;
-    /* overflow-wrap: break-word; */
 }
 
 .text-comment-container .comment-answer {
@@ -295,13 +329,10 @@ section.article-comments {
     grid-row: 0.5em;
     margin: 0;
     padding: 0;
-    /* margin: 20px 0; */
 }
 
 .text-comment-container .comment-update-form {
     grid-template-columns: 1fr;
-    /* margin: 30px; */
-    /* margin-top: 100px; */
 }
 
 .comment-answer .user-info-container {
@@ -330,14 +361,11 @@ form.comment-answer.comment-form {
 }
 
 .article-comments .answer-form.comment-form {
-    /* margin-top: 0px; */
     margin-top: 10px;
 }
 
 .answer-form {
     display: grid;
-    /* grid-template-columns: 17fr 1fr; */
-    /* grid-gap: 0.5em; */
 }
 
     .answer-form.comment-form .usual-submit-button {
@@ -369,7 +397,6 @@ form.comment-answer.comment-form {
 .article-comments .root-answer-form.comment-form {
     margin: 0;
 }
-
 
 /* * USERS COMMENT COLLECTION */
 
@@ -407,7 +434,7 @@ form.comment-answer.comment-form {
 
 .blog-comment-meta .comment-time-info {
     text-align: left;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .time-info-utc {

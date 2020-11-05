@@ -44,7 +44,7 @@ button {
     outline: transparent;
     display: inline-block;
     margin: 5px 8px 2px 0;
-    padding: 7px 10px;
+    padding: 7px 0px 7px 10px;
     width: 50%;
     border: 1px solid rgb(199, 199, 199);
     border-radius: 4px;
@@ -81,6 +81,7 @@ button {
     font-weight: 500;
     color: red;
     margin: 0;
+    padding: 0;
 }
 
 /* * BUTTONS' template */
@@ -132,18 +133,18 @@ a.usual-button-reverse {
 }
 
 .comment-actions-container img {
-    height: 30px;
-    width: 30px;
-}
-
-.comment-change img {
     height: 25px;
     width: 25px;
 }
 
+.comment-change img {
+    height: 20px;
+    width: 20px;
+}
+
 .comment-change .comment-change-delete img {
-    height: 22px;
-    width: 22px;
+    height: 16px;
+    width: 16px;
     margin: 0;
     padding: 0;
 }
@@ -177,7 +178,7 @@ a.usual-button-reverse {
     }
 
 /* * ARTICLE USER ACTIONS
-    * (like, bookmark)    */
+    * (like, bookmark, comments)    */
 
 div.article-user-actions {
     display: grid;
@@ -190,10 +191,15 @@ div.article-user-actions {
     font-family: 'Open Sans', sans-serif;
 }
 
-.article-user-actions .like-action {
+.article-user-actions.text-roboto-style span {
+    font-family: 'Roboto Slab', serif;
+    font-size: 15px;
+}
+
+/*.article-user-actions .like-action {
     justify-self: left;
     justify-content: left;
-}
+}*/
 
 .article-user-actions button {
     outline: none;
@@ -202,6 +208,11 @@ div.article-user-actions {
 .article-user-actions img {
     width: 40px;
     height: 40px;
+}
+
+.article-action-inactive,
+.comment-action-inactive {
+    display: none;
 }
 
 /* * DISPLAY CHARACCTER buttons */
