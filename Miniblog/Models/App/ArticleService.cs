@@ -23,14 +23,14 @@ namespace Miniblog.Models.App
         {
             Article article = repository.Articles.Find(a => a.Link == link).FirstOrDefault();
             if (article != null)
-                article = await GetFullArticlAsync(article);
+                article = await GetFullArticleAsync(article);
             return article;
         }
         public async Task<Article> GetArticleByIdAsync(Guid articleId)
         {
             Article article = await repository.Articles.GetByIdAsync(articleId);
             if (article != null)
-                article = await GetFullArticlAsync(article);
+                article = await GetFullArticleAsync(article);
             return article;
         }
 
@@ -159,11 +159,11 @@ namespace Miniblog.Models.App
 
             for (int i = 0; i < articles.Count; i++)
             {
-                articles[i] = await GetFullArticlAsync(articles[i]);
+                articles[i] = await GetFullArticleAsync(articles[i]);
             }
             return articles;
         }
-        private async Task<Article> GetFullArticlAsync(Article article)
+        private async Task<Article> GetFullArticleAsync(Article article)
         {
             ListDisplayOptions listOptions = await repository.ListDisplayOptions.FirstOrDefaultAsync();
 
