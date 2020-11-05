@@ -16,7 +16,7 @@ namespace Miniblog.Models.Services.Interfaces
         /// </summary>
         /// <param name="entryId">Entry for which we count the number</param>
         /// <returns>Number of related entries</returns>
-        int Count(Guid entryId);
+        Task<int> CountAsync(Guid entryId);
         Task AddForAsync(Guid entryId, Guid userId);
         Task RemoveForAsync(Guid entryId, Guid userId);
         /// <summary>

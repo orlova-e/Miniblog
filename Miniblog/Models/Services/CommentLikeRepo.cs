@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using Miniblog.Models.Entities;
 using Miniblog.Models.Services.Interfaces;
 using System;
@@ -17,58 +18,82 @@ namespace Miniblog.Models.Services
         }
         public async Task<IEnumerable<Comment>> GetAllEntriesForAsync(Guid userId)
         {
-            var user = (await Db.Users
+            var user = await Db.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.LikedComments)
                 .ThenInclude(l => l.Comment)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            IEnumerable<Comment> comments = new List<Comment>();
-            foreach (var liked in user.LikedComments)
-            {
-                comments.Append(liked.Comment);
-            }
+                .FirstOrDefaultAsync();
+
+            IEnumerable<Comment> comments = user.LikedComments
+                .Select(like => like.Comment);
+
+            //IEnumerable<Comment> comments = new List<Comment>();
+            //foreach (var liked in user.LikedComments)
+            //{
+            //    comments.Append(liked.Comment);
+            //}
             return comments;
         }
         public async Task<IEnumerable<User>> GetAllUsersForAsync(Guid entryId)
         {
-            var entry = (await Db.Comments
+            //var entry = (await Db.Comments
+            //    .Where(c => c.Id == entryId)
+            //    .Include(c => c.Likes)
+            //    .ThenInclude(l => l.User)
+            //    .ToArrayAsync())
+            //    .FirstOrDefault();
+
+            //IEnumerable<User> users = new List<User>();
+            //foreach (var like in entry.Likes)
+            //{
+            //    users.Append(like.User);
+            //}
+
+            Comment comment = await Db.Comments
                 .Where(c => c.Id == entryId)
                 .Include(c => c.Likes)
-                .ThenInclude(l => l.User)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            IEnumerable<User> users = new List<User>();
-            foreach (var like in entry.Likes)
-            {
-                users.Append(like.User);
-            }
+                .ThenInclude(like => like.User)
+                .FirstOrDefaultAsync();
+
+            IEnumerable<User> users = comment.Likes
+                .Select(like => like.User);
+
             return users;
         }
         public async Task AddForAsync(Guid entryId, Guid userId)
         {
-            var user = (await Db.Users
+            User user = await Db.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.LikedComments)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            var comment = Db.Comments.Find(entryId);
+                .FirstOrDefaultAsync();
+
+            Comment comment = Db.Comments.Find(entryId);
             user.LikedComments.Add(new CommentLikes() { User = user, Comment = comment });
             Db.Users.Update(user);
             await Db.SaveChangesAsync();
         }
         public async Task RemoveForAsync(Guid entryId, Guid userId)
         {
-            var user = (await Db.Users
+            //var user = (await Db.Users
+            //    .Where(u => u.Id == userId)
+            //    .Include(u => u.LikedComments)
+            //    .ThenInclude(l => l.Comment.Id == entryId)
+            //    .ToArrayAsync())
+            //    .FirstOrDefault();
+            //CommentLikes like = (from l in user.LikedComments
+            //            where l.CommentId == entryId
+            //            select l).FirstOrDefault();
+
+            User user = await Db.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.LikedComments)
-                .ThenInclude(l => l.Comment.Id == entryId)
-                .ToArrayAsync())
+                .FirstOrDefaultAsync();
+
+            CommentLikes commentLike = user.LikedComments
+                .Where(like => like.CommentId == entryId)
                 .FirstOrDefault();
-            var like = (from l in user.LikedComments
-                        where l.CommentId == entryId
-                        select l).FirstOrDefault();
-            user.LikedComments.Remove(like);
+
+            user.LikedComments.Remove(commentLike);
             Db.Users.Update(user);
             await Db.SaveChangesAsync();
         }
@@ -79,34 +104,49 @@ namespace Miniblog.Models.Services
         /// <returns></returns>
         public async Task<List<CommentLikes>> GetAsync(Guid entryId)
         {
-            var entry = (await Db.Comments
+            Comment comment = await Db.Comments
                 .Where(a => a.Id == entryId)
                 .Include(a => a.Likes)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            return entry.Likes;
+                .FirstOrDefaultAsync();
+            return comment.Likes;
         }
-        public int Count(Guid entryId)
+        public async Task<int> CountAsync(Guid entryId)
         {
-            var comment = Db.Comments.Where(c => c.Id == entryId).Include(a => a.Likes).FirstOrDefault();
-            var number = comment.Likes.Count;
+            Comment comment = await Db.Comments
+                .Where(c => c.Id == entryId)
+                .Include(a => a.Likes)
+                .FirstOrDefaultAsync();
+
+            int number = comment.Likes.Count;
             return number;
         }
 
         public async Task<bool> ContainsAsync(Guid entryId, Guid userId)
         {
-            //var lik = Db.Comments
+            //CommentLikes relation = Db.Comments
             //    .Where(c => c.Id.Equals(entryId))
             //    .Include(l => l.Likes
             //        .Where(l => l.UserId.Equals(userId))
             //        .FirstOrDefault());
 
-            var relation = (from comment in await Db.Comments.ToArrayAsync()
-                         where comment.Id.Equals(entryId)
-                         from like in comment.Likes
-                         where like.UserId.Equals(userId)
-                         select like).FirstOrDefault();
-            if (relation != null)
+
+            //var relation = (from comment in await Db.Comments.ToArrayAsync()
+            //             where comment.Id.Equals(entryId)
+            //             from like in comment.Likes
+            //             where like.UserId.Equals(userId)
+            //             select like).FirstOrDefault();
+
+            List<CommentLikes> commentLikes = await Db.Comments
+                .Where(c => c.Id == entryId)
+                .Include(c => c.Likes)
+                .Select(c => c.Likes)
+                .FirstOrDefaultAsync();
+
+            CommentLikes commentLike = commentLikes
+                .Where(cl => cl.UserId == userId)
+                .FirstOrDefault();
+
+            if (commentLike != null)
                 return true;
             return false;
         }

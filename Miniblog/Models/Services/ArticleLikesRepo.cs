@@ -17,44 +17,40 @@ namespace Miniblog.Models.Services
         }
         public async Task<IEnumerable<Article>> GetAllEntriesForAsync(Guid userId)
         {
-            var user = (await Db.Users
+            User user = await Db.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.Liked)
                 .ThenInclude(l => l.Article)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            IEnumerable<Article> articles = new List<Article>();
-            foreach(var like in user.Liked)
-            {
-                articles.Append(like.Article);
-            }
+                .FirstOrDefaultAsync();
+
+            IEnumerable<Article> articles = user.Liked
+                .Select(like => like.Article);
+
             return articles;
         }
 
         public async Task<IEnumerable<User>> GetAllUsersForAsync(Guid entryId)
         {
-            var entry = (await Db.Articles
+            Article article = await Db.Articles
                 .Where(a => a.Id == entryId)
-                .Include(a => a.Likes)
-                .ThenInclude(l => l.User)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            IEnumerable<User> users = new List<User>();
-            foreach(var like in entry.Likes)
-            {
-                users.Append(like.User);
-            }
+                .Include(c => c.Likes)
+                .ThenInclude(like => like.User)
+                .FirstOrDefaultAsync();
+
+            IEnumerable<User> users = article.Likes
+                .Select(like => like.User);
+
             return users;
         }
 
         public async Task AddForAsync(Guid entryId, Guid userId)
         {
-            var user = (await Db.Users
+            User user = await Db.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.Liked)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            var article = Db.Articles.Find(entryId);
+                .FirstOrDefaultAsync();
+
+            Article article = Db.Articles.Find(entryId);
             user.Liked.Add(new UserFavourite() { User = user, Article = article });
             Db.Users.Update(user);
             await Db.SaveChangesAsync();
@@ -62,44 +58,52 @@ namespace Miniblog.Models.Services
 
         public async Task RemoveForAsync(Guid entryId, Guid userId)
         {
-            var user = (await Db.Users
+            User user = await Db.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.Liked)
-                .ThenInclude(l => l.Article.Id == entryId)
-                .ToArrayAsync())
+                .FirstOrDefaultAsync();
+
+            UserFavourite userFavourite = user.Liked
+                .Where(like => like.ArticleId == entryId)
                 .FirstOrDefault();
-            var like = (from l in user.Liked
-                        where l.ArticleId == entryId
-                        select l).FirstOrDefault();
-            user.Liked.Remove(like);
+
+            user.Liked.Remove(userFavourite);
             Db.Users.Update(user);
             await Db.SaveChangesAsync();
         }
 
         public async Task<List<UserFavourite>> GetAsync(Guid entryId)
         {
-            var entry = (await Db.Articles
+            Article article = await Db.Articles
                 .Where(a => a.Id == entryId)
                 .Include(a => a.Likes)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            return entry.Likes;
+                .FirstOrDefaultAsync();
+            return article.Likes;
         }
 
-        public int Count(Guid entryId)
+        public async Task<int> CountAsync(Guid entryId)
         {
-            var article = Db.Articles.Where(a => a.Id == entryId).Include(a => a.Likes).FirstOrDefault();
-            var number = article.Likes.Count;
+            Article article = await Db.Articles
+                .Where(a => a.Id == entryId)
+                .Include(a => a.Likes)
+                .FirstOrDefaultAsync();
+
+            int number = article.Likes.Count;
             return number;
         }
 
         public async Task<bool> ContainsAsync(Guid entryId, Guid userId)
         {
-            var relation = (from article in await Db.Articles.ToArrayAsync()
-                            where article.Id.Equals(entryId)
-                            from like in article.Likes
-                            where like.UserId.Equals(userId)
-                            select like).FirstOrDefault();
+            List<UserFavourite> userFavourites = await Db.Articles
+                .Where(a => a.Id == entryId)
+                .Include(a => a.Likes)
+                .Select(a => a.Likes)
+                .FirstOrDefaultAsync();
+
+            UserFavourite relation = userFavourites
+                .Where(uf => uf.UserId == userId)
+                .FirstOrDefault();
+
             if (relation != null)
                 return true;
             return false;

@@ -17,85 +17,90 @@ namespace Miniblog.Models.Services
         }
         public async Task<IEnumerable<Article>> GetAllEntriesForAsync(Guid userId)
         {
-            var user = (await Db.Users
+            User user = await Db.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.Bookmarked)
                 .ThenInclude(l => l.Article)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            IEnumerable<Article> articles = new List<Article>();
-            foreach (var bookmark in user.Bookmarked)
-            {
-                articles.Append(bookmark.Article);
-            }
+                .FirstOrDefaultAsync();
+
+            IEnumerable<Article> articles = user.Bookmarked
+                .Select(b => b.Article);
+
             return articles;
         }
         public async Task<IEnumerable<User>> GetAllUsersForAsync(Guid entryId)
         {
-            var entry = (await Db.Articles
+            Article article = await Db.Articles
                 .Where(a => a.Id == entryId)
                 .Include(a => a.Bookmarks)
                 .ThenInclude(l => l.User)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            IEnumerable<User> users = new List<User>();
-            foreach (var bookmark in entry.Bookmarks)
-            {
-                users.Append(bookmark.User);
-            }
+                .FirstOrDefaultAsync();
+
+            IEnumerable<User> users = article.Bookmarks
+                .Select(b => b.User);
+
             return users;
         }
         public async Task AddForAsync(Guid entryId, Guid userId)
         {
-            var user = (await Db.Users
+            User user = await Db.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.Bookmarked)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            var article = Db.Articles.Find(entryId);
+                .FirstOrDefaultAsync();
+
+            Article article = Db.Articles.Find(entryId);
             user.Bookmarked.Add(new UserBookmark() { User = user, Article = article });
             Db.Users.Update(user);
             await Db.SaveChangesAsync();
         }
         public async Task RemoveForAsync(Guid entryId, Guid userId)
         {
-            var user = (await Db.Users
+            User user = await Db.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.Bookmarked)
-                .ThenInclude(l => l.Article.Id == entryId)
-                .ToArrayAsync())
+                .FirstOrDefaultAsync();
+
+            UserBookmark bookmark = user.Bookmarked
+                .Where(b => b.ArticleId == entryId)
                 .FirstOrDefault();
-            var like = (from l in user.Bookmarked
-                        where l.ArticleId == entryId
-                        select l).FirstOrDefault();
-            user.Bookmarked.Remove(like);
+
+            user.Bookmarked.Remove(bookmark);
             Db.Users.Update(user);
             await Db.SaveChangesAsync();
         }
         public async Task<List<UserBookmark>> GetAsync(Guid entryId)
         {
-            var entry = (await Db.Articles
+            Article article = await Db.Articles
                 .Where(a => a.Id == entryId)
                 .Include(a => a.Bookmarks)
-                .ToArrayAsync())
-                .FirstOrDefault();
-            return entry.Bookmarks;
+                .FirstOrDefaultAsync();
+
+            return article.Bookmarks;
         }
-        public int Count(Guid entryId)
+        public async Task<int> CountAsync(Guid entryId)
         {
-            var article = Db.Articles.Where(a => a.Id == entryId).Include(a => a.Bookmarks).FirstOrDefault();
-            var number = article.Bookmarks.Count;
+            Article article = await Db.Articles
+                .Where(a => a.Id == entryId)
+                .Include(a => a.Bookmarks)
+                .FirstOrDefaultAsync();
+
+            int number = article.Bookmarks.Count;
             return number;
         }
 
         public async Task<bool> ContainsAsync(Guid entryId, Guid userId)
         {
-            var relation = (from article in await Db.Articles.ToArrayAsync()
-                         where article.Id.Equals(entryId)
-                         from bookmark in article.Bookmarks
-                         where bookmark.UserId.Equals(userId)
-                         select bookmark).FirstOrDefault();
-            if (relation != null)
+            List<UserBookmark> userBookmarks = await Db.Articles
+                .Where(a => a.Id == entryId)
+                .Include(a => a.Bookmarks)
+                .Select(a => a.Bookmarks)
+                .FirstOrDefaultAsync();
+
+            UserBookmark userBookmark = userBookmarks
+                .Where(ub => ub.UserId == userId)
+                .FirstOrDefault();
+
+            if (userBookmark != null)
                 return true;
             return false;
         }
