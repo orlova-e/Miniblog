@@ -297,13 +297,13 @@ section.article-comments {
 
 .comment-actions-container,
 .comment-change {
-    margin: 15px 0;
+    margin: 0px 0 0 0;
     /* display: grid;
     grid-template-columns: 1fr 1fr; */
 }
 
 .comment-actions-container {
-    margin: 10px 0 5px 0;
+    margin: 0px 0 5px 0;
 }
 
     .comment-actions-container .comment-reply,
@@ -434,7 +434,7 @@ form.comment-answer.comment-form {
 
 .blog-comment-meta .comment-time-info {
     text-align: left;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .time-info-utc {

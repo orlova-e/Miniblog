@@ -102,11 +102,30 @@ a.usual-button-reverse,
     outline: none;
 }
 
+.update-comment-actions button.usual-button {
+    display: inline-block;
+    padding: 4px 12px;
+    margin-top: 5px;
+    margin-bottom: 0;
+    margin-right: 8px;
+    font-size: 18px;
+}
+
 button.usual-button-reverse,
 a.usual-button-reverse {
     background-color: transparent;
     color: burlywood;
     border: 1px solid burlywood;
+    /* padding: 4px 12px; */
+}
+
+.update-comment-actions button.usual-button-reverse,
+.update-comment-actions a.usual-button-reverse {
+    padding: 3px 12px;
+}
+
+form.update-comment-actions button {
+    padding: 0;
 }
 
 /* ? Buttons' theme definitions */
@@ -196,18 +215,18 @@ div.article-user-actions {
     font-size: 15px;
 }
 
-/*.article-user-actions .like-action {
+/* .article-user-actions .like-action {
     justify-self: left;
     justify-content: left;
-}*/
+} */
 
 .article-user-actions button {
     outline: none;
 }
 
 .article-user-actions img {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
 }
 
 .article-action-inactive,
