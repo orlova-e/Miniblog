@@ -28,6 +28,7 @@ namespace Miniblog.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet]
         [Route("[controller]/")]
         public async Task<IActionResult> Article([FromQuery] string title)
         {
@@ -37,27 +38,48 @@ namespace Miniblog.Controllers
             }
 
             Article article = await articlesService.GetArticleByLinkAsync(title);
+            ListDisplayOptions listOptions = await repository.ListDisplayOptions.FirstOrDefaultAsync();
+            if (listOptions.OverrideForUserArticle)
+            {
+                article.DisplayOptions = (ArticleOptions)listOptions;
+            }
 
-            User currentUser = null;
+            User user = null;
             if (User.Identity.IsAuthenticated)
             {
                 Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-                currentUser = await repository.Users.GetByIdAsync(userId);
-                if(currentUser?.Role == null)
+                user = await repository.Users.GetByIdAsync(userId);
+                if(user?.Role == null)
                 {
-                    Role role = await repository.Roles.GetByIdAsync(currentUser.RoleId);
-                    currentUser.Role = role;
+                    user.Role = await repository.Roles.GetByIdAsync(user.RoleId);
                 }
             }
 
-            ViewBag.CurrentUser = currentUser;
-            ViewBag.Article = article;
-            ViewBag.CommentsOptions = await repository.CommentsOptions.FirstOrDefaultAsync();
+            CommentsOptions commentsOptions = await repository.CommentsOptions.FirstOrDefaultAsync();
+
+            ArticleReadViewModel articleReadModel = new ArticleReadViewModel
+            {
+                Article = article,
+                User = user
+            };
+
+            CommentsViewModel commentsViewModel = new CommentsViewModel
+            {
+                User = user,
+                Depth = commentsOptions.AllowNesting ? commentsOptions.Depth : 0,
+                WriteComments = user?.Role?.WriteComments ?? default,
+                CommentsVisibility = article.DisplayOptions.Comments,
+                Comments = repository.Comments.Find(c => c.ArticleId == article.Id).ToList()
+            };
+
+            ViewBag.ArticleReadModel = articleReadModel;
+            ViewBag.CommentsViewModel = commentsViewModel;
 
             return View();
         }
 
         [AllowAnonymous]
+        [HttpGet]
         public async Task<IActionResult> List([FromRoute] string name = "Recent", bool isSeries = false) // create method for series ?
         {
             List<Article> articles = (await articlesService

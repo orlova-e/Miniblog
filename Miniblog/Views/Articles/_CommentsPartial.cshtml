@@ -45,7 +45,7 @@
                         @if (User.Identity.IsAuthenticated && !children[i].IsDeleted)
                         {
                             bool allowEditing = false;
-                            if (children[i].AuthorId.Equals(Model.CurrentUser.Id) && (Model.CurrentUser.Role?.WriteComments ?? default))
+                            if (children[i].AuthorId.Equals(Model.User.Id) && (Model.User.Role?.WriteComments ?? default))
                             {
                                 allowEditing = true;
                             }
@@ -58,7 +58,7 @@
                                     </button>
                                 }
 
-                                @if (allowEditing || ((Model.CurrentUser.Role as ExtendedRole)?.ModerateComments ?? default))
+                                @if (allowEditing || ((Model.User.Role as ExtendedRole)?.ModerateComments ?? default))
                                 {
                                     <button class="comment-change-delete reply-button" type="button" onclick="deleteActions(this)">
                                         <img src="/img/ico/delete7.png" alt="reply">
@@ -100,7 +100,7 @@
                         <div class="hearts">
                             @{ 
                                 CommentLikes commentLike = children[i].Likes
-                                    .Where(cl => cl.UserId == Model.CurrentUser?.Id && Model.CurrentUser.Id != null)
+                                    .Where(cl => cl.UserId == Model.User?.Id && Model.User.Id != null)
                                     .FirstOrDefault();
 
                                 <button type="button" class="heart-button" onclick="likeComment(this)">
@@ -143,29 +143,80 @@
     //#nullable restore
 }
 
-<div class="blog-comments text-alegreya-style">
+<section class="article-comments text-sans-style">
 
-    <a name="commentsAnch"></a>
+    <div class="article-comments">
 
-    @{
-        if (!Model.Comments.Any())
+        <div class="comment-appeal text-alegreya-style">
+            @if (!Model.CommentsVisibility)
+            {
+                <h3>Comments are hidden by author</h3>
+            }
+            else if (!User.Identity.IsAuthenticated)
+            {
+                <h3><a href="@Url.Action("signin", "account")">Sign In</a> to leave a comment</h3>
+            }
+            else /*if (User.Identity.IsAuthenticated && Model.CurrentUser.Role.WriteComments)*/
+            {
+                <h3>Comment</h3>
+            }
+        </div>
+
+        @if (User.Identity.IsAuthenticated && Model.User.Role.WriteComments)
         {
-            <h4 id="noCommentsMessage">Leave a comment first!</h4>
+            <div class="root-comment-answer comment-answer">
+
+                <div class="user-info-container">
+                    @if (Model.User.Avatar != null)
+                    {
+                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.User.Avatar))" alt="@Model.User.Username">
+                    }
+                    else
+                    {
+                        <img src="@Url.Content("~/img/social_line/anonymous_user.png")" alt="User">
+                    }
+                </div>
+
+                <form class="root-answer-form comment-form">
+                    <div>
+                        @{
+                            CommentViewModel commentViewModel = new CommentViewModel();
+                        }
+                        <textarea placeholder="Add comment..." class="comment-input comment-input-textarea" asp-for="@commentViewModel.Text"></textarea>
+                        <span class="text-sans-style" asp-validation-for="@commentViewModel.Text"></span>
+                    </div>
+
+                    <button type="button" onclick="sendComment(this)" class="usual-submit-button comment-button">Add comment</button>
+                </form>
+
+            </div>
         }
-        else
-        {
-            <h3 id="commentsAreExistMessage">Comments</h3>
-        }
+    </div>
+
+    <div class="blog-comments text-alegreya-style">
+
+        <a name="commentsAnch"></a>
+
+        @{
+            if (!Model.Comments.Any())
+            {
+                <h4 id="noCommentsMessage">Leave a comment first!</h4>
+            }
+            else
+            {
+                <h3 id="commentsAreExistMessage">Comments</h3>
+            }
             <div data-comments-depth="@Model.Depth" class="article-comments-collection">
                 @if (Model.Comments.Any())
                 {
                     List<Comment> rootComments = (from comment in Model.Comments
-                                                    where comment.ParentId == null
-                                                    orderby comment.DateTime.Ticks
-                                                    select comment).ToList();
+                                                  where comment.ParentId == null
+                                                  orderby comment.DateTime.Ticks
+                                                  select comment).ToList();
                     await GetComment(rootComments, -1);
                 }
             </div>
-      //}
-    }
-</div>
+        }
+    </div>
+
+</section>
