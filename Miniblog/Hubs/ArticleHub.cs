@@ -4,6 +4,7 @@ using Miniblog.Models.Entities;
 using Miniblog.Models.Services.Interfaces;
 using Miniblog.ViewModels;
 using System;
+using Miniblog;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -16,9 +17,7 @@ namespace Miniblog.Hubs
     [Authorize]
     public class ArticleHub : Hub
     {
-        //public User user { get; set; }
-        string DatePattern { get; }
-        string TimePattern { get; }
+        string DateTimePattern { get; }
         public IRepository repository { get; private set; }
         public ITextService textService { get; private set; }
 
@@ -26,8 +25,7 @@ namespace Miniblog.Hubs
         {
             this.repository = repository;
             this.textService = textService;
-            DatePattern = CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern;
-            TimePattern = CultureInfo.InvariantCulture.DateTimeFormat.ShortTimePattern;
+            DateTimePattern = new DateTimeFormatInfo().RoundtripDtPattern();
         }
 
         public async Task AddComment(string title, string text, string parentId = null)
@@ -39,8 +37,6 @@ namespace Miniblog.Hubs
             
             text = textService.GetPrepared(text);
 
-            var httpContext = Context.GetHttpContext();
-            //string link = httpContext.Request.Query["title"];
             Article article = repository.Articles.Find(a => a.Link.Equals(title)).FirstOrDefault();
 
             if (article != null)
@@ -71,12 +67,12 @@ namespace Miniblog.Hubs
                     avatar = Convert.ToBase64String(comment.Author.Avatar);
                 CommentViewModel newComment = new CommentViewModel
                 {
+                    ArticleId = comment.ArticleId.ToString(),
                     CommentId = comment.Id.ToString(),
                     ParentId = comment.ParentId.ToString(),
                     Author = comment.Author.Username,
                     Avatar = avatar,
-                    Date = comment.DateTime.ToString(DatePattern),
-                    Time = comment.DateTime.ToString(TimePattern),
+                    DateTime = comment.DateTime.ToString(DateTimePattern),
                     Text = text
                 };
                 int commentsNumber = repository.Comments
@@ -94,8 +90,6 @@ namespace Miniblog.Hubs
             if (!(user?.Role?.WriteComments ?? false))
                 return;
 
-            //var httpContext = Context.GetHttpContext();
-            //string link = httpContext.Request.Query["title"];
             Article article = repository.Articles.Find(a => a.Link.Equals(title)).FirstOrDefault();
 
             if(article != null)
@@ -114,13 +108,13 @@ namespace Miniblog.Hubs
                             avatar = Convert.ToBase64String(comment.Author.Avatar);
                         CommentViewModel updatedComment = new CommentViewModel
                         {
+                            ArticleId = comment.ArticleId.ToString(),
                             CommentId = comment.Id.ToString(),
+                            ParentId = comment.ParentId.ToString(),
                             Author = comment.Author.Username,
                             Avatar = avatar,
-                            Date = comment.DateTime.ToString(DatePattern),
-                            Time = comment.DateTime.ToString(TimePattern),
-                            UpdatedDate = comment.UpdatedDateTime?.ToString(DatePattern),
-                            UpdatedTime = comment.UpdatedDateTime?.ToString(TimePattern),
+                            DateTime = comment.DateTime.ToString(DateTimePattern),
+                            UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),
                             Text = comment.Text
                         };
                         await Clients.All.SendAsync("UpdatedComment", updatedComment);
@@ -131,8 +125,6 @@ namespace Miniblog.Hubs
 
         public async Task DeleteComment(string title, string commentId)
         {
-            var httpContext = Context.GetHttpContext();
-            //string link = httpContext.Request.Query["title"];
             Article article = repository.Articles.Find(a => a.Link.Equals(title)).FirstOrDefault();
 
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
@@ -160,47 +152,19 @@ namespace Miniblog.Hubs
                         avatar = Convert.ToBase64String(comment.Author.Avatar);
                     CommentViewModel deletedComment = new CommentViewModel
                     {
+                        ArticleId = comment.ParentId.ToString(),
                         CommentId = comment.Id.ToString(),
+                        ParentId = comment.ParentId.ToString(),
                         Author = comment.Author.Username,
                         Avatar = avatar,
-                        Date = comment.DateTime.ToString("yyyy/MM/dd"),
-                        Time = comment.DateTime.ToString("HH/mm"),
-                        UpdatedDate = comment.UpdatedDateTime?.ToString("yyyy/MM/dd"),
-                        UpdatedTime = comment.UpdatedDateTime?.ToString("HH/mm"),
+                        DateTime = comment.DateTime.ToString(DateTimePattern),
+                        UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),
                         Text = comment.Text
                     };
                     await Clients.All.SendAsync("DeletedComment", deletedComment);
                 }
             }
         }
-
-        ///// <summary>
-        ///// Deletes a comment and child comments from the database. Requires more advanced role
-        ///// </summary>
-        ///// <param name="commentId">Id of the comment to delete</param>
-        ///// <returns></returns>
-        //public async Task DeleteWithBranch(string commentId)
-        //{
-        //    Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-        //    User user = await repository.Users.GetByIdAsync(userId);
-        //    if (!((user?.Role as ExtendedRole)?.ModerateComments ?? default))
-        //        return;
-
-        //    if (Guid.TryParse(commentId, out Guid commentGuid))
-        //    {
-        //        Comment comment = await repository.Comments.GetByIdAsync(commentGuid);
-        //        for (int i = 0; i < comment.Children.Count; i++)
-        //        {
-        //            Comment childComment = comment.Children[i];
-        //            await repository.Comments.DeleteAsync(childComment.Id);
-        //            comment.Children.RemoveAt(i);
-        //        }
-        //        await repository.Comments.DeleteAsync(comment.Id);
-
-
-        //    }
-        //}
-
         public async Task LikeArticle(string title)
         {
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
@@ -214,14 +178,14 @@ namespace Miniblog.Hubs
                 if(!await repository.ArticleLikes.ContainsAsync(article.Id, userId))
                 {
                     await repository.ArticleLikes.AddForAsync(article.Id, userId);
-                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleLikeAdded");
+                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleLikeIsChanged", true);
                 }
                 else
                 {
                     await repository.ArticleLikes.RemoveForAsync(article.Id, userId);
-                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleLikeRemoved");
+                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleLikeIsChanged", false);
                 }
-                int number = repository.ArticleLikes.Count(article.Id);
+                int number = await repository.ArticleLikes.CountAsync(article.Id);
                 await Clients.All.SendAsync("ArticleLikesCounted", article.Link, number);
             }
         }
@@ -239,14 +203,14 @@ namespace Miniblog.Hubs
                 if(!await repository.ArticleBookmarks.ContainsAsync(article.Id, userId))
                 {
                     await repository.ArticleBookmarks.AddForAsync(article.Id, userId);
-                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleBookmarkAdded");
+                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleBookmarkIsChanged", true);
                 }
                 else
                 {
                     await repository.ArticleBookmarks.RemoveForAsync(article.Id, userId);
-                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleBookmarkRemoved");
+                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleBookmarkIsChanged", false);
                 }
-                int number = repository.ArticleBookmarks.Count(article.Id);
+                int number = await repository.ArticleBookmarks.CountAsync(article.Id);
                 await Clients.All.SendAsync("ArticleBookmarksCounted", article.Link, number);
             }
         }
@@ -260,75 +224,23 @@ namespace Miniblog.Hubs
 
             if(Guid.TryParse(commentId, out Guid commentGuid))
             {
-                if((await repository.Comments.GetByIdAsync(commentGuid)) != null)
+                Comment comment = await repository.Comments.GetByIdAsync(commentGuid);
+                if (comment is object)
                 {
-                    if (!await repository.CommentLikes.ContainsAsync(commentGuid, userId))
+                    if (!await repository.CommentLikes.ContainsAsync(commentGuid, userId) && !comment.IsDeleted)
                     {
                         await repository.CommentLikes.AddForAsync(commentGuid, userId);
-                        await Clients.User(Context.UserIdentifier).SendAsync("CommentLikeAdded", commentId);
+                        await Clients.User(Context.UserIdentifier).SendAsync("CommentLikeIsChanged", commentId, true);
                     }
                     else
                     {
                         await repository.CommentLikes.RemoveForAsync(commentGuid, userId);
-                        await Clients.User(Context.UserIdentifier).SendAsync("CommentLikeRemoved", commentId);
+                        await Clients.User(Context.UserIdentifier).SendAsync("CommentLikeIsChanged", commentId, false);
                     }
-                    var number = repository.CommentLikes.Count(commentGuid);
+                    int number = await repository.CommentLikes.CountAsync(commentGuid);
                     await Clients.All.SendAsync("CommentLikesCounted", commentId, number);
                 }
             }
         }
-
-
-        //[AllowAnonymous]
-        //public async Task LikesCount(string title, string articleId = null)
-        //{
-        //    Article article = repository.Articles.Find(a => a.Link.Equals(title)).FirstOrDefault();
-        //    if(article != null)
-        //    {
-        //        int number = article.Likes?.Count ?? default;
-        //        if(articleId != null)
-        //            await Clients.All.SendAsync("LikesCounted", number, articleId);
-        //        else
-        //            await Clients.All.SendAsync("LikesCounted", number);
-        //    }
-        //}
-
-        //[AllowAnonymous]
-        //public async Task BookmarksCount(string title, string articleId = null)
-        //{
-        //    Article article = repository.Articles.Find(a => a.Link.Equals(title)).FirstOrDefault();
-        //    if(article != null)
-        //    {
-        //        int number = article.Bookmarks?.Count ?? default;
-        //        if (articleId != null)
-        //            await Clients.All.SendAsync("BookmarksCounted", number, articleId);
-        //        else
-        //            await Clients.All.SendAsync("BookmarksCounted", number);
-        //    }
-        //}
-
-        //[AllowAnonymous]
-        //public async Task CommentsCount(string title, string articleId = null)
-        //{
-        //    Article article = repository.Articles.Find(a => a.Link.Equals(title)).FirstOrDefault();
-        //    if(article != null)
-        //    {
-        //        int number = article.Comments?.Count ?? default;
-        //        if(articleId != null)
-        //            await Clients.All.SendAsync("CommentsCounted", number, articleId);
-        //        else
-        //            await Clients.All.SendAsync("CommentsCounted", number);
-        //    }
-        //}
-        
-        //[AllowAnonymous]
-        //public async Task CommentLikesCount(string commentId)
-        //{
-        //    if(Guid.TryParse(commentId, out Guid commentGuid))
-        //    {
-        //        var number = repository.CommentLikes.Count(commentGuid);
-        //        await Clients.All.SendAsync("CommentLikesCounted", number);
-        //    }
-        //}
     }
 }

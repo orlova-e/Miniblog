@@ -43,26 +43,27 @@
                     @if (listOptions.DateAndTime)
                     {
                         //var th = System.Globalization.CultureInfo.CurrentCulture
-                        <a href="@Url.Action("List", "Articles", new { date = Model.Article.DateTime.ToString("yyyy/MM/dd") })">
-                            @Model.Article.DateTime.ToString("d", CultureInfo.CurrentCulture)
+                        <a class="article-time-info" href="@Url.Action("List", "Articles", new { date = Model.Article.DateTime.ToString("yyyy/MM/dd") })">
+                            @*@Model.Article.DateTime.ToString("d", CultureInfo.CurrentCulture)*@
                         </a>
+                        <div class="time-info-utc time-info-created">@Model.Article.DateTime.ToString("O")</div>
                     }
                 </li>
                 <li>
                     @if (listOptions.Likes)
                     {
                         <img src="/img/buttons/heart.png" alt="likes" height="20px" width="20px">
-                        <span>@Model.Article.Likes.Count</span>
+                        <span id="articleLikesInfo">@Model.Article.Likes.Count</span>
                     }
                     @if (listOptions.Bookmarks)
                     {
                         <img src="/img/ico/bookmark5.png" alt="bookmarks" height="20px" width="20px">
-                        <span>@Model.Article.Bookmarks.Count</span>
+                        <span id="articleBookmarksInfo">@Model.Article.Bookmarks.Count</span>
                     }
                     @if (listOptions.Comments)
                     {
                         <img src="/img/buttons/chat-2.png" alt="comments" height="18px" width="18px">
-                        <span>@Model.Article.Comments.Count</span>
+                        <span id="articleCommentsInfo">@Model.Article.Comments.Count</span>
                     }
                     @if (listOptions.Topic)
                     {
@@ -117,24 +118,55 @@
 
         <div class="article-user-actions text-roboto-style">
             <div class="like-action">
-                <button type="button">
-                    <img src="/img/buttons/heart.png" alt="like">
+                <button type="button" onclick="likeArticle()">
+                    @{
+                        //var like = from l in Model.Article.Likes
+                        //           where l.UserId == Model.CurrentUser.Id
+                        //           select l;
+                        UserFavourite like = Model.Article.Likes
+                            .Where(l => l.UserId == Model.CurrentUser?.Id)
+                            .FirstOrDefault();
+                        if (like is object)
+                        {
+                            <img class="article-action-checked" src="~/img/buttons/heart red.png" alt="like">
+                            <img class="article-action-inactive article-action-unchecked" src="~/img/buttons/heart.png" alt="like">
+                        }
+                        else
+                        {
+                            <img class="article-action-inactive article-action-checked" src="~/img/buttons/heart red.png" alt="like">
+                            <img class="article-action-unchecked" src="~/img/buttons/heart.png" alt="like">
+                        }
+                    }
                 </button>
-                <span id="articleLikesNumber">0</span> @*ID changed*@
+                <span id="articleLikesNumber">@Model.Article.Likes.Count</span> @*ID changed*@
             </div>
 
             <div class="bookmark-action">
-                <button>
-                    <img src="/img/ico/bookmark5.png" alt="bookmark by Calvin Goodman from the Noun Project">
+                <button type="button" onclick="bookmarkArticle()">
+                    @{
+                        UserBookmark bookmark = Model.Article.Bookmarks
+                            .Where(b => b.UserId == Model.CurrentUser.Id)
+                            .FirstOrDefault();
+                        if (bookmark is object)
+                        {
+                            <img class="article-action-checked" src="~/img/ico/bookmark-checked.png" alt="bookmark by Calvin Goodman from the Noun Project">
+                            <img class="article-action-inactive article-action-unchecked" src="~/img/ico/bookmark-unchecked.png" alt="bookmark by Calvin Goodman from the Noun Project">
+                        }
+                        else
+                        {
+                            <img class="article-action-inactive article-action-checked" src="~/img/ico/bookmark-checked.png" alt="bookmark by Calvin Goodman from the Noun Project">
+                            <img class="article-action-unchecked" src="~/img/ico/bookmark-unchecked.png" alt="bookmark by Calvin Goodman from the Noun Project">
+                        }
+                    }
                 </button>
-                <span id="articleBookmarksNumber">0</span> @*ID changed*@
+                <span id="articleBookmarksNumber">@Model.Article.Bookmarks.Count</span> @*ID changed*@
             </div>
 
             @if (Model.Article.DisplayOptions.Comments)
             {
                 <div class="comment-action">
                     <a href="#commentsAnch">
-                        <img src="/img/ico/chat.png" alt="from the Noun Project">
+                        <img src="~/img/ico/chat.png" alt="from the Noun Project">
                     </a>
                     <span id="articleCommentsNumber">@Model.Article.Comments.Count</span>
                 </div>

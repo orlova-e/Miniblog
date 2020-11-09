@@ -2,9 +2,7 @@
 @model User
 
 <template id="templateBlogComment">
-    <div class="blog-comment"
-         data-comment-id=""
-         data-parent-id="">
+    <div class="blog-comment" data-comment-id="" data-parent-id="">
 
         <div class="user-info-container">
             @*@if (Model?.Avatar != null)
@@ -30,14 +28,14 @@
                         @if (Model.Role?.WriteComments ?? default)
                         {
                             <button type="button" onclick="getUpdateCommentForm(this)" class="reply-button">
-                                <img src="/img/ico/rewrite.png" alt="reply">
+                                <img src="~/img/ico/rewrite.png" alt="reply">
                             </button>
                         }
 
                         @if ((Model.Role?.WriteComments ?? default) || ((Model.Role as ExtendedRole)?.ModerateComments ?? default))
                         {
-                            <button class="comment-change-delete reply-button" type="button" onclick="invokeDeletingComment(this)">
-                                <img src="/img/ico/delete7.png" alt="reply">
+                            <button class="comment-change-delete reply-button" type="button" onclick="deleteActions(this)">
+                                <img src="~/img/ico/delete7.png" alt="reply">
                             </button>
                         }
                     </div>
@@ -57,7 +55,7 @@
             <div class="comment-actions-container">
 
                 <div class="hearts">
-                    @{
+                    @*@{
                         string userLikeClick = string.Empty;
                         if (User.Identity.IsAuthenticated)
                         {
@@ -73,7 +71,13 @@
                         <button type="button" onclick="heartClick(this)" class="heart-clicked">
                             <img src="/img/buttons/heart red.png" alt="like">
                         </button>
-                    }
+                    }*@
+
+                    @* class="heart-clicked" *@
+                    <button type="button" class="heart-button" onclick="likeComment(this)">
+                        <img class="comment-action-unchecked" src="~/img/buttons/heart.png" alt="like">
+                        <img class="comment-action-inactive comment-action-checked" src="~/img/buttons/heart red.png" alt="like">
+                    </button>
 
                     <span name="commentLikesNumber" class="hearts-counter text-sans-style comment-hearts-count">0</span>
                 </div>
@@ -82,15 +86,15 @@
                 {
                     <div class="comment-reply">
                         <button type="button" onclick="getReplyCommentForm(this)" class="reply-button">
-                            <img src="/img/buttons/next.png" alt="reply">
+                            <img src="~/img/buttons/next.png" alt="reply">
                         </button>
                     </div>
                 }
             </div>
 
-            <div class="users-comment-answer-collection">
+            @*<div class="users-comment-answer-collection">
 
-            </div>
+            </div>*@
         </div>
 
     </div>

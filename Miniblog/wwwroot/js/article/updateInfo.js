@@ -2,21 +2,25 @@
 
 function updateArticleLikesNumber(number) {
     let commentsNumber = document.getElementById("articleLikesNumber");
-    commentsNumber.innerText = number;
+    commentsNumber.textContent = number;
 }
 
 function updateArticleBookmarksNumber(number) {
     let commentsNumber = document.getElementById("articleBookmarksNumber");
-    commentsNumber.innerText = number;
+    commentsNumber.textContent = number;
 }
 
 function updateArticleCommentsNumber(number) {
     let commentsNumber = document.getElementById("articleCommentsNumber");
-    commentsNumber.innerText = number;
+    commentsNumber.textContent = number;
+    let commentsInfo = document.getElementById("articleCommentsInfo");
+    commentsInfo.textContent = number;
 }
 
-function updateCommentLikesNumber(commentId, number) {
-    let comment = document.getElementById(commentId);
-    let likesNumberElem = comment.querySelector('span.hearts-counter.comment-hearts-count[name="commentLikesNumber"]');
-    likesNumberElem.innerText = number;
+function insertArticleDate() {
+    let dtCreatedStr = document.querySelector('.time-info-utc.time-info-created').textContent;
+    if (dtCreatedStr) {
+        let date = getDateTime(dtCreatedStr);
+        document.querySelector('.article-time-info').textContent = date;
+    }
 }

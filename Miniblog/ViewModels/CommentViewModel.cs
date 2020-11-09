@@ -14,12 +14,9 @@ namespace Miniblog.ViewModels
         [Required]
         public string Avatar { get; set; }
         [Required]
-        public string Date { get; set; }
+        public string DateTime { get; set; }
+        public string UpdatedDateTime { get; set; }
         [Required]
-        public string Time { get; set; }
-        //public string UpdatedDateTime { get; set; }
-        public string UpdatedDate { get; set; }
-        public string UpdatedTime { get; set; }
         public string Text { get; set; }
     }
 }

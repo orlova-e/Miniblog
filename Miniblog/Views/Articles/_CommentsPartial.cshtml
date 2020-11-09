@@ -1,7 +1,9 @@
 ﻿@model CommentsViewModel
 
 @{
-    void GetComment(List<Comment> children, int currentDepth)
+
+    //#nullable disable
+    async Task GetComment(List<Comment> children, int currentDepth)
     {
         ++currentDepth;
         for (int i = 0; i < children.Count(); i++)
@@ -10,9 +12,18 @@
             if (children[i].ParentId is object)
                 commentParentId = children[i].ParentId.ToString();
 
-            <div data-comment-id="@children[i].Id.ToString()"
-                data-parent-id="@commentParentId"
-                class="blog-comment">
+            string parentalClass = string.Empty;
+
+            if(currentDepth > Model.Depth)
+            {
+                parentalClass = $"parental parental-{Model.Depth}";
+            }
+            else if(currentDepth > 0)
+            {
+                parentalClass = $"parental parental-{currentDepth}";
+            }
+
+            <div data-comment-id="@children[i].Id.ToString()" data-parent-id="@commentParentId" class="blog-comment @parentalClass">
 
                 <div class="user-info-container">
                     @if (children[i].Author.Avatar != null)
@@ -28,14 +39,14 @@
                 <div class="text-comment-container clearfix">
 
                     <div class="blog-comment-meta">
-                        <a class="comment-username" href="#">
+                        <a class="comment-username" href="@Url.Action("account", "users", new { username = children[i].Author.Username })">
                             @children[i].Author.Username
                         </a>
 
                         @if (User.Identity.IsAuthenticated && !children[i].IsDeleted)
                         {
                             bool allowEditing = false;
-                            if(children[i].AuthorId.Equals(Model.CurrentUser.Id) && (Model.CurrentUser.Role?.WriteComments ?? default))
+                            if (children[i].AuthorId.Equals(Model.CurrentUser.Id) && (Model.CurrentUser.Role?.WriteComments ?? default))
                             {
                                 allowEditing = true;
                             }
@@ -50,7 +61,7 @@
 
                                 @if (allowEditing || ((Model.CurrentUser.Role as ExtendedRole)?.ModerateComments ?? default))
                                 {
-                                    <button class="comment-change-delete reply-button" type="button" onclick="invokeDeletingComment(this)">
+                                    <button class="comment-change-delete reply-button" type="button" onclick="deleteActions(this)">
                                         <img src="/img/ico/delete7.png" alt="reply">
                                     </button>
                                 }
@@ -62,23 +73,10 @@
                         }
 
                         <span class="comment-time-info time-info">
-                            @*@{ 
-                                string commentTime = children[i].DateTime.ToString("t", CultureInfo.CurrentCulture)
-                                    + " " + children[i].DateTime.ToString("d", CultureInfo.CurrentCulture);
-                                if(children[i].UpdatedDateTime != null)
-                                {
-                                    commentTime += " " + children[i].UpdatedDateTime?.ToString("t", CultureInfo.CurrentCulture)
-                                    + " " + children[i].UpdatedDateTime?.ToString("d", CultureInfo.CurrentCulture);
-                                }
-                            }
-                            @commentTime*@
+
                         </span>
-                        <span class="time-info-utc time-info-created">
-                            @children[i].DateTime.ToString("O")
-                        </span>
-                        <span class="time-info-utc time-info-updated">
-                            @children[i].UpdatedDateTime?.ToString("O")
-                        </span>
+                        <span class="time-info-utc time-info-created">@children[i].DateTime.ToString("O")</span>
+                        <span class="time-info-utc time-info-updated">@children[i].UpdatedDateTime?.ToString("O")</span>
                     </div>
 
                     <div class="comment-container">
@@ -89,7 +87,7 @@
                             }
                             else
                             {
-                                string[] commentText = children[i].Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                                string[] commentText = children[i].Text.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                                 foreach (string txt in commentText)
                                 {
                                     <p>@txt</p>
@@ -101,24 +99,39 @@
                     <div class="comment-actions-container">
 
                         <div class="hearts">
-                            @{
+                            @*@{
                                 string userLikeClick = string.Empty;
                                 if (User.Identity.IsAuthenticated)
                                 {
                                     userLikeClick = "onclick=\"heartClick(this)\"";
                                 }
-                            }
-                            <button type="button" class="heart-not-clicked" @userLikeClick>
-                                <img src="/img/buttons/heart.png" alt="like">
-                            </button>
+                            }*@
 
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <button type="button" onclick="heartClick(this)" class="heart-clicked">
-                                    <img src="/img/buttons/heart red.png" alt="like">
+                            @{ 
+
+                                CommentLikes commentLike = children[i].Likes
+                                    .Where(cl => cl.UserId == Model.CurrentUser?.Id && Model.CurrentUser.Id != null)
+                                    .FirstOrDefault();
+
+                                //var commentLike = from l in children[i].Likes
+                                //                  where l.UserId.Equals(Model.CurrentUser?.Id)
+                                //                  select l;
+
+                                //class="heart-clicked"
+                                <button type="button" class="heart-button" onclick="likeComment(this)">
+                                    @if (commentLike != null)
+                                    {
+                                        <img src="~/img/buttons/heart red.png" class="comment-action-checked" alt="like">
+                                        <img src="~/img/buttons/heart.png" class="comment-action-inactive comment-action-unchecked" alt="like">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/img/buttons/heart red.png" class="comment-action-inactive comment-action-checked" alt="like">
+                                        <img src="~/img/buttons/heart.png" class="comment-action-unchecked" alt="like">
+                                    }
                                 </button>
                             }
-
+                            
                             <span name="commentLikesNumber" class="hearts-counter text-sans-style comment-hearts-count">@children[i].Likes.Count</span>
                         </div>
 
@@ -133,7 +146,7 @@
                     </div>
 
                     @{
-                        if (currentDepth < Model.Depth)
+                        @*if (currentDepth < Model.Depth)
                         {
                             <div class="users-comment-answer-collection">
                                 @if (children[i].Children.Any())
@@ -141,25 +154,31 @@
                                     GetComment(children[i].Children, currentDepth);
                                 }
                             </div>
-                        }
+                        }*@
                     }
                 </div>
 
             </div>
 
-            if (currentDepth >= Model.Depth)
+            @if (children[i].Children.Any())
             {
-                 // TODO: include collection class to addComment method
+                await GetComment(children[i].Children, currentDepth);
+            }
+
+            @*if (currentDepth >= Model.Depth)
+            {
+                // TODO: include collection class to addComment method
                 <div data-collection-of-parent="@children[i].Id.ToString()" class="users-comment-answer-collection">
                     @if (children[i].Children.Any())
                     {
                         GetComment(children[i].Children, currentDepth);
                     }
                 </div>
-            }
-        }
-        --currentDepth;
-    }
+            }*@
+                            }
+                            --currentDepth;
+                        }
+                        //#nullable restore
 }
 
 <div class="blog-comments text-alegreya-style">
@@ -181,7 +200,7 @@
                                                   where comment.ParentId == null
                                                   orderby comment.DateTime.Ticks
                                                   select comment).ToList();
-                    GetComment(rootComments, -1);
+                    await GetComment(rootComments, -1);
                 }
             </div>
         }
