@@ -44,7 +44,7 @@
                 }
                 @if (listOptions.DateAndTime)
                 {
-                    <li class="article-datetime"><a href="#">@Model.DateTime.Day @Model.DateTime.Month @Model.DateTime.Hour @Model.DateTime.Minute</a></li>
+                    <li class="article-datetime"><a href="#">@Model.DateTime.ToString("g")</a></li>
                 }
                 
                 @if (listOptions.Likes)
