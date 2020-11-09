@@ -6,7 +6,6 @@ function createComment(comment) {
 
     newComment.dataset.commentId = comment.commentId;
 
-    //if parental
     if (comment.parentId) {
         newComment.dataset.parentId = comment.parentId;
         newComment.classList.add('parental');
@@ -31,10 +30,8 @@ function createComment(comment) {
     } else {
         userAvatar.alt = "User";
         let imgTemplate = document.getElementById('anonymousUserImgTemplate').content.querySelector('img');
-        //userAvatar.src = imgTemplate.getAttribute('src');
         let srcValue = imgTemplate.getAttribute('src');
         userAvatar.setAttribute('src', srcValue);
-        userAvatar.src = imgTemplate.src;
     }
     newComment.querySelector(".user-info-container").append(userAvatar);
 
@@ -60,13 +57,3 @@ function createComment(comment) {
 
     return newComment;
 }
-
-//function changeTime(comment) {
-//    let dtContainer = comment.querySelector('.comment-time-info.time-info');
-//    let dtCreated = comment.querySelector('.time-info-utc.time-info-created').textContent;
-//    dtCreated = getDateTime(dtCreated);
-//    if (comment.querySelector('.time-info-utc.time-info-updated').textContent) {
-//        //dt += ' ' + '(updated at '
-//    }
-
-//}

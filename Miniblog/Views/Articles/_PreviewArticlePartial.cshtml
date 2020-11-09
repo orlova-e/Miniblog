@@ -51,21 +51,21 @@
                 {
                     <li>
                         <img src="/img/buttons/heart.png" alt="likes" height="20px" width="20px">
-                        <span>@Model.Likes.Count</span>
+                        <span name="articleLikesInfo">@Model.Likes.Count</span>
                     </li>
                 }
                 @if (listOptions.Bookmarks)
                 {
                     <li>
                         <img src="/img/ico/bookmark5.png" alt="bookmarks" height="20px" width="20px">
-                        <span>@Model.Bookmarks.Count</span>
+                        <span name="articleBookmarksInfo">@Model.Bookmarks.Count</span>
                     </li>
                 }
                 @if (listOptions.Comments)
                 {
                     <li>
                         <img src="/img/buttons/chat-2.png" alt="comments" height="18px" width="18px">
-                        <span>@Model.Comments.Count</span>
+                        <span name="articleCommentsInfo">@Model.Comments.Count</span>
                     </li>
                 }
                 @if (listOptions.Topic)

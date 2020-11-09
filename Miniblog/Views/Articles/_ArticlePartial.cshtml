@@ -42,9 +42,8 @@
                     }
                     @if (listOptions.DateAndTime)
                     {
-                        //var th = System.Globalization.CultureInfo.CurrentCulture
                         <a class="article-time-info" href="@Url.Action("List", "Articles", new { date = Model.Article.DateTime.ToString("yyyy/MM/dd") })">
-                            @*@Model.Article.DateTime.ToString("d", CultureInfo.CurrentCulture)*@
+                            
                         </a>
                         <div class="time-info-utc time-info-created">@Model.Article.DateTime.ToString("O")</div>
                     }
@@ -120,9 +119,6 @@
             <div class="like-action">
                 <button type="button" onclick="likeArticle()">
                     @{
-                        //var like = from l in Model.Article.Likes
-                        //           where l.UserId == Model.CurrentUser.Id
-                        //           select l;
                         UserFavourite like = Model.Article.Likes
                             .Where(l => l.UserId == Model.CurrentUser?.Id)
                             .FirstOrDefault();
@@ -145,7 +141,7 @@
                 <button type="button" onclick="bookmarkArticle()">
                     @{
                         UserBookmark bookmark = Model.Article.Bookmarks
-                            .Where(b => b.UserId == Model.CurrentUser.Id)
+                            .Where(b => b.UserId == Model.CurrentUser?.Id)
                             .FirstOrDefault();
                         if (bookmark is object)
                         {

@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\js\list\**" />
+    <Content Remove="wwwroot\js\list\**" />
+    <EmbeddedResource Remove="wwwroot\js\list\**" />
+    <None Remove="wwwroot\js\list\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Migrations\20200908115818_Initial.cs" />
     <Compile Remove="Migrations\20200908115818_Initial.Designer.cs" />
     <Compile Remove="Migrations\20200908161516_Initial.cs" />
@@ -46,7 +53,6 @@
 
   <ItemGroup>
     <Folder Include="Views\Home\" />
-    <Folder Include="wwwroot\js\list\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

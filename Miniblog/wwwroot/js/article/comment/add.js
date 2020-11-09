@@ -9,35 +9,19 @@ function addComment(comment) {
             let answerContainer = parentComment.querySelector('.text-comment-container .comment-answer');
             answerContainer.remove();
         }
-
-        //let currentDepth = 0;
-        //let parentId = comment.parentId;
-        //let parentComment = document.querySelector('div.blog-comment[data-comment-id="' + parentId + '"]');
-        //let currentComment = parentComment;
-        //while (currentDepth < depth) {
-        //    currentComment = currentComment.closest('div.blog-comment[data-comment-id="' + parentId + '"]');
-        //    if (!currentComment?.dataset.parentId) {
-        //        break;
-        //    }
-        //    parentId = currentComment.dataset.parentId;
-        //    ++currentDepth;
-        //}
-        //if (currentDepth < depth) {
-        //    let commentsCollection = parentComment.querySelector('.users-comment-answer-collection');
-        //    commentsCollection.append(newComment);
-        //} else {
-        //    let parentCommentsContainer = document.querySelector('.users-comment-answer-collection[data-collection-of-parent="' + comment.parentId + '"]');
-        //    if (!parentCommentsContainer) {
-        //        parentCommentsContainer = document.createElement('div');
-        //        parentCommentsContainer.dataset.collectionOfParent = comment.parentId;
-        //        parentCommentsContainer.className = 'users-comment-answer-collection';
-        //        parentComment.after(parentCommentsContainer);
-        //    }
-        //    parentCommentsContainer.append(newComment);
-        //    //parentComment.after(newComment);
-        //}
     }
     else {
         document.querySelector(".article-comments-collection").append(newComment);
+        let noCommentsMsg = document.getElementById('noCommentsMessage');
+        if (noCommentsMsg) {
+            let commentsMsg = document.createElement('h3');
+            commentsMsg.id = 'commentsAreExistMessage';
+            commentsMsg.textContent = 'Comments';
+            noCommentsMsg.replaceWith(commentsMsg);
+        }
+        let commentAnswerForm = document.querySelector('.root-comment-answer.comment-answer');
+        if (commentAnswerForm) {
+            commentAnswerForm.querySelector('textarea').value = '';
+        }
     }
 }

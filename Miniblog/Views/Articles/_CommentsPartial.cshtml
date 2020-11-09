@@ -1,7 +1,6 @@
 ﻿@model CommentsViewModel
 
 @{
-
     //#nullable disable
     async Task GetComment(List<Comment> children, int currentDepth)
     {
@@ -99,25 +98,11 @@
                     <div class="comment-actions-container">
 
                         <div class="hearts">
-                            @*@{
-                                string userLikeClick = string.Empty;
-                                if (User.Identity.IsAuthenticated)
-                                {
-                                    userLikeClick = "onclick=\"heartClick(this)\"";
-                                }
-                            }*@
-
                             @{ 
-
                                 CommentLikes commentLike = children[i].Likes
                                     .Where(cl => cl.UserId == Model.CurrentUser?.Id && Model.CurrentUser.Id != null)
                                     .FirstOrDefault();
 
-                                //var commentLike = from l in children[i].Likes
-                                //                  where l.UserId.Equals(Model.CurrentUser?.Id)
-                                //                  select l;
-
-                                //class="heart-clicked"
                                 <button type="button" class="heart-button" onclick="likeComment(this)">
                                     @if (commentLike != null)
                                     {
@@ -144,20 +129,7 @@
                             </div>
                         }
                     </div>
-
-                    @{
-                        @*if (currentDepth < Model.Depth)
-                        {
-                            <div class="users-comment-answer-collection">
-                                @if (children[i].Children.Any())
-                                {
-                                    GetComment(children[i].Children, currentDepth);
-                                }
-                            </div>
-                        }*@
-                    }
                 </div>
-
             </div>
 
             @if (children[i].Children.Any())
@@ -165,20 +137,10 @@
                 await GetComment(children[i].Children, currentDepth);
             }
 
-            @*if (currentDepth >= Model.Depth)
-            {
-                // TODO: include collection class to addComment method
-                <div data-collection-of-parent="@children[i].Id.ToString()" class="users-comment-answer-collection">
-                    @if (children[i].Children.Any())
-                    {
-                        GetComment(children[i].Children, currentDepth);
-                    }
-                </div>
-            }*@
-                            }
-                            --currentDepth;
-                        }
-                        //#nullable restore
+        }
+        --currentDepth;
+    }
+    //#nullable restore
 }
 
 <div class="blog-comments text-alegreya-style">
@@ -188,21 +150,22 @@
     @{
         if (!Model.Comments.Any())
         {
-            <h4>Leave a comment first!</h4>
+            <h4 id="noCommentsMessage">Leave a comment first!</h4>
         }
         else
         {
-            <h3>Comments</h3>
-
+            <h3 id="commentsAreExistMessage">Comments</h3>
+        }
             <div data-comments-depth="@Model.Depth" class="article-comments-collection">
-                @{
+                @if (Model.Comments.Any())
+                {
                     List<Comment> rootComments = (from comment in Model.Comments
-                                                  where comment.ParentId == null
-                                                  orderby comment.DateTime.Ticks
-                                                  select comment).ToList();
+                                                    where comment.ParentId == null
+                                                    orderby comment.DateTime.Ticks
+                                                    select comment).ToList();
                     await GetComment(rootComments, -1);
                 }
             </div>
-        }
+      //}
     }
 </div>
