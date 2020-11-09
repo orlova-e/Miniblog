@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Miniblog.Models.Entities;
 using Miniblog.Models.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Miniblog.Models.Services
 {
@@ -23,6 +22,7 @@ namespace Miniblog.Models.Services
             Article article = await Db.Articles
                 .Where(a => a.Id == id)
                 .Include(a => a.Comments)
+                    .ThenInclude(c => c.Author)
                 .Include(a => a.Images)
                 .FirstOrDefaultAsync();
             //await Db.Entry(article).Reference(a => a.UserArticleDisplayOptions).LoadAsync();
@@ -42,7 +42,10 @@ namespace Miniblog.Models.Services
         /// <returns>List of selected articles without explicitly loaded images.</returns>
         public IEnumerable<Article> Find(Func<Article, bool> predicate)
         {
-            return Db.Articles.Where(predicate).ToList();
+            return Db.Articles
+                .Include(a=>a.User)
+                .Where(predicate)
+                .ToList();
         }
         public async Task CreateAsync(Article entity)
         {

@@ -29,7 +29,9 @@ namespace Miniblog.Models.Services
         }
         public IEnumerable<Comment> Find(Func<Comment, bool> predicate)
         {
-            return Db.Comments.Where(predicate).ToList();
+            return Db.Comments.Include(c => c.Author)
+                .Where(predicate)
+                .ToList();
         }
         public async Task CreateAsync(Comment entity)
         {
