@@ -3,7 +3,6 @@
     public enum ListSortingType
     {
         MostLiked,
-        MostVisited,
         NewFirst,
         OldFirst,
         Alphabetically,
