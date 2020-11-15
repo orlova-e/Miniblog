@@ -54,8 +54,13 @@
 
 .load-more-container {
     display: grid;
+    grid-template-columns: 1fr 1fr;
     justify-content: center;
     margin-bottom: 25px;
+}
+
+.one-button-container {
+    grid-template-columns: 1fr;
 }
 
 #menuButton {

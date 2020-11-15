@@ -128,10 +128,35 @@ form.update-comment-actions button {
     padding: 0;
 }
 
+.load-more-container .usual-button {
+    padding: 6px 25px;
+    margin: 0 12px;
+    display: inline-block;
+}
+
+.usual-button.button-left {
+    margin: 0 12px 0 auto;
+}
+
+.usual-button.button-right {
+    margin: 0 auto 0 10px;
+    padding: 6px 45px 6px 45px;
+}
+
+.one-button-container .usual-button {
+    margin: 0 auto;
+    padding: 6px 35px;
+    text-align: center;
+    /* max-width: 144px; */
+    /* display: inline-block; */
+}
+
 /* ? Buttons' theme definitions */
 
 .blog-theme-blue button.usual-button,
-.blog-theme-blue .usual-submit-button {
+.blog-theme-blue .usual-submit-button,
+.blog-theme-blue a.usual-button,
+.blog-theme-blue a.usual-button-reverse {
     background-color: rgb(94, 143, 248);
 }
 
