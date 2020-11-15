@@ -96,16 +96,31 @@
             }
 
         </div>
-        <a id="articlesLink" href="#author-articles"><h4>&#709; Articles</h4></a>
+        @if (articles.Any())
+        {
+            <a id="articlesLink" href="#author-articles"><h4>&#709; Articles</h4></a>
+        }
     </div>
 </div>
 
-<a name="author-articles"></a>
+@if (articles.Any())
+{
+    <a name="author-articles"></a>
 
-@await Html.PartialAsync("~/Views/Articles/List.cshtml", articles)
+    await Html.RenderPartialAsync("~/Views/Articles/List.cshtml", articles);
 
-@section Scripts {
-    @Html.Partial("_ListScripts")
+    @section Scripts {
+        @Html.PartialAsync("_ListScripts")
+    }
+}
+else
+{
+    ServerMessage serverMessage = new ServerMessage
+    {
+        ShowSmile = true,
+        MessageText = $"{user.Username} has no articles"
+    };
+    await Html.RenderPartialAsync("~/Views/Shared/_ServerMessagePartial.cshtml", serverMessage);
 }
 
 @section Hubs {
