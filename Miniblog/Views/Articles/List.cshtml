@@ -1,31 +1,28 @@
-﻿@*@using System.Security.Claims*@
-@using Miniblog.Models.Services.Interfaces
+﻿@using Miniblog.Models.Services.Interfaces;
+@using System.Security.Claims;
 
-@inject IOptionRepository<Role> rolesRepository
-@inject IOptionRepository<ListDisplayOptions> listDisplayRepo
+@model ListViewModel
+@inject IOptionRepository<Role> rolesRepo
 
-@model List<Article>
-
-@{
-    ListDisplayOptions listOptions = await listDisplayRepo.FirstOrDefaultAsync();
-    //ArticleOptions articleOptions = Model.DisplayOptions;
-    //if (!listOptions.OverrideForUserArticle)
-    //{
-    //    articleOptions = (ArticleOptions)listOptions;
-    //}
+@{ 
+    Role role = null;
+    if (User.Identity.IsAuthenticated)
+    {
+        string roleType = User.FindFirstValue(ClaimsIdentity.DefaultRoleClaimType);
+        RoleType rt = (RoleType)Enum.Parse(typeof(RoleType), roleType);
+        role = rolesRepo.Find(r => r.Type == rt).FirstOrDefault();
+    }
 }
 
-@if (Model.Any())
+@if (Model.Articles.Any())
 {
-    <div class="articles-menu-container text-roboto-style">
-        @await Html.PartialAsync("~/Views/Articles/_ListParametersPartial.cshtml")
-    </div>
+    await Html.RenderPartialAsync("~/Views/Articles/_ListParametersPartial.cshtml", Model);
 }
 
 <div id="articlesContainer" class="blog-container">
 
     @{
-        if (!Model.Any())
+        if (!Model.Articles.Any())
         {
             ServerMessage serverMessage = new ServerMessage()
             {
@@ -36,7 +33,7 @@
         }
         else
         {
-            foreach (var article in Model)
+            foreach (var article in Model.Articles)
             {
                 await Html.RenderPartialAsync("~/Views/Articles/_PreviewArticlePartial.cshtml", article);
             }
@@ -45,26 +42,48 @@
 
 </div>
 
-@if (Model.Any())
+@if (Model.Articles.Any())
 {
-    <div class="load-more-container">
+    string previous = Url.Action(Model.PageName.ToLower(), "articles", new
+    {
+        page = Model.CurrentPageNumber - 1,
+        sortby = Enum.GetName(typeof(ListSorting), Model.ListSortingType).ToLower()
+    });
+    string next = Url.Action(Model.PageName.ToLower(), "articles", new
+    {
+        page = Model.CurrentPageNumber + 1,
+        sortby = Enum.GetName(typeof(ListSorting), Model.ListSortingType).ToLower()
+    });
+
+    @*<div class="load-more-container">
         <button type="button" class="usual-button usual-button-reverse" id="loadMoreButton">Load more</button>
+    </div>*@
+
+@if (Model.CurrentPageNumber > 1 && Model.CurrentPageNumber < Model.TotalPages)
+{
+    <div class="load-more-container blog">
+        <a href="@previous" class="button-left usual-button usual-button-reverse" id="previousPageButton">Previous</a>
+        <a href="@next" class="button-right usual-button" id="nextPageButton">Next</a>
     </div>
+}
+else if (Model.CurrentPageNumber <= 1 && Model.CurrentPageNumber != Model.TotalPages)
+{
+    <div class="load-more-container one-button-container">
+        <a href="@next" class="button-right usual-button" id="nextPageButton">Next</a>
+    </div>
+}
+else if (Model.CurrentPageNumber > 1 && Model.CurrentPageNumber != Model.TotalPages)
+{
+    <div class="load-more-container one-button-container">
+            <a href="@previous" class="button-left usual-button usual-button-reverse" id="previousPageButton">Previous</a> 
+    </div>
+}
 
     @section Scripts {
-        @Html.Partial("_ListScripts")
+        @await Html.PartialAsync("_ListScripts")
     }
-
-    @*@section Scripts {
-        <script src="~/js/listpage_actions/articlesLayoutVisibility.js"></script>
-        <script src="~/js/listpage_actions/sortArticlesList.js"></script>
-        <script src="~/js/listpage_actions/sortArticles.js"></script>
-        <script src="~/js/listpage_actions/closeSortList.js"></script>
-        <script src="~/js/listpage_actions/windowClickEvent.js"></script>
-        <script src="~/js/listpage_actions/handlers.js"></script>
-    }*@
 }
-else
+else if(Model.PageName.Equals("List") && User.Identity.IsAuthenticated && (role?.WriteArticles ?? default))
 {
     <div class="load-more-container">
         <a asp-action="Add" asp-controller="Articles" class="usual-button usual-button-reverse">Add new</a>

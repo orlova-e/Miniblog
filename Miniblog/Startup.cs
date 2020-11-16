@@ -45,6 +45,7 @@ namespace Miniblog
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IArticlesService, ArticleService>();
+            services.AddScoped<IListService, ListService>();
 
             services.AddTransient<ITextService, TextService>(); // to delete
 

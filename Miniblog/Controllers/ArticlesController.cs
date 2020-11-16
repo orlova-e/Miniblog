@@ -20,11 +20,13 @@ namespace Miniblog.Controllers
     {
         public IRepository repository { get; private set; }
         public IArticlesService articlesService { get; private set; }
+        public IListService listService { get; private set; }
 
-        public ArticlesController(IRepository repository, IArticlesService articlesService)
+        public ArticlesController(IRepository repository, IArticlesService articlesService, IListService listService)
         {
             this.repository = repository;
             this.articlesService = articlesService;
+            this.listService = listService;
         }
 
         [AllowAnonymous]
@@ -80,15 +82,55 @@ namespace Miniblog.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> List([FromRoute] string name = "Recent", bool isSeries = false) // create method for series ?
+        public async Task<IActionResult> List([FromQuery] uint page = 1, string sortby = "newfirst") // create method for series ?
         {
-            List<Article> articles = (await articlesService
-                .FindArticlesAsync(a => a.EntryType == EntryType.Article && a.Visibility == true))
-                .OrderByDescending(a => a.DateTime.Ticks).ToList();
-
-            return View(articles);
+            List<Article> articles = await listService
+                .FindArticlesAsync(a => true);
+            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            listViewModel.PageName = "List";
+            return View(listViewModel);
         }
-        
+
+        [HttpGet]
+        public async Task<IActionResult> Favourites([FromQuery] uint page = 1, string sortby = "newfirst")
+        {
+            Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
+            List<Article> articles = await listService.GetFavouritesAsync(userId);
+            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            listViewModel.PageName = "Favourites";
+            return View("~/Views/Articles/Saved.cshtml", listViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Bookmarks([FromQuery] uint page = 1, string sortby = "newfisrt")
+        {
+            Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
+            List<Article> articles = await listService.GetBookmarkedAsync(userId);
+            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            listViewModel.PageName = "Bookmarks";
+            return View("~/Views/Articles/Saved.cshtml", listViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Commented([FromQuery] uint page = 1, string sortby = "newfisrt")
+        {
+            Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
+            List<Article> articles = await listService.GetCommentedAsync(userId);
+            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            listViewModel.PageName = "Commented";
+            return View("~/Views/Articles/Saved.cshtml", listViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Drafts([FromQuery] uint page = 1, string sortby = "newfisrt")
+        {
+            Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
+            List<Article> articles = listService.FindDrafts(userId);
+            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            listViewModel.PageName = "Drafts";
+            return View("~/Views/Articles/Saved.cshtml", listViewModel);
+        }
+
         [HttpGet]
         [TypeFilter(typeof(AccessAttribute), Arguments = new[] { "WriteArticles" })]
         public IActionResult Add()

@@ -1,0 +1,48 @@
+﻿@model ListViewModel
+
+@{
+    async Task GetLinks()
+    {
+        <div class="menu-links-collection">
+            @{
+                string[] links = new[] { "Favourites", "Bookmarks", "Authors", "Commented", "Drafts" };
+                foreach (string link in links)
+                {
+                    string action = link.ToLower();
+                    string controller = link.Equals("Account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
+
+                    string activePage = string.Empty;
+                    if (link.Equals(Model.PageName))
+                        activePage = @"class=""active-page""";
+                    else
+                        activePage = string.Empty;
+
+                    <a href="@Url.Action(action, controller)" @activePage><h3>@link</h3></a>
+                }
+            }
+        </div>
+    }
+}
+
+@if (Model.Articles.Any())
+{
+    await GetLinks();
+}
+
+@if (Model.Articles.Any())
+{
+    await Html.RenderPartialAsync("~/Views/Articles/List.cshtml", Model);
+
+    @section Scripts {
+        @await Html.PartialAsync("_ListScripts")
+    }
+}
+else
+{
+    ServerMessage serverMessage = new ServerMessage
+    {
+        ShowSmile = true,
+        MessageText = "No articles here"
+    };
+    await Html.RenderPartialAsync("~/Views/Shared/_ServerMessagePartial.cshtml", serverMessage);
+}

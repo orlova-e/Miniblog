@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Miniblog.Models.App.Interfaces;
+﻿using Miniblog.Models.App.Interfaces;
 using Miniblog.Models.Entities;
+using Miniblog.Models.Entities.Enums;
 using Miniblog.Models.Services.Interfaces;
 using Miniblog.ViewModels;
 using System;
@@ -18,7 +18,6 @@ namespace Miniblog.Models.App
         {
             this.repository = repository;
         }
-
         public async Task<Article> GetArticleByLinkAsync(string link)
         {
             Article article = repository.Articles.Find(a => a.Link == link).FirstOrDefault();
@@ -33,7 +32,6 @@ namespace Miniblog.Models.App
                 article = await GetFullArticleAsync(article);
             return article;
         }
-
         public async Task<Article> CreateArticleAsync(Guid userId, ArticleWriteViewModel articleViewModel)
         {
             User currentUser = await repository.Users.GetByIdAsync(userId);
@@ -131,7 +129,6 @@ namespace Miniblog.Models.App
             article = repository.Articles.Find(a => a.Link == article.Link).FirstOrDefault();
             return article;
         }
-
         public bool HasArticle(Func<Article, bool> predicate)
         {
             var article = repository.Articles.Find(predicate).FirstOrDefault();
@@ -139,31 +136,15 @@ namespace Miniblog.Models.App
                 return false;
             return true;
         }
-
         public async Task DeleteArticleAsync(Guid articleId)
         {
             await repository.Articles.DeleteAsync(articleId);
         }
-
         public async Task UpdateArticleAsync(Article article)
         {
             await repository.Articles.UpdateAsync(article);
         }
-
-        public async Task<List<Article>> FindArticlesAsync(Func<Article, bool> predicate)
-        {
-            List<Article> articles = (await repository.Articles.GetAllAsync())
-                 .Where(predicate)
-                 .OrderByDescending(a => a.DateTime.Ticks)
-                 .ToList();
-
-            for (int i = 0; i < articles.Count; i++)
-            {
-                articles[i] = await GetFullArticleAsync(articles[i]);
-            }
-            return articles;
-        }
-        private async Task<Article> GetFullArticleAsync(Article article)
+        public async Task<Article> GetFullArticleAsync(Article article)
         {
             ListDisplayOptions listOptions = await repository.ListDisplayOptions.FirstOrDefaultAsync();
 

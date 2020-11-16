@@ -2,6 +2,7 @@
 using Miniblog.Models.App.Interfaces;
 using Miniblog.Models.Entities;
 using Miniblog.Models.Services.Interfaces;
+using Miniblog.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,21 +15,25 @@ namespace Miniblog.Controllers
     {
         public IRepository repository { get; private set; }
         public IArticlesService articlesService { get; private set; }
-        public UsersController(IRepository repository, IArticlesService articlesService)
+        public IListService listService { get; set; }
+        public UsersController(IRepository repository, IArticlesService articlesService, IListService listService)
         {
             this.repository = repository;
             this.articlesService = articlesService;
+            this.listService = listService;
         }
         [HttpGet]
         [Route("[controller]/{username}")]
-        public async Task<IActionResult> Account([FromRoute]string username)
+        public async Task<IActionResult> Account([FromRoute]string username, [FromQuery] uint page = 1, string sortby = "newfirst")
         {
             User author = repository.Users.Find(u => u.Username == username).FirstOrDefault();
 
             if (author == null)
                 return NotFound();
 
-            List<Article> articles = await articlesService.FindArticlesAsync(a => a.User.Id == author.Id);
+            List<Article> articles = await listService.FindArticlesAsync(a => a.User.Id == author.Id);
+            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            listViewModel.PageName = "Account";
 
             bool subscribed = false;
             if (User.Identity.IsAuthenticated)
@@ -40,7 +45,8 @@ namespace Miniblog.Controllers
             }
 
             ViewBag.Author = author;
-            ViewBag.Articles = articles;
+            //ViewBag.Articles = articles;
+            ViewBag.ListViewModel = listViewModel;
             ViewBag.Subscribed = subscribed;
 
             return View();

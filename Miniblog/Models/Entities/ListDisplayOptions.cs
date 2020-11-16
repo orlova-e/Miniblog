@@ -9,6 +9,6 @@ namespace Miniblog.Models.Entities
         public byte WordsPerPreview { get; set; }
         public DisplayType ListDisplayDefaultType { get; set; }
         public ListLayoutType LayoutDefaultType { get; set; }
-        public ListSortingType ListSortingDefaultType { get; set; }
+        public ListSorting ListSortingDefaultType { get; set; }
     }
 }

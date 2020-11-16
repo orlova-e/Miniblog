@@ -186,7 +186,7 @@ namespace Miniblog
                 .Property(e => e.ListSortingDefaultType)
                 .HasConversion(
                 v => v.ToString(),
-                v => (ListSortingType)Enum.Parse(typeof(ListSortingType), v));
+                v => (ListSorting)Enum.Parse(typeof(ListSorting), v));
 
             //CommentsDisplayOptions
             modelBuilder.Entity<CommentsOptions>()
@@ -321,7 +321,7 @@ namespace Miniblog
                 WordsPerPreview = 50,
                 ListDisplayDefaultType = DisplayType.Preview,
                 LayoutDefaultType = ListLayoutType.Row,
-                ListSortingDefaultType = ListSortingType.NewFirst
+                ListSortingDefaultType = ListSorting.NewFirst
             };
 
             modelBuilder.Entity<ListDisplayOptions>().HasData(listDisplayOptions);
