@@ -19,13 +19,13 @@ namespace Miniblog.Controllers
     public class ArticlesController : Controller
     {
         public IRepository repository { get; private set; }
-        public IArticlesService articlesService { get; private set; }
+        public IArticlesService articleService { get; private set; }
         public IListService listService { get; private set; }
 
-        public ArticlesController(IRepository repository, IArticlesService articlesService, IListService listService)
+        public ArticlesController(IRepository repository, IArticlesService articleService, IListService listService)
         {
             this.repository = repository;
-            this.articlesService = articlesService;
+            this.articleService = articleService;
             this.listService = listService;
         }
 
@@ -34,12 +34,12 @@ namespace Miniblog.Controllers
         [Route("[controller]/")]
         public async Task<IActionResult> Article([FromQuery] string title)
         {
-            if (!articlesService.HasArticle(a => a.Link == title))
+            if (!articleService.HasArticle(a => a.Link == title))
             {
                 return NotFound();
             }
 
-            Article article = await articlesService.GetArticleByLinkAsync(title);
+            Article article = await articleService.GetArticleByLinkAsync(title);
             ListDisplayOptions listOptions = await repository.ListDisplayOptions.FirstOrDefaultAsync();
             if (listOptions.OverrideForUserArticle)
             {
@@ -149,7 +149,7 @@ namespace Miniblog.Controllers
 
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
 
-            Article article = await articlesService.CreateArticleAsync(userId, articleViewModel);
+            Article article = await articleService.CreateArticleAsync(userId, articleViewModel);
 
             return RedirectToAction("Article", "Articles", new { title = article.Link });
         }

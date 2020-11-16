@@ -14,12 +14,12 @@ namespace Miniblog.Controllers
     public class UsersController : Controller
     {
         public IRepository repository { get; private set; }
-        public IArticlesService articlesService { get; private set; }
+        public IArticlesService articleService { get; private set; }
         public IListService listService { get; set; }
-        public UsersController(IRepository repository, IArticlesService articlesService, IListService listService)
+        public UsersController(IRepository repository, IArticlesService articleService, IListService listService)
         {
             this.repository = repository;
-            this.articlesService = articlesService;
+            this.articleService = articleService;
             this.listService = listService;
         }
         [HttpGet]
