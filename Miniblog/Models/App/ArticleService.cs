@@ -189,5 +189,13 @@ namespace Miniblog.Models.App
 
             return article;
         }
+
+        public async Task<Article> FindArticleAsync(Func<Article, bool> predicate)
+        {
+            Article article = repository.Articles.Find(predicate).FirstOrDefault();
+            if (article != null)
+                article = await GetFullArticleAsync(article);
+            return article;
+        }
     }
 }

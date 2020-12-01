@@ -35,6 +35,7 @@ namespace Miniblog.Models.App.Interfaces
         /// <param name="predicate">Search condition</param>
         /// <returns>True if the article exists, false if not</returns>
         bool HasArticle(Func<Article, bool> predicate);
+        Task<Article> FindArticleAsync(Func<Article, bool> predicate);
         /// <summary>
         /// Deletes the article
         /// </summary>

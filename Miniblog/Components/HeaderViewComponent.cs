@@ -19,12 +19,15 @@ namespace Miniblog.Components
         public BlogOptions BlogOptions { get; private set; }
         public IRepository _repository { get; set; }
         public IUserService UserService { get; private set; }
+        public IListService ListService { get; private set; }
         public HeaderViewComponent(IRepository repository,
             IUserService userService,
+            IListService listService,
             IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
             BlogOptions = optionsSnapshot.Value;
             UserService = userService;
+            ListService = listService;
             _repository = repository;
         }
         public async Task<IViewComponentResult> InvokeAsync()
@@ -69,11 +72,11 @@ namespace Miniblog.Components
                 pages.Add("Topics", Url.Action("List", "Articles", new { name = "Topics" }));
             }
 
-            List<Article> pagesDb = _repository.Articles
-                .Find(page => page.EntryType == EntryType.Page && page.Visibility == true && page.MenuVisibility == true)
-                .ToList();
+            List<Article> pagesDb = ListService
+                .FindEntries(page => page.EntryType == EntryType.Page && page.Visibility == true && page.MenuVisibility == true);
 
-            foreach(Article page in pagesDb)
+
+            foreach (Article page in pagesDb)
             {
                 pages.Add(page.Header, Url.Action("Article", "Articles", new { link = page.Link }));
             }

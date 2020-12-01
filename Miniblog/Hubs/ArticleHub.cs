@@ -4,11 +4,9 @@ using Miniblog.Models.Entities;
 using Miniblog.Models.Services.Interfaces;
 using Miniblog.ViewModels;
 using System;
-using Miniblog;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Miniblog.Models.App.Interfaces;
@@ -20,14 +18,17 @@ namespace Miniblog.Hubs
     {
         string DateTimePattern { get; }
         public IRepository repository { get; private set; }
+        public IArticlesService articlesService { get; private set; }
         public ITextService textService { get; private set; }
         public IUserService userService { get; private set; }
 
         public ArticleHub(IRepository repository,
+            IArticlesService articlesService,
             ITextService textService,
             IUserService userService)
         {
             this.repository = repository;
+            this.articlesService = articlesService;
             this.textService = textService;
             this.userService = userService;
             DateTimePattern = new DateTimeFormatInfo().RoundtripDtPattern();
@@ -36,13 +37,13 @@ namespace Miniblog.Hubs
         public async Task AddComment(string title, string text, string parentId = null)
         {
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await repository.Users.GetByIdAsync(userId);
+            User user = await userService.GetFromDbAsync(userId);
             if (!(user?.Role?.WriteComments ?? false))
                 return;
             
             text = textService.GetPrepared(text);
 
-            Article article = repository.Articles.Find(a => a.Link.Equals(title)).FirstOrDefault();
+            Article article = await articlesService.GetArticleByLinkAsync(title);
 
             if (article != null)
             {
@@ -91,11 +92,11 @@ namespace Miniblog.Hubs
         public async Task UpdateComment(string title, string text, string commentId)
         {
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await repository.Users.GetByIdAsync(userId);
+            User user = await userService.GetFromDbAsync(userId);
             if (!(user?.Role?.WriteComments ?? false))
                 return;
 
-            Article article = repository.Articles.Find(a => a.Link.Equals(title)).FirstOrDefault();
+            Article article = await articlesService.GetArticleByLinkAsync(title);
 
             if(article != null)
             {
@@ -130,10 +131,10 @@ namespace Miniblog.Hubs
 
         public async Task DeleteComment(string title, string commentId)
         {
-            Article article = repository.Articles.Find(a => a.Link.Equals(title)).FirstOrDefault();
+            Article article = await articlesService.GetArticleByLinkAsync(title);
 
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await repository.Users.GetByIdAsync(userId);
+            User user = await userService.GetFromDbAsync(userId);
 
             if (user == null || article == null || article.User == null)
                 return;
@@ -173,11 +174,11 @@ namespace Miniblog.Hubs
         public async Task LikeArticle(string title)
         {
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await repository.Users.GetByIdAsync(userId);
+            User user = await userService.GetFromDbAsync(userId);
             if (user == null)
                 return;
 
-            Article article = repository.Articles.Find(a => a.Link.Equals(title)).FirstOrDefault();
+            Article article = await articlesService.GetArticleByLinkAsync(title);
             if(article != null)
             {
                 if(!await repository.ArticleLikes.ContainsAsync(article.Id, userId))
@@ -198,11 +199,11 @@ namespace Miniblog.Hubs
         public async Task BookmarkArticle(string title)
         {
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await repository.Users.GetByIdAsync(userId);
+            User user = await userService.GetFromDbAsync(userId);
             if (user == null)
                 return;
 
-            Article article = repository.Articles.Find(a => a.Link.Equals(title)).FirstOrDefault();
+            Article article = await articlesService.GetArticleByLinkAsync(title);
             if(article != null)
             {
                 if(!await repository.ArticleBookmarks.ContainsAsync(article.Id, userId))
@@ -223,7 +224,7 @@ namespace Miniblog.Hubs
         public async Task LikeComment(string commentId)
         {
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await repository.Users.GetByIdAsync(userId);
+            User user = await userService.GetFromDbAsync(userId);
             if (user == null)
                 return;
 
