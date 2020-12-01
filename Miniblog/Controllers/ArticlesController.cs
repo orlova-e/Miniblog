@@ -141,7 +141,7 @@ namespace Miniblog.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Drafts([FromQuery] uint page = 1, string sortby = "newfisrt")
+        public IActionResult Drafts([FromQuery] uint page = 1, string sortby = "newfisrt")
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
             List<Article> articles = listService.FindDrafts(userId);
