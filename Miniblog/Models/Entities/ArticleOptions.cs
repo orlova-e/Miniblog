@@ -24,53 +24,5 @@ namespace Miniblog.Models.Entities
             };
             return articleOptions;
         }
-
-        //public static explicit operator ListOptions(ArticleOptions articleOptions)
-        //{
-        //    ListOptions listOptions = new ListOptions()
-        //    {
-        //        Username = articleOptions.Username,
-        //        DateAndTime = articleOptions.DateAndTime,
-        //        Tags = articleOptions.Tags,
-        //        Topic = articleOptions.Topic,
-        //        Series = articleOptions.Series,
-        //        Likes = articleOptions.Likes,
-        //        Bookmarks = articleOptions.Bookmarks,
-        //        Comments = articleOptions.Comments
-        //    };
-        //    return listOptions;
-        //}
-
-        //public static explicit operator ArticleOptions(ListDisplayOptions globalOptions)
-        //{
-        //    ArticleOptions articleOptions = new ArticleOptions()
-        //    {
-        //        Username = globalOptions.Username,
-        //        DateAndTime = globalOptions.DateAndTime,
-        //        Tags = globalOptions.Tags,
-        //        Topic = globalOptions.Topic,
-        //        Series = globalOptions.Series,
-        //        Likes = globalOptions.Likes,
-        //        Bookmarks = globalOptions.Bookmarks,
-        //        Comments = globalOptions.Comments
-        //    };
-        //    return articleOptions;
-        //}
-
-        //public static explicit operator ListDisplayOptions(ArticleOptions articleOptions)
-        //{
-        //    ListDisplayOptions listDisplayOptions = new ListDisplayOptions()
-        //    {
-        //        Username = articleOptions.Username,
-        //        DateAndTime = articleOptions.DateAndTime,
-        //        Tags = articleOptions.Tags,
-        //        Topic = articleOptions.Topic,
-        //        Series = articleOptions.Series,
-        //        Likes = articleOptions.Likes,
-        //        Bookmarks = articleOptions.Bookmarks,
-        //        Comments = articleOptions.Comments
-        //    };
-        //    return listDisplayOptions;
-        //}
     }
 }
