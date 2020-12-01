@@ -24,6 +24,7 @@ namespace Miniblog.Controllers
         public IRepository repository { get; private set; }
         public IArticlesService articleService { get; private set; }
         public IListService listService { get; private set; }
+        public IUserService userService { get; private set; }
 
         //public Configuration.WebsiteOptions WebsiteOptions { get; private set; }
         //public Roles Roles { get; private set; }
@@ -33,11 +34,13 @@ namespace Miniblog.Controllers
         public ArticlesController(IRepository repository,
             IArticlesService articleService,
             IListService listService,
+            IUserService userService,
             IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
             this.repository = repository;
             this.articleService = articleService;
             this.listService = listService;
+            this.userService = userService;
             this.BlogOptions = optionsSnapshot.Value;
             //WebsiteOptions = websiteOptions.Value;
             //Roles = roles.Value;
@@ -69,7 +72,7 @@ namespace Miniblog.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-                user = await repository.Users.GetByIdAsync(userId);
+                user = await userService.GetFromDbAsync(userId);
                 if(user?.Role == null)
                 {
                     user.Role = await repository.Roles.GetByIdAsync(user.RoleId);

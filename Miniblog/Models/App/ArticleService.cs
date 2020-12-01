@@ -14,11 +14,14 @@ namespace Miniblog.Models.App
     public class ArticleService : IArticlesService
     {
         public IRepository repository { get; private set; }
+        public IUserService userService { get; private set; }
         public BlogOptions BlogOptions { get; private set; }
         public ArticleService(IRepository repository,
+            IUserService userService,
             IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
             this.repository = repository;
+            this.userService = userService;
             BlogOptions = optionsSnapshot.Value;
         }
         public async Task<Article> GetArticleByLinkAsync(string link)
@@ -37,7 +40,7 @@ namespace Miniblog.Models.App
         }
         public async Task<Article> CreateArticleAsync(Guid userId, ArticleWriteViewModel articleViewModel)
         {
-            User currentUser = await repository.Users.GetByIdAsync(userId);
+            User currentUser = await userService.GetFromDbAsync(userId);
 
             Topic topic = null;
             if (articleViewModel.Topic != null)
@@ -152,7 +155,7 @@ namespace Miniblog.Models.App
             ListOptions listOptions = BlogOptions.ListOptions;
 
             if (article.User == null)
-                article.User = await repository.Users.GetByIdAsync(article.UserId);
+                article.User = await userService.GetFromDbAsync(article.UserId);
 
             if (listOptions.OverrideForUserArticle || article.DisplayOptions == null)
             {

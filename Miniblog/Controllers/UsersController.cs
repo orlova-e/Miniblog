@@ -13,20 +13,22 @@ namespace Miniblog.Controllers
 {
     public class UsersController : Controller
     {
-        public IRepository repository { get; private set; }
         public IArticlesService articleService { get; private set; }
         public IListService listService { get; set; }
-        public UsersController(IRepository repository, IArticlesService articleService, IListService listService)
+        public IUserService userService { get; private set; }
+        public UsersController(IArticlesService articleService,
+            IListService listService,
+            IUserService userService)
         {
-            this.repository = repository;
             this.articleService = articleService;
             this.listService = listService;
+            this.userService = userService;
         }
         [HttpGet]
         [Route("[controller]/{username}")]
         public async Task<IActionResult> Account([FromRoute]string username, [FromQuery] uint page = 1, string sortby = "newfirst")
         {
-            User author = repository.Users.Find(u => u.Username == username).FirstOrDefault();
+            User author = userService.GetUserFromDb(u => u.Username == username);
 
             if (author == null)
                 return NotFound();
@@ -39,7 +41,7 @@ namespace Miniblog.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 Guid.TryParse(User.FindFirstValue("Id"), out Guid currentUserId);
-                User currentUser = await repository.Users.GetByIdAsync(currentUserId);
+                User currentUser = await userService.GetFromDbAsync(currentUserId);
                 if (author.Subscribers.Contains(currentUser))
                     subscribed = true;
             }

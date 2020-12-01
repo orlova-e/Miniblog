@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Miniblog.Configuration;
 using Miniblog.Models.App.Interfaces;
 using Miniblog.Models.Entities;
 using Miniblog.Models.Entities.Enums;
-using Miniblog.Models.Services.Interfaces;
 using Miniblog.ViewModels.Options;
-using Microsoft.Extensions.Options;
-using Miniblog.Configuration;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Miniblog.Controllers
 {
@@ -21,27 +18,25 @@ namespace Miniblog.Controllers
     public class OptionsController : Controller                 // +++ SURE that you added AUTHORIZATION requirements
     {
         public BlogOptions BlogOptions { get; private set; }
-        public IRepository repository { get; set; }
-        public IUserService userService { get; private set; }
+        public IUserService UserService { get; private set; }
         public OptionsController(IOptionsSnapshot<BlogOptions> optionsSnapshot,
-            IRepository repository,
             IUserService userService)
         {
             BlogOptions = optionsSnapshot.Value;
-            this.repository = repository;
-            this.userService = userService;
+            UserService = userService;
         }
 
         [HttpGet]
         [Authorize(Roles = nameof(RoleType.Administrator) + "," + nameof(RoleType.Editor) + "," + nameof(RoleType.User))]
         public async Task<IActionResult> Account()            // SURE that you created VIEW
         {
-            User user = await repository.Users.GetByIdAsync(Guid.Parse(User.FindFirstValue("Id")));
+            Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
+            User user = await UserService.GetFromDbAsync(userId);
             return View(user);
         }
 
-        [HttpGet]
         //[Authorize(Roles = nameof(RoleType.Administrator))]
+        [HttpGet]
         public IActionResult Main()
         {
             Configuration.WebsiteOptions websiteOptions = BlogOptions.WebsiteOptions;

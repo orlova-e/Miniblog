@@ -7,15 +7,16 @@ using Miniblog.Models.Services.Interfaces;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Miniblog.Models.App.Interfaces;
 
 namespace Miniblog.Filters
 {
     public class IdAttribute : IAsyncAuthorizationFilter
     {
-        public IRepository repository { get; private set; }
-        public IdAttribute(IRepository repository)
+        public IUserService userService { get; private set; }
+        public IdAttribute(IUserService userService)
         {
-            this.repository = repository;
+            this.userService = userService;
         }
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
@@ -24,12 +25,11 @@ namespace Miniblog.Filters
                 try
                 {
                     Guid.TryParse(context.HttpContext.User.FindFirstValue("Id"), out Guid id);
-                    User user = await repository.Users.GetByIdAsync(id);
+                    User user = await userService.GetFromDbAsync(id);
                 }
                 catch (ArgumentNullException)
                 {
                     await context.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                    //context.Result = new UnauthorizedResult();
                     context.Result = new ChallengeResult(CookieAuthenticationDefaults.AuthenticationScheme);
                 }
             }

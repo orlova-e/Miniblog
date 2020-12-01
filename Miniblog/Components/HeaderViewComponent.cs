@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Miniblog.Configuration;
+using Miniblog.Models.App.Interfaces;
 using Miniblog.Models.Entities;
 using Miniblog.Models.Entities.Enums;
 using Miniblog.Models.Services.Interfaces;
@@ -10,8 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using Miniblog.Configuration;
 
 namespace Miniblog.Components
 {
@@ -19,10 +18,13 @@ namespace Miniblog.Components
     {
         public BlogOptions BlogOptions { get; private set; }
         public IRepository _repository { get; set; }
+        public IUserService UserService { get; private set; }
         public HeaderViewComponent(IRepository repository,
+            IUserService userService,
             IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
             BlogOptions = optionsSnapshot.Value;
+            UserService = userService;
             _repository = repository;
         }
         public async Task<IViewComponentResult> InvokeAsync()
@@ -44,7 +46,7 @@ namespace Miniblog.Components
             {
                 principal = User as ClaimsPrincipal;
                 Guid.TryParse(principal.FindFirstValue("Id"), out Guid id);
-                user = await _repository.Users.GetByIdAsync(id);
+                user = await UserService.GetFromDbAsync(id);
                 header.Username = user.Username;
                 header.Avatar = user.Avatar;
                 role = await _repository.Roles.GetByIdAsync(user.RoleId);

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Miniblog.Models.App.Interfaces;
 
 namespace Miniblog.Hubs
 {
@@ -20,11 +21,15 @@ namespace Miniblog.Hubs
         string DateTimePattern { get; }
         public IRepository repository { get; private set; }
         public ITextService textService { get; private set; }
+        public IUserService userService { get; private set; }
 
-        public ArticleHub(IRepository repository, ITextService textService)
+        public ArticleHub(IRepository repository,
+            ITextService textService,
+            IUserService userService)
         {
             this.repository = repository;
             this.textService = textService;
+            this.userService = userService;
             DateTimePattern = new DateTimeFormatInfo().RoundtripDtPattern();
         }
 
