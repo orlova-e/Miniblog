@@ -18,7 +18,7 @@ namespace Miniblog.Models.Services
         //IOptionRepository<ListDisplayOptions> listDisplayOptions;
         IOptionRepository<ArticleOptions> articleOptions;
         IOptionRepository<CommentsOptions> commentsOptions;
-        IOptionRepository<WebsiteOptions> websiteOptions;
+        //IOptionRepository<WebsiteOptions> websiteOptions;
 
         IRelatedRepository<UserFavourite, Article> articleLikes;
         IRelatedRepository<UserBookmark, Article> articleBookmarks;
@@ -91,15 +91,15 @@ namespace Miniblog.Models.Services
                 return articleOptions;
             }
         }
-        public IOptionRepository<WebsiteOptions> WebsiteOptions
-        {
-            get
-            {
-                if (websiteOptions == null)
-                    websiteOptions = new WebsiteOptionsRepo(Db);
-                return websiteOptions;
-            }
-        }
+        //public IOptionRepository<WebsiteOptions> WebsiteOptions
+        //{
+        //    get
+        //    {
+        //        if (websiteOptions == null)
+        //            websiteOptions = new WebsiteOptionsRepo(Db);
+        //        return websiteOptions;
+        //    }
+        //}
         public IRelatedRepository<UserFavourite, Article> ArticleLikes
         {
             get

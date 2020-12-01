@@ -10,19 +10,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Miniblog.Configuration;
 
 namespace Miniblog.Components
 {
     public class HeaderViewComponent : ViewComponent
     {
+        public BlogOptions BlogOptions { get; private set; }
         public IRepository _repository { get; set; }
-        public HeaderViewComponent(IRepository repository)
+        public HeaderViewComponent(IRepository repository,
+            IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
+            BlogOptions = optionsSnapshot.Value;
             _repository = repository;
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            WebsiteOptions websiteDisplayOptions = await _repository.WebsiteOptions.FirstOrDefaultAsync();
+            Configuration.WebsiteOptions websiteDisplayOptions = BlogOptions.WebsiteOptions;
             HeaderViewModel header = new HeaderViewModel()
             {
                 Title = websiteDisplayOptions.Name,

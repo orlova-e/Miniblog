@@ -11,6 +11,8 @@ using Miniblog.Models.Entities;
 using Miniblog.Models.Entities.Enums;
 using Miniblog.Models.Services.Interfaces;
 using Miniblog.ViewModels.Options;
+using Microsoft.Extensions.Options;
+using Miniblog.Configuration;
 
 namespace Miniblog.Controllers
 {
@@ -18,12 +20,16 @@ namespace Miniblog.Controllers
                Roles = nameof(RoleType.Administrator))]
     public class OptionsController : Controller                 // +++ SURE that you added AUTHORIZATION requirements
     {
-        public IUserService userService { get; private set; }
+        public BlogOptions BlogOptions { get; private set; }
         public IRepository repository { get; set; }
-        public OptionsController(IRepository repository, IUserService userService)
+        public IUserService userService { get; private set; }
+        public OptionsController(IOptionsSnapshot<BlogOptions> optionsSnapshot,
+            IRepository repository,
+            IUserService userService)
         {
-            this.userService = userService;
+            BlogOptions = optionsSnapshot.Value;
             this.repository = repository;
+            this.userService = userService;
         }
 
         [HttpGet]
@@ -38,14 +44,14 @@ namespace Miniblog.Controllers
         //[Authorize(Roles = nameof(RoleType.Administrator))]
         public async Task<IActionResult> Main()
         {
-            WebsiteOptions options = await repository.WebsiteOptions.FirstOrDefaultAsync();
+            Configuration.WebsiteOptions websiteOptions = BlogOptions.WebsiteOptions;
             MainViewModel mainViewModel = new MainViewModel()
             {
-                Title = options.Name,
-                Subtitle = options.Subtitle,
-                Icon = options.Icon,
-                DateFormat = options.WebsiteDateFormat,
-                Language = Enum.GetName(typeof(Languages), options.WebsiteLanguage)
+                Title = websiteOptions.Name,
+                Subtitle = websiteOptions.Subtitle,
+                IconPath = websiteOptions.IconPath,
+                DateFormat = websiteOptions.WebsiteDateFormat,
+                Language = Enum.GetName(typeof(Languages), websiteOptions.WebsiteLanguage)
                 //TimeFormat = options.Ti
             };
             return View(mainViewModel);
