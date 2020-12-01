@@ -16,7 +16,7 @@ namespace Miniblog.Models.Services.Interfaces
         IOptionRepository<Role> Roles { get; }
         //IOptionRepository<ListDisplayOptions> ListDisplayOptions { get; }
         IOptionRepository<ArticleOptions> ArticleOptions { get; }
-        IOptionRepository<CommentsOptions> CommentsOptions { get; }
+        //IOptionRepository<CommentsOptions> CommentsOptions { get; }
         //IOptionRepository<WebsiteOptions> WebsiteOptions { get; }
         IRelatedRepository<UserFavourite, Article> ArticleLikes { get; }
         IRelatedRepository<UserBookmark, Article> ArticleBookmarks { get; }

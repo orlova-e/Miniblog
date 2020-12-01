@@ -76,7 +76,7 @@ namespace Miniblog.Controllers
                 }
             }
 
-            Models.Entities.CommentsOptions commentsOptions = await repository.CommentsOptions.FirstOrDefaultAsync();
+            Configuration.CommentsOptions commentsOptions = BlogOptions.CommentsOptions;
 
             ArticleReadViewModel articleReadModel = new ArticleReadViewModel
             {
@@ -87,7 +87,7 @@ namespace Miniblog.Controllers
             CommentsViewModel commentsViewModel = new CommentsViewModel
             {
                 User = user,
-                Depth = commentsOptions.AllowNesting ? commentsOptions.Depth : 0,
+                Depth = commentsOptions.AllowNesting ? commentsOptions.Depth.Value : 0,
                 WriteComments = user?.Role?.WriteComments ?? default,
                 CommentsVisibility = article.DisplayOptions.Comments,
                 Comments = repository.Comments.Find(c => c.ArticleId == article.Id).ToList()

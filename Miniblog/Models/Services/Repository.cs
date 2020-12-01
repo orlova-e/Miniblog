@@ -17,7 +17,7 @@ namespace Miniblog.Models.Services
         IOptionRepository<Role> roles;
         //IOptionRepository<ListDisplayOptions> listDisplayOptions;
         IOptionRepository<ArticleOptions> articleOptions;
-        IOptionRepository<CommentsOptions> commentsOptions;
+        //IOptionRepository<CommentsOptions> commentsOptions;
         //IOptionRepository<WebsiteOptions> websiteOptions;
 
         IRelatedRepository<UserFavourite, Article> articleLikes;
@@ -138,15 +138,15 @@ namespace Miniblog.Models.Services
             }
         }
 
-        public IOptionRepository<CommentsOptions> CommentsOptions
-        {
-            get
-            {
-                if (commentsOptions == null)
-                    commentsOptions = new CommentsOptionsRepo(Db);
-                return commentsOptions;
-            }
-        }
+        //public IOptionRepository<CommentsOptions> CommentsOptions
+        //{
+        //    get
+        //    {
+        //        if (commentsOptions == null)
+        //            commentsOptions = new CommentsOptionsRepo(Db);
+        //        return commentsOptions;
+        //    }
+        //}
 
         private bool disposed = false;
         public virtual void Dispose(bool disposing)
