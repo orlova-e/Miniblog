@@ -1,56 +1,57 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Miniblog.Configuration;
 using Miniblog.Filters;
 using Miniblog.Hubs;
-using Miniblog.Models;
 using Miniblog.Models.App;
 using Miniblog.Models.App.Interfaces;
 using Miniblog.Models.Entities;
 using Miniblog.Models.Services;
 using Miniblog.Models.Services.Interfaces;
+using System;
+using System.Globalization;
+using System.IO;
 
 namespace Miniblog
 {
     public class Startup
     {
-        public IConfiguration configuration { get; }
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; private set; }
+        private string ConfigPath { get; }
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            this.configuration = configuration;
+            //IConfigurationBuilder builder = new ConfigurationBuilder()
+            //    .AddConfiguration(configuration);
+            //Configuration = builder.Build();
+            Configuration = configuration;
+            ConfigPath = Path.Combine(env.ContentRootPath, "config.json");
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = configuration.GetConnectionString("DefaultConnection");
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<MiniblogDb>(options => options.UseSqlServer(connectionString));
 
-            services.AddScoped<IRepository, Repository>();
+            services.Configure<BlogOptions>(Configuration);
 
+            services.AddScoped<IRepository, Repository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IArticlesService, ArticleService>();
             services.AddScoped<IListService, ListService>();
+            services.AddScoped<IConfigurationWriter>(x => ActivatorUtilities.CreateInstance<ConfigurationWriter>(x, ConfigPath));
 
             services.AddTransient<ITextService, TextService>(); // to delete
 
             services.AddScoped<IOptionRepository<Role>, RolesRepository>();
-            services.AddScoped<IOptionRepository<WebsiteOptions>, WebsiteOptionsRepo>();
+            services.AddScoped<IOptionRepository<Models.Entities.WebsiteOptions>, WebsiteOptionsRepo>();
             services.AddScoped<IOptionRepository<ListDisplayOptions>, ListOptionsRepo>();
 
             services.AddScoped<IdAttribute>();

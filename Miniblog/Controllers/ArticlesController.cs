@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Miniblog.Configuration;
 using Miniblog.Filters;
 using Miniblog.Models.App.Interfaces;
 using Miniblog.Models.Entities;
-using Miniblog.Models.Entities.Enums;
 using Miniblog.Models.Services.Interfaces;
 using Miniblog.ViewModels;
 using System;
@@ -12,21 +13,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Miniblog.Controllers
 {
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class ArticlesController : Controller
     {
+        public BlogOptions BlogOptions { get; set; }
         public IRepository repository { get; private set; }
         public IArticlesService articleService { get; private set; }
         public IListService listService { get; private set; }
 
-        public ArticlesController(IRepository repository, IArticlesService articleService, IListService listService)
+        //public Configuration.WebsiteOptions WebsiteOptions { get; private set; }
+        //public Roles Roles { get; private set; }
+        //public ListOptions ListOptions { get; private set; }
+        //public Configuration.CommentsOptions CommentsOptions { get; private set; }
+
+        public ArticlesController(IRepository repository,
+            IArticlesService articleService,
+            IListService listService,
+            IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
             this.repository = repository;
             this.articleService = articleService;
             this.listService = listService;
+            this.BlogOptions = optionsSnapshot.Value;
+            //WebsiteOptions = websiteOptions.Value;
+            //Roles = roles.Value;
+            //ListOptions = listOptions.Value;
+            //CommentsOptions = commentsOptions.Value;
+            //CommentsOptions.Depth.Value = 2;
+
+            //configuration[""]
         }
 
         [AllowAnonymous]
@@ -57,7 +76,7 @@ namespace Miniblog.Controllers
                 }
             }
 
-            CommentsOptions commentsOptions = await repository.CommentsOptions.FirstOrDefaultAsync();
+            Models.Entities.CommentsOptions commentsOptions = await repository.CommentsOptions.FirstOrDefaultAsync();
 
             ArticleReadViewModel articleReadModel = new ArticleReadViewModel
             {

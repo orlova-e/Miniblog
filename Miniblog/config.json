@@ -1,0 +1,110 @@
+{
+  "WebsiteOptions": {
+    "Name": "Miniblog",
+    "Subtitle": "",
+    "IconPath": "",
+    "HomePage": "/articles/list",
+    "ShowListOfPopularAndRecent": true,
+    "ShowAuthors": true,
+    "ShowTopics": true,
+    "ShowSearchOption": true,
+    "ColorTheme": 2,
+    "WebsiteLanguage": 0,
+    "WebsiteVisibility": 0,
+    "WebsiteDateFormat": ""
+  },
+  "ListOptions": {
+    "OverrideForUserArticle": true,
+    "ArticlesPerPage": {
+      "Value": 10,
+      "Available": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50
+      ]
+    },
+    "WordsPerPreview": {
+      "Value": 50,
+      "Available": [
+        20,
+        30,
+        40,
+        50,
+        60,
+        70
+      ]
+    },
+    "ListDisplayDefaultType": 1,
+    "LayoutDefaultType": 0,
+    "ListSortingDefaultType": 1,
+    "Username": true,
+    "DateAndTime": true,
+    "Tags": true,
+    "Topic": true,
+    "Series": true,
+    "Likes": true,
+    "Bookmarks": true,
+    "Comments": true
+  },
+  "CommentsOptions": {
+    "AllowNesting": true,
+    "Depth": {
+      "Value": 5,
+      "Available": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "SortingCommentsDefaultType": 1
+  },
+  "Roles": {
+    "User": {
+      "Type": 0,
+      "WriteArticles": true,
+      "WriteComments": true,
+      "WriteMessages": true,
+      "OverrideOwnArticle": true,
+      "CreateTopics": true,
+      "CreateTags": true
+    },
+    "Editor": {
+      "ModerateArticles": true,
+      "ModerateComments": true,
+      "ModerateTopics": true,
+      "ModerateTags": true,
+      "OverrideMenu": true,
+      "Type": 1,
+      "WriteArticles": true,
+      "WriteComments": true,
+      "WriteMessages": true,
+      "OverrideOwnArticle": true,
+      "CreateTopics": true,
+      "CreateTags": true
+    },
+    "Administrator": {
+      "ModerateArticles": true,
+      "ModerateComments": true,
+      "ModerateTopics": true,
+      "ModerateTags": true,
+      "OverrideMenu": true,
+      "Type": 2,
+      "WriteArticles": true,
+      "WriteComments": true,
+      "WriteMessages": true,
+      "OverrideOwnArticle": true,
+      "CreateTopics": true,
+      "CreateTags": true
+    }
+  }
+}

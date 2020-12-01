@@ -56,4 +56,6 @@
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
 </Project>
