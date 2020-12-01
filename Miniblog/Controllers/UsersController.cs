@@ -32,7 +32,7 @@ namespace Miniblog.Controllers
                 return NotFound();
 
             List<Article> articles = await listService.FindArticlesAsync(a => a.User.Id == author.Id);
-            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Account";
 
             bool subscribed = false;

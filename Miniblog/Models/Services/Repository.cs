@@ -15,10 +15,7 @@ namespace Miniblog.Models.Services
         IPlainRepository<Series> series;
 
         IOptionRepository<Role> roles;
-        //IOptionRepository<ListDisplayOptions> listDisplayOptions;
         IOptionRepository<ArticleOptions> articleOptions;
-        //IOptionRepository<CommentsOptions> commentsOptions;
-        //IOptionRepository<WebsiteOptions> websiteOptions;
 
         IRelatedRepository<UserFavourite, Article> articleLikes;
         IRelatedRepository<UserBookmark, Article> articleBookmarks;
@@ -73,15 +70,6 @@ namespace Miniblog.Models.Services
                 return roles;
             }
         }
-        //public IOptionRepository<ListDisplayOptions> ListDisplayOptions
-        //{
-        //    get
-        //    {
-        //        if (listDisplayOptions == null)
-        //            listDisplayOptions = new ListOptionsRepo(Db);
-        //        return listDisplayOptions;
-        //    }
-        //}
         public IOptionRepository<ArticleOptions> ArticleOptions
         {
             get
@@ -91,15 +79,6 @@ namespace Miniblog.Models.Services
                 return articleOptions;
             }
         }
-        //public IOptionRepository<WebsiteOptions> WebsiteOptions
-        //{
-        //    get
-        //    {
-        //        if (websiteOptions == null)
-        //            websiteOptions = new WebsiteOptionsRepo(Db);
-        //        return websiteOptions;
-        //    }
-        //}
         public IRelatedRepository<UserFavourite, Article> ArticleLikes
         {
             get
@@ -137,16 +116,6 @@ namespace Miniblog.Models.Services
                 return series;
             }
         }
-
-        //public IOptionRepository<CommentsOptions> CommentsOptions
-        //{
-        //    get
-        //    {
-        //        if (commentsOptions == null)
-        //            commentsOptions = new CommentsOptionsRepo(Db);
-        //        return commentsOptions;
-        //    }
-        //}
 
         private bool disposed = false;
         public virtual void Dispose(bool disposing)

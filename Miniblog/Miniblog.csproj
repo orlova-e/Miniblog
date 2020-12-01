@@ -52,6 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="Views\Home\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>

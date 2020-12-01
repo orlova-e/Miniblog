@@ -66,14 +66,14 @@ namespace Miniblog.Models.App.Interfaces
         /// <param name="sortingType">ListSortingType enumeration value</param>
         /// <param name="articles">List of articles</param>
         /// <returns>The selection of articles.</returns>
-        Task<List<Article>> GetSelectionAsync(List<Article> articles, uint start = 1, ListSorting sortingType = ListSorting.NewFirst);
+        List<Article> GetSelection(List<Article> articles, uint start = 1, ListSorting sortingType = ListSorting.NewFirst);
         /// <summary>
         /// 
         /// </summary>
         /// <param name="start">Number of current page for which articles are being searched</param>
         /// <param name="sortingType">ListSortingType enumeration value</param>
         /// <returns>The ListViewModel instance.</returns>
-        Task<ListViewModel> GetListModelAsync(List<Article> articles, uint start = 1, string sorting = "newfirst");
+        ListViewModel GetListModel(List<Article> articles, uint start = 1, string sorting = "newfirst");
 
         //Task<List<Article>> GetArticlesAsync();
         //Task<List<Article>> GetVisibleSelectionAsync(int start = 1, ListSortingType sortingType = ListSortingType.NewFirst, List<Article> articles = null);

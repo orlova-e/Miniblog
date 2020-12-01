@@ -105,7 +105,7 @@ namespace Miniblog.Controllers
         {
             List<Article> articles = await listService
                 .FindArticlesAsync(a => true);
-            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
             listViewModel.PageName = "List";
             return View(listViewModel);
         }
@@ -115,7 +115,7 @@ namespace Miniblog.Controllers
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
             List<Article> articles = await listService.GetFavouritesAsync(userId);
-            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Favourites";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
@@ -125,7 +125,7 @@ namespace Miniblog.Controllers
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
             List<Article> articles = await listService.GetBookmarkedAsync(userId);
-            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Bookmarks";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
@@ -135,7 +135,7 @@ namespace Miniblog.Controllers
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
             List<Article> articles = await listService.GetCommentedAsync(userId);
-            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Commented";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
@@ -145,7 +145,7 @@ namespace Miniblog.Controllers
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
             List<Article> articles = listService.FindDrafts(userId);
-            ListViewModel listViewModel = await listService.GetListModelAsync(articles, page, sortby);
+            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Drafts";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }

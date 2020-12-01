@@ -51,8 +51,6 @@ namespace Miniblog
             services.AddTransient<ITextService, TextService>(); // to delete
 
             services.AddScoped<IOptionRepository<Role>, RolesRepository>();
-            services.AddScoped<IOptionRepository<Models.Entities.WebsiteOptions>, WebsiteOptionsRepo>();
-            services.AddScoped<IOptionRepository<ListDisplayOptions>, ListOptionsRepo>();
 
             services.AddScoped<IdAttribute>();
 

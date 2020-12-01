@@ -87,7 +87,7 @@ namespace Miniblog.Models.App
             return sortedArticles.ToList();
         }
 
-        public async Task<List<Article>> GetSelectionAsync(List<Article> articles, uint start = 1, ListSorting sortingType = ListSorting.NewFirst)
+        public List<Article> GetSelection(List<Article> articles, uint start = 1, ListSorting sortingType = ListSorting.NewFirst)
         {
             if (articles == null)
                 throw new ArgumentNullException();
@@ -177,13 +177,8 @@ namespace Miniblog.Models.App
             return articles;
         }
 
-        public async Task<ListViewModel> GetListModelAsync(List<Article> articles, uint start = 1, string sorting = "newfirst")
+        public ListViewModel GetListModel(List<Article> articles, uint start = 1, string sorting = "newfirst")
         {
-            //if (articles == null)
-            //    throw new ArgumentNullException(paramName: articles.GetType().Name);
-            //else if (!articles.Any())
-            //    throw new ArgumentException("There is no articles to create model", articles.GetType().Name);
-
             ListSorting sortingType = GetSortingType(sorting);
             ListOptions listOptions = BlogOptions.ListOptions;
 
@@ -191,7 +186,7 @@ namespace Miniblog.Models.App
             total = Math.Ceiling(total);
 
             if(articles != null && articles.Any())
-                articles = await GetSelectionAsync(articles, start, sortingType);
+                articles = GetSelection(articles, start, sortingType);
 
             ListViewModel listViewModel = new ListViewModel
             {

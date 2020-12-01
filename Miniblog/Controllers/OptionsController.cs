@@ -42,7 +42,7 @@ namespace Miniblog.Controllers
 
         [HttpGet]
         //[Authorize(Roles = nameof(RoleType.Administrator))]
-        public async Task<IActionResult> Main()
+        public IActionResult Main()
         {
             Configuration.WebsiteOptions websiteOptions = BlogOptions.WebsiteOptions;
             MainViewModel mainViewModel = new MainViewModel()

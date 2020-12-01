@@ -1,15 +1,17 @@
-﻿@using Miniblog.Models.Entities.Enums
-@using Miniblog.Models.Services.Interfaces
+﻿@using Microsoft.Extensions.Options
+@using Miniblog.Models.Entities.Enums
+@using Miniblog.Configuration
 @using System.Security.Claims
 
-@inject IOptionRepository<Role> rolesRepository
-@inject IOptionRepository<WebsiteOptions> websiteOptionsRepo
+@inject IOptionsSnapshot<BlogOptions> optionsSnapshoot
+
 @model ArticleWriteViewModel
 
 @{
+    BlogOptions blogOptions = optionsSnapshoot.Value;
     RoleType type = (RoleType)Enum.Parse(typeof(RoleType), User.FindFirst(ClaimsIdentity.DefaultRoleClaimType).Value);
-    Role role = rolesRepository.Find(r => r.Type == type).FirstOrDefault();
-    WebsiteOptions websiteOptions = await websiteOptionsRepo.FirstOrDefaultAsync();
+    Role role = blogOptions.Roles.GetRole(type);
+    Miniblog.Configuration.WebsiteOptions websiteOptions = blogOptions.WebsiteOptions;
 }
 
 <div class="blog-container">
@@ -74,7 +76,7 @@
                                     string accent = string.Empty;
                                     foreach (var theme in Enum.GetValues(typeof(ColorTheme)))
                                     {
-                                        if((int)theme == (int)currentTheme)
+                                        if ((int)theme == (int)currentTheme)
                                             accent = "selected-circle";
                                         else
                                             accent = string.Empty;

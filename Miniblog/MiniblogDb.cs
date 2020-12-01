@@ -9,22 +9,14 @@ namespace Miniblog
     {
         public DbSet<Role> Roles { get; set; }
         public DbSet<ExtendedRole> ExtendedRoles { get; set; }
-        //public DbSet<Opportunities> Opportunities { get; set; }
-        //public DbSet<JobOpportunities> JobOpportunities { get; set; }
         public DbSet<User> Users { get; set; }
-        //public DbSet<Entry> Entries { get; set; }
-        //public DbSet<Page> Pages { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Series> Series { get; set; }
-        //public DbSet<Tag> Tags { get; set; }
         public DbSet<Topic> Topics { get; set; }
-        public DbSet<WebsiteOptions> WebsiteOptions { get; set; }
         public DbSet<BaseArticlesOptions> BaseArticlesOptions { get; set; }
         public DbSet<ArticleOptions> ArticleOptions { get; set; }
-        public DbSet<ListDisplayOptions> ListDisplayOptions { get; set; }
-        public DbSet<CommentsOptions> CommentsOptions { get; set; }
 
         public MiniblogDb(DbContextOptions options) : base(options)
         {
@@ -140,19 +132,6 @@ namespace Miniblog
                 .WithMany(ar => ar.Images)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //modelBuilder.Entity<ArticleTag>()
-            //    .HasKey(t => new { t.ArticleId, t.TagId });
-            //modelBuilder.Entity<ArticleTag>()
-            //    .HasOne(at => at.Article)
-            //    .WithMany(a => a.ArticleTags)
-            //    .HasForeignKey(at => at.ArticleId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-            //modelBuilder.Entity<ArticleTag>()
-            //    .HasOne(at => at.Tag)
-            //    .WithMany(t => t.ArticleTags)
-            //    .HasForeignKey(at => at.TagId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
             //UserArticlesDisplayOptions
             modelBuilder.Entity<ArticleOptions>()
                 .HasOne(u => u.Article)
@@ -164,13 +143,6 @@ namespace Miniblog
                 .HasConversion(
                 v => v.ToString(),
                 v => (ColorTheme)Enum.Parse(typeof(ColorTheme), v));
-
-            //ArticlesListDisplayOptions
-            //modelBuilder.Entity<ArticlesListDisplayOptions>()
-            //    .HasOne(a => a.WebsiteDisplayOptions)
-            //    .WithOne(w => w.ArticlesListDisplayOptions)
-            //    //.HasForeignKey(f=>f.)
-            //    .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ListDisplayOptions>()
                 .Property(e => e.ListDisplayDefaultType)
