@@ -1,10 +1,10 @@
-﻿using Miniblog.Models.App.Interfaces;
+﻿using Microsoft.Extensions.Options;
+using Miniblog.Configuration;
+using Miniblog.Models.App.Interfaces;
 using Miniblog.Models.Entities;
-using Miniblog.Models.Entities.Enums;
 using Miniblog.Models.Services.Interfaces;
 using Miniblog.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -13,10 +13,13 @@ namespace Miniblog.Models.App
 {
     public class ArticleService : IArticlesService
     {
-        public IRepository repository { get; set; }
-        public ArticleService(IRepository repository)
+        public IRepository repository { get; private set; }
+        public BlogOptions BlogOptions { get; private set; }
+        public ArticleService(IRepository repository,
+            IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
             this.repository = repository;
+            BlogOptions = optionsSnapshot.Value;
         }
         public async Task<Article> GetArticleByLinkAsync(string link)
         {
@@ -146,7 +149,7 @@ namespace Miniblog.Models.App
         }
         public async Task<Article> GetFullArticleAsync(Article article)
         {
-            ListDisplayOptions listOptions = await repository.ListDisplayOptions.FirstOrDefaultAsync();
+            ListOptions listOptions = BlogOptions.ListOptions;
 
             if (article.User == null)
                 article.User = await repository.Users.GetByIdAsync(article.UserId);

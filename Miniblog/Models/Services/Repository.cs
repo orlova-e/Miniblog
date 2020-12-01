@@ -15,7 +15,7 @@ namespace Miniblog.Models.Services
         IPlainRepository<Series> series;
 
         IOptionRepository<Role> roles;
-        IOptionRepository<ListDisplayOptions> listDisplayOptions;
+        //IOptionRepository<ListDisplayOptions> listDisplayOptions;
         IOptionRepository<ArticleOptions> articleOptions;
         IOptionRepository<CommentsOptions> commentsOptions;
         IOptionRepository<WebsiteOptions> websiteOptions;
@@ -73,15 +73,15 @@ namespace Miniblog.Models.Services
                 return roles;
             }
         }
-        public IOptionRepository<ListDisplayOptions> ListDisplayOptions
-        {
-            get
-            {
-                if (listDisplayOptions == null)
-                    listDisplayOptions = new ListOptionsRepo(Db);
-                return listDisplayOptions;
-            }
-        }
+        //public IOptionRepository<ListDisplayOptions> ListDisplayOptions
+        //{
+        //    get
+        //    {
+        //        if (listDisplayOptions == null)
+        //            listDisplayOptions = new ListOptionsRepo(Db);
+        //        return listDisplayOptions;
+        //    }
+        //}
         public IOptionRepository<ArticleOptions> ArticleOptions
         {
             get

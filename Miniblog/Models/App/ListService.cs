@@ -9,6 +9,8 @@ using Miniblog.Models.Services;
 using Miniblog.Models.Entities.Enums;
 using Miniblog.Models.Entities;
 using Miniblog.ViewModels;
+using Miniblog.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Miniblog.Models.App
 {
@@ -16,10 +18,14 @@ namespace Miniblog.Models.App
     {
         public IRepository repository { get; private set; }
         public IArticlesService articlesService { get; private set; }
-        public ListService(IRepository repository, IArticlesService articlesService)
+        public BlogOptions BlogOptions { get; private set; }
+        public ListService(IRepository repository,
+            IArticlesService articlesService,
+            IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
             this.repository = repository;
             this.articlesService = articlesService;
+            BlogOptions = optionsSnapshot.Value;
         }
 
         public async Task<List<Article>> FindArticlesAsync(Func<Article, bool> predicate)
@@ -88,29 +94,31 @@ namespace Miniblog.Models.App
             else if (!articles.Any())
                 throw new ArgumentException();
 
-            ListDisplayOptions listOptions = await repository.ListDisplayOptions.FirstOrDefaultAsync();
+            ListOptions listOptions = BlogOptions.ListOptions;
             if (listOptions.OverrideForUserArticle)
                 sortingType = listOptions.ListSortingDefaultType;
 
             articles = SortList(articles, sortingType);
 
-            if (start > 0 && listOptions.ArticlesPerPage > 0 && --start * listOptions.ArticlesPerPage + listOptions.ArticlesPerPage <= articles.Count)
+            if (start > 0
+                && listOptions.ArticlesPerPage.Value > 0 
+                && --start * listOptions.ArticlesPerPage.Value + listOptions.ArticlesPerPage.Value <= articles.Count)
             {
                 articles = articles
-                    .Skip((int)start * listOptions.ArticlesPerPage)
-                    .Take(listOptions.ArticlesPerPage)
+                    .Skip((int)start * listOptions.ArticlesPerPage.Value)
+                    .Take(listOptions.ArticlesPerPage.Value)
                     .ToList();
             }
-            else if (++start <= 0 && listOptions.ArticlesPerPage > 0 && listOptions.ArticlesPerPage <= articles.Count)
+            else if (++start <= 0 && listOptions.ArticlesPerPage.Value > 0 && listOptions.ArticlesPerPage.Value <= articles.Count)
             {
                 articles = articles
-                    .Take(listOptions.ArticlesPerPage)
+                    .Take(listOptions.ArticlesPerPage.Value)
                     .ToList();
             }
-            else if (listOptions.ArticlesPerPage > 0 && listOptions.ArticlesPerPage <= articles.Count)
+            else if (listOptions.ArticlesPerPage.Value > 0 && listOptions.ArticlesPerPage.Value <= articles.Count)
             {
                 articles = articles
-                    .TakeLast(listOptions.ArticlesPerPage)
+                    .TakeLast(listOptions.ArticlesPerPage.Value)
                     .ToList();
             }
 
@@ -177,9 +185,9 @@ namespace Miniblog.Models.App
             //    throw new ArgumentException("There is no articles to create model", articles.GetType().Name);
 
             ListSorting sortingType = GetSortingType(sorting);
-            ListDisplayOptions displayOptions = await repository.ListDisplayOptions.FirstOrDefaultAsync();
+            ListOptions listOptions = BlogOptions.ListOptions;
 
-            double total = (double)articles.Count / (double)displayOptions.ArticlesPerPage;
+            double total = (double)articles.Count / (double)listOptions.ArticlesPerPage.Value;
             total = Math.Ceiling(total);
 
             if(articles != null && articles.Any())

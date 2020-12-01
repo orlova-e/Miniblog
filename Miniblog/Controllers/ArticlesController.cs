@@ -59,7 +59,7 @@ namespace Miniblog.Controllers
             }
 
             Article article = await articleService.GetArticleByLinkAsync(title);
-            ListDisplayOptions listOptions = await repository.ListDisplayOptions.FirstOrDefaultAsync();
+            ListOptions listOptions = BlogOptions.ListOptions;
             if (listOptions.OverrideForUserArticle)
             {
                 article.DisplayOptions = (ArticleOptions)listOptions;

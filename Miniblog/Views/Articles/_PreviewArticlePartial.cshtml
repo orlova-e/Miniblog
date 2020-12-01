@@ -1,16 +1,18 @@
 ﻿@using Miniblog.Models.Entities
-@using Miniblog.Models.Services.Interfaces
+@using Microsoft.Extensions.Options;
+@using Miniblog.Configuration;
 
-@inject IOptionRepository<ListDisplayOptions> listDisplayRepo
+@inject IOptionsSnapshot<BlogOptions> optionsSnapshoot
 
 @model Article
 
 @{ 
-    ListDisplayOptions listOptions = await listDisplayRepo.FirstOrDefaultAsync();
+    ListOptions listOptions = optionsSnapshoot.Value.ListOptions;
     ArticleOptions articleOptions = Model.DisplayOptions;
+
     if (listOptions.OverrideForUserArticle)
     {
-        listOptions = (ListDisplayOptions)articleOptions;
+        articleOptions = (ArticleOptions)listOptions;
     }
 }
 
@@ -22,7 +24,7 @@
                 <h2><b>@Model.Header</b></h2>
             </a>
             <ul class="article-info clearfix">
-                @if (listOptions.Username)
+                @if (articleOptions.Username)
                 {
                     <li class="article-info-user">
                         <a href="@Url.Action("Account", "Users", new { username = Model.User.Username })">
@@ -42,41 +44,41 @@
 
                     @*<li><a href="@Url.Action("User", "Users", new { username = Model.User.Username })">@Model.User.Username</a></li>*@
                 }
-                @if (listOptions.DateAndTime)
+                @if (articleOptions.DateAndTime)
                 {
                     <li class="article-datetime"><a href="#">@Model.DateTime.ToString("g")</a></li>
                 }
                 
-                @if (listOptions.Likes)
+                @if (articleOptions.Likes)
                 {
                     <li>
                         <img src="/img/buttons/heart.png" alt="likes" height="20px" width="20px">
                         <span name="articleLikesInfo">@Model.Likes.Count</span>
                     </li>
                 }
-                @if (listOptions.Bookmarks)
+                @if (articleOptions.Bookmarks)
                 {
                     <li>
                         <img src="/img/ico/bookmark5.png" alt="bookmarks" height="20px" width="20px">
                         <span name="articleBookmarksInfo">@Model.Bookmarks.Count</span>
                     </li>
                 }
-                @if (listOptions.Comments)
+                @if (articleOptions.Comments)
                 {
                     <li>
                         <img src="/img/buttons/chat-2.png" alt="comments" height="18px" width="18px">
                         <span name="articleCommentsInfo">@Model.Comments.Count</span>
                     </li>
                 }
-                @if (listOptions.Topic)
+                @if (articleOptions.Topic)
                 {
                     <li><span>Topic: </span><a href="#">@(Model.Topic?.Name ?? "no topic")</a></li>
                 }
-                @if (listOptions.Series)
+                @if (articleOptions.Series)
                 {
                     <li><span>Series: </span><a href="#">@(Model.Series?.Name ?? "no series")</a></li>
                 }
-                @if (listOptions.Tags)
+                @if (articleOptions.Tags)
                 {
                     <li>
                         Tags:
