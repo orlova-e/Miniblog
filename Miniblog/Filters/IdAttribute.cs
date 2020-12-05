@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Miniblog.Models.Entities;
-using Miniblog.Models.Services.Interfaces;
+using Domain.Entities;
+using Repo.Interfaces;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Miniblog.Models.App.Interfaces;
+using Services.Interfaces;
 
 namespace Miniblog.Filters
 {

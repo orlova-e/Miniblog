@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Miniblog.Models.Entities;
-using Miniblog.Models.Entities.Enums;
-using Miniblog.Models.Services.Interfaces;
+using Domain.Entities;
+using Domain.Entities.Enums;
+using Repo.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

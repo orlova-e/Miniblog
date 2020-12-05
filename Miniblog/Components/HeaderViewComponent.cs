@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Miniblog.Configuration;
-using Miniblog.Models.App.Interfaces;
-using Miniblog.Models.Entities;
-using Miniblog.Models.Entities.Enums;
-using Miniblog.Models.Services.Interfaces;
+using Services.Interfaces;
+using Domain.Entities;
+using Domain.Entities.Enums;
+using Repo.Interfaces;
 using Miniblog.ViewModels;
 using System;
 using System.Collections.Generic;

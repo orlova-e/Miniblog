@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Controllers\ve-BDBB.tmp" />
     <None Remove="Models\App\Interfaces\IArticlesService.cs~RFebb58d.TMP" />
     <None Remove="Models\Services\UsersRepository.cs~RF115f6df.TMP" />
     <None Remove="Views\Account\SignIn.cshtml~RF758544.TMP" />
@@ -55,6 +56,10 @@
     <Folder Include="Migrations\" />
     <Folder Include="Views\Home\" />
     <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>

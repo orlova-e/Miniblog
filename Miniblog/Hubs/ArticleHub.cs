@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using Miniblog.Models.Entities;
-using Miniblog.Models.Services.Interfaces;
+using Domain.Entities;
+using Repo.Interfaces;
 using Miniblog.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Miniblog.Models.App.Interfaces;
+using Services.Interfaces;
 
 namespace Miniblog.Hubs
 {

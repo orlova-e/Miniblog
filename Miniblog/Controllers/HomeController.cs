@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Miniblog.Models.Services.Interfaces;
+using Repo.Interfaces;
 
 namespace Miniblog.Controllers
 {

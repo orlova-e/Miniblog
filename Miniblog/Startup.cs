@@ -5,18 +5,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Miniblog.Configuration;
 using Miniblog.Filters;
 using Miniblog.Hubs;
-using Miniblog.Models.App;
-using Miniblog.Models.App.Interfaces;
-using Miniblog.Models.Entities;
-using Miniblog.Models.Services;
-using Miniblog.Models.Services.Interfaces;
+using Services;
 using System;
 using System.Globalization;
 using System.IO;
@@ -26,31 +21,17 @@ namespace Miniblog
     public class Startup
     {
         public IConfiguration Configuration { get; private set; }
-        private string ConfigPath { get; }
+        private string ConfigurationFilePath { get; }
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            //IConfigurationBuilder builder = new ConfigurationBuilder()
-            //    .AddConfiguration(configuration);
-            //Configuration = builder.Build();
             Configuration = configuration;
-            ConfigPath = Path.Combine(env.ContentRootPath, "config.json");
+            ConfigurationFilePath = Path.Combine(env.ContentRootPath, "config.json");
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<MiniblogDb>(options => options.UseSqlServer(connectionString));
-
             services.Configure<BlogOptions>(Configuration);
-
-            services.AddScoped<IRepository, Repository>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IArticlesService, ArticleService>();
-            services.AddScoped<IListService, ListService>();
-            services.AddScoped<IConfigurationWriter>(x => ActivatorUtilities.CreateInstance<ConfigurationWriter>(x, ConfigPath));
-
-            services.AddTransient<ITextService, TextService>(); // to delete
-
-            services.AddScoped<IOptionRepository<Role>, RolesRepository>();
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddBLLServices(connectionString, ConfigurationFilePath);
 
             services.AddScoped<IdAttribute>();
 
@@ -86,7 +67,6 @@ namespace Miniblog
                     options.Filters.AddService<IdAttribute>();
                 })
                 .AddViewLocalization();
-            //services.AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAntiforgery antiforgery)
@@ -126,13 +106,6 @@ namespace Miniblog
             {
                 endpoints.MapHub<ArticleHub>("/articlehub");
                 endpoints.MapHub<SubscriptionHub>("/subscription");
-
-                //endpoints.MapHub<MessagesHub>("/messages");
-
-                //endpoints.MapControllerRoute(
-                //    name: "api",
-                //    pattern: "api/{controller}/{action}/{id?}");
-
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

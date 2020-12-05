@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Miniblog.Models.App.Interfaces;
-using Miniblog.Models.Entities;
+using Services.Interfaces;
+using Domain.Entities;
 using Miniblog.ViewModels;
 using System;
 using System.Collections.Generic;

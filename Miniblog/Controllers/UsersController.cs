@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Miniblog.Models.App.Interfaces;
-using Miniblog.Models.Entities;
-using Miniblog.Models.Services.Interfaces;
+using Services.Interfaces;
+using Domain.Entities;
+using Repo.Interfaces;
 using Miniblog.ViewModels;
 using System;
 using System.Collections.Generic;

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
-using Miniblog.Models.App.Interfaces;
-using Miniblog.Models.Entities;
+using Services.Interfaces;
+using Domain.Entities;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
