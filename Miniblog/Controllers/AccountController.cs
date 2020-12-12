@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Services.Interfaces;
-using Domain.Entities;
 using Miniblog.ViewModels;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +34,7 @@ namespace Miniblog.Controllers
                 return View(loginModel);
             }
 
-            User user = userService.GetFromDb(loginModel);
+            User user = userService.GetFromDb((Account)loginModel);
 
             if(user == null)
             {
@@ -60,39 +60,39 @@ namespace Miniblog.Controllers
                 return View(registerModel);
             }
 
-            bool alreadyRegisteredInJwtAccount = false;
-            User user;
-            bool guidParsed = Guid.TryParse(registerModel.userId, out Guid guid);
+            //bool alreadyRegisteredInJwtAccount = false;
+            //User user;
+            //bool guidParsed = Guid.TryParse(registerModel.userId, out Guid guid);
 
-            if (guidParsed)
-            {
-                alreadyRegisteredInJwtAccount = userService.CheckForExistence(registerModel, guid);
-            }
+            //if (guidParsed)
+            //{
+            //    alreadyRegisteredInJwtAccount = userService.CheckForExistence(registerModel, guid);
+            //}
 
-            if (alreadyRegisteredInJwtAccount)
+            //if (alreadyRegisteredInJwtAccount)
+            //{
+            //    user = await userService.GetFromDbAsync(guid);
+            //}
+            //else // если JwtAccountController.SignUp не отработал
+            //{
+            IEnumerable<string> errors = userService.CheckForInvalidAccountParameters((Account)registerModel);
+            if (errors.Any())
             {
-                user = await userService.GetFromDbAsync(guid);
-            }
-            else // если JwtAccountController.SignUp не отработал
-            {
-                IEnumerable<string> errors = userService.ParametersAlreadyExist(registerModel);
-                if (errors.Any())
+                if (errors.Contains("Username"))
                 {
-                    if (errors.Contains("Username"))
-                    {
-                        ModelState.AddModelError(nameof(registerModel.Username), "A user with this name already exists");
-                    }
-                    if (errors.Contains("Email"))
-                    {
-                        ModelState.AddModelError(nameof(registerModel.Email), "A user with this email already exists");
-                    }
-                    return View("SignUp", registerModel);
+                    ModelState.AddModelError(nameof(registerModel.Username), "A user with this name already exists");
                 }
-                user = await userService.CreateIntoDbAsync(registerModel);
+                if (errors.Contains("Email"))
+                {
+                    ModelState.AddModelError(nameof(registerModel.Email), "A user with this email already exists");
+                }
+
+                return View("SignUp", registerModel);
             }
+            User user = await userService.CreateIntoDbAsync((Account)registerModel);
+            //}
 
             await Authenticate(user);
-
             return RedirectToRoute("default", new { controller = "Home", action = "Index" });
         }
         private async Task Authenticate(User user)

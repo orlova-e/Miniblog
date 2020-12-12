@@ -15,7 +15,6 @@ namespace Miniblog.ViewModels
         public string Series { get; set; }
         public string Tags { get; set; }
         public EntryType EntryType { get; set; }
-        //public ColorTheme ColorTheme { get; set; }
         public bool Visibility { get; set; }
         public bool MenuVisibility { get; set; }
         public ArticleOptions DisplayOptions { get; set; }

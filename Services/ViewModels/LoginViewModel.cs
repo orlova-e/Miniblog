@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Miniblog.ViewModels
 {
@@ -10,5 +11,11 @@ namespace Miniblog.ViewModels
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        public static explicit operator Account(LoginViewModel loginViewModel) => new Account
+        {
+            Username = loginViewModel.Username,
+            Password = loginViewModel.Password
+        };
     }
 }
