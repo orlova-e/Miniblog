@@ -25,10 +25,10 @@ namespace Services.Interfaces
         User GetFromDb(Account account);
         User GetUserFromDb(Func<User, bool> predicate);
         Task<User> GetFromDbAsync(Guid id);
+        User FindByName(string username);
         string GetHash(string password);
         Task AddSubscriberAsync(Guid authorId, Guid subscriberId);
         Task RemoveSubscriberAsync(Guid authorId, Guid subscriberId);
         Task<List<User>> GetSubscriptionAsync(Guid userId);
-        User FindByName(string username);
     }
 }

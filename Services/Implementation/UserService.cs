@@ -138,16 +138,16 @@ namespace Services.Implementation
             await repository.Users.UpdateAsync(author);
         }
 
-        public User GetUserFromDb(Func<User, bool> predicate)
-        {
-            return repository.Users.Find(predicate).FirstOrDefault();
-        }
-
         public async Task<List<User>> GetSubscriptionAsync(Guid userId)
         {
             User user = await repository.Users.GetByIdAsync(userId);
             List<User> subscription = repository.Users.Find(u => u.Subscribers.Contains(user)).ToList();
             return subscription;
+        }
+
+        public User GetUserFromDb(Func<User, bool> predicate)
+        {
+            return repository.Users.Find(predicate).FirstOrDefault();
         }
 
         public User FindByName(string username)
