@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miniblog", "Miniblog\Miniblog.csproj", "{167DCB09-A54F-48AB-8FB6-6F17EDD1CB18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Miniblog\Web.csproj", "{167DCB09-A54F-48AB-8FB6-6F17EDD1CB18}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{0621450E-6070-4A11-8AAE-60F7BC315BA5}"
 EndProject
