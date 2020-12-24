@@ -29,6 +29,7 @@ namespace Services.Interfaces
         /// <param name="articleWriteModel">Model that was filled in by the user</param>
         /// <returns>Created article</returns>
         Task<Article> CreateArticleAsync(Guid userId, ArticleWriteViewModel articleWriteModel);
+
         /// <summary>
         /// Checks the existence of the article for the specified condition
         /// </summary>
@@ -48,6 +49,6 @@ namespace Services.Interfaces
         /// <param name="article">Identifier of the article to update</param>
         /// <returns></returns>
         Task UpdateArticleAsync(Article article);
-        Task<Article> GetFullArticleAsync(Article article);
+        Task<Article> GetPreparedArticleAsync(Article article);
     }
 }

@@ -108,7 +108,16 @@ namespace Services.Implementation
             double total = (double)articles.Count / (double)listOptions.ArticlesPerPage.Value;
             total = Math.Ceiling(total);
 
-            if(articles != null && articles.Any())
+            if (!listOptions.OverrideForUserArticle)
+            {
+                for (int i = 0; i < articles.Count; i++)
+                {
+                    articles[i].DisplayOptions = (ArticleOptions)listOptions;
+                    articles[i].DisplayOptions.ColorTheme = BlogOptions.WebsiteOptions.ColorTheme;
+                }
+            }
+
+            if (articles != null && articles.Any())
                 articles = GetSelection(articles, start, sortingType);
 
             ListViewModel listViewModel = new ListViewModel

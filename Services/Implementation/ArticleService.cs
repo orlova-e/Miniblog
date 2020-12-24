@@ -15,29 +15,29 @@ namespace Services.Implementation
     {
         public IRepository repository { get; private set; }
         public IUserService userService { get; private set; }
-        public BlogOptions BlogOptions { get; private set; }
         public ArticleService(IRepository repository,
-            IUserService userService,
-            IOptionsSnapshot<BlogOptions> optionsSnapshot)
+            IUserService userService)
         {
             this.repository = repository;
             this.userService = userService;
-            BlogOptions = optionsSnapshot.Value;
         }
+        
         public async Task<Article> GetArticleByLinkAsync(string link)
         {
             Article article = repository.Articles.Find(a => a.Link == link).FirstOrDefault();
             if (article != null)
-                article = await GetFullArticleAsync(article);
+                article = await GetPreparedArticleAsync(article);
             return article;
         }
+        
         public async Task<Article> GetArticleByIdAsync(Guid articleId)
         {
             Article article = await repository.Articles.GetByIdAsync(articleId);
             if (article != null)
-                article = await GetFullArticleAsync(article);
+                article = await GetPreparedArticleAsync(article);
             return article;
         }
+        
         public async Task<Article> CreateArticleAsync(Guid userId, ArticleWriteViewModel articleViewModel)
         {
             User currentUser = await userService.GetFromDbAsync(userId);
@@ -135,6 +135,7 @@ namespace Services.Implementation
             article = repository.Articles.Find(a => a.Link == article.Link).FirstOrDefault();
             return article;
         }
+
         public bool HasArticle(Func<Article, bool> predicate)
         {
             var article = repository.Articles.Find(predicate).FirstOrDefault();
@@ -142,28 +143,26 @@ namespace Services.Implementation
                 return false;
             return true;
         }
+        
         public async Task DeleteArticleAsync(Guid articleId)
         {
             await repository.Articles.DeleteAsync(articleId);
         }
+        
         public async Task UpdateArticleAsync(Article article)
         {
             await repository.Articles.UpdateAsync(article);
         }
-        public async Task<Article> GetFullArticleAsync(Article article)
+        
+        public async Task<Article> GetPreparedArticleAsync(Article article)
         {
-            ListOptions listOptions = BlogOptions.ListOptions;
 
             if (article.User == null)
                 article.User = await userService.GetFromDbAsync(article.UserId);
 
-            if (listOptions.OverrideForUserArticle || article.DisplayOptions == null)
+            if (article.DisplayOptions == null)
             {
                 article.DisplayOptions = repository.ArticleOptions.Find(d => d.ArticleId == article.Id).FirstOrDefault();
-            }
-            else
-            {
-                article.DisplayOptions = (ArticleOptions)listOptions;
             }
 
             if (article.TopicId != null && article.Topic == null)
@@ -194,7 +193,7 @@ namespace Services.Implementation
         {
             Article article = repository.Articles.Find(predicate).FirstOrDefault();
             if (article != null)
-                article = await GetFullArticleAsync(article);
+                article = await GetPreparedArticleAsync(article);
             return article;
         }
     }

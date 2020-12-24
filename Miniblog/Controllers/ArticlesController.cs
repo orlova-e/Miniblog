@@ -57,6 +57,7 @@ namespace Miniblog.Controllers
             if (listOptions.OverrideForUserArticle)
             {
                 article.DisplayOptions = (ArticleOptions)listOptions;
+                article.DisplayOptions.ColorTheme = BlogOptions.WebsiteOptions.ColorTheme;
             }
 
             User user = null;
