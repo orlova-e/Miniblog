@@ -154,7 +154,7 @@ namespace Miniblog.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(AccessAttribute), Arguments = new[] { "WriteArticles" })]
-        public async Task<IActionResult> Add(ArticleWriteViewModel articleViewModel)
+        public async Task<IActionResult> Add(NewArticle articleViewModel)
         {
             if (!ModelState.IsValid)
             {

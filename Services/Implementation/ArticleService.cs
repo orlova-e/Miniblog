@@ -36,7 +36,7 @@ namespace Services.Implementation
             return article;
         }
         
-        public async Task<Article> CreateArticleAsync(Guid userId, ArticleWriteViewModel articleViewModel)
+        public async Task<Article> CreateArticleAsync(Guid userId, NewArticle articleViewModel)
         {
             User currentUser = await userService.GetFromDbAsync(userId);
 

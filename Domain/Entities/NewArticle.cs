@@ -1,10 +1,12 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Miniblog.ViewModels
 {
-    public class ArticleWriteViewModel
+    [NotMapped]
+    public class NewArticle
     {
         [Required(ErrorMessage = "Header is required")]
         [StringLength(200, ErrorMessage = "Header's maximum length is 50 characters")]

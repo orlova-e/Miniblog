@@ -1,8 +1,6 @@
 ﻿using Domain.Entities;
-using Domain.Entities.Enums;
 using Miniblog.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Services.Interfaces
@@ -26,9 +24,9 @@ namespace Services.Interfaces
         /// Creates an article using user's Id and ArticleWriteViewModel.
         /// </summary>
         /// <param name="userId">User's identifier</param>
-        /// <param name="articleWriteModel">Model that was filled in by the user</param>
+        /// <param name="newArticle">Article that was filled in by the user</param>
         /// <returns>Created article</returns>
-        Task<Article> CreateArticleAsync(Guid userId, ArticleWriteViewModel articleWriteModel);
+        Task<Article> CreateArticleAsync(Guid userId, NewArticle newArticle);
 
         /// <summary>
         /// Checks the existence of the article for the specified condition
