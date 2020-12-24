@@ -22,13 +22,13 @@ namespace Miniblog.Controllers
     {
         public BlogOptions BlogOptions { get; set; }
         public IRepository repository { get; private set; }
-        public IArticlesService articleService { get; private set; }
+        public IArticleService articleService { get; private set; }
         public IListPreparer listPreparer { get; private set; }
         public IListCreator listCreator { get; private set; }
         public IUserService userService { get; private set; }
 
         public ArticlesController(IRepository repository,
-            IArticlesService articleService,
+            IArticleService articleService,
             IListPreparer listPreparer,
             IListCreator listCreator,
             IUserService userService,

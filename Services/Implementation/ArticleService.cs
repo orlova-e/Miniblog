@@ -1,9 +1,7 @@
-﻿using Microsoft.Extensions.Options;
-using Miniblog.Configuration;
-using Services.Interfaces;
-using Domain.Entities;
-using Repo.Interfaces;
+﻿using Domain.Entities;
 using Miniblog.ViewModels;
+using Repo.Interfaces;
+using Services.Interfaces;
 using System;
 using System.Linq;
 using System.Net;
@@ -11,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Services.Implementation
 {
-    public class ArticleService : IArticlesService
+    public class ArticleService : IArticleService
     {
         public IRepository repository { get; private set; }
         public IUserService userService { get; private set; }

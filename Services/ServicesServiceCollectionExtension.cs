@@ -1,24 +1,22 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Miniblog.Configuration;
-using Services.Implementation;
-using Services.Interfaces;
-using Domain.Entities;
+﻿using Domain.Entities;
+using Microsoft.Extensions.DependencyInjection;
+using Repo;
 using Repo.Implementation;
 using Repo.Interfaces;
-using Repo;
+using Services.Implementation;
+using Services.Interfaces;
 
 namespace Services
 {
     public static class ServicesServiceCollectionExtension
     {
-        public static IServiceCollection AddBLLServices(this IServiceCollection services, string dbConnectionString, string configurationPath)
+        public static IServiceCollection AddBLLServices(this IServiceCollection services, string dbConnectionString)
         {
             services.AddRepository(dbConnectionString);
             services.AddArticleService();
             services.AddUserService();
             services.AddListCreator();
             services.AddTextService();
-            services.AddConfigurationWriter(configurationPath);
             services.AddRolesRepo();
             return services;
         }
@@ -44,12 +42,6 @@ namespace Services
         private static IServiceCollection AddListCreator(this IServiceCollection services)
         {
             services.AddScoped<IListCreator, ListCreator>();
-            return services;
-        }
-
-        private static IServiceCollection AddConfigurationWriter(this IServiceCollection services, string configurationPath)
-        {
-            services.AddScoped<IConfigurationWriter>(x => ActivatorUtilities.CreateInstance<ConfigurationWriter>(x, configurationPath));
             return services;
         }
 
