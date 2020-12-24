@@ -15,7 +15,7 @@ namespace Repo
         public DbSet<Image> Images { get; set; }
         public DbSet<Series> Series { get; set; }
         public DbSet<Topic> Topics { get; set; }
-        public DbSet<BaseArticlesOptions> BaseArticlesOptions { get; set; }
+        public DbSet<BaseDisplayOptions> BaseArticlesOptions { get; set; }
         public DbSet<ArticleOptions> ArticleOptions { get; set; }
 
         public MiniblogDb(DbContextOptions options) : base(options)

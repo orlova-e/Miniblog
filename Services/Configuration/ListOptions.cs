@@ -3,7 +3,7 @@ using Domain.Entities.Enums;
 
 namespace Miniblog.Configuration
 {
-    public class ListOptions : BaseArticlesOptions
+    public class ListOptions : BaseDisplayOptions
     {
         public bool OverrideForUserArticle { get; set; }
         public Changeable ArticlesPerPage { get; set; }
