@@ -16,7 +16,7 @@ namespace Services
             services.AddRepository(dbConnectionString);
             services.AddArticleService();
             services.AddUserService();
-            services.AddListService();
+            services.AddListCreator();
             services.AddTextService();
             services.AddConfigurationWriter(configurationPath);
             services.AddRolesRepo();
@@ -41,11 +41,12 @@ namespace Services
             return services;
         }
 
-        private static IServiceCollection AddListService(this IServiceCollection services)
+        private static IServiceCollection AddListCreator(this IServiceCollection services)
         {
-            services.AddScoped<IListService, ListService>();
+            services.AddScoped<IListCreator, ListCreator>();
             return services;
         }
+
         private static IServiceCollection AddConfigurationWriter(this IServiceCollection services, string configurationPath)
         {
             services.AddScoped<IConfigurationWriter>(x => ActivatorUtilities.CreateInstance<ConfigurationWriter>(x, configurationPath));

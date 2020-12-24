@@ -3,42 +3,19 @@ using Domain.Entities.Enums;
 using Microsoft.Extensions.Options;
 using Miniblog.Configuration;
 using Miniblog.ViewModels;
-using Repo.Interfaces;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Services.Implementation
 {
-    public class ListService : IListService
+    public class ListPreparer : IListPreparer
     {
-        public IRepository repository { get; private set; }
-        public IArticlesService articlesService { get; private set; }
         public BlogOptions BlogOptions { get; private set; }
-        public ListService(IRepository repository,
-            IArticlesService articlesService,
-            IOptionsSnapshot<BlogOptions> optionsSnapshot)
+        public ListPreparer(IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
-            this.repository = repository;
-            this.articlesService = articlesService;
             BlogOptions = optionsSnapshot.Value;
-        }
-
-        public async Task<List<Article>> FindArticlesAsync(Func<Article, bool> predicate)
-        {
-            List<Article> articles = (await repository.Articles.GetAllAsync())
-                 .Where(predicate)
-                 .Where(a => a.Visibility && a.EntryType == EntryType.Article)
-                 .OrderByDescending(a => a.DateTime.Ticks)
-                 .ToList();
-
-            for (int i = 0; i < articles.Count; i++)
-            {
-                articles[i] = await articlesService.GetFullArticleAsync(articles[i]);
-            }
-            return articles;
         }
 
         public ListSorting GetSortingType(string sortby = "newfirst")
@@ -123,58 +100,6 @@ namespace Services.Implementation
             return articles;
         }
 
-        public List<Article> FindDrafts(Guid userId)
-        {
-            List<Article> articles = repository.Articles
-                .Find(a=>a.UserId == userId)
-                .Where(a => !a.Visibility && a.EntryType == EntryType.Article)
-                .ToList();
-            return articles;
-        }
-
-        public List<Article> FindEntries(Func<Article, bool> predicate)
-        {
-            List<Article> articles = repository.Articles
-                .Find(predicate)
-                .ToList();
-            return articles;
-        }
-
-        public async Task<List<Article>> GetFavouritesAsync(Guid userId)
-        {
-            List<Article> articles = (await repository.ArticleLikes
-                .GetAllEntriesForAsync(userId))
-                .Where(a => a.Visibility && a.EntryType == EntryType.Article)
-                .ToList();
-            return articles;
-        }
-
-        public async Task<List<Article>> GetBookmarkedAsync(Guid userId)
-        {
-            List<Article> articles = (await repository.ArticleBookmarks
-                .GetAllEntriesForAsync(userId))
-                .Where(a => a.Visibility && a.EntryType == EntryType.Article)
-                .ToList();
-            return articles;
-        }
-
-        public async Task<List<Article>> GetCommentedAsync(Guid userId)
-        {
-            IEnumerable<Guid> articlesId = (await repository.CommentLikes
-                .GetAllEntriesForAsync(userId))
-                .Select(c => c.ArticleId);
-
-            List<Article> articles = new List<Article>();
-
-            foreach(Guid id in articlesId)
-            {
-                Article article = await repository.Articles.GetByIdAsync(id);
-                if(!articles.Contains(article) && article.Visibility && article.EntryType == EntryType.Article)
-                    articles.Add(article);
-            }
-            return articles;
-        }
-
         public ListViewModel GetListModel(List<Article> articles, uint start = 1, string sorting = "newfirst")
         {
             ListSorting sortingType = GetSortingType(sorting);
@@ -195,12 +120,5 @@ namespace Services.Implementation
             };
             return listViewModel;
         }
-
-        //public Task<List<Article>> GetVisibleSelectionAsync(int start = 1, ListSortingType sortingType = ListSortingType.NewFirst, List<Article> articles = null)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-
     }
 }

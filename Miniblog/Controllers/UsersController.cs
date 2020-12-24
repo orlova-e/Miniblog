@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Services.Interfaces;
-using Domain.Entities;
-using Repo.Interfaces;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Miniblog.ViewModels;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -14,14 +12,17 @@ namespace Miniblog.Controllers
     public class UsersController : Controller
     {
         public IArticlesService articleService { get; private set; }
-        public IListService listService { get; set; }
+        public IListPreparer listPreparer { get; set; }
+        public IListCreator listCreator { get; private set; }
         public IUserService userService { get; private set; }
         public UsersController(IArticlesService articleService,
-            IListService listService,
+            IListPreparer listPreparer,
+            IListCreator listCreator,
             IUserService userService)
         {
             this.articleService = articleService;
-            this.listService = listService;
+            this.listPreparer = listPreparer;
+            this.listCreator = listCreator;
             this.userService = userService;
         }
         [HttpGet]
@@ -33,8 +34,8 @@ namespace Miniblog.Controllers
             if (author == null)
                 return NotFound();
 
-            List<Article> articles = await listService.FindArticlesAsync(a => a.User.Id == author.Id);
-            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
+            List<Article> articles = await listCreator.FindArticlesAsync(a => a.User.Id == author.Id);
+            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Account";
 
             bool subscribed = false;

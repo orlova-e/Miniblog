@@ -23,32 +23,23 @@ namespace Miniblog.Controllers
         public BlogOptions BlogOptions { get; set; }
         public IRepository repository { get; private set; }
         public IArticlesService articleService { get; private set; }
-        public IListService listService { get; private set; }
+        public IListPreparer listPreparer { get; private set; }
+        public IListCreator listCreator { get; private set; }
         public IUserService userService { get; private set; }
-
-        //public Configuration.WebsiteOptions WebsiteOptions { get; private set; }
-        //public Roles Roles { get; private set; }
-        //public ListOptions ListOptions { get; private set; }
-        //public Configuration.CommentsOptions CommentsOptions { get; private set; }
 
         public ArticlesController(IRepository repository,
             IArticlesService articleService,
-            IListService listService,
+            IListPreparer listPreparer,
+            IListCreator listCreator,
             IUserService userService,
             IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
             this.repository = repository;
             this.articleService = articleService;
-            this.listService = listService;
+            this.listPreparer = listPreparer;
+            this.listCreator = listCreator;
             this.userService = userService;
             this.BlogOptions = optionsSnapshot.Value;
-            //WebsiteOptions = websiteOptions.Value;
-            //Roles = roles.Value;
-            //ListOptions = listOptions.Value;
-            //CommentsOptions = commentsOptions.Value;
-            //CommentsOptions.Depth.Value = 2;
-
-            //configuration[""]
         }
 
         [AllowAnonymous]
@@ -79,7 +70,7 @@ namespace Miniblog.Controllers
                 }
             }
 
-            Configuration.CommentsOptions commentsOptions = BlogOptions.CommentsOptions;
+            CommentsOptions commentsOptions = BlogOptions.CommentsOptions;
 
             ArticleReadViewModel articleReadModel = new ArticleReadViewModel
             {
@@ -106,9 +97,9 @@ namespace Miniblog.Controllers
         [HttpGet]
         public async Task<IActionResult> List([FromQuery] uint page = 1, string sortby = "newfirst") // create method for series ?
         {
-            List<Article> articles = await listService
+            List<Article> articles = await listCreator
                 .FindArticlesAsync(a => true);
-            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
+            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "List";
             return View(listViewModel);
         }
@@ -117,8 +108,8 @@ namespace Miniblog.Controllers
         public async Task<IActionResult> Favourites([FromQuery] uint page = 1, string sortby = "newfirst")
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = await listService.GetFavouritesAsync(userId);
-            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
+            List<Article> articles = await listCreator.GetFavouritesAsync(userId);
+            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Favourites";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
@@ -127,8 +118,8 @@ namespace Miniblog.Controllers
         public async Task<IActionResult> Bookmarks([FromQuery] uint page = 1, string sortby = "newfisrt")
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = await listService.GetBookmarkedAsync(userId);
-            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
+            List<Article> articles = await listCreator.GetBookmarkedAsync(userId);
+            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Bookmarks";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
@@ -137,8 +128,8 @@ namespace Miniblog.Controllers
         public async Task<IActionResult> Commented([FromQuery] uint page = 1, string sortby = "newfisrt")
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = await listService.GetCommentedAsync(userId);
-            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
+            List<Article> articles = await listCreator.GetCommentedAsync(userId);
+            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Commented";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
@@ -147,8 +138,8 @@ namespace Miniblog.Controllers
         public IActionResult Drafts([FromQuery] uint page = 1, string sortby = "newfisrt")
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = listService.FindDrafts(userId);
-            ListViewModel listViewModel = listService.GetListModel(articles, page, sortby);
+            List<Article> articles = listCreator.FindDrafts(userId);
+            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Drafts";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }

@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Entities;
+using Domain.Entities.Enums;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Miniblog.Configuration;
-using Services.Interfaces;
-using Domain.Entities;
-using Domain.Entities.Enums;
-using Repo.Interfaces;
 using Miniblog.ViewModels;
+using Repo.Interfaces;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -19,20 +18,23 @@ namespace Miniblog.Components
         public BlogOptions BlogOptions { get; private set; }
         public IRepository _repository { get; set; }
         public IUserService UserService { get; private set; }
-        public IListService ListService { get; private set; }
+        public IListPreparer ListPreparer { get; private set; }
+        public IListCreator ListCreator { get; private set; }
         public HeaderViewComponent(IRepository repository,
             IUserService userService,
-            IListService listService,
+            IListPreparer listPreparer,
+            IListCreator listCreator,
             IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
             BlogOptions = optionsSnapshot.Value;
             UserService = userService;
-            ListService = listService;
+            ListPreparer = listPreparer;
+            ListCreator = listCreator;
             _repository = repository;
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            Configuration.WebsiteOptions websiteDisplayOptions = BlogOptions.WebsiteOptions;
+            WebsiteOptions websiteDisplayOptions = BlogOptions.WebsiteOptions;
             HeaderViewModel header = new HeaderViewModel()
             {
                 Title = websiteDisplayOptions.Name,
@@ -72,7 +74,7 @@ namespace Miniblog.Components
                 pages.Add("Topics", Url.Action("List", "Articles", new { name = "Topics" }));
             }
 
-            List<Article> pagesDb = ListService
+            List<Article> pagesDb = ListCreator
                 .FindEntries(page => page.EntryType == EntryType.Page && page.Visibility == true && page.MenuVisibility == true);
 
 

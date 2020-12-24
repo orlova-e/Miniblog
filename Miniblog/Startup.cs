@@ -12,6 +12,8 @@ using Miniblog.Configuration;
 using Miniblog.Filters;
 using Miniblog.Hubs;
 using Services;
+using Services.Implementation;
+using Services.Interfaces;
 using System;
 using System.Globalization;
 using System.IO;
@@ -32,6 +34,8 @@ namespace Miniblog
             services.Configure<BlogOptions>(Configuration);
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddBLLServices(connectionString, ConfigurationFilePath);
+            services.AddScoped<IListPreparer, ListPreparer>();
+            services.AddScoped<IListCreator, ListCreator>();
 
             services.AddScoped<IdAttribute>();
 
