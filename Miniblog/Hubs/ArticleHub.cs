@@ -18,17 +18,17 @@ namespace Miniblog.Hubs
     {
         string DateTimePattern { get; }
         public IRepository repository { get; private set; }
-        public IArticlesService articlesService { get; private set; }
+        public IArticleService articleService { get; private set; }
         public ITextService textService { get; private set; }
         public IUserService userService { get; private set; }
 
         public ArticleHub(IRepository repository,
-            IArticlesService articlesService,
+            IArticleService articlesService,
             ITextService textService,
             IUserService userService)
         {
             this.repository = repository;
-            this.articlesService = articlesService;
+            this.articleService = articlesService;
             this.textService = textService;
             this.userService = userService;
             DateTimePattern = new DateTimeFormatInfo().RoundtripDtPattern();
@@ -43,7 +43,7 @@ namespace Miniblog.Hubs
             
             text = textService.GetPrepared(text);
 
-            Article article = await articlesService.GetArticleByLinkAsync(title);
+            Article article = await articleService.GetArticleByLinkAsync(title);
 
             if (article != null)
             {
@@ -96,7 +96,7 @@ namespace Miniblog.Hubs
             if (!(user?.Role?.WriteComments ?? false))
                 return;
 
-            Article article = await articlesService.GetArticleByLinkAsync(title);
+            Article article = await articleService.GetArticleByLinkAsync(title);
 
             if(article != null)
             {
@@ -131,7 +131,7 @@ namespace Miniblog.Hubs
 
         public async Task DeleteComment(string title, string commentId)
         {
-            Article article = await articlesService.GetArticleByLinkAsync(title);
+            Article article = await articleService.GetArticleByLinkAsync(title);
 
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
             User user = await userService.GetFromDbAsync(userId);
@@ -178,7 +178,7 @@ namespace Miniblog.Hubs
             if (user == null)
                 return;
 
-            Article article = await articlesService.GetArticleByLinkAsync(title);
+            Article article = await articleService.GetArticleByLinkAsync(title);
             if(article != null)
             {
                 if(!await repository.ArticleLikes.ContainsAsync(article.Id, userId))
@@ -203,7 +203,7 @@ namespace Miniblog.Hubs
             if (user == null)
                 return;
 
-            Article article = await articlesService.GetArticleByLinkAsync(title);
+            Article article = await articleService.GetArticleByLinkAsync(title);
             if(article != null)
             {
                 if(!await repository.ArticleBookmarks.ContainsAsync(article.Id, userId))

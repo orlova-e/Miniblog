@@ -11,11 +11,11 @@ namespace Miniblog.Controllers
 {
     public class UsersController : Controller
     {
-        public IArticlesService articleService { get; private set; }
+        public IArticleService articleService { get; private set; }
         public IListPreparer listPreparer { get; set; }
         public IListCreator listCreator { get; private set; }
         public IUserService userService { get; private set; }
-        public UsersController(IArticlesService articleService,
+        public UsersController(IArticleService articleService,
             IListPreparer listPreparer,
             IListCreator listCreator,
             IUserService userService)

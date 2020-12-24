@@ -25,7 +25,7 @@ namespace Services
 
         private static IServiceCollection AddArticleService(this IServiceCollection services)
         {
-            services.AddScoped<IArticlesService, ArticleService>();
+            services.AddScoped<IArticleService, ArticleService>();
             return services;
         }
 

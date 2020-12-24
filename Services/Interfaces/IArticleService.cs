@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Services.Interfaces
 {
-    public interface IArticlesService
+    public interface IArticleService
     {
         /// <summary>
         /// Gets the article.
