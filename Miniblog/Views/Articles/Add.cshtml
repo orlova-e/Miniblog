@@ -1,17 +1,20 @@
-﻿@using Microsoft.Extensions.Options
+﻿@using Miniblog.Configuration
+@using Microsoft.Extensions.Options
 @using Domain.Entities.Enums
-@using Miniblog.Configuration
+@using Domain.Entities
 @using System.Security.Claims
+@using Repo.Interfaces
 
 @inject IOptionsSnapshot<BlogOptions> optionsSnapshoot
+@inject IOptionRepository<Role> rolesRepo
 
 @model ArticleWriteViewModel
 
 @{
     BlogOptions blogOptions = optionsSnapshoot.Value;
     RoleType type = (RoleType)Enum.Parse(typeof(RoleType), User.FindFirst(ClaimsIdentity.DefaultRoleClaimType).Value);
-    Role role = blogOptions.Roles.GetRole(type);
-    Miniblog.Configuration.WebsiteOptions websiteOptions = blogOptions.WebsiteOptions;
+    Role role = rolesRepo.Find(r => r.Type == type).FirstOrDefault();
+    WebsiteOptions websiteOptions = blogOptions.WebsiteOptions;
 }
 
 <div class="blog-container">
