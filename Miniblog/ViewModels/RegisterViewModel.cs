@@ -27,9 +27,6 @@ namespace Miniblog.ViewModels
         [Compare(nameof(Password), ErrorMessage = "The value must be identical to the password")]
         public string PasswordConfirmation { get; set; }
 
-        //[UIHint("HiddenInput")]
-        //public string userId { get; set; }
-
         public static explicit operator Account(RegisterViewModel registerViewModel) => new Account
         {
             Email = registerViewModel.Email,
