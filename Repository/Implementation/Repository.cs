@@ -21,6 +21,8 @@ namespace Repo.Implementation
         IRelatedRepository<UserBookmark, Article> articleBookmarks;
         IRelatedRepository<CommentLikes, Comment> commentLikes;
 
+        ISubscriptionsRepository subscriptions;
+
         public Repository(MiniblogDb miniblogDb)
         {
             Db = miniblogDb;
@@ -114,6 +116,16 @@ namespace Repo.Implementation
                 if (series == null)
                     series = new SeriesRepository(Db);
                 return series;
+            }
+        }
+
+        public ISubscriptionsRepository Subscriptions
+        {
+            get
+            {
+                if (subscriptions == null)
+                    subscriptions = new SubscriptionsRepository(this);
+                return subscriptions;
             }
         }
 

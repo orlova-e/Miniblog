@@ -13,9 +13,6 @@ namespace Services.Interfaces
         /// <param name="account"></param>
         /// <returns>List of errors.</returns>
         IEnumerable<string> CheckForInvalidAccountParameters(Account account);
-        //bool CheckForExistence(Account account, Guid guid);
-        //bool CheckForExistence(LoginViewModel loginModel, Guid guid);
-
         /// <summary>
         /// Retrieves the hash from the password, gives plain user role and puts new user into database.
         /// </summary>
@@ -27,8 +24,5 @@ namespace Services.Interfaces
         Task<User> GetFromDbAsync(Guid id);
         User FindByName(string username);
         string GetHash(string password);
-        Task AddSubscriberAsync(Guid authorId, Guid subscriberId);
-        Task RemoveSubscriberAsync(Guid authorId, Guid subscriberId);
-        Task<List<User>> GetSubscriptionAsync(Guid userId);
     }
 }

@@ -18,5 +18,6 @@ namespace Repo.Interfaces
         IRelatedRepository<UserFavourite, Article> ArticleLikes { get; }
         IRelatedRepository<UserBookmark, Article> ArticleBookmarks { get; }
         IRelatedRepository<CommentLikes, Comment> CommentLikes { get; }
+        ISubscriptionsRepository Subscriptions { get; }
     }
 }

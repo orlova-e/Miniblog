@@ -6,6 +6,7 @@ using Domain.Entities;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Repo.Interfaces;
 
 namespace Miniblog.Hubs
 {
@@ -13,10 +14,13 @@ namespace Miniblog.Hubs
     public class SubscriptionHub : Hub
     {
         public IUserService userService { get; private set; }
+        public IRepository repository { get; set; }
 
-        public SubscriptionHub(IUserService userService)
+        public SubscriptionHub(IUserService userService,
+            IRepository repository)
         {
             this.userService = userService;
+            this.repository = repository;
         }
 
         [Authorize]
@@ -31,7 +35,7 @@ namespace Miniblog.Hubs
 
             if(subscriber != null && author != null && !subscriber.Username.Equals(author.Username))
             {
-                await userService.AddSubscriberAsync(author.Id, subscriberId);
+                await repository.Subscriptions.AddSubscriberAsync(author.Id, subscriberId);
                 statusCode = StatusCodes.Status200OK;
             }
 
@@ -51,7 +55,7 @@ namespace Miniblog.Hubs
 
             if (subscriber != null && author != null && !subscriber.Username.Equals(author.Username))
             {
-                await userService.RemoveSubscriberAsync(author.Id, subscriberId);
+                await repository.Subscriptions.RemoveSubscriberAsync(author.Id, subscriberId);
                 statusCode = StatusCodes.Status200OK;
             }
 
