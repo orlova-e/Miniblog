@@ -12,4 +12,19 @@
     <ProjectReference Include="..\Repository\Repo.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="partsOfSpeech.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>partsOfSpeech.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="partsOfSpeech.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>partsOfSpeech.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
