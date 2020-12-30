@@ -17,6 +17,8 @@ namespace Repo
         public DbSet<Topic> Topics { get; set; }
         public DbSet<BaseDisplayOptions> BaseArticlesOptions { get; set; }
         public DbSet<ArticleOptions> ArticleOptions { get; set; }
+        public DbSet<FoundWord> FoundWords { get; set; }
+        public DbSet<IndexInfo> IndexInfos { get; set; }
 
         public MiniblogDb(DbContextOptions options) : base(options)
         {
@@ -100,6 +102,11 @@ namespace Repo
             modelBuilder.Entity<Image>()
                 .HasOne(i => i.Article)
                 .WithMany(ar => ar.Images)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<IndexInfo>()
+                .HasOne(i => i.FoundWord)
+                .WithMany(f => f.IndexInfos)
                 .OnDelete(DeleteBehavior.Cascade);
 
             //ArticleOptions

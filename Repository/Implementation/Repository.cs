@@ -14,6 +14,9 @@ namespace Repo.Implementation
         IPlainRepository<Topic> topics;
         IPlainRepository<Series> series;
 
+        IWorkingWithRange<FoundWord> foundWords;
+        IWorkingWithRange<IndexInfo> indexInfos;
+
         IOptionRepository<Role> roles;
         IOptionRepository<ArticleOptions> articleOptions;
 
@@ -63,6 +66,33 @@ namespace Repo.Implementation
                 return topics;
             }
         }
+        public IPlainRepository<Series> Series
+        {
+            get
+            {
+                if (series == null)
+                    series = new SeriesRepository(Db);
+                return series;
+            }
+        }
+        public IWorkingWithRange<FoundWord> FoundWords
+        {
+            get
+            {
+                if (foundWords == null)
+                    foundWords = new FoundWordsRepository(Db);
+                return foundWords;
+            }
+        }
+        public IWorkingWithRange<IndexInfo> IndexInfos
+        {
+            get
+            {
+                if (indexInfos == null)
+                    indexInfos = new IndexInfoRepository(Db);
+                return indexInfos;
+            }
+        }
         public IOptionRepository<Role> Roles
         {
             get
@@ -106,16 +136,6 @@ namespace Repo.Implementation
                 if (commentLikes == null)
                     commentLikes = new CommentLikeRepo(Db);
                 return commentLikes;
-            }
-        }
-
-        public IPlainRepository<Series> Series
-        {
-            get
-            {
-                if (series == null)
-                    series = new SeriesRepository(Db);
-                return series;
             }
         }
 

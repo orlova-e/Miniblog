@@ -4,7 +4,7 @@ using System;
 namespace Repo.Interfaces
 {
     /// <summary>
-    /// Unit of work.
+    /// Unit of work
     /// </summary>
     public interface IRepository : IDisposable
     {
@@ -13,6 +13,8 @@ namespace Repo.Interfaces
         IPlainRepository<Comment> Comments { get; }
         IPlainRepository<Topic> Topics { get; }
         IPlainRepository<Series> Series { get; }
+        IWorkingWithRange<FoundWord> FoundWords { get; }
+        IWorkingWithRange<IndexInfo> IndexInfos { get; }
         IOptionRepository<Role> Roles { get; }
         IOptionRepository<ArticleOptions> ArticleOptions { get; }
         IRelatedRepository<UserFavourite, Article> ArticleLikes { get; }
