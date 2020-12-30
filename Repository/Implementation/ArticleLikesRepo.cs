@@ -50,7 +50,7 @@ namespace Repo.Implementation
                 .Include(u => u.Liked)
                 .FirstOrDefaultAsync();
 
-            Article article = Db.Articles.Find(entryId);
+            Article article = await Db.Articles.FindAsync(entryId);
             user.Liked.Add(new UserFavourite() { User = user, Article = article });
             Db.Users.Update(user);
             await Db.SaveChangesAsync();

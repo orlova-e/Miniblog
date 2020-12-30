@@ -26,46 +26,19 @@ namespace Repo.Implementation
         }
         public IEnumerable<Role> Find(Func<Role, bool> predicate)
         {
-            IEnumerable<Role> roles;
-            //if(predicate is Func<ExtendedRole, bool>)
-            //{
-            //    roles = Db.ExtendedRoles.Where(predicate).ToList();
-            //}
-            //else
-            //{
-                roles = Db.Roles.Where(predicate).ToList();
-            //}
+            IEnumerable<Role> roles = Db.Roles.Where(predicate).ToList();
             return roles;
         }
-        //Role FindFirst(Func<Role, bool> predicate)
-        //{
-        //    Role role;
-        //    if(predicate is Func<ExtendedRole, bool>)
-        //    {
-        //        role = Db.ExtendedRoles.Where(predicate).First();
-        //    }
-        //    else
-        //    {
-        //        role = Db.Roles.Where(predicate).First();
-        //    }
-        //    return role;
-        //}
+
         public async Task UpdateAsync(Role entity)
         {
-            //if(entity.GetType() == typeof(ExtendedRole))
-            //{
-            //    Db.ExtendedRoles.Update(entity as ExtendedRole);
-            //}
-            //else
-            //{
-                Db.Roles.Update(entity);
-            //}
+            Db.Roles.Update(entity);
             await Db.SaveChangesAsync();
         }
 
         public async Task<Role> FirstOrDefaultAsync()
         {
-            return (await Db.Roles.ToArrayAsync()).FirstOrDefault();
+            return await Db.Roles.FirstOrDefaultAsync();
         }
     }
 }

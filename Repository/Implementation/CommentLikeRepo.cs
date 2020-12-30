@@ -26,28 +26,10 @@ namespace Repo.Implementation
             IEnumerable<Comment> comments = user.LikedComments
                 .Select(like => like.Comment);
 
-            //IEnumerable<Comment> comments = new List<Comment>();
-            //foreach (var liked in user.LikedComments)
-            //{
-            //    comments.Append(liked.Comment);
-            //}
             return comments;
         }
         public async Task<IEnumerable<User>> GetAllUsersForAsync(Guid entryId)
         {
-            //var entry = (await Db.Comments
-            //    .Where(c => c.Id == entryId)
-            //    .Include(c => c.Likes)
-            //    .ThenInclude(l => l.User)
-            //    .ToArrayAsync())
-            //    .FirstOrDefault();
-
-            //IEnumerable<User> users = new List<User>();
-            //foreach (var like in entry.Likes)
-            //{
-            //    users.Append(like.User);
-            //}
-
             Comment comment = await Db.Comments
                 .Where(c => c.Id == entryId)
                 .Include(c => c.Likes)
@@ -66,23 +48,13 @@ namespace Repo.Implementation
                 .Include(u => u.LikedComments)
                 .FirstOrDefaultAsync();
 
-            Comment comment = Db.Comments.Find(entryId);
+            Comment comment = await Db.Comments.FindAsync(entryId);
             user.LikedComments.Add(new CommentLikes() { User = user, Comment = comment });
             Db.Users.Update(user);
             await Db.SaveChangesAsync();
         }
         public async Task RemoveForAsync(Guid entryId, Guid userId)
         {
-            //var user = (await Db.Users
-            //    .Where(u => u.Id == userId)
-            //    .Include(u => u.LikedComments)
-            //    .ThenInclude(l => l.Comment.Id == entryId)
-            //    .ToArrayAsync())
-            //    .FirstOrDefault();
-            //CommentLikes like = (from l in user.LikedComments
-            //            where l.CommentId == entryId
-            //            select l).FirstOrDefault();
-
             User user = await Db.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.LikedComments)
@@ -122,19 +94,6 @@ namespace Repo.Implementation
 
         public async Task<bool> ContainsAsync(Guid entryId, Guid userId)
         {
-            //CommentLikes relation = Db.Comments
-            //    .Where(c => c.Id.Equals(entryId))
-            //    .Include(l => l.Likes
-            //        .Where(l => l.UserId.Equals(userId))
-            //        .FirstOrDefault());
-
-
-            //var relation = (from comment in await Db.Comments.ToArrayAsync()
-            //             where comment.Id.Equals(entryId)
-            //             from like in comment.Likes
-            //             where like.UserId.Equals(userId)
-            //             select like).FirstOrDefault();
-
             List<CommentLikes> commentLikes = await Db.Comments
                 .Where(c => c.Id == entryId)
                 .Include(c => c.Likes)
