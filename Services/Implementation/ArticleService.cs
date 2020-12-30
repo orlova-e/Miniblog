@@ -6,6 +6,8 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Services.IndexedValues;
+using Services.Interfaces.Indexing;
 
 namespace Services.Implementation
 {
@@ -13,11 +15,14 @@ namespace Services.Implementation
     {
         public IRepository repository { get; private set; }
         public IUserService userService { get; private set; }
+        public IIndexedObjectsObserver IndexedObjectsObserver { get; }
         public ArticleService(IRepository repository,
-            IUserService userService)
+            IUserService userService,
+            IIndexedObjectsObserver indexedObjectsObserver)
         {
             this.repository = repository;
             this.userService = userService;
+            IndexedObjectsObserver = indexedObjectsObserver;
         }
         
         public async Task<Article> GetArticleByLinkAsync(string link)
@@ -131,6 +136,7 @@ namespace Services.Implementation
             await repository.Articles.CreateAsync(article);
 
             article = repository.Articles.Find(a => a.Link == article.Link).FirstOrDefault();
+            await IndexedObjectsObserver.OnNewEntityAsync((ArticleIndexedValues)article);
             return article;
         }
 
@@ -144,12 +150,16 @@ namespace Services.Implementation
         
         public async Task DeleteArticleAsync(Guid articleId)
         {
+            Article article = await repository.Articles.GetByIdAsync(articleId);
             await repository.Articles.DeleteAsync(articleId);
+            await IndexedObjectsObserver.OnDeletedEntityAsync((ArticleIndexedValues)article);
         }
         
         public async Task UpdateArticleAsync(Article article)
         {
             await repository.Articles.UpdateAsync(article);
+            Article updated = await repository.Articles.GetByIdAsync(article.Id);
+            await IndexedObjectsObserver.OnUpdatedEntityAsync((ArticleIndexedValues)updated);
         }
         
         public async Task<Article> GetPreparedArticleAsync(Article article)
