@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace Services.Implementation.Indexing
 {
@@ -26,54 +25,58 @@ namespace Services.Implementation.Indexing
         public List<FoundWord> Index(IndexedObject indexedObject)
         {
             IndexedObject = indexedObject;
-            if (FoundWords.Any())
-                FoundWords = new List<FoundWord>();
+            FoundWords = new List<FoundWord>();
 
             PropertyInfo[] propertyInfos = IndexedObject.GetType()
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             foreach (PropertyInfo propertyInfo in propertyInfos)
             {
-                if (propertyInfo.GetType() == typeof(string))
+                if (propertyInfo.PropertyType != typeof(string))
+                    continue;
+
+                string propertyValue = (string)propertyInfo.GetValue(IndexedObject);
+
+                List<string> words = new List<string>();
+                try
                 {
-                    string propertyValue = (string)propertyInfo.GetValue(IndexedObject);
-                    propertyValue = RemovePunctuation(propertyValue);
-                    List<string> values = GetWords(propertyValue);
+                    words = InputPreparation.PrepareWithoutDistinct(propertyValue);
+                }
+                catch (ArgumentNullException)
+                {
+                    continue;
+                }
 
-                    foreach (string value in values)
+                foreach (string word in words)
+                {
+                    FoundWord foundWord = GetFoundWord(word);
+                    IndexInfo indexInfo = foundWord.IndexInfos.Find(i => i.EntityId == IndexedObject.Id);
+                    int indexInfoPosition = foundWord.IndexInfos.IndexOf(indexInfo);
+
+                    if (indexInfo == default)
                     {
-                        FoundWord foundWord = GetFoundWord(value);
-                        IndexInfo indexInfo = foundWord.IndexInfos.Find(i => i.EntityId == IndexedObject.Id);
-                        if (indexInfo == default)
+                        indexInfo = new IndexInfo
                         {
-                            indexInfo = new IndexInfo
-                            {
-                                EntityId = IndexedObject.Id,
-                                EntityType = IndexedObject.TypeOfIndexed.ToString()
-                            };
-                        }
+                            EntityId = IndexedObject.Id,
+                            EntityType = IndexedObject.TypeOfIndexed.Name,
+                            FoundWordId = foundWord.Id
+                        };
+                    }
 
-                        int count = Count(values, value);
-                        int propertyRank = Rate(propertyInfo.Name);
-                        indexInfo.Rank += Summup(propertyRank, count);
+                    int count = Count(words, word);
+                    int propertyRank = Rate(propertyInfo.Name);
+                    indexInfo.Rank += Summup(propertyRank, count);
+
+                    if (indexInfoPosition != -1)
+                        foundWord.IndexInfos[indexInfoPosition] = indexInfo;
+                    else
                         foundWord.IndexInfos.Add(indexInfo);
 
-                        AddOrUpdateIndexes(foundWord);
-                    }
+                    AddOrUpdateIndexes(foundWord);
                 }
             }
 
             return FoundWords;
-        }
-
-        private string RemovePunctuation(string values)
-        {
-            return Regex.Replace(values, "[-.?!)(,:;/|*+@#$%^&*]", "");
-        }
-
-        private List<string> GetWords(string value)
-        {
-            return value.Split(new string[] { Environment.NewLine, " " }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
 
         private FoundWord GetFoundWord(string word)
@@ -82,10 +85,10 @@ namespace Services.Implementation.Indexing
             if (foundWord == default)
             {
                 foundWord = Repository.FoundWords
-                    .Find(f => f.Word.Equals(word))
+                    .Find(f => f.Word.Equals(word))?
                     .FirstOrDefault();
                 if (foundWord == default)
-                    foundWord = new FoundWord { Word = word };
+                    foundWord = new FoundWord { Word = word, IndexInfos = new List<IndexInfo>() };
             }
             return foundWord;
         }
@@ -103,9 +106,9 @@ namespace Services.Implementation.Indexing
             }
         }
 
-        private int Count(List<string> values, string value)
+        private int Count(List<string> words, string word)
         {
-            return values.Count(v => v.Equals(value));
+            return words.Count(v => v.Equals(word));
         }
 
         protected virtual int Rate(string propertyName)

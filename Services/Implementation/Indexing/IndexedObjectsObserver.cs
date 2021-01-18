@@ -34,7 +34,7 @@ namespace Services.Implementation.Indexing
             List<FoundWord> foundWords = indexObject.Index(indexedObject);
             foreach (var foundword in foundWords)
             {
-                if (Repository.FoundWords.Find(f => f.Id == foundword.Id).Any())
+                if (Repository.FoundWords.Find(fw => fw.Id == foundword.Id).Any())
                 {
                     await Repository.FoundWords.UpdateAsync(foundword);
                 }
@@ -56,27 +56,44 @@ namespace Services.Implementation.Indexing
             IndexObject indexObject = new IndexObject(Repository, rateStrategy);
             List<FoundWord> foundWords = indexObject.Index(indexedObject);
 
-            List<FoundWord> newFoundWords = foundWords.Except(oldFoundWords).ToList();
-            List<FoundWord> updatedFoundWords = foundWords.Except(newFoundWords).ToList();
-            List<FoundWord> excludedFoundWords = oldFoundWords.Except(foundWords).ToList();
+            var newFoundWords = from foundWord in foundWords
+                                from oldFoundWord in oldFoundWords
+                                where foundWord.Word != oldFoundWord.Word
+                                select foundWord;
 
-            await Repository.FoundWords.CreateRangeAsync(newFoundWords);
-            await Repository.FoundWords.UpdateRangeAsync(updatedFoundWords);
+            var updatedFoundWords = from foundWord in foundWords
+                                    from oldFoundWord in oldFoundWords
+                                    where foundWord.Word == oldFoundWord.Word
+                                    select foundWord;
 
-            foreach (var excepted in excludedFoundWords)
+            if (newFoundWords.Any())
+                await Repository.FoundWords.CreateRangeAsync(newFoundWords);
+            if (updatedFoundWords.Any())
+                await Repository.FoundWords.UpdateRangeAsync(updatedFoundWords);
+
+            var excludedFoundWords = from oldFoundWord in oldFoundWords
+                                     from foundWord in foundWords
+                                     where oldFoundWord.Word != foundWord.Word
+                                     select oldFoundWord;
+
+            var excludedIndexInfos = from foundWord in excludedFoundWords
+                                     from indexInfo in foundWord.IndexInfos
+                                     where indexInfo.EntityId != indexedObject.Id
+                                     select indexInfo;
+
+            if (excludedIndexInfos.Any())
             {
-                var deletedIndexInfos = excepted.IndexInfos.Where(ii => ii.EntityId == indexedObject.Id);
-                if (deletedIndexInfos.Any())
-                {
-                    await Repository.IndexInfos.DeleteRangeAsync(deletedIndexInfos);
-                }
+                excludedIndexInfos = from foundWord in excludedFoundWords
+                                     from indexInfo in foundWord.IndexInfos
+                                     where indexInfo.EntityId == indexedObject.Id
+                                     select indexInfo;
+                if (excludedIndexInfos.Any())
+                    await Repository.IndexInfos.DeleteRangeAsync(excludedIndexInfos);
             }
-
-            var deletedFoundWords = from excluded in excludedFoundWords
-                                    from indexInfo in excluded.IndexInfos
-                                    where indexInfo.EntityId == indexedObject.Id
-                                    select excluded;
-            await Repository.FoundWords.DeleteRangeAsync(deletedFoundWords);
+            else if (excludedFoundWords.Any())
+            {
+                await Repository.FoundWords.DeleteRangeAsync(excludedFoundWords);
+            }
         }
 
         public async Task OnDeletedEntityAsync(IndexedObject indexedObject)
@@ -84,21 +101,26 @@ namespace Services.Implementation.Indexing
             List<FoundWord> foundWords = Repository.IndexInfos
                 .Find(ii => ii.EntityId == indexedObject.Id)
                 .Select(ii => ii.FoundWord)
+                .Distinct()
                 .ToList();
 
-            var leftWords = from foundWord in foundWords
-                            from indexInfo in foundWord.IndexInfos
-                            where indexInfo.EntityId != indexedObject.Id
-                            select foundWord;
+            var leftWords = (from foundWord in foundWords
+                             from indexInfo in foundWord.IndexInfos
+                             where indexInfo.EntityId != indexedObject.Id
+                             select foundWord)?
+                            .Distinct();
+
             var foundWordsToDelete = from foundWord in foundWords.Except(leftWords)
                                      select foundWord;
-            await Repository.FoundWords.DeleteRangeAsync(foundWordsToDelete);
+            if (foundWordsToDelete.Any())
+                await Repository.FoundWords.DeleteRangeAsync(foundWordsToDelete);
 
             var indexInfosToDelete = from foundWord in leftWords
                                      from indexInfo in foundWord.IndexInfos
                                      where indexInfo.EntityId == indexedObject.Id
                                      select indexInfo;
-            await Repository.IndexInfos.DeleteRangeAsync(indexInfosToDelete);
+            if (indexInfosToDelete.Any())
+                await Repository.IndexInfos.DeleteRangeAsync(indexInfosToDelete);
         }
     }
 }

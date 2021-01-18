@@ -20,8 +20,8 @@ namespace Services.IndexedValues
                 Text = article.Text,
                 Author = article.User.Username,
                 Tags = article.Tags,
-                Topic = article.Topic.Name,
-                Series = article.Series.Name,
+                Topic = article.Topic?.Name,
+                Series = article.Series?.Name,
             };
     }
 }

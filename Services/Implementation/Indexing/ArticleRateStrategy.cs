@@ -12,7 +12,6 @@ namespace Services.Implementation.Indexing
                 "Series" => 3,
                 "Topic" => 2,
                 "Tags" => 2,
-                "DateTime" => 2,
                 "Text" => 1,
                 _ => 0
             };
