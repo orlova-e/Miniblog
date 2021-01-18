@@ -9,11 +9,11 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public Guid EntityId { get; set; }
+        public object Entity { get; set; }
         public Guid FoundWordId { get; set; }
         public FoundWord FoundWord { get; set; }
         [Required]
         public string EntityType { get; set; }
-        public int Count { get; set; }
         public int Rank { get; set; }
     }
 }
