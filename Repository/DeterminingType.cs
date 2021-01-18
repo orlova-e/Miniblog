@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-//[assembly: InternalsVisibleTo("Repo.UnitTests")]
+[assembly: InternalsVisibleTo("Repo.UnitTests")]
 
 namespace Repo
 {
