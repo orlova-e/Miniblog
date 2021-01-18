@@ -33,6 +33,11 @@ namespace Repo.Implementation
             return Db.Series.Where(predicate).ToList();
         }
 
+        public async Task<IEnumerable<Series>> FindAsync(Func<Series, bool> predicate)
+        {
+            return await Task.Run(() => Db.Series.Where(predicate).ToList());
+        }
+
         public async Task<IEnumerable<Series>> GetAllAsync()
         {
             return await Db.Series.ToListAsync();

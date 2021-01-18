@@ -33,6 +33,12 @@ namespace Repo.Implementation
                 .Where(predicate)
                 .ToList();
         }
+        public async Task<IEnumerable<Comment>> FindAsync(Func<Comment, bool> predicate)
+        {
+            return await Task.Run(() => Db.Comments.Include(c => c.Author)
+                .Where(predicate)
+                .ToList());
+        }
         public async Task CreateAsync(Comment entity)
         {
             Db.Comments.Add(entity);

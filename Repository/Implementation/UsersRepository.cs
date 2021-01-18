@@ -31,6 +31,10 @@ namespace Repo.Implementation
         {
             return Db.Users.Include(u => u.Subscribers).Where(predicate).ToList();
         }
+        public async Task<IEnumerable<User>> FindAsync(Func<User, bool> predicate)
+        {
+            return await Task.Run(() => Db.Users.Include(u => u.Subscribers).Where(predicate).ToList());
+        }
         public async Task CreateAsync(User entity)
         {
             Db.Users.Add(entity);

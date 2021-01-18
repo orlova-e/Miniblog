@@ -55,6 +55,20 @@ namespace Repo.Implementation
             return foundWords;
         }
 
+        public async Task<IEnumerable<FoundWord>> FindAsync(Func<FoundWord, bool> predicate)
+        {
+            IEnumerable<FoundWord> foundWords = await Task.Run(() => Db.FoundWords.Where(predicate));
+
+            foreach (var foundWord in foundWords)
+                foreach (var indexInfo in foundWord.IndexInfos)
+                {
+                    Type entityType = DeterminingType.Determine(indexInfo.EntityType);
+                    indexInfo.Entity = await Db.FindAsync(entityType, indexInfo.EntityId);
+                }
+
+            return foundWords;
+        }
+
         public async Task CreateAsync(FoundWord entity)
         {
             Db.FoundWords.Add(entity);

@@ -27,6 +27,10 @@ namespace Repo.Implementation
         {
             return Db.Topics.Where(predicate).ToList();
         }
+        public async Task<IEnumerable<Topic>> FindAsync(Func<Topic, bool> predicate)
+        {
+            return await Task.Run(() => Db.Topics.Where(predicate).ToList());
+        }
         public async Task CreateAsync(Topic entity)
         {
             Db.Topics.Add(entity);
