@@ -18,17 +18,32 @@ namespace Repo.Implementation
 
         public async Task<IndexInfo> GetByIdAsync(Guid id)
         {
-            return await Db.IndexInfos.FindAsync(id);
+            IndexInfo indexInfo = await Db.IndexInfos.FindAsync(id);
+            Type entityType = DeterminingType.Determine(indexInfo.EntityType);
+            indexInfo.Entity = await Db.FindAsync(entityType, indexInfo.EntityId);
+            return indexInfo;
         }
 
         public async Task<IEnumerable<IndexInfo>> GetAllAsync()
         {
-            return await Db.IndexInfos.ToListAsync();
+            List<IndexInfo> indexInfos = await Db.IndexInfos.ToListAsync();
+            foreach(var indexInfo in indexInfos)
+            {
+                Type entityType = DeterminingType.Determine(indexInfo.EntityType);
+                indexInfo.Entity = await Db.FindAsync(entityType, indexInfo.EntityId);
+            }
+            return indexInfos;
         }
 
         public IEnumerable<IndexInfo> Find(Func<IndexInfo, bool> predicate)
         {
-            return Db.IndexInfos.Where(predicate);
+            IEnumerable<IndexInfo> indexInfos = Db.IndexInfos.Where(predicate);
+            foreach(var indexinfo in indexInfos)
+            {
+                Type entityType = DeterminingType.Determine(indexinfo.EntityType);
+                indexinfo.Entity = Db.Find(entityType, indexinfo.EntityId);
+            }
+            return indexInfos;
         }
 
         public async Task CreateAsync(IndexInfo entity)

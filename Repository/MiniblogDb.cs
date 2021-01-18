@@ -109,6 +109,9 @@ namespace Repo
                 .WithMany(f => f.IndexInfos)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<IndexInfo>()
+                .Ignore(ii => ii.Entity);
+
             //ArticleOptions
             modelBuilder.Entity<ArticleOptions>()
                 .HasOne(u => u.Article)
