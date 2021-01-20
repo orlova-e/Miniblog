@@ -5,6 +5,7 @@ using Services.Interfaces.Search;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Services.Implementation.Search
@@ -31,17 +32,44 @@ namespace Services.Implementation.Search
             foreach (var predicate in searchStrategy.Predicates)
             {
                 IEnumerable<T> list = await searchStrategy.FindAsync.Invoke(predicate);
-                if (list is object)
+                if (list?.Any() ?? default)
                     foundEntities = foundEntities.Union(list).ToList();
             }
 
-            foundObjects = (from found in foundEntities
-                            select new FoundObject<T>
-                            {
-                                Entity = found,
-                                MatchedWords = new List<string> { query },
-                                TotalRating = int.MaxValue
-                            }).ToList();
+            foundObjects = foundEntities
+                .Select(f => new FoundObject<T>
+                {
+                    Entity = f,
+                    MatchedWords = new List<string> { query },
+                    TotalRating = int.MaxValue
+                })
+                .ToList();
+
+            foundObjects = PrepareResults(foundObjects);
+
+            return foundObjects;
+        }
+
+        public List<FoundObject<T>> PrepareResults(List<FoundObject<T>> foundObjects)
+        {
+            foreach (var foundObject in foundObjects)
+            {
+                Type entityType = foundObject.Entity.GetType();
+
+                if (entityType != typeof(T))
+                    break;
+
+                PropertyInfo propertyInfo = entityType.GetProperty("Id");
+                object maybeId = propertyInfo?.GetValue(foundObject.Entity);
+                if (maybeId is Guid guid)
+                {
+                    foundObject.EntityId = guid;
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             return foundObjects;
         }
