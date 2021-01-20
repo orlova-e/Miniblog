@@ -1,9 +1,8 @@
 ﻿using Domain.Entities;
 using NUnit.Framework;
-using Repo;
 using System;
 
-namespace Services.UnitTests
+namespace Repo.UnitTests
 {
     [TestFixture]
     public class DeterminingTypeTests
