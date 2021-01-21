@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Entities;
+using Domain.Entities.Enums;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Domain.Entities;
-using Domain.Entities.Enums;
 using Repo.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 
-namespace Miniblog.Filters
+namespace Web.Filters
 {
     public class AccessAttribute : IAuthorizationFilter
     {

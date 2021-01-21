@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using System.Collections.Generic;
 
-namespace Miniblog.ViewModels
+namespace Web.ViewModels
 {
     public class CommentsViewModel
     {

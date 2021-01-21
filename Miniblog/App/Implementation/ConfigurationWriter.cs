@@ -1,19 +1,21 @@
 ﻿using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Web.App.Interfaces;
+using Web.Configuration;
 
-namespace Miniblog.Configuration
+namespace Web.App.Implementation
 {
     public class ConfigurationWriter : IConfigurationWriter
     {
-        private string configPath { get; }
+        private string ConfigPath { get; }
         public ConfigurationWriter(string configPath)
         {
-            this.configPath = configPath;
+            ConfigPath = configPath;
         }
         public async Task WriteAsync(BlogOptions blogOptions)
         {
-            using (FileStream fileStream = new FileStream(configPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
+            using (FileStream fileStream = new FileStream(ConfigPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
             {
                 JsonSerializerOptions serializerOptions = new JsonSerializerOptions
                 {

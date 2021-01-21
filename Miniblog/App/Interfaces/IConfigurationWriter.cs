@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Web.Configuration;
 
-namespace Miniblog.Configuration
+namespace Web.App.Interfaces
 {
     public interface IConfigurationWriter
     {

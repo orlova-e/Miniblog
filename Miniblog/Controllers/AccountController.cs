@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Miniblog.ViewModels;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Web.ViewModels;
 
-namespace Miniblog.Controllers
+namespace Web.Controllers
 {
     public class AccountController : Controller
     {
@@ -27,7 +27,7 @@ namespace Miniblog.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async  Task<IActionResult> SignInAsync([FromForm]LoginViewModel loginModel)
+        public async Task<IActionResult> SignInAsync([FromForm] LoginViewModel loginModel)
         {
             if (!ModelState.IsValid)
             {
@@ -36,7 +36,7 @@ namespace Miniblog.Controllers
 
             User user = userService.GetFromDb((Account)loginModel);
 
-            if(user == null)
+            if (user == null)
             {
                 ModelState.AddModelError("", "User is not found");
                 return View("SignIn", loginModel);
@@ -53,9 +53,9 @@ namespace Miniblog.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignUpAsync([FromForm]RegisterViewModel registerModel/*, string userId = null*/)
+        public async Task<IActionResult> SignUpAsync([FromForm] RegisterViewModel registerModel/*, string userId = null*/)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(registerModel);
             }

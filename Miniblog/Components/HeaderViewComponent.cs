@@ -2,16 +2,17 @@
 using Domain.Entities.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Miniblog.Configuration;
-using Miniblog.ViewModels;
 using Repo.Interfaces;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Web.App.Interfaces;
+using Web.Configuration;
+using Web.ViewModels;
 
-namespace Miniblog.Components
+namespace Web.Components
 {
     public class HeaderViewComponent : ViewComponent
     {
@@ -86,7 +87,7 @@ namespace Miniblog.Components
             if (User.Identity.IsAuthenticated)
             {
                 pages.Add("Account", Url.Action("Account", "Options"));
-                if(role.Discriminator == "ExtendedRole")
+                if (role.Discriminator == "ExtendedRole")
                 {
                     pages.Add("Options", Url.Action("Main", "Options"));
                 }

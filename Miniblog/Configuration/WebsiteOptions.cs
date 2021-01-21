@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace Miniblog.Configuration
+namespace Web.Configuration
 {
     public class WebsiteOptions
     {

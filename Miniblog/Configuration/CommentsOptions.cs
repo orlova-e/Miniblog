@@ -1,6 +1,6 @@
 ﻿using Domain.Entities.Enums;
 
-namespace Miniblog.Configuration
+namespace Web.Configuration
 {
     public class CommentsOptions
     {

@@ -1,9 +1,8 @@
-﻿using Domain.Entities;
-using Domain.Entities.Enums;
+﻿using Domain.Entities.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Miniblog.ViewModels
+namespace Domain.Entities
 {
     [NotMapped]
     public class NewArticle

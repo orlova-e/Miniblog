@@ -1,13 +1,12 @@
 ﻿using Domain.Entities;
-using Miniblog.ViewModels;
 using Repo.Interfaces;
+using Services.IndexedValues;
 using Services.Interfaces;
+using Services.Interfaces.Indexing;
 using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Services.IndexedValues;
-using Services.Interfaces.Indexing;
 
 namespace Services.Implementation
 {
@@ -24,7 +23,7 @@ namespace Services.Implementation
             this.userService = userService;
             IndexedObjectsObserver = indexedObjectsObserver;
         }
-        
+
         public async Task<Article> GetArticleByLinkAsync(string link)
         {
             Article article = repository.Articles.Find(a => a.Link == link).FirstOrDefault();
@@ -32,7 +31,7 @@ namespace Services.Implementation
                 article = await GetPreparedArticleAsync(article);
             return article;
         }
-        
+
         public async Task<Article> GetArticleByIdAsync(Guid articleId)
         {
             Article article = await repository.Articles.GetByIdAsync(articleId);
@@ -40,7 +39,7 @@ namespace Services.Implementation
                 article = await GetPreparedArticleAsync(article);
             return article;
         }
-        
+
         public async Task<Article> CreateArticleAsync(Guid userId, NewArticle articleViewModel)
         {
             User currentUser = await userService.GetFromDbAsync(userId);
@@ -92,7 +91,7 @@ namespace Services.Implementation
             }
 
             string[] tags = articleViewModel.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            for(int i = 0; i < tags.Length; i++)
+            for (int i = 0; i < tags.Length; i++)
             {
                 tags[i] = tags[i].Trim();
             }
@@ -147,21 +146,21 @@ namespace Services.Implementation
                 return false;
             return true;
         }
-        
+
         public async Task DeleteArticleAsync(Guid articleId)
         {
             Article article = await repository.Articles.GetByIdAsync(articleId);
             await repository.Articles.DeleteAsync(articleId);
             await IndexedObjectsObserver.OnDeletedEntityAsync((ArticleIndexedValues)article);
         }
-        
+
         public async Task UpdateArticleAsync(Article article)
         {
             await repository.Articles.UpdateAsync(article);
             Article updated = await repository.Articles.GetByIdAsync(article.Id);
             await IndexedObjectsObserver.OnUpdatedEntityAsync((ArticleIndexedValues)updated);
         }
-        
+
         public async Task<Article> GetPreparedArticleAsync(Article article)
         {
 

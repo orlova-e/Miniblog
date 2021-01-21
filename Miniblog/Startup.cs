@@ -8,17 +8,19 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Miniblog.Configuration;
-using Miniblog.Filters;
-using Miniblog.Hubs;
 using Services;
 using Services.Implementation;
 using Services.Interfaces;
 using System;
 using System.Globalization;
 using System.IO;
+using Web.App.Implementation;
+using Web.App.Interfaces;
+using Web.Configuration;
+using Web.Filters;
+using Web.Hubs;
 
-namespace Miniblog
+namespace Web
 {
     public class Startup
     {

@@ -1,9 +1,9 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Enums;
-using Miniblog.ViewModels;
 using System.Collections.Generic;
+using Web.ViewModels;
 
-namespace Services.Interfaces
+namespace Web.App.Interfaces
 {
     public interface IListPreparer
     {

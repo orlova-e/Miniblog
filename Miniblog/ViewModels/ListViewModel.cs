@@ -2,7 +2,7 @@
 using Domain.Entities.Enums;
 using System.Collections.Generic;
 
-namespace Miniblog.ViewModels
+namespace Web.ViewModels
 {
     public class ListViewModel
     {

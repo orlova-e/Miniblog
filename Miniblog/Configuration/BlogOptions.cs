@@ -1,4 +1,4 @@
-﻿namespace Miniblog.Configuration
+﻿namespace Web.Configuration
 {
     public class BlogOptions
     {

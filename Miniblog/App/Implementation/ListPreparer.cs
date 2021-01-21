@@ -1,14 +1,14 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Enums;
 using Microsoft.Extensions.Options;
-using Miniblog.Configuration;
-using Miniblog.ViewModels;
-using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Web.App.Interfaces;
+using Web.Configuration;
+using Web.ViewModels;
 
-namespace Services.Implementation
+namespace Web.App.Implementation
 {
     public class ListPreparer : IListPreparer
     {
@@ -76,7 +76,7 @@ namespace Services.Implementation
             articles = SortList(articles, sortingType);
 
             if (start > 0
-                && listOptions.ArticlesPerPage.Value > 0 
+                && listOptions.ArticlesPerPage.Value > 0
                 && --start * listOptions.ArticlesPerPage.Value + listOptions.ArticlesPerPage.Value <= articles.Count)
             {
                 articles = articles

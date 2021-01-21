@@ -1,4 +1,4 @@
-﻿namespace Miniblog.ViewModels
+﻿namespace Web.ViewModels
 {
     public class ServerMessage
     {

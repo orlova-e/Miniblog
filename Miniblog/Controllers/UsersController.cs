@@ -1,13 +1,14 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Miniblog.ViewModels;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Web.App.Interfaces;
+using Web.ViewModels;
 
-namespace Miniblog.Controllers
+namespace Web.Controllers
 {
     public class UsersController : Controller
     {
@@ -27,7 +28,7 @@ namespace Miniblog.Controllers
         }
         [HttpGet]
         [Route("[controller]/{username}")]
-        public async Task<IActionResult> Account([FromRoute]string username, [FromQuery] uint page = 1, string sortby = "newfirst")
+        public async Task<IActionResult> Account([FromRoute] string username, [FromQuery] uint page = 1, string sortby = "newfirst")
         {
             User author = userService.GetUserFromDb(u => u.Username == username);
 

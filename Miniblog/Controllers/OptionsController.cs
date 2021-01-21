@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Domain.Entities;
+using Domain.Entities.Enums;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Miniblog.Configuration;
 using Services.Interfaces;
-using Domain.Entities;
-using Domain.Entities.Enums;
-using Miniblog.ViewModels.Options;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Web.Configuration;
+using Web.ViewModels.Options;
 
-namespace Miniblog.Controllers
+namespace Web.Controllers
 {
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme,
                Roles = nameof(RoleType.Administrator))]

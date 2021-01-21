@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Miniblog.ViewModels
+namespace Web.ViewModels
 {
     public class CommentAnonymousViewModel
     {

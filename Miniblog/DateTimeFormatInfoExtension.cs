@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Miniblog
+namespace Web
 {
     public static class DateTimeFormatInfoExtension
     {

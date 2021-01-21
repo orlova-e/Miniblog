@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 
-namespace Miniblog.ViewModels
+namespace Web.ViewModels
 {
     public class ArticleReadViewModel
     {

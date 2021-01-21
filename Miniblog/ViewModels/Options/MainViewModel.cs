@@ -1,4 +1,4 @@
-﻿namespace Miniblog.ViewModels.Options
+﻿namespace Web.ViewModels.Options
 {
     public class MainViewModel
     {

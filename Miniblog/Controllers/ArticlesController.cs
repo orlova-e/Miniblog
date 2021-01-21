@@ -1,21 +1,21 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Miniblog.Configuration;
-using Miniblog.Filters;
-using Services.Interfaces;
-using Domain.Entities;
 using Repo.Interfaces;
-using Miniblog.ViewModels;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+using Web.App.Interfaces;
+using Web.Configuration;
+using Web.Filters;
+using Web.ViewModels;
 
-namespace Miniblog.Controllers
+namespace Web.Controllers
 {
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class ArticlesController : Controller
@@ -65,7 +65,7 @@ namespace Miniblog.Controllers
             {
                 Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
                 user = await userService.GetFromDbAsync(userId);
-                if(user?.Role == null)
+                if (user?.Role == null)
                 {
                     user.Role = await repository.Roles.GetByIdAsync(user.RoleId);
                 }

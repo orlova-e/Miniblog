@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Miniblog.Configuration
+namespace Web.Configuration
 {
     public class Changeable
     {

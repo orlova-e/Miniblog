@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using Domain.Entities;
 using Repo.Interfaces;
-using Miniblog.ViewModels;
+using Services.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Services.Interfaces;
+using Web.ViewModels;
 
-namespace Miniblog.Hubs
+namespace Web.Hubs
 {
     [Authorize]
     public class ArticleHub : Hub
@@ -40,7 +39,7 @@ namespace Miniblog.Hubs
             User user = await userService.GetFromDbAsync(userId);
             if (!(user?.Role?.WriteComments ?? false))
                 return;
-            
+
             text = textService.GetPrepared(text);
 
             Article article = await articleService.GetArticleByLinkAsync(title);
@@ -98,9 +97,9 @@ namespace Miniblog.Hubs
 
             Article article = await articleService.GetArticleByLinkAsync(title);
 
-            if(article != null)
+            if (article != null)
             {
-                if(Guid.TryParse(commentId, out Guid commentGuid))
+                if (Guid.TryParse(commentId, out Guid commentGuid))
                 {
                     Comment comment = await repository.Comments.GetByIdAsync(commentGuid);
                     if (userId.Equals(comment.AuthorId) && !comment.IsDeleted && article.Comments.Contains(comment))
@@ -144,10 +143,10 @@ namespace Miniblog.Hubs
                 || (!(user.Role as ExtendedRole)?.ModerateComments ?? default))
                 return;
 
-            if(Guid.TryParse(commentId, out Guid commentGuid))
+            if (Guid.TryParse(commentId, out Guid commentGuid))
             {
                 Comment comment = await repository.Comments.GetByIdAsync(commentGuid);
-                if(comment != null && !comment.IsDeleted && article.Comments.Contains(comment))
+                if (comment != null && !comment.IsDeleted && article.Comments.Contains(comment))
                 {
                     comment.IsDeleted = true;
                     comment.Text = string.Empty;
@@ -179,9 +178,9 @@ namespace Miniblog.Hubs
                 return;
 
             Article article = await articleService.GetArticleByLinkAsync(title);
-            if(article != null)
+            if (article != null)
             {
-                if(!await repository.ArticleLikes.ContainsAsync(article.Id, userId))
+                if (!await repository.ArticleLikes.ContainsAsync(article.Id, userId))
                 {
                     await repository.ArticleLikes.AddForAsync(article.Id, userId);
                     await Clients.User(Context.UserIdentifier).SendAsync("ArticleLikeIsChanged", true);
@@ -204,9 +203,9 @@ namespace Miniblog.Hubs
                 return;
 
             Article article = await articleService.GetArticleByLinkAsync(title);
-            if(article != null)
+            if (article != null)
             {
-                if(!await repository.ArticleBookmarks.ContainsAsync(article.Id, userId))
+                if (!await repository.ArticleBookmarks.ContainsAsync(article.Id, userId))
                 {
                     await repository.ArticleBookmarks.AddForAsync(article.Id, userId);
                     await Clients.User(Context.UserIdentifier).SendAsync("ArticleBookmarkIsChanged", true);
@@ -228,7 +227,7 @@ namespace Miniblog.Hubs
             if (user == null)
                 return;
 
-            if(Guid.TryParse(commentId, out Guid commentGuid))
+            if (Guid.TryParse(commentId, out Guid commentGuid))
             {
                 Comment comment = await repository.Comments.GetByIdAsync(commentGuid);
                 if (comment is object)

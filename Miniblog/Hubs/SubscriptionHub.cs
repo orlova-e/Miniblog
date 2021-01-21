@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
+using Repo.Interfaces;
 using Services.Interfaces;
-using Domain.Entities;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Repo.Interfaces;
 
-namespace Miniblog.Hubs
+namespace Web.Hubs
 {
     [AllowAnonymous]
     public class SubscriptionHub : Hub
@@ -33,7 +33,7 @@ namespace Miniblog.Hubs
             User subscriber = userService.GetUserFromDb(u => u.Id == subscriberId);
             User author = userService.GetUserFromDb(u => u.Username.Equals(authorName));
 
-            if(subscriber != null && author != null && !subscriber.Username.Equals(author.Username))
+            if (subscriber != null && author != null && !subscriber.Username.Equals(author.Username))
             {
                 await repository.Subscriptions.AddSubscriberAsync(author.Id, subscriberId);
                 statusCode = StatusCodes.Status200OK;

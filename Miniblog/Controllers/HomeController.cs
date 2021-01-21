@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Repo.Interfaces;
 
-namespace Miniblog.Controllers
+namespace Web.Controllers
 {
     public class HomeController : Controller
     {

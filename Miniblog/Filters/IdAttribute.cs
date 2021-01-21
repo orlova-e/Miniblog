@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Domain.Entities;
-using Repo.Interfaces;
+using Services.Interfaces;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Services.Interfaces;
 
-namespace Miniblog.Filters
+namespace Web.Filters
 {
     public class IdAttribute : IAsyncAuthorizationFilter
     {
