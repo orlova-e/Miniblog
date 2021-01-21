@@ -1,6 +1,7 @@
 ﻿using Repo.Interfaces;
 using Services.FoundValues;
 using Services.Interfaces.Search;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,24 +15,25 @@ namespace Services.Implementation.Search
     public class AggregateSearch<T> : IAggregateSearch<T>
         where T : class, new()
     {
-        public ISearch<T> Search { get; protected set; }
+        protected virtual ISearch<T> AccurateSearch { get; set; }
+        protected virtual ISearch<T> SearchByWords { get; set; }
         private IRepository Repository { get; }
         public AggregateSearch(IRepository repository)
         {
             Repository = repository;
+            AccurateSearch = new AccurateSearch<T>(Repository);
+            SearchByWords = new SearchByWords<T>(Repository);
         }
 
         public async Task<List<FoundObject<T>>> FindAsync(string query, bool accurateSearch = false)
         {
             List<FoundObject<T>> foundAccurately, foundByWords = null;
 
-            Search = new AccurateSearch<T>(Repository);
-            foundAccurately = await Search.FindAsync(query);
+            foundAccurately = await AccurateSearch.FindAsync(query);
 
             if (!accurateSearch)
             {
-                Search = new SearchByWords<T>(Repository);
-                foundByWords = await Search.FindAsync(query);
+                foundByWords = await SearchByWords.FindAsync(query);
             }
 
             List<FoundObject<T>> foundObjects = PrepareResults(foundAccurately, foundByWords);
@@ -44,7 +46,7 @@ namespace Services.Implementation.Search
         {
             List<FoundObject<T>> result = new List<FoundObject<T>>();
 
-            if (foundByWords is object)
+            if (foundByWords?.Any() ?? default)
             {
                 var joinedResult = from accurately in foundAccurately
                                    join byWords in foundByWords on accurately.EntityId equals byWords.EntityId
@@ -52,20 +54,21 @@ namespace Services.Implementation.Search
                                    {
                                        EntityId = accurately.EntityId,
                                        Entity = accurately.Entity,
-                                       MatchedWords = accurately.MatchedWords.Concat(byWords.MatchedWords).ToList(),
+                                       MatchedWords = accurately.MatchedWords.Concat(byWords.MatchedWords).Distinct().ToList(),
                                        TotalRating = accurately.TotalRating > int.MaxValue - byWords.TotalRating
                                                      ? int.MaxValue : accurately.TotalRating + byWords.TotalRating
                                    };
 
-                foundAccurately = (from accurately in foundAccurately
-                                   from joined in joinedResult
-                                   where accurately.EntityId != joined.EntityId
-                                   select accurately).ToList();
+                IEnumerable<Guid> joinedResultIds = joinedResult
+                    .Select(f => f.EntityId);
 
-                foundByWords = (from byWords in foundByWords
-                                from joined in joinedResult
-                                where byWords.EntityId != joined.EntityId
-                                select byWords).ToList();
+                foundAccurately = foundAccurately
+                    .Where(a => !joinedResultIds.Contains(a.EntityId))
+                    .ToList();
+
+                foundByWords = foundByWords
+                    .Where(b => !joinedResultIds.Contains(b.EntityId))
+                    .ToList();
 
                 result.AddRange(joinedResult);
                 result.AddRange(foundAccurately);
