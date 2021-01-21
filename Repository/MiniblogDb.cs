@@ -112,6 +112,10 @@ namespace Repo
             modelBuilder.Entity<IndexInfo>()
                 .Ignore(ii => ii.Entity);
 
+            modelBuilder.Entity<FoundWord>()
+                .HasIndex(f => f.Word)
+                .IsUnique();
+
             //ArticleOptions
             modelBuilder.Entity<ArticleOptions>()
                 .HasOne(u => u.Article)
