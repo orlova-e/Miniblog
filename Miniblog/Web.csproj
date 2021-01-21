@@ -5,29 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
     <Compile Remove="wwwroot\js\list\**" />
+    <Content Remove="Migrations\**" />
     <Content Remove="wwwroot\js\list\**" />
+    <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="wwwroot\js\list\**" />
+    <None Remove="Migrations\**" />
     <None Remove="wwwroot\js\list\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Migrations\20200908115818_Initial.cs" />
-    <Compile Remove="Migrations\20200908115818_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200908161516_Initial.cs" />
-    <Compile Remove="Migrations\20200908161516_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200910062302_Initial.cs" />
-    <Compile Remove="Migrations\20200910062302_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200910062428_v1.cs" />
-    <Compile Remove="Migrations\20200910062428_v1.Designer.cs" />
-    <Compile Remove="Migrations\20200913113540_Initial.cs" />
-    <Compile Remove="Migrations\20200913113540_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200914132513_Initial.cs" />
-    <Compile Remove="Migrations\20200914132513_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200914205312_Intal.cs" />
-    <Compile Remove="Migrations\20200914205312_Intal.Designer.cs" />
-    <Compile Remove="Migrations\20200914205344_Initial.cs" />
-    <Compile Remove="Migrations\20200914205344_Initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="Views\Home\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
