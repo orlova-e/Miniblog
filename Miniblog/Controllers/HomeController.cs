@@ -5,10 +5,10 @@ namespace Web.Controllers
 {
     public class HomeController : Controller
     {
-        public IRepository _repository { get; private set; }
+        public IRepository Repository { get; private set; }
         public HomeController(IRepository repository)
         {
-            _repository = repository;
+            Repository = repository;
         }
         public IActionResult Index()
         {

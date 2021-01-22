@@ -13,14 +13,14 @@ namespace Web.Hubs
     [AllowAnonymous]
     public class SubscriptionHub : Hub
     {
-        public IUserService userService { get; private set; }
-        public IRepository repository { get; set; }
+        public IUserService UserService { get; private set; }
+        public IRepository Repository { get; set; }
 
         public SubscriptionHub(IUserService userService,
             IRepository repository)
         {
-            this.userService = userService;
-            this.repository = repository;
+            UserService = userService;
+            Repository = repository;
         }
 
         [Authorize]
@@ -30,12 +30,12 @@ namespace Web.Hubs
 
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid subscriberId);
 
-            User subscriber = userService.GetUserFromDb(u => u.Id == subscriberId);
-            User author = userService.GetUserFromDb(u => u.Username.Equals(authorName));
+            User subscriber = UserService.GetUserFromDb(u => u.Id == subscriberId);
+            User author = UserService.GetUserFromDb(u => u.Username.Equals(authorName));
 
             if (subscriber != null && author != null && !subscriber.Username.Equals(author.Username))
             {
-                await repository.Subscriptions.AddSubscriberAsync(author.Id, subscriberId);
+                await Repository.Subscriptions.AddSubscriberAsync(author.Id, subscriberId);
                 statusCode = StatusCodes.Status200OK;
             }
 
@@ -50,12 +50,12 @@ namespace Web.Hubs
 
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid subscriberId);
 
-            User subscriber = userService.GetUserFromDb(u => u.Id == subscriberId);
-            User author = userService.GetUserFromDb(u => u.Username.Equals(authorName));
+            User subscriber = UserService.GetUserFromDb(u => u.Id == subscriberId);
+            User author = UserService.GetUserFromDb(u => u.Username.Equals(authorName));
 
             if (subscriber != null && author != null && !subscriber.Username.Equals(author.Username))
             {
-                await repository.Subscriptions.RemoveSubscriberAsync(author.Id, subscriberId);
+                await Repository.Subscriptions.RemoveSubscriberAsync(author.Id, subscriberId);
                 statusCode = StatusCodes.Status200OK;
             }
 
@@ -66,7 +66,7 @@ namespace Web.Hubs
         [AllowAnonymous]
         public async Task Count(string authorName)
         {
-            User author = userService.GetUserFromDb(u => u.Username.Equals(authorName));
+            User author = UserService.GetUserFromDb(u => u.Username.Equals(authorName));
             int number = author?.Subscribers.Count ?? 0;
             await Clients.All.SendAsync("Counted", number);
         }

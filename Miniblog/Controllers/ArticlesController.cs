@@ -21,11 +21,11 @@ namespace Web.Controllers
     public class ArticlesController : Controller
     {
         public BlogOptions BlogOptions { get; set; }
-        public IRepository repository { get; private set; }
-        public IArticleService articleService { get; private set; }
-        public IListPreparer listPreparer { get; private set; }
-        public IListCreator listCreator { get; private set; }
-        public IUserService userService { get; private set; }
+        public IRepository Repository { get; private set; }
+        public IArticleService ArticleService { get; private set; }
+        public IListPreparer ListPreparer { get; private set; }
+        public IListCreator ListCreator { get; private set; }
+        public IUserService UserService { get; private set; }
 
         public ArticlesController(IRepository repository,
             IArticleService articleService,
@@ -34,12 +34,12 @@ namespace Web.Controllers
             IUserService userService,
             IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
-            this.repository = repository;
-            this.articleService = articleService;
-            this.listPreparer = listPreparer;
-            this.listCreator = listCreator;
-            this.userService = userService;
-            this.BlogOptions = optionsSnapshot.Value;
+            Repository = repository;
+            ArticleService = articleService;
+            ListPreparer = listPreparer;
+            ListCreator = listCreator;
+            UserService = userService;
+            BlogOptions = optionsSnapshot.Value;
         }
 
         [AllowAnonymous]
@@ -47,12 +47,12 @@ namespace Web.Controllers
         [Route("[controller]/")]
         public async Task<IActionResult> Article([FromQuery] string title)
         {
-            if (!articleService.HasArticle(a => a.Link == title))
+            if (!ArticleService.HasArticle(a => a.Link == title))
             {
                 return NotFound();
             }
 
-            Article article = await articleService.GetArticleByLinkAsync(title);
+            Article article = await ArticleService.GetArticleByLinkAsync(title);
             ListOptions listOptions = BlogOptions.ListOptions;
             if (listOptions.OverrideForUserArticle)
             {
@@ -64,10 +64,10 @@ namespace Web.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-                user = await userService.GetFromDbAsync(userId);
+                user = await UserService.GetFromDbAsync(userId);
                 if (user?.Role == null)
                 {
-                    user.Role = await repository.Roles.GetByIdAsync(user.RoleId);
+                    user.Role = await Repository.Roles.GetByIdAsync(user.RoleId);
                 }
             }
 
@@ -85,7 +85,7 @@ namespace Web.Controllers
                 Depth = commentsOptions.AllowNesting ? commentsOptions.Depth.Value : 0,
                 WriteComments = user?.Role?.WriteComments ?? default,
                 CommentsVisibility = article.DisplayOptions.Comments,
-                Comments = repository.Comments.Find(c => c.ArticleId == article.Id).ToList()
+                Comments = Repository.Comments.Find(c => c.ArticleId == article.Id).ToList()
             };
 
             ViewBag.ArticleReadModel = articleReadModel;
@@ -98,9 +98,9 @@ namespace Web.Controllers
         [HttpGet]
         public async Task<IActionResult> List([FromQuery] uint page = 1, string sortby = "newfirst") // create method for series ?
         {
-            List<Article> articles = await listCreator
+            List<Article> articles = await ListCreator
                 .FindArticlesAsync(a => true);
-            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
+            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "List";
             return View(listViewModel);
         }
@@ -109,8 +109,8 @@ namespace Web.Controllers
         public async Task<IActionResult> Favourites([FromQuery] uint page = 1, string sortby = "newfirst")
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = await listCreator.GetFavouritesAsync(userId);
-            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
+            List<Article> articles = await ListCreator.GetFavouritesAsync(userId);
+            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Favourites";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
@@ -119,8 +119,8 @@ namespace Web.Controllers
         public async Task<IActionResult> Bookmarks([FromQuery] uint page = 1, string sortby = "newfisrt")
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = await listCreator.GetBookmarkedAsync(userId);
-            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
+            List<Article> articles = await ListCreator.GetBookmarkedAsync(userId);
+            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Bookmarks";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
@@ -129,8 +129,8 @@ namespace Web.Controllers
         public async Task<IActionResult> Commented([FromQuery] uint page = 1, string sortby = "newfisrt")
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = await listCreator.GetCommentedAsync(userId);
-            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
+            List<Article> articles = await ListCreator.GetCommentedAsync(userId);
+            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Commented";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
@@ -139,8 +139,8 @@ namespace Web.Controllers
         public IActionResult Drafts([FromQuery] uint page = 1, string sortby = "newfisrt")
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = listCreator.FindDrafts(userId);
-            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
+            List<Article> articles = ListCreator.FindDrafts(userId);
+            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Drafts";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
@@ -163,7 +163,7 @@ namespace Web.Controllers
 
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
 
-            Article article = await articleService.CreateArticleAsync(userId, articleViewModel);
+            Article article = await ArticleService.CreateArticleAsync(userId, articleViewModel);
 
             return RedirectToAction("Article", "Articles", new { title = article.Link });
         }

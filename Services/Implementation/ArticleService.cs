@@ -12,21 +12,21 @@ namespace Services.Implementation
 {
     public class ArticleService : IArticleService
     {
-        public IRepository repository { get; private set; }
-        public IUserService userService { get; private set; }
+        public IRepository Repository { get; private set; }
+        public IUserService UserService { get; private set; }
         public IIndexedObjectsObserver IndexedObjectsObserver { get; }
         public ArticleService(IRepository repository,
             IUserService userService,
             IIndexedObjectsObserver indexedObjectsObserver)
         {
-            this.repository = repository;
-            this.userService = userService;
+            Repository = repository;
+            UserService = userService;
             IndexedObjectsObserver = indexedObjectsObserver;
         }
 
         public async Task<Article> GetArticleByLinkAsync(string link)
         {
-            Article article = repository.Articles.Find(a => a.Link == link).FirstOrDefault();
+            Article article = Repository.Articles.Find(a => a.Link == link).FirstOrDefault();
             if (article != null)
                 article = await GetPreparedArticleAsync(article);
             return article;
@@ -34,7 +34,7 @@ namespace Services.Implementation
 
         public async Task<Article> GetArticleByIdAsync(Guid articleId)
         {
-            Article article = await repository.Articles.GetByIdAsync(articleId);
+            Article article = await Repository.Articles.GetByIdAsync(articleId);
             if (article != null)
                 article = await GetPreparedArticleAsync(article);
             return article;
@@ -42,12 +42,12 @@ namespace Services.Implementation
 
         public async Task<Article> CreateArticleAsync(Guid userId, NewArticle articleViewModel)
         {
-            User currentUser = await userService.GetFromDbAsync(userId);
+            User currentUser = await UserService.GetFromDbAsync(userId);
 
             Topic topic = null;
             if (articleViewModel.Topic != null)
             {
-                topic = repository.Topics.Find(t => t.Name == articleViewModel.Topic).FirstOrDefault();
+                topic = Repository.Topics.Find(t => t.Name == articleViewModel.Topic).FirstOrDefault();
                 if (topic == null && currentUser.Role.CreateTopics)
                 {
                     topic = new Topic()
@@ -55,19 +55,19 @@ namespace Services.Implementation
                         Author = currentUser,
                         Name = articleViewModel.Topic
                     };
-                    await repository.Topics.CreateAsync(topic);
-                    topic = repository.Topics.Find(t => t.Name == topic.Name).FirstOrDefault();
+                    await Repository.Topics.CreateAsync(topic);
+                    topic = Repository.Topics.Find(t => t.Name == topic.Name).FirstOrDefault();
                 }
             }
 
             Series series = null;
             if (articleViewModel.Series != null)
             {
-                series = repository.Series.Find(s => s.Name == articleViewModel.Series && s.UserId == currentUser.Id).FirstOrDefault();
+                series = Repository.Series.Find(s => s.Name == articleViewModel.Series && s.UserId == currentUser.Id).FirstOrDefault();
                 if (series == null)
                 {
                     string seriesLink = WebUtility.UrlEncode(articleViewModel.Series);
-                    var otherSeries = repository.Series.Find(s => s.Link == seriesLink).FirstOrDefault();
+                    var otherSeries = Repository.Series.Find(s => s.Link == seriesLink).FirstOrDefault();
                     if (otherSeries != null)
                     {
                         string fromName = seriesLink;
@@ -75,7 +75,7 @@ namespace Services.Implementation
                         while (seriesLink == otherSeries?.Link)
                         {
                             seriesLink = $"{fromName}-{counter}";
-                            otherSeries = repository.Series.Find(s => s.Link == seriesLink).FirstOrDefault();
+                            otherSeries = Repository.Series.Find(s => s.Link == seriesLink).FirstOrDefault();
                             counter++;
                         }
                     }
@@ -85,8 +85,8 @@ namespace Services.Implementation
                         User = currentUser,
                         Link = seriesLink
                     };
-                    await repository.Series.CreateAsync(series);
-                    series = repository.Series.Find(s => s.Link == series.Link).FirstOrDefault();
+                    await Repository.Series.CreateAsync(series);
+                    series = Repository.Series.Find(s => s.Link == series.Link).FirstOrDefault();
                 }
             }
 
@@ -98,7 +98,7 @@ namespace Services.Implementation
             string tagsStr = string.Join(',', tags);
 
             string link = WebUtility.UrlEncode(articleViewModel.Header);
-            var otherArticle = repository.Articles.Find(a => a.Link == link).FirstOrDefault();
+            var otherArticle = Repository.Articles.Find(a => a.Link == link).FirstOrDefault();
             if (otherArticle != null
                 || articleViewModel.Header.Equals("Article", StringComparison.OrdinalIgnoreCase)
                 || articleViewModel.Header.Equals("Add", StringComparison.OrdinalIgnoreCase)
@@ -111,7 +111,7 @@ namespace Services.Implementation
                 {
                     link = $"{fromHeader}-{counter}";
                     link = WebUtility.UrlEncode(link);
-                    otherArticle = repository.Articles.Find(a => a.Link == link).FirstOrDefault();
+                    otherArticle = Repository.Articles.Find(a => a.Link == link).FirstOrDefault();
                     counter++;
                 }
             }
@@ -132,16 +132,16 @@ namespace Services.Implementation
                 DisplayOptions = articleViewModel.DisplayOptions
             };
 
-            await repository.Articles.CreateAsync(article);
+            await Repository.Articles.CreateAsync(article);
 
-            article = repository.Articles.Find(a => a.Link == article.Link).FirstOrDefault();
+            article = Repository.Articles.Find(a => a.Link == article.Link).FirstOrDefault();
             await IndexedObjectsObserver.OnNewEntityAsync((ArticleIndexedValues)article);
             return article;
         }
 
         public bool HasArticle(Func<Article, bool> predicate)
         {
-            var article = repository.Articles.Find(predicate).FirstOrDefault();
+            var article = Repository.Articles.Find(predicate).FirstOrDefault();
             if (article == null)
                 return false;
             return true;
@@ -149,15 +149,15 @@ namespace Services.Implementation
 
         public async Task DeleteArticleAsync(Guid articleId)
         {
-            Article article = await repository.Articles.GetByIdAsync(articleId);
-            await repository.Articles.DeleteAsync(articleId);
+            Article article = await Repository.Articles.GetByIdAsync(articleId);
+            await Repository.Articles.DeleteAsync(articleId);
             await IndexedObjectsObserver.OnDeletedEntityAsync((ArticleIndexedValues)article);
         }
 
         public async Task UpdateArticleAsync(Article article)
         {
-            await repository.Articles.UpdateAsync(article);
-            Article updated = await repository.Articles.GetByIdAsync(article.Id);
+            await Repository.Articles.UpdateAsync(article);
+            Article updated = await Repository.Articles.GetByIdAsync(article.Id);
             await IndexedObjectsObserver.OnUpdatedEntityAsync((ArticleIndexedValues)updated);
         }
 
@@ -165,40 +165,40 @@ namespace Services.Implementation
         {
 
             if (article.User == null)
-                article.User = await userService.GetFromDbAsync(article.UserId);
+                article.User = await UserService.GetFromDbAsync(article.UserId);
 
             if (article.DisplayOptions == null)
             {
-                article.DisplayOptions = repository.ArticleOptions.Find(d => d.ArticleId == article.Id).FirstOrDefault();
+                article.DisplayOptions = Repository.ArticleOptions.Find(d => d.ArticleId == article.Id).FirstOrDefault();
             }
 
             if (article.TopicId != null && article.Topic == null)
-                article.Topic = await repository.Topics.GetByIdAsync((Guid)article.TopicId);
+                article.Topic = await Repository.Topics.GetByIdAsync((Guid)article.TopicId);
 
             if (article.SeriesId != null && article.Series == null)
-                article.Series = await repository.Series.GetByIdAsync((Guid)article.SeriesId);
+                article.Series = await Repository.Series.GetByIdAsync((Guid)article.SeriesId);
 
             if (!article.Comments.Any())
             {
-                article.Comments = repository.Comments.Find(c => c.ArticleId == article.Id).ToList();
+                article.Comments = Repository.Comments.Find(c => c.ArticleId == article.Id).ToList();
                 for (int i = 0; i < article.Comments.Count; i++)
                 {
-                    article.Comments[i].Likes = await repository.CommentLikes.GetAsync(article.Comments[i].Id);
+                    article.Comments[i].Likes = await Repository.CommentLikes.GetAsync(article.Comments[i].Id);
                 }
             }
 
             if (!article.Bookmarks.Any())
-                article.Bookmarks = await repository.ArticleBookmarks.GetAsync(article.Id);
+                article.Bookmarks = await Repository.ArticleBookmarks.GetAsync(article.Id);
 
             if (!article.Likes.Any())
-                article.Likes = await repository.ArticleLikes.GetAsync(article.Id);
+                article.Likes = await Repository.ArticleLikes.GetAsync(article.Id);
 
             return article;
         }
 
         public async Task<Article> FindArticleAsync(Func<Article, bool> predicate)
         {
-            Article article = repository.Articles.Find(predicate).FirstOrDefault();
+            Article article = Repository.Articles.Find(predicate).FirstOrDefault();
             if (article != null)
                 article = await GetPreparedArticleAsync(article);
             return article;

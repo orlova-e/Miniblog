@@ -12,10 +12,10 @@ namespace Web.Filters
 {
     public class IdAttribute : IAsyncAuthorizationFilter
     {
-        public IUserService userService { get; private set; }
+        public IUserService UserService { get; private set; }
         public IdAttribute(IUserService userService)
         {
-            this.userService = userService;
+            UserService = userService;
         }
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
@@ -24,7 +24,7 @@ namespace Web.Filters
                 try
                 {
                     Guid.TryParse(context.HttpContext.User.FindFirstValue("Id"), out Guid id);
-                    User user = await userService.GetFromDbAsync(id);
+                    User user = await UserService.GetFromDbAsync(id);
                 }
                 catch (ArgumentNullException)
                 {

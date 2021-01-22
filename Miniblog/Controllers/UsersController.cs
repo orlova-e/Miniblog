@@ -12,38 +12,38 @@ namespace Web.Controllers
 {
     public class UsersController : Controller
     {
-        public IArticleService articleService { get; private set; }
-        public IListPreparer listPreparer { get; set; }
-        public IListCreator listCreator { get; private set; }
-        public IUserService userService { get; private set; }
+        public IArticleService ArticleService { get; private set; }
+        public IListPreparer ListPreparer { get; set; }
+        public IListCreator ListCreator { get; private set; }
+        public IUserService UserService { get; private set; }
         public UsersController(IArticleService articleService,
             IListPreparer listPreparer,
             IListCreator listCreator,
             IUserService userService)
         {
-            this.articleService = articleService;
-            this.listPreparer = listPreparer;
-            this.listCreator = listCreator;
-            this.userService = userService;
+            ArticleService = articleService;
+            ListPreparer = listPreparer;
+            ListCreator = listCreator;
+            UserService = userService;
         }
         [HttpGet]
         [Route("[controller]/{username}")]
         public async Task<IActionResult> Account([FromRoute] string username, [FromQuery] uint page = 1, string sortby = "newfirst")
         {
-            User author = userService.GetUserFromDb(u => u.Username == username);
+            User author = UserService.GetUserFromDb(u => u.Username == username);
 
             if (author == null)
                 return NotFound();
 
-            List<Article> articles = await listCreator.FindArticlesAsync(a => a.User.Id == author.Id);
-            ListViewModel listViewModel = listPreparer.GetListModel(articles, page, sortby);
+            List<Article> articles = await ListCreator.FindArticlesAsync(a => a.User.Id == author.Id);
+            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortby);
             listViewModel.PageName = "Account";
 
             bool subscribed = false;
             if (User.Identity.IsAuthenticated)
             {
                 Guid.TryParse(User.FindFirstValue("Id"), out Guid currentUserId);
-                User currentUser = await userService.GetFromDbAsync(currentUserId);
+                User currentUser = await UserService.GetFromDbAsync(currentUserId);
                 if (author.Subscribers.Contains(currentUser))
                     subscribed = true;
             }
