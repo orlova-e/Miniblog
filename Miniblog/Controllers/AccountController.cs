@@ -15,16 +15,18 @@ namespace Web.Controllers
 {
     public class AccountController : Controller
     {
-        public IUserService userService { get; private set; }
+        public IUserService UserService { get; private set; }
         public AccountController(IUserService userService)
         {
-            this.userService = userService;
+            UserService = userService;
         }
+
         [HttpGet]
         public IActionResult SignIn()
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignInAsync([FromForm] LoginViewModel loginModel)
@@ -34,7 +36,7 @@ namespace Web.Controllers
                 return View(loginModel);
             }
 
-            User user = userService.GetFromDb((Account)loginModel);
+            User user = UserService.GetFromDb((Account)loginModel);
 
             if (user == null)
             {
@@ -46,36 +48,23 @@ namespace Web.Controllers
 
             return RedirectToRoute("default", new { controller = "Home", action = "Index" });
         }
+
         [HttpGet]
         public IActionResult SignUp()
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignUpAsync([FromForm] RegisterViewModel registerModel/*, string userId = null*/)
+        public async Task<IActionResult> SignUpAsync([FromForm] RegisterViewModel registerModel)
         {
             if (!ModelState.IsValid)
             {
                 return View(registerModel);
             }
 
-            //bool alreadyRegisteredInJwtAccount = false;
-            //User user;
-            //bool guidParsed = Guid.TryParse(registerModel.userId, out Guid guid);
-
-            //if (guidParsed)
-            //{
-            //    alreadyRegisteredInJwtAccount = userService.CheckForExistence(registerModel, guid);
-            //}
-
-            //if (alreadyRegisteredInJwtAccount)
-            //{
-            //    user = await userService.GetFromDbAsync(guid);
-            //}
-            //else // если JwtAccountController.SignUp не отработал
-            //{
-            IEnumerable<string> errors = userService.CheckForInvalidAccountParameters((Account)registerModel);
+            IEnumerable<string> errors = UserService.CheckForInvalidAccountParameters((Account)registerModel);
             if (errors.Any())
             {
                 if (errors.Contains("Username"))
@@ -89,12 +78,12 @@ namespace Web.Controllers
 
                 return View("SignUp", registerModel);
             }
-            User user = await userService.CreateIntoDbAsync((Account)registerModel);
-            //}
+            User user = await UserService.CreateIntoDbAsync((Account)registerModel);
 
             await Authenticate(user);
             return RedirectToRoute("default", new { controller = "Home", action = "Index" });
         }
+
         private async Task Authenticate(User user)
         {
             List<Claim> claims = new List<Claim>()
@@ -110,6 +99,7 @@ namespace Web.Controllers
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
         }
+
         [Route("SignOut")]
         public async Task<IActionResult> SignOutAsync()
         {

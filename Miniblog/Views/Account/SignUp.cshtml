@@ -1,4 +1,4 @@
-﻿@model Web.ViewModels.RegisterViewModel
+﻿@model RegisterViewModel
 
 <div class="blog-container">
 
@@ -31,8 +31,6 @@
                     <label class="usual-label" asp-for="PasswordConfirmation"></label>
                     <input class="usual-input usual-input-text" asp-for="PasswordConfirmation">
                     <span class="text-sans-style" asp-validation-for="PasswordConfirmation"></span>
-
-                    @*<input class="usual-input usual-input-text" asp-for="userId">*@
 
                     <button type="submit" class="usual-submit-button usual-button">Let's start!</button>
 
