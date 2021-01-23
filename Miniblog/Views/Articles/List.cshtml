@@ -88,7 +88,7 @@
 }
 else if (Model.PageName.Equals("List") && User.Identity.IsAuthenticated && (role?.WriteArticles ?? default))
 {
-    <div class="load-more-container">
+    <div class="load-more-container one-button-container">
         <a asp-action="Add" asp-controller="Articles" class="usual-button usual-button-reverse">Add new</a>
     </div>
 }
