@@ -95,10 +95,10 @@
                         Image currentImage = (from image in Model.Article.Images
                                               where image.Position == i
                                               select image).FirstOrDefault();
-                        if (currentImage != null)
+                        if (currentImage is object)
                         {
                             <div class="article-image">
-                                <img src="data:image/jpeg;base64,@(Convert.ToBase64String(currentImage.File))" alt="@currentImage.Name">
+                                <image source="currentImage"/>
                             </div>
                         }
                         else
