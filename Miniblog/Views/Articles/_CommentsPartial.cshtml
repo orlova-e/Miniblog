@@ -25,14 +25,7 @@
             <div data-comment-id="@children[i].Id.ToString()" data-parent-id="@commentParentId" class="blog-comment @parentalClass">
 
                 <div class="user-info-container">
-                    @if (children[i].Author.Avatar != null)
-                    {
-                        <img name="avatar" src="data:image/jpeg;base64,@(Convert.ToBase64String(children[i].Author.Avatar))" alt="@children[i].Author.Username">
-                    }
-                    else
-                    {
-                        <img name="avatar" src="@Url.Content("~/img/social_line/anonymous_user.png")" alt="user">
-                    }
+                    <avatar user="children[i].Author"/>
                 </div>
 
                 <div class="text-comment-container clearfix">
@@ -167,14 +160,7 @@
             <div class="root-comment-answer comment-answer">
 
                 <div class="user-info-container">
-                    @if (Model.User.Avatar != null)
-                    {
-                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.User.Avatar))" alt="@Model.User.Username">
-                    }
-                    else
-                    {
-                        <img src="@Url.Content("~/img/social_line/anonymous_user.png")" alt="User">
-                    }
+                    <avatar user="Model.User"/>
                 </div>
 
                 <form class="root-answer-form comment-form">

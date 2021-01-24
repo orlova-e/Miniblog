@@ -29,14 +29,7 @@
                         {
                             <a href="@Url.Action("Account", "Users", new { username = Model.Article.User.Username })">
                                 <div class="user-info-container">
-                                    @if (Model.Article.User.Avatar != null)
-                                    {
-                                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Article.User.Avatar))" width="10px" height="10px" alt="@Model.Article.User.Username">
-                                    }
-                                    else
-                                    {
-                                        <img src="@Url.Content("~/img/social_line/anonymous_user.png")" width="10px" height="10px" alt="User">
-                                    }
+                                    <avatar user="Model.Article.User"/>
                                     <span>@Model.Article.User.Username</span>
                                 </div>
                             </a>

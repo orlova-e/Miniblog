@@ -15,17 +15,10 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link user-info" href="@Url.Action("Account", "Users", new { username = Model.Username })">
+                                <a class="nav-link user-info" href="@Url.Action("Account", "Users", new { username = Model.User.Username })">
                                     <div class="user-info-container">
-                                        @if (Model.Avatar != null)
-                                        {
-                                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Avatar))" width="30px" alt="User">
-                                        }
-                                        else
-                                        {
-                                            <img src="@Url.Content("~/img/social_line/anonymous_user.png")" width="30px" alt="User">
-                                        }
-                                        <span>@Model.Username</span>
+                                        <avatar user="Model.User" />
+                                        <span>@Model.User.Username</span>
                                     </div>
                                 </a>
                             </li>

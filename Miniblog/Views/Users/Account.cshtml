@@ -13,14 +13,7 @@
             <div class="author-container">
                 <div class="author-info-container">
                     <div class="user-info-container">
-                        @if (user.Avatar != null)
-                        {
-                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Avatar))" alt="@user.Username">
-                        }
-                        else
-                        {
-                            <img src="@Url.Content("~/img/social_line/anonymous_user.png")" alt="User">
-                        }
+                        <avatar user="user"/>
                     </div>
 
                     <div class="author-info">
