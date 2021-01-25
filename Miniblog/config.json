@@ -67,44 +67,5 @@
       ]
     },
     "SortingCommentsDefaultType": 1
-  },
-  "Roles": {
-    "User": {
-      "Type": 0,
-      "WriteArticles": true,
-      "WriteComments": true,
-      "WriteMessages": true,
-      "OverrideOwnArticle": true,
-      "CreateTopics": true,
-      "CreateTags": true
-    },
-    "Editor": {
-      "ModerateArticles": true,
-      "ModerateComments": true,
-      "ModerateTopics": true,
-      "ModerateTags": true,
-      "OverrideMenu": true,
-      "Type": 1,
-      "WriteArticles": true,
-      "WriteComments": true,
-      "WriteMessages": true,
-      "OverrideOwnArticle": true,
-      "CreateTopics": true,
-      "CreateTags": true
-    },
-    "Administrator": {
-      "ModerateArticles": true,
-      "ModerateComments": true,
-      "ModerateTopics": true,
-      "ModerateTags": true,
-      "OverrideMenu": true,
-      "Type": 2,
-      "WriteArticles": true,
-      "WriteComments": true,
-      "WriteMessages": true,
-      "OverrideOwnArticle": true,
-      "CreateTopics": true,
-      "CreateTags": true
-    }
   }
 }
