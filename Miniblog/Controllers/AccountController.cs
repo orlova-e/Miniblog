@@ -64,20 +64,17 @@ namespace Web.Controllers
                 return View(registerModel);
             }
 
-            IEnumerable<string> errors = UserService.CheckForInvalidAccountParameters((Account)registerModel);
-            if (errors.Any())
+            Dictionary<string, string> errors = UserService.CheckParameters((Account)registerModel);
+            foreach (var error in errors)
             {
-                if (errors.Contains("Username"))
-                {
-                    ModelState.AddModelError(nameof(registerModel.Username), "A user with this name already exists");
-                }
-                if (errors.Contains("Email"))
-                {
-                    ModelState.AddModelError(nameof(registerModel.Email), "A user with this email already exists");
-                }
+                ModelState.AddModelError(error.Key, error.Value);
+            }
 
+            if (!ModelState.IsValid)
+            {
                 return View("SignUp", registerModel);
             }
+
             User user = await UserService.CreateIntoDbAsync((Account)registerModel);
 
             await Authenticate(user);
