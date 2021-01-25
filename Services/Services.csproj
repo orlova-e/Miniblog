@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <None Remove="Implementation\Search\ArticleAccurateSearch.cs~RF63b9ed2.TMP" />
+    <None Remove="Implementation\UserService.cs~RF8c58a6.TMP" />
   </ItemGroup>
 
   <ItemGroup>
