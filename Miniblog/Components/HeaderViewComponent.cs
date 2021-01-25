@@ -17,7 +17,7 @@ namespace Web.Components
     public class HeaderViewComponent : ViewComponent
     {
         public BlogOptions BlogOptions { get; private set; }
-        public IRepository _repository { get; set; }
+        public IRepository Repository { get; set; }
         public IUserService UserService { get; private set; }
         public IListPreparer ListPreparer { get; private set; }
         public IListCreator ListCreator { get; private set; }
@@ -31,7 +31,7 @@ namespace Web.Components
             UserService = userService;
             ListPreparer = listPreparer;
             ListCreator = listCreator;
-            _repository = repository;
+            Repository = repository;
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
@@ -53,9 +53,8 @@ namespace Web.Components
                 principal = User as ClaimsPrincipal;
                 Guid.TryParse(principal.FindFirstValue("Id"), out Guid id);
                 user = await UserService.GetFromDbAsync(id);
-                header.Username = user.Username;
-                header.Avatar = user.Avatar;
-                role = await _repository.Roles.GetByIdAsync(user.RoleId);
+                header.User = user;
+                role = await Repository.Roles.GetByIdAsync(user.RoleId);
                 if (role.WriteArticles)
                 {
                     pages.Add("Add", Url.Action("Add", "Articles"));
@@ -86,7 +85,7 @@ namespace Web.Components
 
             if (User.Identity.IsAuthenticated)
             {
-                pages.Add("Account", Url.Action("Account", "Options"));
+                pages.Add("Account settings", Url.Action("Settings", "Account"));
                 if (role.Discriminator == "ExtendedRole")
                 {
                     pages.Add("Options", Url.Action("Main", "Options"));
