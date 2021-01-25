@@ -1,7 +1,9 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
+using Web.Configuration;
 
 namespace Web.Infrastructure.TagHelpers
 {
@@ -15,10 +17,14 @@ namespace Web.Infrastructure.TagHelpers
         [HtmlAttributeNotBound]
         public string ImagePath { get; set; }
 
+        public AvatarTagHelper(IOptionsSnapshot<BlogOptions> optionsSnapshot)
+        {
+            string path = optionsSnapshot.Value.WebsiteOptions.StandardAvatarPath;
+            ImagePath = Path.Combine("~", path);
+        }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            ImagePath = Path.Combine("~", @"/img/social_line/anonymous_user.png");
-
             output.TagName = "img";
             output.TagMode = TagMode.StartTagOnly;
 

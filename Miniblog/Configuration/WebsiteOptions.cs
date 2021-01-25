@@ -9,6 +9,8 @@ namespace Web.Configuration
         public string Name { get; set; }
         public string Subtitle { get; set; }
         public string IconPath { get; set; }
+        [Required]
+        public string StandardAvatarPath { get; set; }
         public string HomePage { get; set; }
         public bool ShowListOfPopularAndRecent { get; set; }
         public bool ShowAuthors { get; set; }

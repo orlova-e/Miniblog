@@ -3,6 +3,7 @@
     "Name": "Miniblog",
     "Subtitle": "",
     "IconPath": "",
+    "StandardAvatarPath": "/img/social_line/anonymous_user.png",
     "HomePage": "/articles/list",
     "ShowListOfPopularAndRecent": true,
     "ShowAuthors": true,
