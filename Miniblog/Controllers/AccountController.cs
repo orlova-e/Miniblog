@@ -1,14 +1,14 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Web.Infrastructure.Extensions;
 using Web.ViewModels;
 
 namespace Web.Controllers
@@ -87,7 +87,6 @@ namespace Web.Controllers
             {
                 new Claim("Id", user.Id.ToString()),
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Username),
-                new Claim("Email", user.Email),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Type.ToString())
             };
 
@@ -102,6 +101,39 @@ namespace Web.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Settings()
+        {
+            User user = UserService.FindByName(User.Identity.Name);
+            return View((UserViewModel)user);
+        }
+
+        [HttpPost, Authorize, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Settings([FromForm] UserViewModel userViewModel)
+        {
+            User user = UserService.FindByName(User.Identity.Name);
+
+            Dictionary<string, string> errors = UserService
+                .CheckParameters(user, (Account)userViewModel, userViewModel.OldPassword);
+
+            foreach (var error in errors)
+                ModelState.AddModelError(error.Key, error.Value);
+
+            if (!ModelState.IsValid)
+                return View(userViewModel);
+
+            if (userViewModel.FormFile is object)
+                userViewModel.Avatar = userViewModel.FormFile.ReadBytes();
+            else
+                userViewModel.Avatar = user.Avatar;
+
+            user += userViewModel;
+            user = await UserService.UpdateAsync(user, userViewModel.Password);
+
+            return View((UserViewModel)user);
         }
     }
 }

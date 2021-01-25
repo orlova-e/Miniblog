@@ -1,0 +1,66 @@
+﻿@model UserViewModel
+
+<div class="blog-container">
+    <div class="page-container text-alegreya-style">
+        <div class="blog-content">
+            <div class="options-container">
+                <div id="optionsContent" class="options-content">
+
+                    <form method="post" asp-action="Settings" asp-controller="Account" enctype="multipart/form-data" class="usual-form">
+
+                        <fieldset>
+                            <legend>Main</legend>
+                            <label class="usual-label" asp-for="@Model.Email"></label>
+                            <input class="usual-input usual-input-text" asp-for="@Model.Email">
+                            <span class="text-sans-style" asp-validation-for="@Model.Email"></span>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Avatar</legend>
+                            <avatar username="@Model.Username" image="@Model.Avatar" px="120" />
+                            <input type="file" accept=".jpg,.jpeg,.png, image/jpeg,image/png" asp-for="@Model.FormFile">
+                            <span class="text-sans-style" asp-validation-for="@Model.FormFile"></span>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Change password</legend>
+                            <label class="usual-label" asp-for="@Model.OldPassword"></label>
+                            <input class="usual-input usual-input-text" asp-for="@Model.OldPassword">
+                            <span class="text-sans-style" asp-validation-for="@Model.OldPassword"></span>
+
+                            <label class="usual-label" asp-for="@Model.Password"></label>
+                            <input class="usual-input usual-input-text" asp-for="@Model.Password">
+                            <span class="text-sans-style" asp-validation-for="@Model.Password"></span>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Details</legend>
+                            <label class="usual-label" asp-for="@Model.FullName"></label>
+                            <input type="text" class="usual-input usual-input-text" asp-for="@Model.FullName">
+
+                            <label class="usual-label" asp-for="@Model.City"></label>
+                            <input type="text" class="usual-input usual-input-text" asp-for="@Model.City">
+
+                            <label class="usual-label" asp-for="@Model.Description"></label>
+                            <input type="text" class="usual-input usual-input-text" asp-for="@Model.Description">
+                        </fieldset>
+
+                        <div asp-validation-summary="ModelOnly"></div>
+
+                        <button type="submit" class="usual-submit-button usual-button">Save</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Validation {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"
+            asp-fallback-src="~/lib/jquery-validate/jquery.validate.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"
+            asp-fallback-src="~/lib/jquery-validation-unobtrusive/query.validate.unobtrusive.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"></script>
+}
