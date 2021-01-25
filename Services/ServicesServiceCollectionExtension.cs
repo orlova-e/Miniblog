@@ -12,7 +12,7 @@ namespace Services
 {
     public static class ServicesServiceCollectionExtension
     {
-        public static IServiceCollection AddBLLServices(this IServiceCollection services, string dbConnectionString)
+        public static IServiceCollection AddServicesLayer(this IServiceCollection services, string dbConnectionString)
         {
             services.AddRepository(dbConnectionString);
             services.AddArticleService();

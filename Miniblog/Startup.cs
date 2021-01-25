@@ -35,7 +35,7 @@ namespace Web
         {
             services.Configure<BlogOptions>(Configuration);
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddBLLServices(connectionString);
+            services.AddServicesLayer(connectionString);
             services.AddScoped<IConfigurationWriter>(x => ActivatorUtilities.CreateInstance<ConfigurationWriter>(x, ConfigurationFilePath));
 
             services.AddScoped<IListPreparer, ListPreparer>();
