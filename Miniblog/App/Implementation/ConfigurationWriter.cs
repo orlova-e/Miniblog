@@ -15,7 +15,7 @@ namespace Web.App.Implementation
         }
         public async Task WriteAsync(BlogOptions blogOptions)
         {
-            using (FileStream fileStream = new FileStream(ConfigPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
+            using (FileStream fileStream = new FileStream(ConfigPath, FileMode.Create, FileAccess.Write))
             {
                 JsonSerializerOptions serializerOptions = new JsonSerializerOptions
                 {
