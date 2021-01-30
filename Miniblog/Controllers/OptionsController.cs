@@ -49,28 +49,10 @@ namespace Web.Controllers
             string avatarPath = await TryChangeImageAsync(mainViewModel.AvatarFile, mainViewModel.AvatarPath);
             mainViewModel.AvatarPath = !string.IsNullOrWhiteSpace(avatarPath) ? avatarPath : mainViewModel.AvatarPath;
 
-            #region
-            //if (mainViewModel.IconFile?.Length > 0)
-            //{
-            //    string filePath = WebHostEnvironment.WebRootPath + mainViewModel.IconPath;
-            //    filePath = await mainViewModel.IconFile.TryUpdateFileAsync(filePath);
-            //    if (System.IO.File.Exists(filePath))
-            //    {
-            //        filePath = filePath.Replace(WebHostEnvironment.WebRootPath, "").Replace(@"\\", "/");
-            //        mainViewModel.IconPath = filePath;
-            //    }
-            //    else
-            //    {
-            //        mainViewModel.IconFile = default;
-            //        return View(mainViewModel);
-            //    }
-            //}
-            #endregion
-
             BlogOptions.WebsiteOptions += mainViewModel;
             await ConfigurationWriter.WriteAsync(BlogOptions);
 
-            return View(mainViewModel);
+            return RedirectToAction("main");
         }
 
         private async Task<string> TryChangeImageAsync(IFormFile formFile, string path)
