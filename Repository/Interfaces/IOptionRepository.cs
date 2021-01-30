@@ -9,7 +9,7 @@ namespace Repo.Interfaces
         Task<T> FirstOrDefaultAsync();
         Task<T> GetByIdAsync(Guid id);
         IEnumerable<T> Find(Func<T, bool> predicate);
-        //T FindFirst(Func<T, bool> predicate);
         Task UpdateAsync(T entity);
+        Task<List<T>> GetAllAsync();
     }
 }

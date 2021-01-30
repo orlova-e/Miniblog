@@ -32,7 +32,12 @@ namespace Repo.Implementation
 
         public async Task<ArticleOptions> FirstOrDefaultAsync()
         {
-            return (await Db.ArticleOptions.ToArrayAsync()).FirstOrDefault();
+            return await Db.ArticleOptions.FirstOrDefaultAsync();
+        }
+
+        public async Task<List<ArticleOptions>> GetAllAsync()
+        {
+            return await Db.ArticleOptions.ToListAsync();
         }
     }
 }

@@ -40,5 +40,10 @@ namespace Repo.Implementation
         {
             return await Db.Roles.FirstOrDefaultAsync();
         }
+
+        public async Task<List<Role>> GetAllAsync()
+        {
+            return await Db.Roles.ToListAsync();
+        }
     }
 }
