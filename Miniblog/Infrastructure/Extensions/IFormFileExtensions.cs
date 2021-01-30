@@ -26,11 +26,11 @@ namespace Web.Infrastructure.Extensions
                 Directory.CreateDirectory(directory);
             }
 
-            string newPath = Path.Combine(directory, formFile.FileName);
+            string newPath = Path.Combine(directory, formFile.FileName).Replace(@"\\", "/");
 
             try
             {
-                using (FileStream fileStream = new FileStream(newPath, FileMode.Create))
+                using (FileStream fileStream = new FileStream(newPath, FileMode.Create, FileAccess.Write))
                 {
                     await formFile.CopyToAsync(fileStream);
                 }
