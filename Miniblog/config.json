@@ -1,9 +1,9 @@
 {
   "WebsiteOptions": {
     "Name": "Miniblog",
-    "Subtitle": "",
-    "IconPath": "",
-    "StandardAvatarPath": "/img/social_line/anonymous_user.png",
+    "Subtitle": null,
+    "IconPath": "\\img\\icon.png",
+    "StandardAvatarPath": "\\img\\social_line\\user.png",
     "HomePage": "/articles/list",
     "ShowListOfPopularAndRecent": true,
     "ShowAuthors": true,
