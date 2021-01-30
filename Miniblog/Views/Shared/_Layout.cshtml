@@ -33,14 +33,7 @@
     @*@RenderSection("CommentTemplates", false)*@
     @RenderSection("Scripts", false)
     @RenderSection("Hubs", false)
-
     <script src="~/js/datetime.js"></script>
-
-    @*<script src="~/js/options_actions/openList.js"></script>
-        <script src="~/js/options_actions/hideOptions.js"></script>
-        <script src="~/js/options_actions/handlers.js"></script>*@
-
-    @* jQuery, Popper, Bootstrap JS *@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     @if (IsSectionDefined("Validation") @*&& !User.Identity.IsAuthenticated*@)
     {
