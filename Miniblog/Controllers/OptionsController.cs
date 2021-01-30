@@ -1,69 +1,93 @@
-﻿using Domain.Entities;
-using Domain.Entities.Enums;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Domain.Entities.Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Services.Interfaces;
-using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
+using Web.App.Interfaces;
 using Web.Configuration;
+using Web.Infrastructure.Extensions;
 using Web.ViewModels.Options;
 
 namespace Web.Controllers
 {
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme,
-               Roles = nameof(RoleType.Administrator))]
-    public class OptionsController : Controller                 // +++ SURE that you added AUTHORIZATION requirements
+    [Authorize(Roles = nameof(RoleType.Administrator))]
+    public class OptionsController : Controller
     {
         public BlogOptions BlogOptions { get; private set; }
-        public IUserService UserService { get; private set; }
+        public IConfigurationWriter ConfigurationWriter { get; private set; }
+        public IWebHostEnvironment WebHostEnvironment { get; private set; }
         public OptionsController(IOptionsSnapshot<BlogOptions> optionsSnapshot,
-            IUserService userService)
+            IConfigurationWriter configurationWriter,
+            IWebHostEnvironment webHostEnvironment)
         {
             BlogOptions = optionsSnapshot.Value;
-            UserService = userService;
+            ConfigurationWriter = configurationWriter;
+            WebHostEnvironment = webHostEnvironment;
         }
 
-        [HttpGet]
-        [Authorize(Roles = nameof(RoleType.Administrator) + "," + nameof(RoleType.Editor) + "," + nameof(RoleType.User))]
-        public async Task<IActionResult> Account()            // SURE that you created VIEW
-        {
-            Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            User user = await UserService.GetFromDbAsync(userId);
-            return View(user);
-        }
-
-        //[Authorize(Roles = nameof(RoleType.Administrator))]
         [HttpGet]
         public IActionResult Main()
         {
-            Configuration.WebsiteOptions websiteOptions = BlogOptions.WebsiteOptions;
-            MainViewModel mainViewModel = new MainViewModel()
-            {
-                Title = websiteOptions.Name,
-                Subtitle = websiteOptions.Subtitle,
-                IconPath = websiteOptions.IconPath,
-                DateFormat = websiteOptions.WebsiteDateFormat,
-                Language = Enum.GetName(typeof(Languages), websiteOptions.WebsiteLanguage)
-                //TimeFormat = options.Ti
-            };
+            MainViewModel mainViewModel = (MainViewModel)BlogOptions.WebsiteOptions;
             return View(mainViewModel);
         }
 
-        //[Route("Main")]
-        //[HttpPost]
-        ////[Authorize(Roles = nameof(RoleType.Administrator))]
-        //public async Task<IActionResult> Main(MainViewModel mainViewModel)
-        //{
+        [HttpPost]
+        public async Task<IActionResult> Main(MainViewModel mainViewModel)
+        {
+            mainViewModel.IconPath = BlogOptions.WebsiteOptions.IconPath;
+            mainViewModel.AvatarPath = BlogOptions.WebsiteOptions.StandardAvatarPath;
 
-        //}
+            if (!ModelState.IsValid)
+                return View(mainViewModel);
 
-        //[HttpGet]
-        //public async Task<IActionResult> Writing()
-        //{
-        //    Role role 
-        //}
+            string iconPath = await TryChangeImageAsync(mainViewModel.IconFile, mainViewModel.IconPath);
+            mainViewModel.IconPath = !string.IsNullOrWhiteSpace(iconPath) ? iconPath : mainViewModel.IconPath;
+
+            string avatarPath = await TryChangeImageAsync(mainViewModel.AvatarFile, mainViewModel.AvatarPath);
+            mainViewModel.AvatarPath = !string.IsNullOrWhiteSpace(avatarPath) ? avatarPath : mainViewModel.AvatarPath;
+
+            #region
+            //if (mainViewModel.IconFile?.Length > 0)
+            //{
+            //    string filePath = WebHostEnvironment.WebRootPath + mainViewModel.IconPath;
+            //    filePath = await mainViewModel.IconFile.TryUpdateFileAsync(filePath);
+            //    if (System.IO.File.Exists(filePath))
+            //    {
+            //        filePath = filePath.Replace(WebHostEnvironment.WebRootPath, "").Replace(@"\\", "/");
+            //        mainViewModel.IconPath = filePath;
+            //    }
+            //    else
+            //    {
+            //        mainViewModel.IconFile = default;
+            //        return View(mainViewModel);
+            //    }
+            //}
+            #endregion
+
+            BlogOptions.WebsiteOptions += mainViewModel;
+            await ConfigurationWriter.WriteAsync(BlogOptions);
+
+            return View(mainViewModel);
+        }
+
+        private async Task<string> TryChangeImageAsync(IFormFile formFile, string path)
+        {
+            if (formFile?.Length > 0)
+            {
+                string filePath = WebHostEnvironment.WebRootPath + path;
+                filePath = await formFile.TryUpdateFileAsync(filePath);
+                if (System.IO.File.Exists(filePath))
+                {
+                    filePath = filePath.Replace(WebHostEnvironment.WebRootPath, "");
+                    string newPath = filePath;
+                    return newPath;
+                }
+            }
+
+            return string.Empty;
+        }
     }
 }
