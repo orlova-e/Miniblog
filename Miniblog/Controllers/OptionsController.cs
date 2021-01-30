@@ -1,9 +1,14 @@
-﻿using Domain.Entities.Enums;
+﻿using Domain.Entities;
+using Domain.Entities.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Repo.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Web.App.Interfaces;
 using Web.Configuration;
@@ -18,13 +23,16 @@ namespace Web.Controllers
         public BlogOptions BlogOptions { get; private set; }
         public IConfigurationWriter ConfigurationWriter { get; private set; }
         public IWebHostEnvironment WebHostEnvironment { get; private set; }
+        public IRepository Repository { get; private set; }
         public OptionsController(IOptionsSnapshot<BlogOptions> optionsSnapshot,
             IConfigurationWriter configurationWriter,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+            IRepository repository)
         {
             BlogOptions = optionsSnapshot.Value;
             ConfigurationWriter = configurationWriter;
             WebHostEnvironment = webHostEnvironment;
+            Repository = repository;
         }
 
         [HttpGet]
@@ -70,6 +78,53 @@ namespace Web.Controllers
             }
 
             return string.Empty;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Writing()
+        {
+            List<RoleViewModel> rolesViewModels = new List<RoleViewModel>();
+            List<Role> roles = await Repository.Roles.GetAllAsync();
+
+            foreach (var role in roles)
+            {
+                if (role is ExtendedRole extendedRole)
+                    rolesViewModels.Add((RoleViewModel)extendedRole);
+                else
+                    rolesViewModels.Add((RoleViewModel)role);
+            }
+
+            return View(rolesViewModels);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Writing(List<RoleViewModel> rolesViewModels)
+        {
+            RoleViewModel userViewModel = rolesViewModels.Where(r => r.Discriminator.Equals("Role")).First();
+            if (userViewModel.ModerateTopics || userViewModel.ModerateTags)
+            {
+                userViewModel.ModerateTopics = false;
+                userViewModel.ModerateTags = false;
+                return View(rolesViewModels);
+            }
+
+            List<Role> roles = await Repository.Roles.GetAllAsync();
+
+            foreach (var roleViewModel in rolesViewModels)
+            {
+                var role = roles.Where(r => Enum.GetName(typeof(RoleType), r.Type).Equals(roleViewModel.Type)).First();
+                if (role is ExtendedRole extendedRole)
+                {
+                    extendedRole = extendedRole + roleViewModel;
+                }
+                else
+                {
+                    role += roleViewModel;
+                }
+                await Repository.Roles.UpdateAsync(role);
+            }
+
+            return RedirectToAction("writing");
         }
     }
 }

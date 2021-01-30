@@ -1,0 +1,130 @@
+﻿@model List<RoleViewModel>
+
+<div class="blog-container">
+    <div class="page-container text-alegreya-style">
+        <div class="blog-content">
+
+            <div class="options-container">
+
+                @await Html.PartialAsync("_OptionsMenuPartial")
+
+                <div id="optionsContent" class="options-content">
+
+                    <form method="post" asp-action="Writing" asp-controller="Options" class="usual-form">
+                        <fieldset>
+                            <legend>Who can write articles</legend>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                <label class="usual-label radio-label">
+                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].WriteArticles">
+                                    @Model[i].Type
+                                </label>
+                            }
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Who can override own articles</legend>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                <label class="usual-label radio-label">
+                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].OverrideOwnArticle">
+                                    @Model[i].Type
+                                </label>
+                            }
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Who can create topics</legend>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                <label class="usual-label radio-label">
+                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].CreateTopics">
+                                    @Model[i].Type
+                                </label>
+                            }
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Who can moderate topics</legend>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                if (Model[i].Discriminator.Equals("Role"))
+                                    continue;
+
+                                <label class="usual-label radio-label">
+                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].ModerateTopics">
+                                    @Model[i].Type
+                                </label>
+                            }
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Who can create articles' tags</legend>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                <label class="usual-label radio-label">
+                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].CreateTags">
+                                    @Model[i].Type
+                                </label>
+                            }
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Who can moderate tags</legend>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                if (Model[i].Discriminator.Equals("Role"))
+                                    continue;
+
+                                <label class="usual-label radio-label">
+                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].ModerateTags">
+                                    @Model[i].Type
+                                </label>
+                            }
+                        </fieldset>
+
+                        @* Add next -- needs new model *@
+
+                        @*<fieldset>
+                                <legend>Articles' moderation</legend>
+
+                                <label class="usual-label">
+                                    <span class="blog-info-span text-alegreya-style">
+                                        A list of words separated by a string (it can also be URLs, phone numbers, email addresses, and so on) that will allow the article to be <b>moderated</b>
+                                    </span>
+                                    <textarea class="usual-input usual-input-text usual-input-textarea-middle"></textarea>
+                                </label>
+
+
+                                <label class="usual-label">
+                                    <span class="blog-info-span text-alegreya-style">
+                                        A list of words separated by a string (it can also be URLs, phone numbers, email addresses, and so on) that make the article <b>blacklisted</b>
+                                    </span>
+                                    <textarea class="usual-input usual-input-text usual-input-textarea-middle"></textarea>
+                                </label>
+
+                                <label class="usual-label checkbox-label">
+                                    <input type="checkbox" name="" class="usual-checkbox">
+                                    Delete articles from the blacklist immediately
+                                </label>
+
+                            </fieldset>*@
+
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <input type="hidden" asp-for="@Model[i].Type" value="@Model[i].Type">
+                            <input type="hidden" asp-for="@Model[i].Discriminator" value="@Model[i].Discriminator">
+                        }
+
+                        <button type="submit" class="usual-submit-button usual-button">Save</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script src="~/js/options_actions/openList.js"></script>
+}
