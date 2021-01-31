@@ -1,12 +1,15 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Enums;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Web.ViewModels.Options
 {
     public class RoleViewModel
     {
+        [Required]
         public string Type { get; set; }
+        [Required]
         public string Discriminator { get; set; }
         public bool WriteArticles { get; set; }
         public bool CreateTopics { get; set; }

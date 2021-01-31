@@ -100,13 +100,8 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Writing(List<RoleViewModel> rolesViewModels)
         {
-            RoleViewModel userViewModel = rolesViewModels.Where(r => r.Discriminator.Equals("Role")).First();
-            if (userViewModel.ModerateTopics || userViewModel.ModerateTags)
-            {
-                userViewModel.ModerateTopics = false;
-                userViewModel.ModerateTags = false;
+            if (!ModelState.IsValid)
                 return View(rolesViewModels);
-            }
 
             List<Role> roles = await Repository.Roles.GetAllAsync();
 
