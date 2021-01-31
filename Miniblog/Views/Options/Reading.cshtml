@@ -1,0 +1,172 @@
+﻿@using System
+@using Web.Infrastructure.Extensions
+@using Web.Configuration
+
+@model ReadingViewModel
+
+<div class="blog-container">
+    <div class="page-container text-alegreya-style">
+        <div class="blog-content">
+            <div class="options-container">
+
+                @await Html.PartialAsync("_OptionsMenuPartial")
+
+                <div id="optionsContent" class="options-content">
+
+                    <form method="post" asp-action="reading" asp-controller="options" class="usual-form">
+
+                        <fieldset>
+                            <legend>Show pages:</legend>
+                            <label class="usual-label checkbox-label">
+                                <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowListOfPopularAndRecent">
+                                @Model.WebsiteOptionsPartially.GetDisplayName(nameof(WebsiteOptionsPartially.ShowListOfPopularAndRecent))
+                            </label>
+
+                            <label class="usual-label checkbox-label">
+                                <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowAuthors">
+                                @Model.WebsiteOptionsPartially.GetDisplayName(nameof(WebsiteOptionsPartially.ShowAuthors))
+                            </label>
+
+                            <label class="usual-label checkbox-label">
+                                <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowTopics">
+                                @Model.WebsiteOptionsPartially.GetDisplayName(nameof(WebsiteOptionsPartially.ShowTopics))
+                            </label>
+
+                            <label class="usual-label checkbox-label">
+                                <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowSearchOption">
+                                @Model.WebsiteOptionsPartially.GetDisplayName(nameof(WebsiteOptionsPartially.ShowSearchOption))
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Number of articles per page</legend>
+                            @Html.DropDownListFor(n => n.ListOptions.ArticlesPerPage.Value,
+                               new SelectList(Model.ListOptions.ArticlesPerPage.Available),
+                               "")
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Articles list displaying type</legend>
+                            @foreach (var displayingType in Enum.GetValues(typeof(DisplayType)))
+                            {
+                                <label class="usual-label radio-label">
+                                    <input type="radio" class="usual-radiobutton"
+                                           checked="@((int)displayingType == (int)Model.ListOptions.ListDisplayDefaultType)"
+                                           value="@((int)displayingType)"
+                                           asp-for="@Model.ListOptions.ListDisplayDefaultType">
+                                    @EnumExt.GetEnumDisplayName(typeof(DisplayType), displayingType)
+                                </label>
+                            }
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Number of words in preview</legend>
+                            <label class="usual-label">
+                                @Html.DropDownListFor(n => n.ListOptions.WordsPerPreview.Value,
+                                new SelectList(Model.ListOptions.WordsPerPreview.Available),
+                                "")
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Website's layout type</legend>
+                            @foreach (var layoutType in Enum.GetValues(typeof(ListLayoutType)))
+                            {
+                                <label class="usual-label radio-label">
+                                    <input type="radio" class="usual-radiobutton"
+                                           checked="@((int)layoutType == (int)Model.ListOptions.LayoutDefaultType)"
+                                           value="@((int)layoutType)"
+                                           asp-for="@Model.ListOptions.LayoutDefaultType">
+                                    @Enum.GetName(typeof(ListLayoutType), layoutType)
+                                </label>
+                            }
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>List sorting default type</legend>
+                            @foreach (var sortingType in Enum.GetValues(typeof(ListSorting)))
+                            {
+                                <label class="usual-label radio-label">
+                                    <input type="radio" class="usual-radiobutton"
+                                           checked="@((int)sortingType == (int)Model.ListOptions.ListSortingDefaultType)"
+                                           value="@((int)sortingType)"
+                                           asp-for="@Model.ListOptions.ListSortingDefaultType">
+                                    @EnumExt.GetEnumDisplayName(typeof(ListSorting), sortingType)
+                                </label>
+                            }
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Displaying data in any articles' list</legend>
+
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Username">
+                                @nameof(Model.ListOptions.Username)
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.DateAndTime">
+                                @Model.ListOptions.GetDisplayName(nameof(ListOptions.DateAndTime))
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Tags">
+                                @nameof(Model.ListOptions.Tags)
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Topic">
+                                @nameof(Model.ListOptions.Topic)
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Series">
+                                @nameof(Model.ListOptions.Series)
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Likes">
+                                @nameof(Model.ListOptions.Likes)
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Bookmarks">
+                                @nameof(Model.ListOptions.Bookmarks)
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Comments">
+                                @nameof(Model.ListOptions.Comments)
+                            </label>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.OverrideForUserArticle">
+                                <b>User can override some elements for their articles</b>
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>The visibility of the website</legend>
+                            @foreach (Visibility visibility in Enum.GetValues(typeof(Visibility)))
+                            {
+                                <label class="usual-label radio-label">
+                                    <input type="radio" class="usual-radiobutton"
+                                           checked="@((int)visibility == (int)Model.WebsiteOptionsPartially.WebsiteVisibility)"
+                                           value="@((int)visibility)"
+                                           asp-for="@Model.WebsiteOptionsPartially.WebsiteVisibility">
+                                    @if (visibility == Visibility.Public)
+                                    {
+                                        @:Public
+                                    }
+                                    else if (visibility == Visibility.Private)
+                                    {
+                                        @:Private (the site content is only available to authorized users)
+                                    }
+                                </label>
+                            }
+                        </fieldset>
+
+                        <button type="submit" class="usual-submit-button usual-button">Save</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/options_actions/openList.js"></script>
+}

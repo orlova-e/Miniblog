@@ -174,5 +174,33 @@ namespace Web.Controllers
 
             return RedirectToAction("discussion");
         }
+
+        [HttpGet]
+        public IActionResult Reading()
+        
+        {
+            ReadingViewModel readingViewModel = new ReadingViewModel
+            {
+                ListOptions = BlogOptions.ListOptions,
+                WebsiteOptionsPartially = (WebsiteOptionsPartially)BlogOptions.WebsiteOptions
+            };
+            return View(readingViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reading([FromForm] ReadingViewModel readingViewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(readingViewModel);
+
+            readingViewModel.ListOptions.ArticlesPerPage.Available ??= BlogOptions.ListOptions.ArticlesPerPage.Available;
+            readingViewModel.ListOptions.WordsPerPreview.Available ??= BlogOptions.ListOptions.WordsPerPreview.Available;
+
+            BlogOptions.ListOptions = readingViewModel.ListOptions;
+            BlogOptions.WebsiteOptions += readingViewModel.WebsiteOptionsPartially;
+            await ConfigurationWriter.WriteAsync(BlogOptions);
+
+            return RedirectToAction("reading");
+        }
     }
 }
