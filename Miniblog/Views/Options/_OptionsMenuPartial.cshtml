@@ -14,16 +14,15 @@
     <ul class="blog-menu-list">
         <li class="blog-menu-list-point drop-menu actual-menu-list">
             <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Main</h5></button>
-
-            <ul id="sortListDropdown" class="blog-links-list">
-                @if (type == RoleType.Administrator)
-                {
+            @if (type == RoleType.Administrator)
+            {
+                <ul id="sortListDropdown" class="blog-links-list">
                     <li><a href="@Url.Action("Main", "Options")">Main</a></li>
                     <li><a href="@Url.Action("Writing", "Options")">Writing</a></li>
-                }
-                <li><a href="@Url.Action("Reading", "Options")">Reading</a></li>
-                <li><a href="@Url.Action("Discussion", "Options")">Discussion</a></li>
-            </ul>
+                    <li><a href="@Url.Action("Discussion", "Options")">Discussion</a></li>
+                    <li><a href="@Url.Action("Reading", "Options")">Reading</a></li>
+                </ul>
+            }
         </li>
 
         <li class="blog-menu-list-point drop-menu">
