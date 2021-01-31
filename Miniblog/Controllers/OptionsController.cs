@@ -126,5 +126,58 @@ namespace Web.Controllers
 
             return RedirectToAction("writing");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Discussion()
+        {
+            DiscussionViewModel discussionViewModel = new DiscussionViewModel
+            {
+                CommentsOptions = BlogOptions.CommentsOptions,
+                DiscussionRoles = new List<DiscussionRoles>()
+            };
+
+            List<Role> roles = await Repository.Roles.GetAllAsync();
+            foreach(var role in roles)
+            {
+                if (role is ExtendedRole extendedRole)
+                    discussionViewModel.DiscussionRoles.Add((DiscussionRoles)extendedRole);
+                else
+                    discussionViewModel.DiscussionRoles.Add((DiscussionRoles)role);
+            }
+
+            return View(discussionViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Discussion(DiscussionViewModel discussionViewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(discussionViewModel);
+
+            discussionViewModel.CommentsOptions.Depth.Available ??= BlogOptions.CommentsOptions.Depth.Available;
+            if (!BlogOptions.CommentsOptions.Equals(discussionViewModel.CommentsOptions))
+            {
+                BlogOptions.CommentsOptions = discussionViewModel.CommentsOptions;
+                await ConfigurationWriter.WriteAsync(BlogOptions);
+            }
+
+            List<Role> roles = await Repository.Roles.GetAllAsync();
+
+            foreach(var discussionRole in discussionViewModel.DiscussionRoles)
+            {
+                var role = roles.Where(r => Enum.GetName(typeof(RoleType), r.Type).Equals(discussionRole.Type)).First();
+                if (role is ExtendedRole extendedRole)
+                {
+                    extendedRole = extendedRole + discussionRole;
+                }
+                else
+                {
+                    role += discussionRole;
+                }
+                await Repository.Roles.UpdateAsync(role);
+            }
+
+            return RedirectToAction("discussion");
+        }
     }
 }

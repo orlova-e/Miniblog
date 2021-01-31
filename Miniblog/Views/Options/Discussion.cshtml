@@ -1,0 +1,80 @@
+﻿@model DiscussionViewModel
+
+<div class="blog-container">
+    <div class="page-container text-alegreya-style">
+        <div class="blog-content">
+
+            <div class="options-container">
+
+                @await Html.PartialAsync("_OptionsMenuPartial")
+
+                <div id="optionsContent" class="options-content">
+
+                    <form method="post" asp-action="discussion" asp-controller="options" class="usual-form">
+
+                        <fieldset>
+                            <legend>Sorting comments</legend>
+                            <select asp-for="@Model.CommentsOptions.SortingCommentsDefaultType" asp-items="Html.GetEnumSelectList<SortingComments>()">
+                            </select>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Displaying comments</legend>
+                            <label class="usual-label checkbox-label">
+                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.CommentsOptions.AllowNesting">
+                                Allow nested comments
+                            </label>
+
+                            <label class="usual-label">
+                                Depth of nested comments:
+                                @Html.DropDownListFor(d => d.CommentsOptions.Depth.Value,
+                                    new SelectList(Model.CommentsOptions.Depth.Available),
+                                    "")
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Who can write comments</legend>
+                            @for (int i = 0; i < Model.DiscussionRoles.Count; i++)
+                            {
+                                <label class="usual-label radio-label">
+                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model.DiscussionRoles[i].WriteComments">
+                                    @Model.DiscussionRoles[i].Type
+                                </label>
+                            }
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Who can moderate comments</legend>
+                            @for (int i = 0; i < Model.DiscussionRoles.Count; i++)
+                            {
+                                if(Model.DiscussionRoles[i].Discriminator.Equals("Role"))
+                                    continue;
+
+                                <label class="usual-label radio-label">
+                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model.DiscussionRoles[i].ModerateComments">
+                                    @Model.DiscussionRoles[i].Type
+                                </label>
+                            }
+
+                            <span class="blog-info-span text-alegreya-style"><mark>Note:</mark> If comments are available only to administrators or only to editors and administrators, then only administrators can moderate comments.</span>
+                        </fieldset>
+
+                        @for(int i = 0; i < Model.DiscussionRoles.Count; i++)
+                        {
+                            <input type="hidden" asp-for="@Model.DiscussionRoles[i].Type" value="@Model.DiscussionRoles[i].Type">
+                            <input type="hidden" asp-for="@Model.DiscussionRoles[i].Discriminator" value="@Model.DiscussionRoles[i].Discriminator">
+                        }
+
+                        <button type="submit" class="usual-submit-button usual-button">Save</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/options_actions/openList.js"></script>
+}
