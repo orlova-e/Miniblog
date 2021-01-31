@@ -43,7 +43,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Main(MainViewModel mainViewModel)
+        public async Task<IActionResult> Main([FromForm] MainViewModel mainViewModel)
         {
             mainViewModel.IconPath = BlogOptions.WebsiteOptions.IconPath;
             mainViewModel.AvatarPath = BlogOptions.WebsiteOptions.StandardAvatarPath;
@@ -98,7 +98,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Writing(List<RoleViewModel> rolesViewModels)
+        public async Task<IActionResult> Writing([FromForm] List<RoleViewModel> rolesViewModels)
         {
             if (!ModelState.IsValid)
                 return View(rolesViewModels);
@@ -132,7 +132,7 @@ namespace Web.Controllers
             };
 
             List<Role> roles = await Repository.Roles.GetAllAsync();
-            foreach(var role in roles)
+            foreach (var role in roles)
             {
                 if (role is ExtendedRole extendedRole)
                     discussionViewModel.DiscussionRoles.Add((DiscussionRoles)extendedRole);
@@ -144,7 +144,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Discussion(DiscussionViewModel discussionViewModel)
+        public async Task<IActionResult> Discussion([FromForm] DiscussionViewModel discussionViewModel)
         {
             if (!ModelState.IsValid)
                 return View(discussionViewModel);
@@ -158,7 +158,7 @@ namespace Web.Controllers
 
             List<Role> roles = await Repository.Roles.GetAllAsync();
 
-            foreach(var discussionRole in discussionViewModel.DiscussionRoles)
+            foreach (var discussionRole in discussionViewModel.DiscussionRoles)
             {
                 var role = roles.Where(r => Enum.GetName(typeof(RoleType), r.Type).Equals(discussionRole.Type)).First();
                 if (role is ExtendedRole extendedRole)
@@ -177,7 +177,6 @@ namespace Web.Controllers
 
         [HttpGet]
         public IActionResult Reading()
-        
         {
             ReadingViewModel readingViewModel = new ReadingViewModel
             {
