@@ -1,0 +1,44 @@
+﻿@model CheckListViewModel
+
+<div class="blog-container">
+    <div class="page-container text-alegreya-style">
+        <div class="blog-content">
+            <div class="options-container">
+
+                @await Html.PartialAsync("_OptionsMenuPartial")
+
+                <div id="optionsContent" class="options-content">
+
+                    <form method="post" asp-action="checklists" asp-controller="options" class="usual-form">
+
+                        <fieldset>
+                            <legend>Check lists</legend>
+
+                            <label class="usual-label">
+                                <span class="blog-info-span text-alegreya-style">
+                                    A list of words separated by a string (it can also be URLs, phone numbers, email addresses, and so on) that will allow the article to be <b>moderated</b>
+                                </span>
+                                <textarea asp-for="@Model.ListToCheck" class="usual-input usual-input-text usual-input-textarea-middle"></textarea>
+                            </label>
+
+                            <label class="usual-label">
+                                <span class="blog-info-span text-alegreya-style">
+                                    A list of words separated by a string (it can also be URLs, phone numbers, email addresses, and so on) that make the article <b>blacklisted</b>
+                                </span>
+                                <textarea asp-for="@Model.BlackList" class="usual-input usual-input-text usual-input-textarea-middle"></textarea>
+                            </label>
+
+                        </fieldset>
+
+                        <button type="submit" class="usual-submit-button usual-button">Save</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/options_actions/openList.js"></script>
+}
