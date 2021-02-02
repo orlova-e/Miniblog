@@ -201,5 +201,40 @@ namespace Web.Controllers
 
             return RedirectToAction("reading");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> CheckLists()
+        {
+            List<CheckList> checkLists = await Repository.CheckLists.GetAllAsync();
+            CheckListViewModel checkListView = new CheckListViewModel();
+            checkListView.ListToCheck = checkLists
+                .Where(c => c.CheckAction == CheckAction.Verify)
+                .First()
+                .VerifiableWords;
+            checkListView.BlackList = checkLists
+                .Where(c => c.CheckAction == CheckAction.Delete)
+                .First()
+                .VerifiableWords;
+
+            return View(checkListView);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckLists([FromForm] CheckListViewModel checkListView)
+        {
+            List<CheckList> checkLists = await Repository.CheckLists.GetAllAsync();
+            CheckList toCheck = checkLists
+                .Where(c => c.CheckAction == CheckAction.Verify)
+                .First();
+            toCheck.VerifiableWords = checkListView.ListToCheck;
+            await Repository.CheckLists.UpdateAsync(toCheck);
+            CheckList toDelete = checkLists
+                .Where(c => c.CheckAction == CheckAction.Delete)
+                .First();
+            toDelete.VerifiableWords = checkListView.BlackList;
+            await Repository.CheckLists.UpdateAsync(toDelete);
+
+            return RedirectToAction("checklists");
+        }
     }
 }
