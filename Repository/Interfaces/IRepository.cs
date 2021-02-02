@@ -17,6 +17,7 @@ namespace Repo.Interfaces
         IWorkingWithRange<IndexInfo> IndexInfos { get; }
         IOptionRepository<Role> Roles { get; }
         IOptionRepository<ArticleOptions> ArticleOptions { get; }
+        IOptionRepository<CheckList> CheckLists { get; }
         IRelatedRepository<UserFavourite, Article> ArticleLikes { get; }
         IRelatedRepository<UserBookmark, Article> ArticleBookmarks { get; }
         IRelatedRepository<CommentLikes, Comment> CommentLikes { get; }

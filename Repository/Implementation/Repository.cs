@@ -19,6 +19,7 @@ namespace Repo.Implementation
 
         IOptionRepository<Role> roles;
         IOptionRepository<ArticleOptions> articleOptions;
+        IOptionRepository<CheckList> checkLists;
 
         IRelatedRepository<UserFavourite, Article> articleLikes;
         IRelatedRepository<UserBookmark, Article> articleBookmarks;
@@ -109,6 +110,16 @@ namespace Repo.Implementation
                 if (articleOptions == null)
                     articleOptions = new ArticleOptionsRepo(Db);
                 return articleOptions;
+            }
+        }
+
+        public IOptionRepository<CheckList> CheckLists
+        {
+            get
+            {
+                if (checkLists == null)
+                    checkLists = new CheckListsRepository(Db);
+                return checkLists;
             }
         }
         public IRelatedRepository<UserFavourite, Article> ArticleLikes

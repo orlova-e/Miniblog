@@ -19,6 +19,7 @@ namespace Repo
         public DbSet<ArticleOptions> ArticleOptions { get; set; }
         public DbSet<FoundWord> FoundWords { get; set; }
         public DbSet<IndexInfo> IndexInfos { get; set; }
+        public DbSet<CheckList> CheckLists { get; set; }
 
         public MiniblogDb(DbContextOptions options) : base(options)
         {
@@ -32,6 +33,16 @@ namespace Repo
                 .HasConversion(
                 v => v.ToString(),
                 v => (RoleType)Enum.Parse(typeof(RoleType), v));
+
+            modelBuilder.Entity<CheckList>()
+                .Property(c => c.CheckAction)
+                .HasConversion(
+                v => v.ToString(),
+                v => (CheckAction)Enum.Parse(typeof(CheckAction), v));
+
+            CheckList listToCheck = new CheckList { Id = Guid.NewGuid(), CheckAction = CheckAction.Verify };
+            CheckList blackList = new CheckList { Id = Guid.NewGuid(), CheckAction = CheckAction.Delete };
+            modelBuilder.Entity<CheckList>().HasData(listToCheck, blackList);
 
             modelBuilder.Entity<Article>()
                 .Property(a => a.EntryType)
