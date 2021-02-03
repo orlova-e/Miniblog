@@ -216,14 +216,6 @@ namespace Web.Controllers
                 .First()
                 .VerifiableWords;
 
-            //test
-
-            foreach(var checkList in checkLists)
-                foreach(var verifiable in checkList)
-                {
-                    string check = verifiable;
-                }
-
             return View(checkListView);
         }
 
