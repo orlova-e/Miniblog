@@ -1,13 +1,12 @@
-﻿using Moq;
+﻿using Domain.Entities;
+using Moq;
 using NUnit.Framework;
 using Repo.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using Domain.Entities;
 using Services.Implementation.Indexing;
 using Services.IndexedValues;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Services.UnitTests.Indexing
@@ -18,31 +17,39 @@ namespace Services.UnitTests.Indexing
         [Test]
         public async Task OnUpdatedEntityAsync_GetsAFullyModifiedArticle_DeletesOldInfo()
         {
-            Article article = new Article { Id = Guid.NewGuid(), Header = "something", User = new User() };
+            Article article = new Article { Id = Guid.NewGuid(), Header = "something something_else", User = new User() };
+            IEnumerable<FoundWord> foundWords1 = null, foundWords2 = null, foundWords3 = null;
             Mock<IRepository> _repository = new Mock<IRepository>();
-            _repository.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
-                .Returns<IEnumerable<FoundWord>>(null);
+            _repository.SetupSequence(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
+                .Returns(foundWords1)
+                .Returns(foundWords2);
+
             IndexObject indexObject = new IndexObject(_repository.Object, new ArticleRateStrategy());
             List<FoundWord> oldFoundWords = indexObject.Index((ArticleIndexedValues)article);
 
-            var indexInfos = oldFoundWords.ElementAt(0).IndexInfos;
-            foreach (var indexInfo in indexInfos)
-                indexInfo.FoundWord = oldFoundWords.ElementAt(0);
+            List<IndexInfo> indexInfos = new List<IndexInfo>();
+            foreach (var foundWord in oldFoundWords)
+            {
+                foreach (var indexInfo in foundWord.IndexInfos)
+                {
+                    indexInfo.FoundWord = foundWord;
+                }
+                indexInfos.AddRange(foundWord.IndexInfos);
+            }
 
-            _repository.Setup(r => r.IndexInfos.Find(It.IsAny<Func<IndexInfo, bool>>()))
+            Mock<IRepository> _repository2 = new Mock<IRepository>();
+            _repository2.SetupSequence(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
+                .Returns(foundWords3)
+                .Returns(new List<FoundWord> { oldFoundWords[0] });
+            _repository2.Setup(r => r.IndexInfos.Find(It.IsAny<Func<IndexInfo, bool>>()))
                 .Returns(indexInfos);
-            _repository.Setup(r => r.FoundWords.CreateRangeAsync(It.IsNotNull<IEnumerable<FoundWord>>()));
-            _repository.Setup(r => r.FoundWords.DeleteRangeAsync(It.IsNotNull<IEnumerable<FoundWord>>()));
 
-            article.Header = "Anything";
-            IndexedObjectsObserver observer = new IndexedObjectsObserver(_repository.Object);
+            article.Header = "something";
+            IndexedObjectsObserver observer = new IndexedObjectsObserver(_repository2.Object);
             await observer.OnUpdatedEntityAsync((ArticleIndexedValues)article);
 
-            _repository.Verify(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()), Times.AtLeast(2));
-            _repository.Verify(r => r.IndexInfos.Find(It.IsAny<Func<IndexInfo, bool>>()));
-            _repository.Verify(r => r.FoundWords.CreateRangeAsync(It.IsNotNull<IEnumerable<FoundWord>>()));
-            _repository.Verify(r => r.FoundWords.DeleteRangeAsync(It.IsNotNull<IEnumerable<FoundWord>>()));
-            _repository.VerifyNoOtherCalls();
+            _repository2.Verify(r => r.FoundWords.UpdateRangeAsync(It.IsNotNull<IEnumerable<FoundWord>>()));
+            _repository2.Verify(r => r.FoundWords.DeleteRangeAsync(It.IsNotNull<IEnumerable<FoundWord>>()));
         }
 
         [Test]
@@ -65,7 +72,6 @@ namespace Services.UnitTests.Indexing
                 .Returns(oldFoundWords);
             _repository.Setup(r => r.IndexInfos.Find(It.IsAny<Func<IndexInfo, bool>>()))
                 .Returns(indexInfos);
-            _repository.Setup(r => r.FoundWords.UpdateRangeAsync(It.IsNotNull<IEnumerable<FoundWord>>()));
 
             article.Header = "something something";
             IndexedObjectsObserver observer = new IndexedObjectsObserver(_repository.Object);

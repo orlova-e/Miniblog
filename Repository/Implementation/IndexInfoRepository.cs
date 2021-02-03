@@ -37,7 +37,7 @@ namespace Repo.Implementation
 
         public IEnumerable<IndexInfo> Find(Func<IndexInfo, bool> predicate)
         {
-            IEnumerable<IndexInfo> indexInfos = Db.IndexInfos.Where(predicate);
+            IEnumerable<IndexInfo> indexInfos = Db.IndexInfos.Include(i => i.FoundWord).Where(predicate);
             foreach (var indexinfo in indexInfos)
             {
                 Type entityType = DeterminingType.Determine(indexinfo.EntityType);
