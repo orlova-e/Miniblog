@@ -54,7 +54,7 @@
                                            checked="@((int)displayingType == (int)Model.ListOptions.ListDisplayDefaultType)"
                                            value="@((int)displayingType)"
                                            asp-for="@Model.ListOptions.ListDisplayDefaultType">
-                                    @EnumExt.GetEnumDisplayName(typeof(DisplayType), displayingType)
+                                    @Enums.GetEnumName(displayingType)
                                 </label>
                             }
                         </fieldset>
@@ -77,7 +77,7 @@
                                            checked="@((int)layoutType == (int)Model.ListOptions.LayoutDefaultType)"
                                            value="@((int)layoutType)"
                                            asp-for="@Model.ListOptions.LayoutDefaultType">
-                                    @Enum.GetName(typeof(ListLayoutType), layoutType)
+                                    @Enums.GetEnumName(layoutType)
                                 </label>
                             }
                         </fieldset>
@@ -91,7 +91,7 @@
                                            checked="@((int)sortingType == (int)Model.ListOptions.ListSortingDefaultType)"
                                            value="@((int)sortingType)"
                                            asp-for="@Model.ListOptions.ListSortingDefaultType">
-                                    @EnumExt.GetEnumDisplayName(typeof(ListSorting), sortingType)
+                                    @Enums.GetEnumName(sortingType)
                                 </label>
                             }
                         </fieldset>
@@ -146,14 +146,7 @@
                                            checked="@((int)visibility == (int)Model.WebsiteOptionsPartially.WebsiteVisibility)"
                                            value="@((int)visibility)"
                                            asp-for="@Model.WebsiteOptionsPartially.WebsiteVisibility">
-                                    @if (visibility == Visibility.Public)
-                                    {
-                                        @:Public
-                                    }
-                                    else if (visibility == Visibility.Private)
-                                    {
-                                        @:Private (the site content is only available to authorized users)
-                                    }
+                                    @Enums.GetEnumName(visibility)
                                 </label>
                             }
                         </fieldset>

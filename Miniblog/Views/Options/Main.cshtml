@@ -1,22 +1,5 @@
 ﻿@model MainViewModel
 
-@functions {
-    async Task GetLanguageOptionsAsync()
-    {
-        foreach (var language in Enum.GetValues(typeof(Languages)))
-        {
-            string languageToString = language switch
-            {
-                Languages.BasedOnUserCulture => "Based on user's culture",
-                Languages.Russian => "Русский",
-                _ => "English",
-            };
-            <input type="radio" asp-for="@Model.Language" value="@((int)language)" checked="@((int)language == (int)Model.Language)" class="usual-radiobutton">
-            @languageToString
-        }
-    }
-}
-
 <div class="blog-container">
     <div class="page-container text-alegreya-style">
         <div class="blog-content">
@@ -54,8 +37,10 @@
 
                         <fieldset>
                             <legend>Language</legend>
-                            @{
-                                await GetLanguageOptionsAsync();
+                            @foreach (var language in Enum.GetValues(typeof(Languages)))
+                            {
+                                <input type="radio" asp-for="@Model.Language" value="@((int)language)" checked="@((int)language == (int)Model.Language)" class="usual-radiobutton">
+                                @Enums.GetEnumName(language)
                             }
                             <span class="text-sans-style" asp-validation-for="@Model.Language"></span>
                         </fieldset>

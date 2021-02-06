@@ -4,20 +4,20 @@ using System.Reflection;
 
 namespace Web.Infrastructure.Extensions
 {
-    public static class EnumExt
+    public static class Enums
     {
-        public static string GetEnumDisplayName(Type enumType, object value)
+        public static string GetEnumName(object value)
         {
+            Type enumType = value.GetType();
             if (!enumType.IsEnum)
                 throw new ArgumentException();
 
             string name = Enum.GetName(enumType, value);
-            FieldInfo property = enumType.GetField(name);
-            if (property.GetCustomAttribute(typeof(DisplayAttribute)) is DisplayAttribute displayAttribute)
-            {
+            FieldInfo fieldInfo = enumType.GetField(name);
+            if (fieldInfo.GetCustomAttribute(typeof(DisplayAttribute)) is DisplayAttribute displayAttribute)
                 return displayAttribute.Name;
-            }
-            return string.Empty;
+
+            return name;
         }
     }
 }
