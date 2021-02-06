@@ -1,6 +1,5 @@
 ﻿@using System
 @using Web.Infrastructure.Extensions
-@using Web.Configuration
 
 @model ReadingViewModel
 
@@ -19,22 +18,22 @@
                             <legend>Show pages:</legend>
                             <label class="usual-label checkbox-label">
                                 <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowListOfPopularAndRecent">
-                                @Model.WebsiteOptionsPartially.GetDisplayName(nameof(WebsiteOptionsPartially.ShowListOfPopularAndRecent))
+                                @Model.WebsiteOptionsPartially.GetDisplayName()
                             </label>
 
                             <label class="usual-label checkbox-label">
                                 <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowAuthors">
-                                @Model.WebsiteOptionsPartially.GetDisplayName(nameof(WebsiteOptionsPartially.ShowAuthors))
+                                @Model.WebsiteOptionsPartially.GetDisplayName()
                             </label>
 
                             <label class="usual-label checkbox-label">
                                 <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowTopics">
-                                @Model.WebsiteOptionsPartially.GetDisplayName(nameof(WebsiteOptionsPartially.ShowTopics))
+                                @Model.WebsiteOptionsPartially.GetDisplayName()
                             </label>
 
                             <label class="usual-label checkbox-label">
                                 <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowSearchOption">
-                                @Model.WebsiteOptionsPartially.GetDisplayName(nameof(WebsiteOptionsPartially.ShowSearchOption))
+                                @Model.WebsiteOptionsPartially.GetDisplayName()
                             </label>
                         </fieldset>
 
@@ -105,7 +104,7 @@
                             </label>
                             <label class="usual-label checkbox-label">
                                 <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.DateAndTime">
-                                @Model.ListOptions.GetDisplayName(nameof(ListOptions.DateAndTime))
+                                @Model.ListOptions.GetDisplayName()
                             </label>
                             <label class="usual-label checkbox-label">
                                 <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Tags">

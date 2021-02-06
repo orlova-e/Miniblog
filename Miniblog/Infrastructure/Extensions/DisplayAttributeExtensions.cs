@@ -6,11 +6,10 @@ namespace Web.Infrastructure.Extensions
 {
     public static class DisplayAttributeExtensions
     {
-        public static string GetDisplayName(this object obj, string propertyName)
+        public static string GetDisplayName(this object obj)
         {
             Type type = obj.GetType();
-            MemberInfo property = type.GetProperty(propertyName);
-            if (property.GetCustomAttribute(typeof(DisplayAttribute)) is DisplayAttribute displayAttribute)
+            if (type.GetCustomAttribute(typeof(DisplayAttribute)) is DisplayAttribute displayAttribute)
             {
                 return displayAttribute.Name;
             }
