@@ -1,6 +1,6 @@
-﻿@using Repo.Interfaces
-@using Domain.Entities.Enums
+﻿@using Domain.Entities.Enums
 @using System.Security.Claims
+@using Repo.Interfaces
 
 @inject IOptionRepository<Role> rolesRepository
 
@@ -12,18 +12,20 @@
 <aside class="options-menu-bar">
 
     <ul class="blog-menu-list">
-        <li class="blog-menu-list-point drop-menu actual-menu-list">
-            <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Main</h5></button>
-            @if (type == RoleType.Administrator)
-            {
+        @if (type == RoleType.Administrator)
+        {
+            <li class="blog-menu-list-point drop-menu actual-menu-list">
+                <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Main</h5></button>
+
                 <ul id="sortListDropdown" class="blog-links-list">
                     <li><a href="@Url.Action("Main", "Options")">Main</a></li>
                     <li><a href="@Url.Action("Writing", "Options")">Writing</a></li>
-                    <li><a href="@Url.Action("Discussion", "Options")">Discussion</a></li>
                     <li><a href="@Url.Action("Reading", "Options")">Reading</a></li>
+                    <li><a href="@Url.Action("Discussion", "Options")">Discussion</a></li>
+                    <li><a href="@Url.Action("Checklists", "Options")">Check lists</a></li>
                 </ul>
-            }
-        </li>
+            </li>
+        }
 
         <li class="blog-menu-list-point drop-menu">
             <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Articles</h5></button>
@@ -32,8 +34,7 @@
                 <li><a href="@Url.Action("Add", "Articles")">Add new</a></li>
                 <li><a href="#">Topics</a></li>
                 <li><a href="#">Tags</a></li>
-                <li><a href="#">Queue for moderation</a></li>
-                <li><a href="#">Manage</a></li>
+                <li><a href="#">Queue</a></li>
             </ul>
         </li>
 
@@ -42,8 +43,7 @@
 
             <ul id="" class="blog-links-list">
                 <li><a href="@Url.Action("Add", "Articles")">Add new</a></li>
-                <li><a href="#">Queue for moderation</a></li>
-                <li><a href="#">Manage</a></li>
+                <li><a href="#">Queue</a></li>
                 <li><a href="@Url.Action("List", "Articles", new { name = "pages"})">All pages</a></li>
             </ul>
         </li>
@@ -52,8 +52,7 @@
             <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Comments</h5></button>
 
             <ul id="" class="blog-links-list">
-                <li><a href="#">Queue for moderation</a></li>
-                @*<li><a href="#">Sorting rules</a></li>*@
+                <li><a href="#">Queue</a></li>
             </ul>
         </li>
 
@@ -61,33 +60,19 @@
             <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Users</h5></button>
 
             <ul id="" class="blog-links-list">
-                <li><a href="#">With roles</a></li>
+                <li><a href="#">Roles</a></li>
                 <li><a href="#">Blocked</a></li>
             </ul>
-            @*<ul id="" class="blog-links-list">
-                    <li><a href="#">Invite</a></li>
-                </ul>*@
-
         </li>
 
-        <li class="blog-menu-list-point drop-menu">
-            <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Media files</h5></button>
+        @*<li class="blog-menu-list-point drop-menu">
+                <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Media files</h5></button>
 
-            <ul id="" class="blog-links-list">
-                <li><a href="#">All files</a></li>
-                <li><a href="#">Content rules</a></li>
-            </ul>
-        </li>
-
-        <li class="blog-menu-list-point drop-menu">
-            <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Feedback</h5></button>
-
-            <ul id="" class="blog-links-list">
-                <li><a href="#">All messages</a></li>
-                <li><a href="#">Surveys</a></li>
-            </ul>
-        </li>
-
+                <ul id="" class="blog-links-list">
+                    <li><a href="#">All files</a></li>
+                    <li><a href="#">Content rules</a></li>
+                </ul>
+            </li>*@
     </ul>
 
 </aside>
