@@ -83,33 +83,6 @@
                             }
                         </fieldset>
 
-                        @* Add next -- needs new model *@
-
-                        @*<fieldset>
-                                <legend>Articles' moderation</legend>
-
-                                <label class="usual-label">
-                                    <span class="blog-info-span text-alegreya-style">
-                                        A list of words separated by a string (it can also be URLs, phone numbers, email addresses, and so on) that will allow the article to be <b>moderated</b>
-                                    </span>
-                                    <textarea class="usual-input usual-input-text usual-input-textarea-middle"></textarea>
-                                </label>
-
-
-                                <label class="usual-label">
-                                    <span class="blog-info-span text-alegreya-style">
-                                        A list of words separated by a string (it can also be URLs, phone numbers, email addresses, and so on) that make the article <b>blacklisted</b>
-                                    </span>
-                                    <textarea class="usual-input usual-input-text usual-input-textarea-middle"></textarea>
-                                </label>
-
-                                <label class="usual-label checkbox-label">
-                                    <input type="checkbox" name="" class="usual-checkbox">
-                                    Delete articles from the blacklist immediately
-                                </label>
-
-                            </fieldset>*@
-
                         @for (int i = 0; i < Model.Count; i++)
                         {
                             <input type="hidden" asp-for="@Model[i].Type" value="@((int)Model[i].Type)">
