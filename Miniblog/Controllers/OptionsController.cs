@@ -107,7 +107,7 @@ namespace Web.Controllers
 
             foreach (var roleViewModel in rolesViewModels)
             {
-                var role = roles.Where(r => Enum.GetName(typeof(RoleType), r.Type).Equals(roleViewModel.Type)).First();
+                var role = roles.Where(r => r.Type == roleViewModel.Type).First();
                 if (role is ExtendedRole extendedRole)
                 {
                     extendedRole = extendedRole + roleViewModel;
@@ -160,7 +160,7 @@ namespace Web.Controllers
 
             foreach (var discussionRole in discussionViewModel.DiscussionRoles)
             {
-                var role = roles.Where(r => Enum.GetName(typeof(RoleType), r.Type).Equals(discussionRole.Type)).First();
+                var role = roles.Where(r => r.Type == discussionRole.Type).First();
                 if (role is ExtendedRole extendedRole)
                 {
                     extendedRole = extendedRole + discussionRole;

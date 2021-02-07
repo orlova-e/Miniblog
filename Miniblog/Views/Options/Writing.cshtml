@@ -112,7 +112,7 @@
 
                         @for (int i = 0; i < Model.Count; i++)
                         {
-                            <input type="hidden" asp-for="@Model[i].Type" value="@Model[i].Type">
+                            <input type="hidden" asp-for="@Model[i].Type" value="@((int)Model[i].Type)">
                             <input type="hidden" asp-for="@Model[i].Discriminator" value="@Model[i].Discriminator">
                         }
 

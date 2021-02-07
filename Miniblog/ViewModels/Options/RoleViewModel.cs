@@ -8,7 +8,7 @@ namespace Web.ViewModels.Options
     public class RoleViewModel
     {
         [Required]
-        public string Type { get; set; }
+        public RoleType Type { get; set; }
         [Required]
         public string Discriminator { get; set; }
         public bool WriteArticles { get; set; }
@@ -21,7 +21,7 @@ namespace Web.ViewModels.Options
         public static explicit operator RoleViewModel(Role role)
             => new RoleViewModel
             {
-                Type = Enum.GetName(typeof(RoleType), role.Type),
+                Type = role.Type,
                 Discriminator = role.Discriminator,
                 WriteArticles = role.WriteArticles,
                 CreateTopics = role.CreateTopics,
@@ -34,7 +34,7 @@ namespace Web.ViewModels.Options
         public static explicit operator RoleViewModel(ExtendedRole extendedRole)
             => new RoleViewModel
             {
-                Type = Enum.GetName(typeof(RoleType), extendedRole.Type),
+                Type = extendedRole.Type,
                 Discriminator = extendedRole.Discriminator,
                 WriteArticles = extendedRole.WriteArticles,
                 CreateTopics = extendedRole.CreateTopics,
@@ -44,30 +44,34 @@ namespace Web.ViewModels.Options
                 ModerateTags = extendedRole.ModerateTags
             };
 
-        public static Role operator +(Role role, RoleViewModel rolesViewModel)
+        public static Role operator +(Role role, RoleViewModel roleViewModel)
         {
-            if (!Enum.GetName(typeof(RoleType), role.Type).Equals(rolesViewModel.Type))
+            if (role.Type != roleViewModel.Type)
+                throw new ArgumentException();
+            if (role.Discriminator != roleViewModel.Discriminator)
                 throw new ArgumentException();
 
-            role.WriteArticles = rolesViewModel.WriteArticles;
-            role.CreateTopics = rolesViewModel.CreateTopics;
-            role.CreateTags = rolesViewModel.CreateTags;
-            role.OverrideOwnArticle = rolesViewModel.OverrideOwnArticle;
+            role.WriteArticles = roleViewModel.WriteArticles;
+            role.CreateTopics = roleViewModel.CreateTopics;
+            role.CreateTags = roleViewModel.CreateTags;
+            role.OverrideOwnArticle = roleViewModel.OverrideOwnArticle;
 
             return role;
         }
 
-        public static ExtendedRole operator +(ExtendedRole extendedRole, RoleViewModel rolesViewModel)
+        public static ExtendedRole operator +(ExtendedRole extendedRole, RoleViewModel roleViewModel)
         {
-            if (!Enum.GetName(typeof(RoleType), extendedRole.Type).Equals(rolesViewModel.Type))
+            if (extendedRole.Type != roleViewModel.Type)
+                throw new ArgumentException();
+            if (extendedRole.Discriminator != roleViewModel.Discriminator)
                 throw new ArgumentException();
 
-            extendedRole.WriteArticles = rolesViewModel.WriteArticles;
-            extendedRole.CreateTopics = rolesViewModel.CreateTopics;
-            extendedRole.CreateTags = rolesViewModel.CreateTags;
-            extendedRole.OverrideOwnArticle = rolesViewModel.OverrideOwnArticle;
-            extendedRole.ModerateTopics = rolesViewModel.ModerateTopics;
-            extendedRole.ModerateTags = rolesViewModel.ModerateTags;
+            extendedRole.WriteArticles = roleViewModel.WriteArticles;
+            extendedRole.CreateTopics = roleViewModel.CreateTopics;
+            extendedRole.CreateTags = roleViewModel.CreateTags;
+            extendedRole.OverrideOwnArticle = roleViewModel.OverrideOwnArticle;
+            extendedRole.ModerateTopics = roleViewModel.ModerateTopics;
+            extendedRole.ModerateTags = roleViewModel.ModerateTags;
 
             return extendedRole;
         }

@@ -8,7 +8,7 @@ namespace Web.ViewModels.Options
     public class DiscussionRoles
     {
         [Required]
-        public string Type { get; set; }
+        public RoleType Type { get; set; }
         [Required]
         public string Discriminator { get; set; }
         public bool WriteComments { get; set; }
@@ -17,7 +17,7 @@ namespace Web.ViewModels.Options
         public static explicit operator DiscussionRoles(Role role)
             => new DiscussionRoles
             {
-                Type = Enum.GetName(typeof(RoleType), role.Type),
+                Type = role.Type,
                 Discriminator = role.Discriminator,
                 WriteComments = role.WriteComments,
                 ModerateComments = false
@@ -26,7 +26,7 @@ namespace Web.ViewModels.Options
         public static explicit operator DiscussionRoles(ExtendedRole extendedRole)
             => new DiscussionRoles
             {
-                Type = Enum.GetName(typeof(RoleType), extendedRole.Type),
+                Type = extendedRole.Type,
                 Discriminator = extendedRole.Discriminator,
                 WriteComments = extendedRole.WriteComments,
                 ModerateComments = extendedRole.ModerateComments
@@ -34,7 +34,9 @@ namespace Web.ViewModels.Options
 
         public static Role operator +(Role role, DiscussionRoles discussionRoles)
         {
-            if (!Enum.GetName(typeof(RoleType), role.Type).Equals(discussionRoles.Type))
+            if (role.Type != discussionRoles.Type)
+                throw new ArgumentException();
+            if (role.Discriminator != discussionRoles.Discriminator)
                 throw new ArgumentException();
 
             role.WriteComments = discussionRoles.WriteComments;
@@ -44,7 +46,9 @@ namespace Web.ViewModels.Options
 
         public static ExtendedRole operator +(ExtendedRole extendedRole, DiscussionRoles discussionRoles)
         {
-            if (!Enum.GetName(typeof(RoleType), extendedRole.Type).Equals(discussionRoles.Type))
+            if (extendedRole.Type != discussionRoles.Type)
+                throw new ArgumentException();
+            if (extendedRole.Discriminator != discussionRoles.Discriminator)
                 throw new ArgumentException();
 
             extendedRole.WriteComments = discussionRoles.WriteComments;
@@ -53,5 +57,4 @@ namespace Web.ViewModels.Options
             return extendedRole;
         }
     }
-
 }
