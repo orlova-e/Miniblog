@@ -15,10 +15,10 @@
                             <legend>Who can write articles</legend>
                             @for (int i = 0; i < Model.Count; i++)
                             {
-                                <label class="usual-label radio-label">
+                                <p class="options-input-container">
                                     <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].WriteArticles">
-                                    @Model[i].Type
-                                </label>
+                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
+                                </p>
                             }
                         </fieldset>
 
@@ -26,10 +26,10 @@
                             <legend>Who can override own articles</legend>
                             @for (int i = 0; i < Model.Count; i++)
                             {
-                                <label class="usual-label radio-label">
+                                <p class="options-input-container">
                                     <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].OverrideOwnArticle">
-                                    @Model[i].Type
-                                </label>
+                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
+                                </p>
                             }
                         </fieldset>
 
@@ -37,10 +37,10 @@
                             <legend>Who can create topics</legend>
                             @for (int i = 0; i < Model.Count; i++)
                             {
-                                <label class="usual-label radio-label">
+                                <p class="options-input-container">
                                     <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].CreateTopics">
-                                    @Model[i].Type
-                                </label>
+                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
+                                </p>
                             }
                         </fieldset>
 
@@ -51,10 +51,10 @@
                                 if (Model[i].Discriminator.Equals("Role"))
                                     continue;
 
-                                <label class="usual-label radio-label">
+                                <p class="options-input-container">
                                     <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].ModerateTopics">
-                                    @Model[i].Type
-                                </label>
+                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
+                                </p>
                             }
                         </fieldset>
 
@@ -62,10 +62,10 @@
                             <legend>Who can create articles' tags</legend>
                             @for (int i = 0; i < Model.Count; i++)
                             {
-                                <label class="usual-label radio-label">
+                                <p class="options-input-container">
                                     <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].CreateTags">
-                                    @Model[i].Type
-                                </label>
+                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
+                                </p>
                             }
                         </fieldset>
 
@@ -76,10 +76,10 @@
                                 if (Model[i].Discriminator.Equals("Role"))
                                     continue;
 
-                                <label class="usual-label radio-label">
+                                <p class="options-input-container">
                                     <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].ModerateTags">
-                                    @Model[i].Type
-                                </label>
+                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
+                                </p>
                             }
                         </fieldset>
 
