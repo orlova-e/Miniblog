@@ -169,6 +169,7 @@ select {
 .usual-label.radio-label,
 .usual-label.checkbox-label {
     margin: 5px 0;
+    display: inline-block;
 }
 
 fieldset {

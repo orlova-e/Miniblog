@@ -96,6 +96,12 @@ h6, p, a {
     line-height: 1.5;
 }
 
+.options-input-container {
+    line-height: 1.0;
+    padding: 0;
+    margin: 0;
+}
+
 p {
     text-align: justify;
 }
