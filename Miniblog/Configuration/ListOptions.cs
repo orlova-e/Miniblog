@@ -1,10 +1,12 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Web.Configuration
 {
     public class ListOptions : BaseDisplayOptions
     {
+        [Display(Name = "User can override some elements for their articles")]
         public bool OverrideForUserArticle { get; set; }
         public Changeable ArticlesPerPage { get; set; }
         public Changeable WordsPerPreview { get; set; }
