@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Repo.Interfaces
 {
-    public interface IWorkingWithRange<T> : IPlainRepository<T>
+    public interface IWorkingWithRange<T>
         where T : class
     {
         Task CreateRangeAsync(IEnumerable<T> entities);

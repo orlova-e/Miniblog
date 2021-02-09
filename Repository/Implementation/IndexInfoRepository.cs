@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Repo.Implementation
 {
-    public class IndexInfoRepository : IWorkingWithRange<IndexInfo>
+    public class IndexInfoRepository : IPlainEntityRepository<IndexInfo>
     {
         public MiniblogDb Db { get; set; }
         public IndexInfoRepository(MiniblogDb db)

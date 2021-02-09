@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Repo.Implementation
 {
-    public class FoundWordsRepository : IWorkingWithRange<FoundWord>
+    public class FoundWordsRepository : IPlainEntityRepository<FoundWord>
     {
         public MiniblogDb Db { get; private set; }
         public FoundWordsRepository(MiniblogDb db)

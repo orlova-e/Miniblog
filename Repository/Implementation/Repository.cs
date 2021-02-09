@@ -14,8 +14,8 @@ namespace Repo.Implementation
         IPlainRepository<Topic> topics;
         IPlainRepository<Series> series;
 
-        IWorkingWithRange<FoundWord> foundWords;
-        IWorkingWithRange<IndexInfo> indexInfos;
+        IPlainEntityRepository<FoundWord> foundWords;
+        IPlainEntityRepository<IndexInfo> indexInfos;
 
         IOptionRepository<Role> roles;
         IOptionRepository<ArticleOptions> articleOptions;
@@ -76,7 +76,7 @@ namespace Repo.Implementation
                 return series;
             }
         }
-        public IWorkingWithRange<FoundWord> FoundWords
+        public IPlainEntityRepository<FoundWord> FoundWords
         {
             get
             {
@@ -85,7 +85,7 @@ namespace Repo.Implementation
                 return foundWords;
             }
         }
-        public IWorkingWithRange<IndexInfo> IndexInfos
+        public IPlainEntityRepository<IndexInfo> IndexInfos
         {
             get
             {
