@@ -15,6 +15,7 @@ namespace Repo
         public DbSet<Image> Images { get; set; }
         public DbSet<Series> Series { get; set; }
         public DbSet<Topic> Topics { get; set; }
+        public DbSet<Tag> Tags { get; set; }
         public DbSet<BaseDisplayOptions> BaseArticlesOptions { get; set; }
         public DbSet<ArticleOptions> ArticleOptions { get; set; }
         public DbSet<FoundWord> FoundWords { get; set; }
@@ -83,6 +84,21 @@ namespace Repo
                 .HasOne(uf => uf.Article)
                 .WithMany(a => a.Likes)
                 .HasForeignKey(uf => uf.ArticleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ArticleTag>()
+                .HasKey(k => new { k.ArticleId, k.TagId });
+
+            modelBuilder.Entity<ArticleTag>()
+                .HasOne(a => a.Article)
+                .WithMany(at => at.ArticleTags)
+                .HasForeignKey(k => k.ArticleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ArticleTag>()
+                .HasOne(at => at.Tag)
+                .WithMany(t => t.ArticleTags)
+                .HasForeignKey(fk => fk.TagId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Comment>()

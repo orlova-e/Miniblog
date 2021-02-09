@@ -17,13 +17,14 @@ namespace Services.UnitTests.Indexing
         public void Index_IndexingArticleWhenRepositoryReturnsNull_ReturnsListOfFoundWords()
         {
             string[] words = new string[] { "article", "Header", "login", "one_", "tag1", "topic1", "series1" };
+            ArticleTag articleTag = new ArticleTag { Tag = new Tag { Name = words[4] } };
             Article article = new Article
             {
                 Id = Guid.NewGuid(),
                 Header = $"{words[0]} {words[1]}",
                 User = new User { Username = $"{words[2]}" },
                 Text = $"{words[3]}",
-                Tags = $"{words[4]}",
+                ArticleTags = new List<ArticleTag> { articleTag },
                 Topic = new Topic { Name = $"{words[5]}" },
                 Series = new Series { Name = $"{words[6]}" }
             };

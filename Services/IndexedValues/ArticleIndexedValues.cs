@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using System.Linq;
 
 namespace Services.IndexedValues
 {
@@ -19,7 +20,9 @@ namespace Services.IndexedValues
                 Header = article.Header,
                 Text = article.Text,
                 Author = article.User.Username,
-                Tags = article.Tags,
+                Tags = string.Join(", ", article.ArticleTags?
+                    .Select(t => t.Tag)?
+                    .Select(t => t.Name)),
                 Topic = article.Topic?.Name,
                 Series = article.Series?.Name,
             };

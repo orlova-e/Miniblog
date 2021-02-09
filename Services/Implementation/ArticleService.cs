@@ -4,6 +4,7 @@ using Services.IndexedValues;
 using Services.Interfaces;
 using Services.Interfaces.Indexing;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -38,6 +39,29 @@ namespace Services.Implementation
             if (article != null)
                 article = await GetPreparedArticleAsync(article);
             return article;
+        }
+
+        public async Task<Dictionary<string, string>> CheckBeforeCreation(Guid userId, NewArticle newArticle)
+        {
+            Dictionary<string, string> errors = new Dictionary<string, string>();
+
+            User user = await Repository.Users.GetByIdAsync(userId);
+            Role role = user.Role;
+
+            if (!role.WriteArticles)
+                errors.Add("", "Cannot write articles");
+
+            if(!string.IsNullOrWhiteSpace(newArticle.Topic))
+            {
+                Topic topic = Repository.Topics.Find(t => t.Equals(newArticle.Topic)).FirstOrDefault();
+                if (topic is object && !role.CreateTopics)
+                    errors.Add("Topic", "Cannot create topics");
+            }
+
+            if (newArticle.DisplayOptions != default && !role.OverrideOwnArticle)
+                errors.Add("DisplayOptions", "Cannot override own articles");
+
+            return errors;
         }
 
         public async Task<Article> CreateArticleAsync(Guid userId, NewArticle articleViewModel)
@@ -91,11 +115,21 @@ namespace Services.Implementation
             }
 
             string[] tags = articleViewModel.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < tags.Length; i++)
+            Array.ForEach(tags, t =>
             {
-                tags[i] = tags[i].Trim();
+                t.Trim();
+            });
+            List<ArticleTag> articleTags = new List<ArticleTag>(tags.Length);
+            IEnumerable<Tag> tagsCollection = Repository.Tags.FindRange(tags);
+            string[] existingTags = tagsCollection?.Select(t => t.Name)?.ToArray();
+            string[] uncreatedTags = new string[] { };
+            if(existingTags is object)
+                uncreatedTags = tags.Except(existingTags).ToArray();
+            foreach(string uncreated in uncreatedTags)
+            {
+                Tag tag = new Tag { Name = uncreated, Author = currentUser };
+                articleTags.Add(new ArticleTag { Tag = tag });
             }
-            string tagsStr = string.Join(',', tags);
 
             string link = WebUtility.UrlEncode(articleViewModel.Header);
             var otherArticle = Repository.Articles.Find(a => a.Link == link).FirstOrDefault();
@@ -123,7 +157,7 @@ namespace Services.Implementation
                 Text = articleViewModel.Text,
                 Topic = topic,
                 Series = series,
-                Tags = tagsStr,
+                ArticleTags = articleTags,
                 Link = link,
                 Visibility = articleViewModel.Visibility,
                 MenuVisibility = articleViewModel.MenuVisibility,

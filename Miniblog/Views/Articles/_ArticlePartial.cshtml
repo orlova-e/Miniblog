@@ -1,19 +1,18 @@
 ﻿@using Domain.Entities
-@*@using Repo.Interfaces*@
+@using System.Linq
 @using Web.ViewModels
 
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @model ArticleReadViewModel
-
 @*@{
-//ListDisplayOptions listOptions = await listDisplayRepo.FirstOrDefaultAsync();
-//ArticleOptions articleOptions = Model.Article.DisplayOptions;
-//if (listOptions.OverrideForUserArticle)
-//{
-//    listOptions = (ListDisplayOptions)articleOptions;
-//}
-}*@
+    //ListDisplayOptions listOptions = await listDisplayRepo.FirstOrDefaultAsync();
+    //ArticleOptions articleOptions = Model.Article.DisplayOptions;
+    //if (listOptions.OverrideForUserArticle)
+    //{
+    //    listOptions = (ListDisplayOptions)articleOptions;
+    //}
+    }*@
 
 <div class="blog-container article-page-container">
 
@@ -72,12 +71,12 @@
                         <li>
                             Tags:
                             @{
-                                string[] tags = Model.Article.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                                for (int i = 0; i < tags.Length; i++)
+                                List<string> tags = Model.Article.ArticleTags.Select(t => t.Tag).Select(t => t.Name).ToList();
+                                for (int i = 0; i < tags.Count; i++)
                                 {
                                     <a href="#">@tags[i]</a>
                                 }
-                                if (tags.Length == 0)
+                                if (tags.Count == 0)
                                 {
                                     <span>no tags</span>
                                 }

@@ -15,6 +15,7 @@ namespace Repo.Interfaces
         IPlainRepository<Series> Series { get; }
         IPlainEntityRepository<FoundWord> FoundWords { get; }
         IPlainEntityRepository<IndexInfo> IndexInfos { get; }
+        ITagsRepository Tags { get; }
         IOptionRepository<Role> Roles { get; }
         IOptionRepository<ArticleOptions> ArticleOptions { get; }
         IOptionRepository<CheckList> CheckLists { get; }

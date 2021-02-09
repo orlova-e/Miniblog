@@ -30,7 +30,7 @@ namespace Domain.Entities
         public List<UserBookmark> Bookmarked { get; set; }
         public List<CommentLikes> LikedComments { get; set; }
         public List<Topic> Topics { get; set; }
-        //public List<Tag> Tags { get; set; }
+        public List<Tag> Tags { get; set; }
         public User()
         {
             Subscribers = new List<User>();
@@ -39,7 +39,7 @@ namespace Domain.Entities
             Topics = new List<Topic>();
             Liked = new List<UserFavourite>();
             Bookmarked = new List<UserBookmark>();
-            //Tags = new List<Tag>();
+            Tags = new List<Tag>();
         }
     }
 }

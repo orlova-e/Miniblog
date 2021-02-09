@@ -17,6 +17,8 @@ namespace Repo.Implementation
         IPlainEntityRepository<FoundWord> foundWords;
         IPlainEntityRepository<IndexInfo> indexInfos;
 
+        ITagsRepository tags;
+
         IOptionRepository<Role> roles;
         IOptionRepository<ArticleOptions> articleOptions;
         IOptionRepository<CheckList> checkLists;
@@ -92,6 +94,15 @@ namespace Repo.Implementation
                 if (indexInfos == null)
                     indexInfos = new IndexInfoRepository(Db);
                 return indexInfos;
+            }
+        }
+        public ITagsRepository Tags
+        {
+            get
+            {
+                if (tags == null)
+                    tags = new TagsRepository(Db);
+                return tags;
             }
         }
         public IOptionRepository<Role> Roles

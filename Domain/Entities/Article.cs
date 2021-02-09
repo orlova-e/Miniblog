@@ -21,12 +21,11 @@ namespace Domain.Entities
         public EntryType EntryType { get; set; }
         [Required]
         public string Link { get; set; }
-        public string Tags { get; set; }
         public DateTimeOffset DateTime { get; set; }
         public List<Image> Images { get; set; }
         public Guid? TopicId { get; set; }
         public Topic Topic { get; set; }
-        //public List<ArticleTag> ArticleTags { get; set; }
+        public List<ArticleTag> ArticleTags { get; set; }
         public Guid? SeriesId { get; set; }
         public Series Series { get; set; }
         public List<Comment> Comments { get; set; }
@@ -39,7 +38,7 @@ namespace Domain.Entities
             Comments = new List<Comment>();
             Bookmarks = new List<UserBookmark>();
             Likes = new List<UserFavourite>();
-            //ArticleTags = new List<ArticleTag>();
+            ArticleTags = new List<ArticleTag>();
         }
     }
 }
