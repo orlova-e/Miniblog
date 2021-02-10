@@ -27,38 +27,15 @@ namespace Web.App.Implementation
 
         public List<Article> SortList(List<Article> articles, ListSorting sortingType = ListSorting.NewFirst)
         {
-            if (articles == null)
-                throw new ArgumentNullException();
-            else if (!articles.Any())
-                throw new ArgumentException();
-
-            IOrderedEnumerable<Article> sortedArticles;
-
-            switch (sortingType)
+            IOrderedEnumerable<Article> sortedArticles = sortingType switch
             {
-                case ListSorting.NewFirst:
-                    sortedArticles = articles
-                        .OrderByDescending(a => a.DateTime);
-                    break;
-                case ListSorting.OldFirst:
-                    sortedArticles = articles
-                        .OrderBy(a => a.DateTime);
-                    break;
-                case ListSorting.Alphabetically:
-                    sortedArticles = articles
-                        .OrderBy(a => a.Header);
-                    break;
-                case ListSorting.AlphabeticallyDescending:
-                    sortedArticles = articles
-                        .OrderByDescending(a => a.Header);
-                    break;
-                case ListSorting.MostLiked:
-                    sortedArticles = articles
-                        .OrderBy(a => a.Likes.Count);
-                    break;
-                default:
-                    goto case ListSorting.NewFirst;
-            }
+                ListSorting.MostLiked => articles.OrderByDescending(a => a.Likes.Count),
+                ListSorting.OldFirst => articles.OrderBy(a => a.DateTime),
+                ListSorting.Alphabetically => articles.OrderBy(a => a.Header),
+                ListSorting.AlphabeticallyDescending => articles.OrderByDescending(a => a.Header),
+                _ => articles.OrderByDescending(a => a.DateTime),
+            };
+
             return sortedArticles.ToList();
         }
 
