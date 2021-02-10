@@ -34,7 +34,7 @@ namespace Services.Implementation.Indexing
             List<FoundWord> foundWords = indexObject.Index(indexedObject);
             foreach (var foundword in foundWords)
             {
-                if (Repository.FoundWords.Find(fw => fw.Id == foundword.Id).Any())
+                if (Repository.FoundWords.Find(fw => fw.Word == foundword.Word).Any())
                 {
                     await Repository.FoundWords.UpdateAsync(foundword);
                 }
