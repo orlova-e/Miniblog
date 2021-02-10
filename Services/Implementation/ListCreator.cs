@@ -12,12 +12,9 @@ namespace Services.Implementation
     public class ListCreator : IListCreator
     {
         public IRepository repository { get; private set; }
-        //public IArticlesService articlesService { get; private set; }
-        public ListCreator(IRepository repository
-            /*IArticlesService articlesService*/)
+        public ListCreator(IRepository repository)
         {
             this.repository = repository;
-            //this.articlesService = articlesService;
         }
 
         public List<Article> FindEntries(Func<Article, bool> predicate)
@@ -30,17 +27,9 @@ namespace Services.Implementation
 
         public async Task<List<Article>> FindArticlesAsync(Func<Article, bool> predicate)
         {
-            List<Article> articles = (await repository.Articles.GetAllAsync())
-                 .Where(predicate)
+            List<Article> articles = (await repository.Articles.FindAsync(predicate))
                  .Where(a => a.Visibility && a.EntryType == EntryType.Article)
-                 .OrderByDescending(a => a.DateTime.Ticks)
                  .ToList();
-
-            //for (int i = 0; i < articles.Count; i++)
-            //{
-            //    articles[i] = await articlesService.GetPreparedArticleAsync(articles[i]);
-            //}
-
             return articles;
         }
 
