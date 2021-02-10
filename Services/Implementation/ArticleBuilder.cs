@@ -39,7 +39,7 @@ namespace Services.Implementation
 
         public ArticleBuilder Header(string header)
         {
-            if (_article.Header.Equals(header))
+            if (_article.Header?.Equals(header) ?? default)
                 return this;
             _article.Header = header;
             var builder = Link(header);
