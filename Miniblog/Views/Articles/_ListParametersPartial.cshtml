@@ -7,15 +7,6 @@
         string controller = action.Equals("Account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
         return Url.Action(action, controller, new { page = Model.CurrentPageNumber, sortby = Enum.GetName(typeof(ListSorting), sortingType).ToLower() });
     }
-
-    string GetSortCharacter(ListSorting sortingType) => sortingType switch
-    {
-        ListSorting.MostLiked => "Most liked",
-        ListSorting.OldFirst => "First the old ones",
-        ListSorting.NewFirst => "First the new ones",
-        ListSorting.Alphabetically => "Alphabetically",
-        ListSorting.AlphabeticallyDescending => "Alphabetically (descending)"
-    };
 }
 
 <div class="articles-menu-container text-roboto-style">
@@ -24,14 +15,14 @@
         <div class="drop-menu">
             <button onclick="sortArticlesList()" class="drop-button text-alegreya-style">
                 <img class="sort-list-filter" src="~/img/ico/filter.png" alt="filter by Chameleon Design from the Noun Project">
-                <h5>@GetSortCharacter(Model.ListSortingType)</h5>
+                <h5>@Enums.GetEnumName(Model.ListSortingType)</h5>
             </button>
             <div id="sortListDropdown" class="display-sort-menu-content">
-                <a href="@GetUrl(ListSorting.MostLiked)" class="sort-list-item">@GetSortCharacter(ListSorting.MostLiked)</a>
-                <a href="@GetUrl(ListSorting.OldFirst)" class="sort-list-item">@GetSortCharacter(ListSorting.OldFirst)</a>
-                <a href="@GetUrl(ListSorting.NewFirst)" class="sort-list-item">@GetSortCharacter(ListSorting.NewFirst)</a>
-                <a href="@GetUrl(ListSorting.AlphabeticallyDescending)" class="sort-list-item">@GetSortCharacter(ListSorting.AlphabeticallyDescending)</a>
-                <a href="@GetUrl(ListSorting.Alphabetically)" class="sort-list-item">@GetSortCharacter(ListSorting.Alphabetically)</a>
+                <a href="@GetUrl(ListSorting.MostLiked)" class="sort-list-item">@Enums.GetEnumName(ListSorting.MostLiked)</a>
+                <a href="@GetUrl(ListSorting.NewFirst)" class="sort-list-item">@Enums.GetEnumName(ListSorting.NewFirst)</a>
+                <a href="@GetUrl(ListSorting.OldFirst)" class="sort-list-item">@Enums.GetEnumName(ListSorting.OldFirst)</a>
+                <a href="@GetUrl(ListSorting.Alphabetically)" class="sort-list-item">@Enums.GetEnumName(ListSorting.Alphabetically)</a>
+                <a href="@GetUrl(ListSorting.AlphabeticallyDescending)" class="sort-list-item">@Enums.GetEnumName(ListSorting.AlphabeticallyDescending)</a>
             </div>
         </div>
 
