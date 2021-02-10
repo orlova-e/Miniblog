@@ -25,7 +25,7 @@ namespace Services.Interfaces
         /// <param name="userId">User's identifier</param>
         /// <param name="newArticle">Article that was filled in by the user</param>
         /// <returns>Created article</returns>
-        Task<Article> CreateArticleAsync(Guid userId, NewArticle newArticle);
+        Task<Article> CreateArticleAsync(NewArticle newArticle);
 
         /// <summary>
         /// Checks the existence of the article for the specified condition

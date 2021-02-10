@@ -7,6 +7,7 @@ namespace Domain.Entities
     [NotMapped]
     public class NewArticle
     {
+        public User User { get; set; }
         [Required(ErrorMessage = "Header is required")]
         [StringLength(200, ErrorMessage = "Header's maximum length is 50 characters")]
         public string Header { get; set; }

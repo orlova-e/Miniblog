@@ -41,13 +41,11 @@ namespace Services.Implementation
             return article;
         }
 
-        public async Task<Dictionary<string, string>> CheckBeforeCreation(Guid userId, NewArticle newArticle)
+        public Dictionary<string, string> CheckBeforeCreation(NewArticle newArticle)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
 
-            User user = await Repository.Users.GetByIdAsync(userId);
-            Role role = user.Role;
-
+            Role role = newArticle.User.Role;
             if (!role.WriteArticles)
                 errors.Add("", "Cannot write articles");
 
@@ -64,20 +62,20 @@ namespace Services.Implementation
             return errors;
         }
 
-        public async Task<Article> CreateArticleAsync(Guid userId, NewArticle articleViewModel)
+        public async Task<Article> CreateArticleAsync(NewArticle newArticle)
         {
-            User currentUser = await UserService.GetFromDbAsync(userId);
+            User currentUser = newArticle.User;
 
             Topic topic = null;
-            if (articleViewModel.Topic != null)
+            if (newArticle.Topic != null)
             {
-                topic = Repository.Topics.Find(t => t.Name == articleViewModel.Topic).FirstOrDefault();
+                topic = Repository.Topics.Find(t => t.Name == newArticle.Topic).FirstOrDefault();
                 if (topic == null && currentUser.Role.CreateTopics)
                 {
                     topic = new Topic()
                     {
                         Author = currentUser,
-                        Name = articleViewModel.Topic
+                        Name = newArticle.Topic
                     };
                     await Repository.Topics.CreateAsync(topic);
                     topic = Repository.Topics.Find(t => t.Name == topic.Name).FirstOrDefault();
@@ -85,12 +83,12 @@ namespace Services.Implementation
             }
 
             Series series = null;
-            if (articleViewModel.Series != null)
+            if (newArticle.Series != null)
             {
-                series = Repository.Series.Find(s => s.Name == articleViewModel.Series && s.UserId == currentUser.Id).FirstOrDefault();
+                series = Repository.Series.Find(s => s.Name == newArticle.Series && s.UserId == currentUser.Id).FirstOrDefault();
                 if (series == null)
                 {
-                    string seriesLink = WebUtility.UrlEncode(articleViewModel.Series);
+                    string seriesLink = WebUtility.UrlEncode(newArticle.Series);
                     var otherSeries = Repository.Series.Find(s => s.Link == seriesLink).FirstOrDefault();
                     if (otherSeries != null)
                     {
@@ -105,7 +103,7 @@ namespace Services.Implementation
                     }
                     series = new Series()
                     {
-                        Name = articleViewModel.Series,
+                        Name = newArticle.Series,
                         User = currentUser,
                         Link = seriesLink
                     };
@@ -114,7 +112,7 @@ namespace Services.Implementation
                 }
             }
 
-            string[] tags = articleViewModel.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] tags = newArticle.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             Array.ForEach(tags, t =>
             {
                 t.Trim();
@@ -131,12 +129,12 @@ namespace Services.Implementation
                 articleTags.Add(new ArticleTag { Tag = tag });
             }
 
-            string link = WebUtility.UrlEncode(articleViewModel.Header);
+            string link = WebUtility.UrlEncode(newArticle.Header);
             var otherArticle = Repository.Articles.Find(a => a.Link == link).FirstOrDefault();
             if (otherArticle != null
-                || articleViewModel.Header.Equals("Article", StringComparison.OrdinalIgnoreCase)
-                || articleViewModel.Header.Equals("Add", StringComparison.OrdinalIgnoreCase)
-                || articleViewModel.Header.Equals("List", StringComparison.OrdinalIgnoreCase))
+                || newArticle.Header.Equals("Article", StringComparison.OrdinalIgnoreCase)
+                || newArticle.Header.Equals("Add", StringComparison.OrdinalIgnoreCase)
+                || newArticle.Header.Equals("List", StringComparison.OrdinalIgnoreCase))
             {
                 int counter = 1;
                 link = WebUtility.UrlDecode(link);
@@ -153,17 +151,17 @@ namespace Services.Implementation
             Article article = new Article()
             {
                 User = currentUser,
-                Header = articleViewModel.Header,
-                Text = articleViewModel.Text,
+                Header = newArticle.Header,
+                Text = newArticle.Text,
                 Topic = topic,
                 Series = series,
                 ArticleTags = articleTags,
                 Link = link,
-                Visibility = articleViewModel.Visibility,
-                MenuVisibility = articleViewModel.MenuVisibility,
+                Visibility = newArticle.Visibility,
+                MenuVisibility = newArticle.MenuVisibility,
                 DateTime = DateTimeOffset.UtcNow,
-                EntryType = articleViewModel.EntryType,
-                DisplayOptions = articleViewModel.DisplayOptions
+                EntryType = newArticle.EntryType,
+                DisplayOptions = newArticle.DisplayOptions
             };
 
             await Repository.Articles.CreateAsync(article);
