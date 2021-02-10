@@ -6,7 +6,6 @@ using Services.Interfaces.Indexing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Services.Implementation
@@ -27,17 +26,7 @@ namespace Services.Implementation
 
         public async Task<Article> GetArticleByLinkAsync(string link)
         {
-            Article article = Repository.Articles.Find(a => a.Link == link).FirstOrDefault();
-            if (article != null)
-                article = await GetPreparedArticleAsync(article);
-            return article;
-        }
-
-        public async Task<Article> GetArticleByIdAsync(Guid articleId)
-        {
-            Article article = await Repository.Articles.GetByIdAsync(articleId);
-            if (article != null)
-                article = await GetPreparedArticleAsync(article);
+            Article article = (await Repository.Articles.FindAsync(a => a.Link == link)).FirstOrDefault();
             return article;
         }
 
@@ -49,7 +38,7 @@ namespace Services.Implementation
             if (!role.WriteArticles)
                 errors.Add("", "Cannot write articles");
 
-            if(!string.IsNullOrWhiteSpace(articleData.Topic))
+            if (!string.IsNullOrWhiteSpace(articleData.Topic))
             {
                 Topic topic = Repository.Topics.Find(t => t.Equals(articleData.Topic)).FirstOrDefault();
                 if (topic is object && !role.CreateTopics)
@@ -103,49 +92,7 @@ namespace Services.Implementation
             await Repository.Articles.UpdateAsync(article);
             Article updated = await Repository.Articles.GetByIdAsync(article.Id);
             await IndexedObjectsObserver.OnUpdatedEntityAsync((ArticleIndexedValues)updated);
-        }
 
-        public async Task<Article> GetPreparedArticleAsync(Article article)
-        {
-
-            if (article.User == null)
-                article.User = await UserService.GetFromDbAsync(article.UserId);
-
-            if (article.DisplayOptions == null)
-            {
-                article.DisplayOptions = Repository.ArticleOptions.Find(d => d.ArticleId == article.Id).FirstOrDefault();
-            }
-
-            if (article.TopicId != null && article.Topic == null)
-                article.Topic = await Repository.Topics.GetByIdAsync((Guid)article.TopicId);
-
-            if (article.SeriesId != null && article.Series == null)
-                article.Series = await Repository.Series.GetByIdAsync((Guid)article.SeriesId);
-
-            if (!article.Comments.Any())
-            {
-                article.Comments = Repository.Comments.Find(c => c.ArticleId == article.Id).ToList();
-                for (int i = 0; i < article.Comments.Count; i++)
-                {
-                    article.Comments[i].Likes = await Repository.CommentLikes.GetAsync(article.Comments[i].Id);
-                }
-            }
-
-            if (!article.Bookmarks.Any())
-                article.Bookmarks = await Repository.ArticleBookmarks.GetAsync(article.Id);
-
-            if (!article.Likes.Any())
-                article.Likes = await Repository.ArticleLikes.GetAsync(article.Id);
-
-            return article;
-        }
-
-        public async Task<Article> FindArticleAsync(Func<Article, bool> predicate)
-        {
-            Article article = Repository.Articles.Find(predicate).FirstOrDefault();
-            if (article != null)
-                article = await GetPreparedArticleAsync(article);
-            return article;
         }
     }
 }

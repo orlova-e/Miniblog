@@ -7,32 +7,23 @@ namespace Services.Interfaces
     public interface IArticleService
     {
         /// <summary>
-        /// Gets the article.
-        /// </summary>
-        /// <param name="articleId">The article's id</param>
-        /// <returns>The article.</returns>
-        Task<Article> GetArticleByIdAsync(Guid articleId);
-        /// <summary>
-        /// Gets the article.
+        /// Gets the article using its link.
         /// </summary>
         /// <param name="link">Article's relative link</param>
         /// <returns>The article.</returns>
         Task<Article> GetArticleByLinkAsync(string link);
-
         /// <summary>
         /// Creates an article using the ArticleData class
         /// </summary>
         /// <param name="articleData">Article that was filled in by the user</param>
         /// <returns>Created article</returns>
         Task<Article> CreateArticleAsync(ArticleData articleData);
-
         /// <summary>
         /// Checks the existence of the article for the specified condition
         /// </summary>
         /// <param name="predicate">Search condition</param>
         /// <returns>True if the article exists, false if not</returns>
         bool HasArticle(Func<Article, bool> predicate);
-        Task<Article> FindArticleAsync(Func<Article, bool> predicate);
         /// <summary>
         /// Deletes the article
         /// </summary>
@@ -45,6 +36,5 @@ namespace Services.Interfaces
         /// <param name="article">Identifier of the article to update</param>
         /// <returns></returns>
         Task UpdateArticleAsync(Article article);
-        Task<Article> GetPreparedArticleAsync(Article article);
     }
 }
