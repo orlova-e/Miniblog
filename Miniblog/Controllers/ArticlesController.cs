@@ -154,16 +154,16 @@ namespace Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(AccessAttribute), Arguments = new[] { "WriteArticles" })]
-        public async Task<IActionResult> Add(NewArticle newArticle)
+        public async Task<IActionResult> Add(ArticleData articleData)
         {
             if (!ModelState.IsValid)
             {
-                return View(newArticle);
+                return View(articleData);
             }
 
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            newArticle.User = await UserService.GetFromDbAsync(userId);
-            Article article = await ArticleService.CreateArticleAsync(newArticle);
+            articleData.User = await UserService.GetFromDbAsync(userId);
+            Article article = await ArticleService.CreateArticleAsync(articleData);
 
             return RedirectToAction("Article", "Articles", new { title = article.Link });
         }

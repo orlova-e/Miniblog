@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Domain.Entities
 {
     [NotMapped]
-    public class NewArticle
+    public class ArticleData
     {
         public User User { get; set; }
         [Required(ErrorMessage = "Header is required")]

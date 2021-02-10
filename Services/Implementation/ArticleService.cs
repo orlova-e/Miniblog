@@ -41,41 +41,41 @@ namespace Services.Implementation
             return article;
         }
 
-        public Dictionary<string, string> CheckBeforeCreation(NewArticle newArticle)
+        public Dictionary<string, string> CheckBeforeCreation(ArticleData articleData)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
 
-            Role role = newArticle.User.Role;
+            Role role = articleData.User.Role;
             if (!role.WriteArticles)
                 errors.Add("", "Cannot write articles");
 
-            if(!string.IsNullOrWhiteSpace(newArticle.Topic))
+            if(!string.IsNullOrWhiteSpace(articleData.Topic))
             {
-                Topic topic = Repository.Topics.Find(t => t.Equals(newArticle.Topic)).FirstOrDefault();
+                Topic topic = Repository.Topics.Find(t => t.Equals(articleData.Topic)).FirstOrDefault();
                 if (topic is object && !role.CreateTopics)
                     errors.Add("Topic", "Cannot create topics");
             }
 
-            if (newArticle.DisplayOptions != default && !role.OverrideOwnArticle)
+            if (articleData.DisplayOptions != default && !role.OverrideOwnArticle)
                 errors.Add("DisplayOptions", "Cannot override own articles");
 
             return errors;
         }
 
-        public async Task<Article> CreateArticleAsync(NewArticle newArticle)
+        public async Task<Article> CreateArticleAsync(ArticleData articleData)
         {
-            User currentUser = newArticle.User;
+            User currentUser = articleData.User;
 
             Topic topic = null;
-            if (newArticle.Topic != null)
+            if (articleData.Topic != null)
             {
-                topic = Repository.Topics.Find(t => t.Name == newArticle.Topic).FirstOrDefault();
+                topic = Repository.Topics.Find(t => t.Name == articleData.Topic).FirstOrDefault();
                 if (topic == null && currentUser.Role.CreateTopics)
                 {
                     topic = new Topic()
                     {
                         Author = currentUser,
-                        Name = newArticle.Topic
+                        Name = articleData.Topic
                     };
                     await Repository.Topics.CreateAsync(topic);
                     topic = Repository.Topics.Find(t => t.Name == topic.Name).FirstOrDefault();
@@ -83,12 +83,12 @@ namespace Services.Implementation
             }
 
             Series series = null;
-            if (newArticle.Series != null)
+            if (articleData.Series != null)
             {
-                series = Repository.Series.Find(s => s.Name == newArticle.Series && s.UserId == currentUser.Id).FirstOrDefault();
+                series = Repository.Series.Find(s => s.Name == articleData.Series && s.UserId == currentUser.Id).FirstOrDefault();
                 if (series == null)
                 {
-                    string seriesLink = WebUtility.UrlEncode(newArticle.Series);
+                    string seriesLink = WebUtility.UrlEncode(articleData.Series);
                     var otherSeries = Repository.Series.Find(s => s.Link == seriesLink).FirstOrDefault();
                     if (otherSeries != null)
                     {
@@ -103,7 +103,7 @@ namespace Services.Implementation
                     }
                     series = new Series()
                     {
-                        Name = newArticle.Series,
+                        Name = articleData.Series,
                         User = currentUser,
                         Link = seriesLink
                     };
@@ -112,7 +112,7 @@ namespace Services.Implementation
                 }
             }
 
-            string[] tags = newArticle.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] tags = articleData.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             Array.ForEach(tags, t =>
             {
                 t.Trim();
@@ -129,12 +129,12 @@ namespace Services.Implementation
                 articleTags.Add(new ArticleTag { Tag = tag });
             }
 
-            string link = WebUtility.UrlEncode(newArticle.Header);
+            string link = WebUtility.UrlEncode(articleData.Header);
             var otherArticle = Repository.Articles.Find(a => a.Link == link).FirstOrDefault();
             if (otherArticle != null
-                || newArticle.Header.Equals("Article", StringComparison.OrdinalIgnoreCase)
-                || newArticle.Header.Equals("Add", StringComparison.OrdinalIgnoreCase)
-                || newArticle.Header.Equals("List", StringComparison.OrdinalIgnoreCase))
+                || articleData.Header.Equals("Article", StringComparison.OrdinalIgnoreCase)
+                || articleData.Header.Equals("Add", StringComparison.OrdinalIgnoreCase)
+                || articleData.Header.Equals("List", StringComparison.OrdinalIgnoreCase))
             {
                 int counter = 1;
                 link = WebUtility.UrlDecode(link);
@@ -151,17 +151,17 @@ namespace Services.Implementation
             Article article = new Article()
             {
                 User = currentUser,
-                Header = newArticle.Header,
-                Text = newArticle.Text,
+                Header = articleData.Header,
+                Text = articleData.Text,
                 Topic = topic,
                 Series = series,
                 ArticleTags = articleTags,
                 Link = link,
-                Visibility = newArticle.Visibility,
-                MenuVisibility = newArticle.MenuVisibility,
+                Visibility = articleData.Visibility,
+                MenuVisibility = articleData.MenuVisibility,
                 DateTime = DateTimeOffset.UtcNow,
-                EntryType = newArticle.EntryType,
-                DisplayOptions = newArticle.DisplayOptions
+                EntryType = articleData.EntryType,
+                DisplayOptions = articleData.DisplayOptions
             };
 
             await Repository.Articles.CreateAsync(article);

@@ -20,12 +20,11 @@ namespace Services.Interfaces
         Task<Article> GetArticleByLinkAsync(string link);
 
         /// <summary>
-        /// Creates an article using user's Id and ArticleWriteViewModel.
+        /// Creates an article using the ArticleData class
         /// </summary>
-        /// <param name="userId">User's identifier</param>
-        /// <param name="newArticle">Article that was filled in by the user</param>
+        /// <param name="articleData">Article that was filled in by the user</param>
         /// <returns>Created article</returns>
-        Task<Article> CreateArticleAsync(NewArticle newArticle);
+        Task<Article> CreateArticleAsync(ArticleData articleData);
 
         /// <summary>
         /// Checks the existence of the article for the specified condition
