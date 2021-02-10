@@ -33,8 +33,9 @@ namespace Services.Interfaces
         /// <summary>
         /// Updates the article
         /// </summary>
-        /// <param name="article">Identifier of the article to update</param>
+        /// <param name="article">Article to update</param>
+        /// <param name="articleData">New article's data</param>
         /// <returns></returns>
-        Task UpdateArticleAsync(Article article);
+        Task UpdateArticleAsync(Article article, ArticleData articleData);
     }
 }

@@ -87,12 +87,24 @@ namespace Services.Implementation
             await IndexedObjectsObserver.OnDeletedEntityAsync((ArticleIndexedValues)article);
         }
 
-        public async Task UpdateArticleAsync(Article article)
+        public async Task UpdateArticleAsync(Article article, ArticleData articleData)
         {
-            await Repository.Articles.UpdateAsync(article);
-            Article updated = await Repository.Articles.GetByIdAsync(article.Id);
-            await IndexedObjectsObserver.OnUpdatedEntityAsync((ArticleIndexedValues)updated);
+            Article updated = new ArticleBuilder(Repository, article)
+                .Header(articleData.Header)
+                .Text(articleData.Text)
+                .Visibility(articleData.Visibility)
+                .User(articleData.User)
+                .Topic(articleData.Topic)
+                .Series(articleData.Series)
+                .Tags(articleData.Tags)
+                .MenuVisibility(articleData.MenuVisibility)
+                .DisplayOptions(articleData.DisplayOptions)
+                .TypeOfEntry(articleData.EntryType)
+                .Build();
 
+            await Repository.Articles.UpdateAsync(updated);
+            updated = await Repository.Articles.GetByIdAsync(article.Id);
+            await IndexedObjectsObserver.OnUpdatedEntityAsync((ArticleIndexedValues)updated);
         }
     }
 }
