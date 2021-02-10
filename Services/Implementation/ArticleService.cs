@@ -64,108 +64,20 @@ namespace Services.Implementation
 
         public async Task<Article> CreateArticleAsync(ArticleData articleData)
         {
-            User currentUser = articleData.User;
-
-            Topic topic = null;
-            if (articleData.Topic != null)
-            {
-                topic = Repository.Topics.Find(t => t.Name == articleData.Topic).FirstOrDefault();
-                if (topic == null && currentUser.Role.CreateTopics)
-                {
-                    topic = new Topic()
-                    {
-                        Author = currentUser,
-                        Name = articleData.Topic
-                    };
-                    await Repository.Topics.CreateAsync(topic);
-                    topic = Repository.Topics.Find(t => t.Name == topic.Name).FirstOrDefault();
-                }
-            }
-
-            Series series = null;
-            if (articleData.Series != null)
-            {
-                series = Repository.Series.Find(s => s.Name == articleData.Series && s.UserId == currentUser.Id).FirstOrDefault();
-                if (series == null)
-                {
-                    string seriesLink = WebUtility.UrlEncode(articleData.Series);
-                    var otherSeries = Repository.Series.Find(s => s.Link == seriesLink).FirstOrDefault();
-                    if (otherSeries != null)
-                    {
-                        string fromName = seriesLink;
-                        int counter = 1;
-                        while (seriesLink == otherSeries?.Link)
-                        {
-                            seriesLink = $"{fromName}-{counter}";
-                            otherSeries = Repository.Series.Find(s => s.Link == seriesLink).FirstOrDefault();
-                            counter++;
-                        }
-                    }
-                    series = new Series()
-                    {
-                        Name = articleData.Series,
-                        User = currentUser,
-                        Link = seriesLink
-                    };
-                    await Repository.Series.CreateAsync(series);
-                    series = Repository.Series.Find(s => s.Link == series.Link).FirstOrDefault();
-                }
-            }
-
-            string[] tags = articleData.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            Array.ForEach(tags, t =>
-            {
-                t.Trim();
-            });
-            List<ArticleTag> articleTags = new List<ArticleTag>(tags.Length);
-            IEnumerable<Tag> tagsCollection = Repository.Tags.FindRange(tags);
-            string[] existingTags = tagsCollection?.Select(t => t.Name)?.ToArray();
-            string[] uncreatedTags = new string[] { };
-            if(existingTags is object)
-                uncreatedTags = tags.Except(existingTags).ToArray();
-            foreach(string uncreated in uncreatedTags)
-            {
-                Tag tag = new Tag { Name = uncreated, Author = currentUser };
-                articleTags.Add(new ArticleTag { Tag = tag });
-            }
-
-            string link = WebUtility.UrlEncode(articleData.Header);
-            var otherArticle = Repository.Articles.Find(a => a.Link == link).FirstOrDefault();
-            if (otherArticle != null
-                || articleData.Header.Equals("Article", StringComparison.OrdinalIgnoreCase)
-                || articleData.Header.Equals("Add", StringComparison.OrdinalIgnoreCase)
-                || articleData.Header.Equals("List", StringComparison.OrdinalIgnoreCase))
-            {
-                int counter = 1;
-                link = WebUtility.UrlDecode(link);
-                string fromHeader = link;
-                while (link == otherArticle?.Link) // substitute NULL
-                {
-                    link = $"{fromHeader}-{counter}";
-                    link = WebUtility.UrlEncode(link);
-                    otherArticle = Repository.Articles.Find(a => a.Link == link).FirstOrDefault();
-                    counter++;
-                }
-            }
-
-            Article article = new Article()
-            {
-                User = currentUser,
-                Header = articleData.Header,
-                Text = articleData.Text,
-                Topic = topic,
-                Series = series,
-                ArticleTags = articleTags,
-                Link = link,
-                Visibility = articleData.Visibility,
-                MenuVisibility = articleData.MenuVisibility,
-                DateTime = DateTimeOffset.UtcNow,
-                EntryType = articleData.EntryType,
-                DisplayOptions = articleData.DisplayOptions
-            };
+            Article article = new ArticleBuilder(Repository)
+                .Header(articleData.Header)
+                .Text(articleData.Text)
+                .Visibility(articleData.Visibility)
+                .User(articleData.User)
+                .Topic(articleData.Topic)
+                .Series(articleData.Series)
+                .Tags(articleData.Tags)
+                .MenuVisibility(articleData.MenuVisibility)
+                .DisplayOptions(articleData.DisplayOptions)
+                .TypeOfEntry(articleData.EntryType)
+                .Build();
 
             await Repository.Articles.CreateAsync(article);
-
             article = Repository.Articles.Find(a => a.Link == article.Link).FirstOrDefault();
             await IndexedObjectsObserver.OnNewEntityAsync((ArticleIndexedValues)article);
             return article;
