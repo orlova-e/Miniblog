@@ -18,13 +18,6 @@ namespace Web.App.Implementation
             BlogOptions = optionsSnapshot.Value;
         }
 
-        public ListSorting GetSortingType(string sortby = "newfirst")
-        {
-            if (!Enum.TryParse(sortby.ToLower().Replace(' ', '\0'), true, out ListSorting sortingType))
-                sortingType = ListSorting.NewFirst;
-            return sortingType;
-        }
-
         public List<Article> SortList(List<Article> articles, ListSorting sortingType = ListSorting.NewFirst)
         {
             IOrderedEnumerable<Article> sortedArticles = sortingType switch
@@ -41,11 +34,6 @@ namespace Web.App.Implementation
 
         public List<Article> GetSelection(List<Article> articles, uint start = 1, ListSorting sortingType = ListSorting.NewFirst)
         {
-            if (articles == null)
-                throw new ArgumentNullException();
-            else if (!articles.Any())
-                throw new ArgumentException();
-
             ListOptions listOptions = BlogOptions.ListOptions;
             if (listOptions.OverrideForUserArticle)
                 sortingType = listOptions.ListSortingDefaultType;
@@ -77,9 +65,8 @@ namespace Web.App.Implementation
             return articles;
         }
 
-        public ListViewModel GetListModel(List<Article> articles, uint start = 1, string sorting = "newfirst")
+        public ListViewModel GetListModel(List<Article> articles, uint start = 1, ListSorting listSorting = ListSorting.NewFirst)
         {
-            ListSorting sortingType = GetSortingType(sorting);
             ListOptions listOptions = BlogOptions.ListOptions;
 
             double total = (double)articles.Count / (double)listOptions.ArticlesPerPage.Value;
@@ -95,13 +82,13 @@ namespace Web.App.Implementation
             }
 
             if (articles != null && articles.Any())
-                articles = GetSelection(articles, start, sortingType);
+                articles = GetSelection(articles, start, listSorting);
 
             ListViewModel listViewModel = new ListViewModel
             {
                 CurrentPageNumber = start,
                 TotalPages = (int)total,
-                ListSortingType = sortingType,
+                ListSortingType = listSorting,
                 Articles = articles
             };
             return listViewModel;

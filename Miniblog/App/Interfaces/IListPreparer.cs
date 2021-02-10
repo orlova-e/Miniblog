@@ -8,12 +8,6 @@ namespace Web.App.Interfaces
     public interface IListPreparer
     {
         /// <summary>
-        /// Returns ListSortingType enumeration
-        /// </summary>
-        /// <param name="sorting">String representation of ListSortingType value</param>
-        /// <returns>ListSortingType enumeration</returns>
-        ListSorting GetSortingType(string sorting = "newfirst");
-        /// <summary>
         /// Sorts the existing list of articles using the ListSortingType enumeration.
         /// </summary>
         /// <param name="articles">List of articles</param>
@@ -32,9 +26,10 @@ namespace Web.App.Interfaces
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="articles">Articles to prepare</param>
         /// <param name="start">Number of current page for which articles are being searched</param>
-        /// <param name="sortingType">ListSortingType enumeration value</param>
-        /// <returns>The ListViewModel instance.</returns>
-        ListViewModel GetListModel(List<Article> articles, uint start = 1, string sorting = "newfirst");
+        /// <param name="listSorting">ListSortingType enumeration value</param>
+        /// <returns></returns>
+        ListViewModel GetListModel(List<Article> articles, uint start = 1, ListSorting listSorting = ListSorting.NewFirst);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using System;
@@ -28,7 +29,9 @@ namespace Web.Controllers
         }
         [HttpGet]
         [Route("[controller]/{username}")]
-        public async Task<IActionResult> Account([FromRoute] string username, [FromQuery] uint page = 1, string sortby = "newfirst")
+        public async Task<IActionResult> Account([FromRoute] string username,
+            [FromQuery] uint page = 1,
+            [FromQuery] ListSorting sortby = ListSorting.NewFirst)
         {
             User author = UserService.GetUserFromDb(u => u.Username == username);
 

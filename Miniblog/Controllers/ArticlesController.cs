@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.Enums;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -96,51 +97,51 @@ namespace Web.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> List([FromQuery] uint page = 1, string sortby = "newfirst") // create method for series ?
+        public async Task<IActionResult> List([FromQuery] uint page = 1, ListSorting sortBy = ListSorting.NewFirst) // create method for series ?
         {
             List<Article> articles = await ListCreator
                 .FindArticlesAsync(a => true);
-            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortby);
+            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortBy);
             listViewModel.PageName = "List";
             return View(listViewModel);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Favourites([FromQuery] uint page = 1, string sortby = "newfirst")
+        public async Task<IActionResult> Favourites([FromQuery] uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
             List<Article> articles = await ListCreator.GetFavouritesAsync(userId);
-            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortby);
+            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortBy);
             listViewModel.PageName = "Favourites";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Bookmarks([FromQuery] uint page = 1, string sortby = "newfisrt")
+        public async Task<IActionResult> Bookmarks([FromQuery] uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
             List<Article> articles = await ListCreator.GetBookmarkedAsync(userId);
-            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortby);
+            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortBy);
             listViewModel.PageName = "Bookmarks";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Commented([FromQuery] uint page = 1, string sortby = "newfisrt")
+        public async Task<IActionResult> Commented([FromQuery] uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
             List<Article> articles = await ListCreator.GetCommentedAsync(userId);
-            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortby);
+            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortBy);
             listViewModel.PageName = "Commented";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
 
         [HttpGet]
-        public IActionResult Drafts([FromQuery] uint page = 1, string sortby = "newfisrt")
+        public IActionResult Drafts([FromQuery] uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
             List<Article> articles = ListCreator.FindDrafts(userId);
-            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortby);
+            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortBy);
             listViewModel.PageName = "Drafts";
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
