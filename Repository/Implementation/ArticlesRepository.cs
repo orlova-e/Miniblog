@@ -36,15 +36,22 @@ namespace Repo.Implementation
         {
             return Db.Articles
                 .Include(a => a.User)
+                .Include(a => a.DisplayOptions)
+                .Include(a => a.Topic)
+                .Include(a => a.Series)
+                .Include(a => a.ArticleTags)
+                    .ThenInclude(at => at.Tag)
+                .Include(a => a.Likes)
+                .Include(a => a.Bookmarks)
+                .Include(a => a.Comments)
+                    .ThenInclude(c => c.Author)
+                .Include(a=>a.Images)
                 .Where(predicate)
                 .ToList();
         }
         public async Task<IEnumerable<Article>> FindAsync(Func<Article, bool> predicate)
         {
-            return await Task.Run(() => Db.Articles
-                .Include(a => a.User)
-                .Where(predicate)
-                .ToList());
+            return await Task.Run(() => Find(predicate));
         }
         public async Task CreateAsync(Article entity)
         {
