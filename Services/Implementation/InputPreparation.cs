@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Services.Implementation
 {
-    public static class InputPreparation
+    internal static class InputPreparation
     {
         public static List<string> Prepare(string input)
         {
@@ -27,7 +27,7 @@ namespace Services.Implementation
             List<string> preparedQuery = input
                 .Split(new string[] { Environment.NewLine, " " }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(q => Regex.Replace(q, @"[^-\w]", ""))
-                //.Distinct(StringComparer.OrdinalIgnoreCase)
+                .Select(s => s.ToLower())
                 .Where(s => s.Length >= 4)
                 .ToList();
 
