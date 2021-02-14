@@ -9,13 +9,12 @@
 }
 
 <template id="anonymousUserImgTemplate">
-    <img name="avatar" src="@Url.Content("~/img/social_line/anonymous_user.png")" alt="User">
+    <avatar user="null" />
 </template>
 
 @if (User.Identity.IsAuthenticated && articleReadModel.User.Avatar != null)
 {
     <template id="userImgTemplate">
-        @*<img name="avatar" src="data:image/jpeg;base64,@(Convert.ToBase64String(articleReadModel.User.Avatar))" alt="@articleReadModel.User.Username">*@
         <avatar user="articleReadModel.User" />
     </template>
 }

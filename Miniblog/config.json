@@ -3,7 +3,7 @@
     "Name": "Miniblog",
     "Subtitle": null,
     "IconPath": "\\img\\icon.png",
-    "StandardAvatarPath": "\\img\\social_line\\user.png",
+    "StandardAvatarPath": "\\img\\ico\\user.png",
     "HomePage": "/articles/list",
     "ShowListOfPopularAndRecent": true,
     "ShowAuthors": true,
