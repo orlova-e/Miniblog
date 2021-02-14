@@ -1,6 +1,10 @@
-﻿@model ListViewModel
+﻿@inject IOptionsSnapshot<ListOptions> listOptions
 
-@{ 
+@model ListViewModel
+
+@{
+    ListLayoutType layoutType = listOptions.Value.LayoutDefaultType;
+
     string GetUrl(ListSorting sortingType)
     {
         string action = Model.PageName;
@@ -26,9 +30,9 @@
             </div>
         </div>
 
-        <div class="display-character">
-            <button id="rowArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="~/img/ico/rows2.png" alt=""></button>
-            <button id="gridArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="~/img/ico/grid nonactive.png" alt=""></button>
+        <div class="display-character" data-btn-active="@layoutType">
+            <button id="RowsArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="~/img/ico/rows.png" alt=""></button>
+            <button id="GridArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="~/img/ico/grid_nonactive.png" alt=""></button>
         </div>
     </div>
 

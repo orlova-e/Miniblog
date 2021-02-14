@@ -4,8 +4,8 @@ namespace Domain.Entities.Enums
 {
     public enum ListLayoutType
     {
-        [Display(Name = "Row")]
-        Row,
+        [Display(Name = "Rows")]
+        Rows,
         [Display(Name = "Grid")]
         Grid
     }
