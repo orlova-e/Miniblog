@@ -6,10 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class Article
+    [Table("Articles")]
+    public class Article : Entity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }
         [Required, StringLength(200, ErrorMessage = "Header's maximum length is 50 characters")]

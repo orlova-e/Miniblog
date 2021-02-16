@@ -5,10 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class Comment
+    [Table("Comments")]
+    public class Comment : Entity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
         public Guid AuthorId { get; set; }
         public User Author { get; set; }
         public Guid ArticleId { get; set; }
