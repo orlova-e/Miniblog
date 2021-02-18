@@ -14,7 +14,7 @@ namespace Services.Implementation.Search
     /// </summary>
     /// <typeparam name="T">Type of entity being searched for</typeparam>
     public class SearchByWords<T> : ISearch<T>
-        where T : class, new()
+        where T : Entity, new()
     {
         private IRepository Repository { get; }
         public SearchByWords(IRepository repository)
@@ -38,36 +38,29 @@ namespace Services.Implementation.Search
 
         protected List<FoundObject<T>> PrepareResults(List<FoundWord> foundWords)
         {
-            IEnumerable<Guid> ids = foundWords
-                .SelectMany(f => f.IndexInfos)
-                .Select(i => i.EntityId)
-                .Distinct();
+            IEnumerable<IndexInfo> indexInfos = foundWords
+                .SelectMany(f => f.IndexInfos);
 
-            List<FoundObject<T>> foundObjects = new List<FoundObject<T>>(ids.Count());
+            IEnumerable<IndexInfo> uniqueIndexInfos = indexInfos
+                .Where(i => i.Entity is T)
+                .DistinctBy(i => i.Entity.Id);
 
-            foreach (Guid id in ids)
+            List<FoundObject<T>> foundObjects = new List<FoundObject<T>>(uniqueIndexInfos.Count());
+
+            foreach (IndexInfo indexInfo in uniqueIndexInfos)
             {
                 FoundObject<T> foundObject = new FoundObject<T>
                 {
-                    EntityId = id,
+                    Entity = indexInfo.Entity,
 
-                    Entity = foundWords
-                        .SelectMany(f => f.IndexInfos)
-                        .Where(i => i.EntityId == id)
-                        .Where(i => i.Entity is T)
-                        .Select(i => i.Entity)
-                        .First() as T,
-
-                    MatchedWords = foundWords
-                        .SelectMany(f => f.IndexInfos)
-                        .Where(i => i.EntityId == id)
+                    MatchedWords = indexInfos
+                        .Where(i => i.EntityId == indexInfo.EntityId)
                         .Select(i => i.FoundWord.Word)
                         .Distinct()
                         .ToList(),
 
-                    TotalRating = foundWords
-                        .SelectMany(f => f.IndexInfos)
-                        .Where(i => i.EntityId == id)
+                    TotalRating = indexInfos
+                        .Where(i => i.EntityId == indexInfo.EntityId)
                         .Select(i => i.Rank)
                         .Sum()
                 };

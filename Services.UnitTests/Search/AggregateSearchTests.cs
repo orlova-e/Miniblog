@@ -32,7 +32,6 @@ namespace Services.UnitTests.Search
 
                 FoundObject<User> foundObject = new FoundObject<User>
                 {
-                    EntityId = user.Id,
                     Entity = user,
                     MatchedWords = new List<string> { word },
                     TotalRating = word.Length * 2
@@ -124,7 +123,7 @@ namespace Services.UnitTests.Search
     }
 
     internal class TestingAggregateSearch<T> : AggregateSearch<T>
-        where T : class, new()
+        where T : Entity, new()
     {
         protected override ISearch<T> AccurateSearch { get; set; }
         protected override ISearch<T> SearchByWords { get; set; }

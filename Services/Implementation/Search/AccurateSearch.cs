@@ -5,13 +5,12 @@ using Services.Interfaces.Search;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Services.Implementation.Search
 {
     public class AccurateSearch<T> : ISearch<T>
-        where T : class, new()
+        where T : Entity, new()
     {
         private IRepository Repository { get; }
         public AccurateSearch(IRepository repository)
@@ -44,32 +43,6 @@ namespace Services.Implementation.Search
                     TotalRating = int.MaxValue
                 })
                 .ToList();
-
-            foundObjects = PrepareResults(foundObjects);
-
-            return foundObjects;
-        }
-
-        public List<FoundObject<T>> PrepareResults(List<FoundObject<T>> foundObjects)
-        {
-            foreach (var foundObject in foundObjects)
-            {
-                Type entityType = foundObject.Entity.GetType();
-
-                if (entityType != typeof(T))
-                    break;
-
-                PropertyInfo propertyInfo = entityType.GetProperty("Id");
-                object maybeId = propertyInfo?.GetValue(foundObject.Entity);
-                if (maybeId is Guid guid)
-                {
-                    foundObject.EntityId = guid;
-                }
-                else
-                {
-                    break;
-                }
-            }
 
             return foundObjects;
         }

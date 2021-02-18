@@ -19,41 +19,24 @@ namespace Repo.Implementation
         public async Task<IndexInfo> GetByIdAsync(Guid id)
         {
             IndexInfo indexInfo = await Db.IndexInfos.FindAsync(id);
-            Type entityType = DeterminingType.Determine(indexInfo.EntityType);
-            indexInfo.Entity = await Db.FindAsync(entityType, indexInfo.EntityId);
             return indexInfo;
         }
 
         public async Task<IEnumerable<IndexInfo>> GetAllAsync()
         {
             List<IndexInfo> indexInfos = await Db.IndexInfos.ToListAsync();
-            foreach (var indexInfo in indexInfos)
-            {
-                Type entityType = DeterminingType.Determine(indexInfo.EntityType);
-                indexInfo.Entity = await Db.FindAsync(entityType, indexInfo.EntityId);
-            }
             return indexInfos;
         }
 
         public IEnumerable<IndexInfo> Find(Func<IndexInfo, bool> predicate)
         {
             IEnumerable<IndexInfo> indexInfos = Db.IndexInfos.Include(i => i.FoundWord).Where(predicate);
-            foreach (var indexinfo in indexInfos)
-            {
-                Type entityType = DeterminingType.Determine(indexinfo.EntityType);
-                indexinfo.Entity = Db.Find(entityType, indexinfo.EntityId);
-            }
             return indexInfos;
         }
 
         public async Task<IEnumerable<IndexInfo>> FindAsync(Func<IndexInfo, bool> predicate)
         {
             IEnumerable<IndexInfo> indexInfos = await Task.Run(() => Db.IndexInfos.Where(predicate));
-            foreach (var indexinfo in indexInfos)
-            {
-                Type entityType = DeterminingType.Determine(indexinfo.EntityType);
-                indexinfo.Entity = await Db.FindAsync(entityType, indexinfo.EntityId);
-            }
             return indexInfos;
         }
 

@@ -9,6 +9,7 @@ namespace Repo
     {
         public DbSet<Role> Roles { get; set; }
         public DbSet<ExtendedRole> ExtendedRoles { get; set; }
+        public DbSet<Entity> Entities { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<Comment> Comments { get; set; }
@@ -135,9 +136,6 @@ namespace Repo
                 .HasOne(i => i.FoundWord)
                 .WithMany(f => f.IndexInfos)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<IndexInfo>()
-                .Ignore(ii => ii.Entity);
 
             modelBuilder.Entity<FoundWord>()
                 .HasIndex(f => f.Word)

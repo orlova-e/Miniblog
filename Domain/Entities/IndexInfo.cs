@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
@@ -9,11 +8,9 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public Guid EntityId { get; set; }
-        public object Entity { get; set; }
+        public Entity Entity { get; set; }
         public Guid FoundWordId { get; set; }
         public FoundWord FoundWord { get; set; }
-        [Required]
-        public string EntityType { get; set; }
         public int Rank { get; set; }
     }
 }

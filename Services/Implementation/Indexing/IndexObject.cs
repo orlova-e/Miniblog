@@ -58,7 +58,6 @@ namespace Services.Implementation.Indexing
                         indexInfo = new IndexInfo
                         {
                             EntityId = IndexedObject.Id,
-                            EntityType = IndexedObject.TypeOfIndexed.Name,
                             FoundWordId = foundWord.Id
                         };
                     }

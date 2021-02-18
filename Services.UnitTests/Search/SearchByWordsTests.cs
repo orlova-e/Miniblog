@@ -45,7 +45,6 @@ namespace Services.UnitTests.Search
                         User user = new User { Id = Guid.NewGuid() };
                         indexInfo.EntityId = user.Id;
                         indexInfo.Entity = user;
-                        indexInfo.EntityType = typeof(User).Name;
                         indexInfo.FoundWord = foundWord1;
                     }
                     else
@@ -53,7 +52,6 @@ namespace Services.UnitTests.Search
                         Article article = new Article { Id = Guid.NewGuid() };
                         indexInfo.EntityId = article.Id;
                         indexInfo.Entity = article;
-                        indexInfo.EntityType = typeof(Article).Name;
                         indexInfo.FoundWord = foundWord2;
                     }
 

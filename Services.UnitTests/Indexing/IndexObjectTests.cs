@@ -16,17 +16,17 @@ namespace Services.UnitTests.Indexing
         [Test]
         public void Index_IndexingArticleWhenRepositoryReturnsNull_ReturnsListOfFoundWords()
         {
-            string[] words = new string[] { "article", "Header", "login", "one_", "tag1", "topic1", "series1" };
-            ArticleTag articleTag = new ArticleTag { Tag = new Tag { Name = words[4] } };
+            string[] expected = new string[] { "article", "header", "login", "one_", "tag1", "topic1", "series1" };
+            ArticleTag articleTag = new ArticleTag { Tag = new Tag { Name = expected[4] } };
             Article article = new Article
             {
                 Id = Guid.NewGuid(),
-                Header = $"{words[0]} {words[1]}",
-                User = new User { Username = $"{words[2]}" },
-                Text = $"{words[3]}",
+                Header = $"{expected[0]} {expected[1]}",
+                User = new User { Username = $"{expected[2]}" },
+                Text = $"{expected[3]}",
                 ArticleTags = new List<ArticleTag> { articleTag },
-                Topic = new Topic { Name = $"{words[5]}" },
-                Series = new Series { Name = $"{words[6]}" }
+                Topic = new Topic { Name = $"{expected[5]}" },
+                Series = new Series { Name = $"{expected[6]}" }
             };
 
             Mock<IRepository> _repository = new Mock<IRepository>();
@@ -36,14 +36,8 @@ namespace Services.UnitTests.Indexing
             IndexObject indexObject = new IndexObject(_repository.Object, new ArticleRateStrategy());
             List<FoundWord> foundWords = indexObject.Index((ArticleIndexedValues)article);
 
-            var result = from foundWord in foundWords
-                         from indexInfo in foundWord.IndexInfos
-                         where words.Contains(foundWord.Word)
-                         where indexInfo.EntityId == article.Id
-                         where indexInfo.EntityType == typeof(Article).Name
-                         select foundWord;
-
-            Assert.That(result.Count() == words.Length);
+            string[] actual = foundWords.Select(f => f.Word).ToArray();
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         [Test]
@@ -72,7 +66,6 @@ namespace Services.UnitTests.Indexing
                                             where words.Contains(foundWord.Word)
                                             where foundWord.IndexInfos.Count == 1
                                             where indexInfo.EntityId == article.Id
-                                            where indexInfo.EntityType == typeof(Article).Name
                                             select foundWord;
 
             Assert.That(result.Count() == words.Length);

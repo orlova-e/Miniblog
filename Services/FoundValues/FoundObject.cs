@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Domain.Entities;
 using System.Collections.Generic;
 
 namespace Services.FoundValues
@@ -8,7 +8,6 @@ namespace Services.FoundValues
     {
         public int TotalRating { get; set; }
         public List<string> MatchedWords { get; set; }
-        public Guid EntityId { get; set; }
-        public T Entity { get; set; }
+        public Entity Entity { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Repo.Interfaces;
+﻿using Domain.Entities;
+using Repo.Interfaces;
 using Services.FoundValues;
 using Services.Interfaces.Search;
 using System;
@@ -13,7 +14,7 @@ namespace Services.Implementation.Search
     /// </summary>
     /// <typeparam name="T">Entity</typeparam>
     public class AggregateSearch<T> : IAggregateSearch<T>
-        where T : class, new()
+        where T : Entity, new()
     {
         protected virtual ISearch<T> AccurateSearch { get; set; }
         protected virtual ISearch<T> SearchByWords { get; set; }
@@ -49,26 +50,18 @@ namespace Services.Implementation.Search
             if (foundByWords?.Any() ?? default)
             {
                 var joinedResult = from accurately in foundAccurately
-                                   join byWords in foundByWords on accurately.EntityId equals byWords.EntityId
+                                   join byWords in foundByWords on accurately.Entity.Id equals byWords.Entity.Id
                                    select new FoundObject<T>
                                    {
-                                       EntityId = accurately.EntityId,
+                                       //EntityId = accurately.Entity.Id,
                                        Entity = accurately.Entity,
                                        MatchedWords = accurately.MatchedWords.Concat(byWords.MatchedWords).Distinct().ToList(),
                                        TotalRating = accurately.TotalRating > int.MaxValue - byWords.TotalRating
                                                      ? int.MaxValue : accurately.TotalRating + byWords.TotalRating
                                    };
 
-                IEnumerable<Guid> joinedResultIds = joinedResult
-                    .Select(f => f.EntityId);
-
-                foundAccurately = foundAccurately
-                    .Where(a => !joinedResultIds.Contains(a.EntityId))
-                    .ToList();
-
-                foundByWords = foundByWords
-                    .Where(b => !joinedResultIds.Contains(b.EntityId))
-                    .ToList();
+                foundAccurately = foundAccurately.ExceptBy(f => f.Entity.Id, joinedResult).ToList();
+                foundByWords = foundByWords.ExceptBy(f => f.Entity.Id, joinedResult).ToList();
 
                 result.AddRange(joinedResult);
                 result.AddRange(foundAccurately);
