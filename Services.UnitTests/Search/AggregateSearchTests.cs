@@ -16,7 +16,7 @@ namespace Services.UnitTests.Search
     {
         public string Query { get; private set; }
         public string[] QueryWords { get; private set; }
-        public List<FoundObject<User>> UsersFoundObjects { get; private set; }
+        public List<FoundObject> UsersFoundObjects { get; private set; }
 
         [SetUp]
         public void SetUpUnitTest()
@@ -24,13 +24,13 @@ namespace Services.UnitTests.Search
             QueryWords = new string[] { "first", "second", "third" };
             Query = string.Join(' ', QueryWords);
 
-            UsersFoundObjects = new List<FoundObject<User>>();
+            UsersFoundObjects = new List<FoundObject>();
 
             foreach (var word in QueryWords)
             {
                 User user = new User { Id = Guid.NewGuid() };
 
-                FoundObject<User> foundObject = new FoundObject<User>
+                FoundObject foundObject = new FoundObject
                 {
                     Entity = user,
                     MatchedWords = new List<string> { word },
@@ -44,7 +44,7 @@ namespace Services.UnitTests.Search
         [Test]
         public async Task FindAsync_AccurateSearchReturnsEmptyCollection_ReturnsCollectionFromSearchByWordsClass()
         {
-            List<FoundObject<User>> found = new List<FoundObject<User>>();
+            List<FoundObject> found = new List<FoundObject>();
             Mock<IRepository> _repository = new Mock<IRepository>();
             Mock<ISearch<User>> _accurateSearch = new Mock<ISearch<User>>();
             _accurateSearch.Setup(a => a.FindAsync(Query))
@@ -54,7 +54,7 @@ namespace Services.UnitTests.Search
                 .ReturnsAsync(UsersFoundObjects);
 
             TestingAggregateSearch<User> testing = new TestingAggregateSearch<User>(_repository.Object, _accurateSearch.Object, _searchByWords.Object);
-            List<FoundObject<User>> foundObjects = await testing.FindAsync(Query);
+            List<FoundObject> foundObjects = await testing.FindAsync(Query);
 
             CollectionAssert.AreEquivalent(UsersFoundObjects, foundObjects);
         }
@@ -62,7 +62,7 @@ namespace Services.UnitTests.Search
         [Test]
         public async Task FindAsync_SearchByWordsReturnsEmptyCollection_ReturnsCollectionFromAccurateSearchClass()
         {
-            List<FoundObject<User>> found = new List<FoundObject<User>>();
+            List<FoundObject> found = new List<FoundObject>();
             Mock<IRepository> _repository = new Mock<IRepository>();
             Mock<ISearch<User>> _accurateSearch = new Mock<ISearch<User>>();
 
@@ -78,7 +78,7 @@ namespace Services.UnitTests.Search
                 .ReturnsAsync(found);
 
             TestingAggregateSearch<User> testing = new TestingAggregateSearch<User>(_repository.Object, _accurateSearch.Object, _searchByWords.Object);
-            List<FoundObject<User>> foundObjects = await testing.FindAsync(Query);
+            List<FoundObject> foundObjects = await testing.FindAsync(Query);
 
             CollectionAssert.AreEqual(UsersFoundObjects, foundObjects);
         }
@@ -86,8 +86,8 @@ namespace Services.UnitTests.Search
         [Test]
         public async Task FindAsync_SearchClassesReturnsEmptyCollection_ReturnsEmptyCollection()
         {
-            List<FoundObject<User>> accurateSearchFound = new List<FoundObject<User>>();
-            List<FoundObject<User>> searchByWordsFound = new List<FoundObject<User>>();
+            List<FoundObject> accurateSearchFound = new List<FoundObject>();
+            List<FoundObject> searchByWordsFound = new List<FoundObject>();
 
             Mock<IRepository> _repository = new Mock<IRepository>();
             Mock<ISearch<User>> _accurateSearch = new Mock<ISearch<User>>();
@@ -99,7 +99,7 @@ namespace Services.UnitTests.Search
                 .ReturnsAsync(searchByWordsFound);
 
             TestingAggregateSearch<User> testing = new TestingAggregateSearch<User>(_repository.Object, _accurateSearch.Object, _searchByWords.Object);
-            List<FoundObject<User>> foundObjects = await testing.FindAsync(Query);
+            List<FoundObject> foundObjects = await testing.FindAsync(Query);
 
             CollectionAssert.IsEmpty(foundObjects);
         }
@@ -116,7 +116,7 @@ namespace Services.UnitTests.Search
                 .ReturnsAsync(UsersFoundObjects);
 
             TestingAggregateSearch<User> testing = new TestingAggregateSearch<User>(_repository.Object, _accurateSearch.Object, _searchByWords.Object);
-            List<FoundObject<User>> foundObjects = await testing.FindAsync(Query);
+            List<FoundObject> foundObjects = await testing.FindAsync(Query);
 
             CollectionAssert.AllItemsAreUnique(foundObjects);
         }

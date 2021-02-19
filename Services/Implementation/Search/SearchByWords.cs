@@ -22,12 +22,12 @@ namespace Services.Implementation.Search
             Repository = repository;
         }
 
-        public async Task<List<FoundObject<T>>> FindAsync(string query)
+        public async Task<List<FoundObject>> FindAsync(string query)
         {
             List<string> preparedQuery = InputPreparation.Prepare(query);
             List<FoundWord> foundWords = await FindWordsAsync(preparedQuery);
 
-            List<FoundObject<T>> preparedResults = new List<FoundObject<T>>();
+            List<FoundObject> preparedResults = new List<FoundObject>();
             if (foundWords.Any())
             {
                 preparedResults = PrepareResults(foundWords);
@@ -36,7 +36,7 @@ namespace Services.Implementation.Search
             return preparedResults;
         }
 
-        protected List<FoundObject<T>> PrepareResults(List<FoundWord> foundWords)
+        protected List<FoundObject> PrepareResults(List<FoundWord> foundWords)
         {
             IEnumerable<IndexInfo> indexInfos = foundWords
                 .SelectMany(f => f.IndexInfos);
@@ -45,13 +45,13 @@ namespace Services.Implementation.Search
                 .Where(i => i.Entity is T)
                 .DistinctBy(i => i.Entity.Id);
 
-            List<FoundObject<T>> foundObjects = new List<FoundObject<T>>(uniqueIndexInfos.Count());
+            List<FoundObject> foundObjects = new List<FoundObject>(uniqueIndexInfos.Count());
 
             foreach (IndexInfo indexInfo in uniqueIndexInfos)
             {
-                FoundObject<T> foundObject = new FoundObject<T>
+                FoundObject foundObject = new FoundObject
                 {
-                    Entity = indexInfo.Entity,
+                    Entity = (T)indexInfo.Entity,
 
                     MatchedWords = indexInfos
                         .Where(i => i.EntityId == indexInfo.EntityId)

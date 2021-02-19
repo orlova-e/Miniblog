@@ -31,7 +31,7 @@ namespace Services.UnitTests.Search
 
             AccurateSearch<User> accurateSearch = new AccurateSearch<User>(_repository.Object);
 
-            List<FoundObject<User>> actual = await accurateSearch.FindAsync(query);
+            List<FoundObject> actual = await accurateSearch.FindAsync(query);
 
             var result = from obj in actual
                          where obj.TotalRating == int.MaxValue

@@ -18,12 +18,12 @@ namespace Services.Implementation.Search
             Repository = repository;
         }
 
-        public async Task<List<FoundObject<T>>> FindAsync(string query)
+        public async Task<List<FoundObject>> FindAsync(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
                 throw new ArgumentNullException();
 
-            List<FoundObject<T>> foundObjects = new List<FoundObject<T>>();
+            List<FoundObject> foundObjects = new List<FoundObject>();
             List<T> foundEntities = new List<T>();
 
             ISearchStrategy<T> searchStrategy = ChooseStrategy(query);
@@ -36,7 +36,7 @@ namespace Services.Implementation.Search
             }
 
             foundObjects = foundEntities
-                .Select(f => new FoundObject<T>
+                .Select(f => new FoundObject
                 {
                     Entity = f,
                     MatchedWords = new List<string> { query },

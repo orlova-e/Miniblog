@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 namespace Services.FoundValues
 {
-    public class FoundObject<T>
-        where T : class, new()
+    public class FoundObject
     {
         public int TotalRating { get; set; }
         public List<string> MatchedWords { get; set; }

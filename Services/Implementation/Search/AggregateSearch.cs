@@ -2,7 +2,6 @@
 using Repo.Interfaces;
 using Services.FoundValues;
 using Services.Interfaces.Search;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,9 +25,9 @@ namespace Services.Implementation.Search
             SearchByWords = new SearchByWords<T>(Repository);
         }
 
-        public async Task<List<FoundObject<T>>> FindAsync(string query, bool accurateSearch = false)
+        public async Task<List<FoundObject>> FindAsync(string query, bool accurateSearch = false)
         {
-            List<FoundObject<T>> foundAccurately, foundByWords = null;
+            List<FoundObject> foundAccurately, foundByWords = null;
 
             foundAccurately = await AccurateSearch.FindAsync(query);
 
@@ -37,21 +36,21 @@ namespace Services.Implementation.Search
                 foundByWords = await SearchByWords.FindAsync(query);
             }
 
-            List<FoundObject<T>> foundObjects = PrepareResults(foundAccurately, foundByWords);
+            List<FoundObject> foundObjects = PrepareResults(foundAccurately, foundByWords);
 
             return foundObjects;
         }
 
-        protected List<FoundObject<T>> PrepareResults(List<FoundObject<T>> foundAccurately,
-            List<FoundObject<T>> foundByWords = null)
+        protected List<FoundObject> PrepareResults(List<FoundObject> foundAccurately,
+            List<FoundObject> foundByWords = null)
         {
-            List<FoundObject<T>> result = new List<FoundObject<T>>();
+            List<FoundObject> result = new List<FoundObject>();
 
             if (foundByWords?.Any() ?? default)
             {
                 var joinedResult = from accurately in foundAccurately
                                    join byWords in foundByWords on accurately.Entity.Id equals byWords.Entity.Id
-                                   select new FoundObject<T>
+                                   select new FoundObject
                                    {
                                        //EntityId = accurately.Entity.Id,
                                        Entity = accurately.Entity,
