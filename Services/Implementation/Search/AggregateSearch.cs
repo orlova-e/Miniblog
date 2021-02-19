@@ -52,7 +52,6 @@ namespace Services.Implementation.Search
                                    join byWords in foundByWords on accurately.Entity.Id equals byWords.Entity.Id
                                    select new FoundObject
                                    {
-                                       //EntityId = accurately.Entity.Id,
                                        Entity = accurately.Entity,
                                        MatchedWords = accurately.MatchedWords.Concat(byWords.MatchedWords).Distinct().ToList(),
                                        TotalRating = accurately.TotalRating > int.MaxValue - byWords.TotalRating
