@@ -14,9 +14,9 @@ namespace Repo.Interfaces
         IPlainRepository<Comment> Comments { get; }
         IPlainRepository<Topic> Topics { get; }
         IPlainRepository<Series> Series { get; }
+        IPlainEntityRepository<Tag> Tags { get; }
         IPlainEntityRepository<FoundWord> FoundWords { get; }
         IPlainEntityRepository<IndexInfo> IndexInfos { get; }
-        ITagsRepository Tags { get; }
         IOptionRepository<Role> Roles { get; }
         IOptionRepository<ArticleOptions> ArticleOptions { get; }
         IOptionRepository<CheckList> CheckLists { get; }

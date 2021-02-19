@@ -15,10 +15,9 @@ namespace Repo.Implementation
         IPlainRepository<Topic> topics;
         IPlainRepository<Series> series;
 
+        IPlainEntityRepository<Tag> tags;
         IPlainEntityRepository<FoundWord> foundWords;
         IPlainEntityRepository<IndexInfo> indexInfos;
-
-        ITagsRepository tags;
 
         IOptionRepository<Role> roles;
         IOptionRepository<ArticleOptions> articleOptions;
@@ -88,6 +87,15 @@ namespace Repo.Implementation
                 return series;
             }
         }
+        public IPlainEntityRepository<Tag> Tags
+        {
+            get
+            {
+                if (tags == null)
+                    tags = new TagsRepository(Db);
+                return tags;
+            }
+        }
         public IPlainEntityRepository<FoundWord> FoundWords
         {
             get
@@ -106,15 +114,7 @@ namespace Repo.Implementation
                 return indexInfos;
             }
         }
-        public ITagsRepository Tags
-        {
-            get
-            {
-                if (tags == null)
-                    tags = new TagsRepository(Db);
-                return tags;
-            }
-        }
+
         public IOptionRepository<Role> Roles
         {
             get
