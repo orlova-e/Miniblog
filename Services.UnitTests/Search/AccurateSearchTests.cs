@@ -58,17 +58,6 @@ namespace Services.UnitTests.Search
         }
 
         [Test]
-        public void FindAsync_NotValidGenericParameter_ThrowsArgumentException()
-        {
-            string query = "smth";
-            Mock<IRepository> _repository = new Mock<IRepository>();
-
-            AccurateSearch<Topic> accurateSearch = new AccurateSearch<Topic>(_repository.Object);
-
-            Assert.ThrowsAsync(typeof(ArgumentException), () => accurateSearch.FindAsync(query));
-        }
-
-        [Test]
         public void FindAsync_NullStringQuery_ThrowsArgumentNullException()
         {
             string query = null;

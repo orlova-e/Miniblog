@@ -12,7 +12,9 @@ namespace Services.Implementation.Search
     public class AccurateSearch<T> : ISearch<T>
         where T : Entity, new()
     {
-        private IRepository Repository { get; }
+        protected virtual List<Func<T, bool>> Predicates { get; set; }
+        protected virtual IPlainRepository<T> PlainRepository { get; set; }
+        protected IRepository Repository { get; }
         public AccurateSearch(IRepository repository)
         {
             Repository = repository;
@@ -23,17 +25,19 @@ namespace Services.Implementation.Search
             if (string.IsNullOrWhiteSpace(query))
                 throw new ArgumentNullException();
 
+            Match(Repository, query);
+
             List<FoundObject> foundObjects = new List<FoundObject>();
             List<T> foundEntities = new List<T>();
 
-            ISearchStrategy<T> searchStrategy = ChooseStrategy(query);
-
-            foreach (var predicate in searchStrategy.Predicates)
+            foreach (var predicate in Predicates)
             {
-                IEnumerable<T> list = await searchStrategy.FindAsync.Invoke(predicate);
-                if (list?.Any() ?? default)
-                    foundEntities = foundEntities.Union(list).ToList();
+                IEnumerable<T> list = await PlainRepository.FindAsync(predicate);
+                if (list is not null)
+                    foundEntities.AddRange(list);
             }
+
+            foundEntities = foundEntities.DistinctBy(f => f.Id).ToList();
 
             foundObjects = foundEntities
                 .Select(f => new FoundObject
@@ -47,22 +51,48 @@ namespace Services.Implementation.Search
             return foundObjects;
         }
 
-        protected ISearchStrategy<T> ChooseStrategy(string query)
+        protected virtual void Match(IRepository repository, string query)
         {
-            Type type = typeof(T);
+            Predicates = new T() switch
+            {
+                User => new List<Func<T, bool>>
+                {
+                    _ => (_ as User).Username.Contains(query),
+                    _ => (_ as User).Description.Contains(query)
+                },
+                Article => new List<Func<T, bool>>
+                {
+                    _ => (_ as Article).Header.Contains(query)
+                },
+                Comment => new List<Func<T, bool>>
+                {
+                    _ => (_ as Comment).Text.Contains(query)
+                },
+                Topic => new List<Func<T, bool>>
+                {
+                    _ => (_ as Topic).Name.Contains(query)
+                },
+                Tag => new List<Func<T, bool>>
+                {
+                    _ => (_ as Tag).Name.Contains(query)
+                },
+                Series => new List<Func<T, bool>>
+                {
+                    _ => (_ as Series).Name.Contains(query)
+                },
+                { } => throw new NotImplementedException()
+            };
 
-            if (type == typeof(User))
+            PlainRepository = new T() switch
             {
-                return new UserSearchStrategy(Repository, query) as ISearchStrategy<T>;
-            }
-            else if (type == typeof(Article))
-            {
-                return new ArticleSearchStrategy(Repository, query) as ISearchStrategy<T>;
-            }
-            else
-            {
-                throw new ArgumentException();
-            }
+                User => repository.Users as IPlainRepository<T>,
+                Article => repository.Articles as IPlainRepository<T>,
+                Comment => repository.Comments as IPlainRepository<T>,
+                Topic => repository.Topics as IPlainRepository<T>,
+                Tag => repository.Tags as IPlainRepository<T>,
+                Series => repository.Series as IPlainRepository<T>,
+                { } => throw new NotImplementedException()
+            };
         }
     }
 }
