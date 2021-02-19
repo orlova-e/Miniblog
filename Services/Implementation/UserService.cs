@@ -2,15 +2,13 @@
 using Domain.Entities.Enums;
 using Repo.Interfaces;
 using Services.Interfaces;
+using Services.VisibleValues;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Services.Interfaces.Indexing;
-using Services.VisibleValues;
 
 namespace Services.Implementation
 {
@@ -31,9 +29,9 @@ namespace Services.Implementation
             var sameEmail = repository.Users.Find(u => u.Email == account.Email);
             Dictionary<string, string> errors = new Dictionary<string, string>();
 
-            if(sameUsername.Any())
+            if (sameUsername.Any())
                 errors.Add("Username", "A user with this name already exists");
-            if(sameEmail.Any())
+            if (sameEmail.Any())
                 errors.Add("Email", "A user with this email already exists");
 
             return errors;
@@ -46,7 +44,7 @@ namespace Services.Implementation
             if (!oldInfo.Email.Equals(newInfo.Email))
             {
                 var sameEmail = repository.Users.Find(u => u.Email == newInfo.Email);
-                if(sameEmail.Any())
+                if (sameEmail.Any())
                     errors.Add(nameof(newInfo.Email), "A user with this email already exists");
             }
 
@@ -96,7 +94,7 @@ namespace Services.Implementation
 
         private User ToUser(Account account)
         {
-            Role userRole = repository.Roles.Find(r=> r.Type == RoleType.User).First();
+            Role userRole = repository.Roles.Find(r => r.Type == RoleType.User).First();
 
             User newUser = new User()
             {
@@ -116,7 +114,7 @@ namespace Services.Implementation
             string hash = GetHash(account.Password);
             User user = repository.Users.Find(u => u.Username == account.Username && u.Hash == hash).FirstOrDefault();
             Role role;
-            if(user != null)
+            if (user != null)
             {
                 role = repository.Roles.GetByIdAsync(user.RoleId).Result;
                 user.Role = role;

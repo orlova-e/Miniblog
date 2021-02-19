@@ -6,7 +6,6 @@ using Repo.Interfaces;
 using Services.Implementation;
 using Services.Implementation.Indexing;
 using Services.Interfaces;
-using Services.Interfaces.Indexing;
 
 namespace Services
 {

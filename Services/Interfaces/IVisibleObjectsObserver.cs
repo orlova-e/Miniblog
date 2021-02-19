@@ -1,7 +1,7 @@
 ﻿using Services.VisibleValues;
 using System.Threading.Tasks;
 
-namespace Services.Interfaces.Indexing
+namespace Services.Interfaces
 {
     public interface IVisibleObjectsObserver
     {

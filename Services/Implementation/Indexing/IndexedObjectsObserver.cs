@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Repo.Interfaces;
+using Services.Interfaces;
 using Services.VisibleValues;
-using Services.Interfaces.Indexing;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
