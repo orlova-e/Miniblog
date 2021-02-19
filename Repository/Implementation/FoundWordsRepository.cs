@@ -30,13 +30,13 @@ namespace Repo.Implementation
 
         public IEnumerable<FoundWord> Find(Func<FoundWord, bool> predicate)
         {
-            IEnumerable<FoundWord> foundWords = Db.FoundWords.Where(predicate);
+            IEnumerable<FoundWord> foundWords = Db.FoundWords.Include(f => f.IndexInfos).Where(predicate);
             return foundWords;
         }
 
         public async Task<IEnumerable<FoundWord>> FindAsync(Func<FoundWord, bool> predicate)
         {
-            IEnumerable<FoundWord> foundWords = await Task.Run(() => Db.FoundWords.Where(predicate));
+            IEnumerable<FoundWord> foundWords = await Task.Run(() => Find(predicate));
             return foundWords;
         }
 
