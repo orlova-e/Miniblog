@@ -118,7 +118,7 @@ namespace Services.Implementation
                 return this;
 
             List<ArticleTag> articleTags = new List<ArticleTag>(tagsArray.Length);
-            IEnumerable<Tag> tagsCollection = Repository.Tags.FindRange(tagsArray);
+            IEnumerable<Tag> tagsCollection = Repository.Tags.Find(t => tagsArray.Contains(t.Name));
             string[] existingTags = tagsCollection?.Select(t => t.Name)?.ToArray();
             string[] uncreatedTags = new string[] { };
             if (existingTags is object)
