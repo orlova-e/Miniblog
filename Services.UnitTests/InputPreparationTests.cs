@@ -15,7 +15,7 @@ namespace Services.UnitTests
 
             List<string> expected = new List<string>()
             {
-                "_-QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm"
+                "_-qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnm"
             };
 
             var result = InputPreparation.Prepare(tested);
@@ -26,7 +26,7 @@ namespace Services.UnitTests
         [Test]
         public void PrepareStringWithWordFormingSymbolsReturnsListWithThatString()
         {
-            string tested = @"QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyui_-opasdfghjklzxcvbnm";
+            string tested = @"qwertyuiopasdfghjklzxcvbnm1234567890qwertyui_-opasdfghjklzxcvbnm";
 
             var result = InputPreparation.Prepare(tested);
 
@@ -43,7 +43,7 @@ namespace Services.UnitTests
 
             List<string> expected = new List<string>
             {
-                "QWERTY",
+                "qwerty",
                 "qwe-rty",
                 "_qwe-rty_",
                 "qwe-asd-zxc",
