@@ -33,7 +33,7 @@ namespace Services.UnitTests.Indexing
             _repository.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
                 .Returns<IEnumerable<FoundWord>>(null);
 
-            IndexObject indexObject = new IndexObject(_repository.Object, new ArticleRateStrategy());
+            IndexObject indexObject = new IndexObject(_repository.Object);
             List<FoundWord> foundWords = indexObject.Index((ArticleIndexedValues)article);
 
             string[] actual = foundWords.Select(f => f.Word).ToArray();
@@ -57,7 +57,7 @@ namespace Services.UnitTests.Indexing
             _repository.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
                 .Returns<IEnumerable<FoundWord>>(null);
 
-            IndexObject indexObject = new IndexObject(_repository.Object, new ArticleRateStrategy());
+            IndexObject indexObject = new IndexObject(_repository.Object);
 
             List<FoundWord> foundWords = indexObject.Index((ArticleIndexedValues)article);
 
@@ -72,21 +72,21 @@ namespace Services.UnitTests.Indexing
         }
 
         [Test]
-        public void Index_IndexingArticleTwice_ReturnsListOfFoundWordsWithIdenticalIndexInfos()
+        public void Index_IndexingArticleTwice_ReturnsListOfFoundWordsWithIdenticalFoundWords()
         {
             string word = "first-word";
             Article article = new Article { Id = Guid.NewGuid(), Header = word, User = new User() };
             Mock<IRepository> _repository1 = new Mock<IRepository>();
             _repository1.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
                 .Returns<IEnumerable<FoundWord>>(null);
-            IndexObject indexArticle1 = new IndexObject(_repository1.Object, new ArticleRateStrategy());
+            IndexObject indexArticle1 = new IndexObject(_repository1.Object);
 
             List<FoundWord> firstFound = indexArticle1.Index((ArticleIndexedValues)article);
 
             Mock<IRepository> _repository2 = new Mock<IRepository>();
             _repository2.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
                 .Returns(firstFound);
-            IndexObject indexArticle2 = new IndexObject(_repository2.Object, new ArticleRateStrategy());
+            IndexObject indexArticle2 = new IndexObject(_repository2.Object);
 
             List<FoundWord> foundAfter = indexArticle2.Index((ArticleIndexedValues)article);
 
@@ -135,7 +135,7 @@ namespace Services.UnitTests.Indexing
             Mock<IRepository> _repository = new Mock<IRepository>();
             _repository.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
                 .Returns<IEnumerable<FoundWord>>(null);
-            IndexObject indexObject = new IndexObject(_repository.Object, new ArticleRateStrategy());
+            IndexObject indexObject = new IndexObject(_repository.Object);
 
             List<FoundWord> foundWords = indexObject.Index((ArticleIndexedValues)article);
 
@@ -149,7 +149,7 @@ namespace Services.UnitTests.Indexing
             Mock<IRepository> _repository = new Mock<IRepository>();
             _repository.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
                 .Returns<IEnumerable<FoundWord>>(null);
-            IndexObject indexObject = new IndexObject(_repository.Object, new ArticleRateStrategy());
+            IndexObject indexObject = new IndexObject(_repository.Object);
 
             List<FoundWord> foundWords = indexObject.Index((ArticleIndexedValues)article);
 

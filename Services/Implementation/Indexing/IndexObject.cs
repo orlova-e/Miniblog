@@ -1,7 +1,6 @@
 ﻿using Domain.Entities;
 using Repo.Interfaces;
 using Services.IndexedValues;
-using Services.Interfaces.Indexing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +13,9 @@ namespace Services.Implementation.Indexing
         private IndexedObject IndexedObject { get; set; }
         private List<FoundWord> FoundWords { get; set; }
         private IRepository Repository { get; }
-        private IRateStrategy RateStrategy { get; }
-        public IndexObject(IRepository repository,
-            IRateStrategy rateStrategy)
+        public IndexObject(IRepository repository)
         {
             Repository = repository;
-            RateStrategy = rateStrategy;
         }
 
         public List<FoundWord> Index(IndexedObject indexedObject)
@@ -63,7 +59,7 @@ namespace Services.Implementation.Indexing
                     }
 
                     int count = Count(words, word);
-                    int propertyRank = Rate(propertyInfo.Name);
+                    int propertyRank = IndexedObject.Rate(propertyInfo.Name);
                     indexInfo.Rank += Summup(propertyRank, count);
 
                     if (indexInfoPosition != -1)
@@ -81,13 +77,21 @@ namespace Services.Implementation.Indexing
         private FoundWord GetFoundWord(string word)
         {
             FoundWord foundWord = FoundWords.Find(f => f.Word.Equals(word));
-            if (foundWord == default)
+            if (foundWord is null)
             {
                 foundWord = Repository.FoundWords
                     .Find(f => f.Word.Equals(word))?
                     .FirstOrDefault();
-                if (foundWord == default)
+                if (foundWord is not null)
+                {
+                    foundWord.IndexInfos = foundWord.IndexInfos
+                        .Where(i => i.EntityId != IndexedObject.Id)
+                        .ToList();
+                }
+                else
+                {
                     foundWord = new FoundWord { Word = word, IndexInfos = new List<IndexInfo>() };
+                }
             }
             return foundWord;
         }
@@ -108,11 +112,6 @@ namespace Services.Implementation.Indexing
         private int Count(List<string> words, string word)
         {
             return words.Count(v => v.Equals(word));
-        }
-
-        protected virtual int Rate(string propertyName)
-        {
-            return RateStrategy.RateElement(propertyName);
         }
 
         protected virtual int Summup(int rate, int count)

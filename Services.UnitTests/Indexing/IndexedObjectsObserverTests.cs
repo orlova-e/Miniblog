@@ -24,7 +24,7 @@ namespace Services.UnitTests.Indexing
                 .Returns(foundWords1)
                 .Returns(foundWords2);
 
-            IndexObject indexObject = new IndexObject(_repository.Object, new ArticleRateStrategy());
+            IndexObject indexObject = new IndexObject(_repository.Object);
             List<FoundWord> oldFoundWords = indexObject.Index((ArticleIndexedValues)article);
 
             List<IndexInfo> indexInfos = new List<IndexInfo>();
@@ -61,7 +61,7 @@ namespace Services.UnitTests.Indexing
             _repository.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
                 .Returns<IEnumerable<FoundWord>>(null);
 
-            IndexObject indexObject = new IndexObject(_repository.Object, new ArticleRateStrategy());
+            IndexObject indexObject = new IndexObject(_repository.Object);
             List<FoundWord> oldFoundWords = indexObject.Index((ArticleIndexedValues)article);
 
             var indexInfos = oldFoundWords.ElementAt(0).IndexInfos;
@@ -91,7 +91,7 @@ namespace Services.UnitTests.Indexing
             Mock<IRepository> _repository = new Mock<IRepository>();
             _repository.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
                 .Returns<IEnumerable<FoundWord>>(null);
-            IndexObject indexObject = new IndexObject(_repository.Object, new ArticleRateStrategy());
+            IndexObject indexObject = new IndexObject(_repository.Object);
             List<FoundWord> oldFoundWords = indexObject.Index((ArticleIndexedValues)article);
 
             var indexInfos = oldFoundWords.ElementAt(0).IndexInfos;
@@ -121,7 +121,7 @@ namespace Services.UnitTests.Indexing
             _repository.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
                 .Returns<IEnumerable<FoundWord>>(null);
 
-            IndexObject indexObject = new IndexObject(_repository.Object, new ArticleRateStrategy());
+            IndexObject indexObject = new IndexObject(_repository.Object);
             List<FoundWord> articleFoundWords = indexObject.Index((ArticleIndexedValues)article);
             List<FoundWord> articleToDeleteFoundWords = indexObject.Index((ArticleIndexedValues)articleToDelete);
             articleToDeleteFoundWords.ElementAt(0).IndexInfos.Add(articleFoundWords.ElementAt(0).IndexInfos[0]);

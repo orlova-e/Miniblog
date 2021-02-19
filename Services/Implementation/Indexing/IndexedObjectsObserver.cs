@@ -2,7 +2,6 @@
 using Repo.Interfaces;
 using Services.IndexedValues;
 using Services.Interfaces.Indexing;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,20 +16,9 @@ namespace Services.Implementation.Indexing
             Repository = repository;
         }
 
-        protected IRateStrategy ChooseStrategy(IndexedObject indexedObject)
-        {
-            if (indexedObject is ArticleIndexedValues)
-                return new ArticleRateStrategy();
-            else if (indexedObject is UserIndexedValues)
-                return new UserRateStrategy();
-            else
-                throw new ArgumentException();
-        }
-
         public async Task OnNewEntityAsync(IndexedObject indexedObject)
         {
-            IRateStrategy rateStrategy = ChooseStrategy(indexedObject);
-            IndexObject indexObject = new IndexObject(Repository, rateStrategy);
+            IndexObject indexObject = new IndexObject(Repository);
             List<FoundWord> foundWords = indexObject.Index(indexedObject);
             foreach (var foundword in foundWords)
             {
@@ -52,8 +40,7 @@ namespace Services.Implementation.Indexing
                 .Select(ii => ii.FoundWord)
                 .ToList();
 
-            IRateStrategy rateStrategy = ChooseStrategy(indexedObject);
-            IndexObject indexObject = new IndexObject(Repository, rateStrategy);
+            IndexObject indexObject = new IndexObject(Repository);
             List<FoundWord> foundWords = indexObject.Index(indexedObject);
 
             var newFoundWords = foundWords.ExceptBy(f => f.Word, oldFoundWords);

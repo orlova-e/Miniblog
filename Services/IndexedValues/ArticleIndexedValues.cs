@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using System;
 using System.Linq;
 
 namespace Services.IndexedValues
@@ -16,7 +17,6 @@ namespace Services.IndexedValues
             => new ArticleIndexedValues
             {
                 Id = article.Id,
-                TypeOfIndexed = article.GetType(),
                 Header = article.Header,
                 Text = article.Text,
                 Author = article.User.Username,
@@ -26,5 +26,16 @@ namespace Services.IndexedValues
                 Topic = article.Topic?.Name,
                 Series = article.Series?.Name,
             };
+
+        public override int Rate(string propertyName) => propertyName switch
+        {
+            nameof(Header) => 5,
+            nameof(Author) => 5,
+            nameof(Series) => 3,
+            nameof(Topic) => 2,
+            nameof(Tags) => 2,
+            nameof(Text) => 1,
+            _ => throw new NotImplementedException()
+        };
     }
 }
