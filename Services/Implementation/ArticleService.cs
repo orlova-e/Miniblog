@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 using Repo.Interfaces;
-using Services.IndexedValues;
+using Services.VisibleValues;
 using Services.Interfaces;
 using Services.Interfaces.Indexing;
 using System;
@@ -68,7 +68,7 @@ namespace Services.Implementation
 
             await Repository.Articles.CreateAsync(article);
             article = Repository.Articles.Find(a => a.Link == article.Link).FirstOrDefault();
-            await IndexedObjectsObserver.OnNewEntityAsync((ArticleIndexedValues)article);
+            await IndexedObjectsObserver.OnNewEntityAsync((VisibleArticleValues)article);
             return article;
         }
 
@@ -84,7 +84,7 @@ namespace Services.Implementation
         {
             Article article = await Repository.Articles.GetByIdAsync(articleId);
             await Repository.Articles.DeleteAsync(articleId);
-            await IndexedObjectsObserver.OnDeletedEntityAsync((ArticleIndexedValues)article);
+            await IndexedObjectsObserver.OnDeletedEntityAsync((VisibleArticleValues)article);
         }
 
         public async Task UpdateArticleAsync(Article article, ArticleData articleData)
@@ -104,7 +104,7 @@ namespace Services.Implementation
 
             await Repository.Articles.UpdateAsync(updated);
             updated = await Repository.Articles.GetByIdAsync(article.Id);
-            await IndexedObjectsObserver.OnUpdatedEntityAsync((ArticleIndexedValues)updated);
+            await IndexedObjectsObserver.OnUpdatedEntityAsync((VisibleArticleValues)updated);
         }
     }
 }

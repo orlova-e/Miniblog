@@ -1,12 +1,12 @@
-﻿using Services.IndexedValues;
+﻿using Services.VisibleValues;
 using System.Threading.Tasks;
 
 namespace Services.Interfaces.Indexing
 {
     public interface IIndexedObjectsObserver
     {
-        Task OnNewEntityAsync(IndexedObject indexedObject);
-        Task OnUpdatedEntityAsync(IndexedObject indexedObject);
-        Task OnDeletedEntityAsync(IndexedObject indexedObject);
+        Task OnNewEntityAsync(VisibleObjectValues indexedObject);
+        Task OnUpdatedEntityAsync(VisibleObjectValues indexedObject);
+        Task OnDeletedEntityAsync(VisibleObjectValues indexedObject);
     }
 }

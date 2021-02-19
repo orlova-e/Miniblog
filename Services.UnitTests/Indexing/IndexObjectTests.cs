@@ -3,7 +3,7 @@ using Moq;
 using NUnit.Framework;
 using Repo.Interfaces;
 using Services.Implementation.Indexing;
-using Services.IndexedValues;
+using Services.VisibleValues;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +34,7 @@ namespace Services.UnitTests.Indexing
                 .Returns<IEnumerable<FoundWord>>(null);
 
             IndexObject indexObject = new IndexObject(_repository.Object);
-            List<FoundWord> foundWords = indexObject.Index((ArticleIndexedValues)article);
+            List<FoundWord> foundWords = indexObject.Index((VisibleArticleValues)article);
 
             string[] actual = foundWords.Select(f => f.Word).ToArray();
             CollectionAssert.AreEquivalent(expected, actual);
@@ -59,7 +59,7 @@ namespace Services.UnitTests.Indexing
 
             IndexObject indexObject = new IndexObject(_repository.Object);
 
-            List<FoundWord> foundWords = indexObject.Index((ArticleIndexedValues)article);
+            List<FoundWord> foundWords = indexObject.Index((VisibleArticleValues)article);
 
             IEnumerable<FoundWord> result = from foundWord in foundWords
                                             from indexInfo in foundWord.IndexInfos
@@ -81,14 +81,14 @@ namespace Services.UnitTests.Indexing
                 .Returns<IEnumerable<FoundWord>>(null);
             IndexObject indexArticle1 = new IndexObject(_repository1.Object);
 
-            List<FoundWord> firstFound = indexArticle1.Index((ArticleIndexedValues)article);
+            List<FoundWord> firstFound = indexArticle1.Index((VisibleArticleValues)article);
 
             Mock<IRepository> _repository2 = new Mock<IRepository>();
             _repository2.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
                 .Returns(firstFound);
             IndexObject indexArticle2 = new IndexObject(_repository2.Object);
 
-            List<FoundWord> foundAfter = indexArticle2.Index((ArticleIndexedValues)article);
+            List<FoundWord> foundAfter = indexArticle2.Index((VisibleArticleValues)article);
 
             Assert.AreEqual(firstFound, foundAfter);
         }
@@ -137,7 +137,7 @@ namespace Services.UnitTests.Indexing
                 .Returns<IEnumerable<FoundWord>>(null);
             IndexObject indexObject = new IndexObject(_repository.Object);
 
-            List<FoundWord> foundWords = indexObject.Index((ArticleIndexedValues)article);
+            List<FoundWord> foundWords = indexObject.Index((VisibleArticleValues)article);
 
             CollectionAssert.IsEmpty(foundWords);
         }
@@ -151,7 +151,7 @@ namespace Services.UnitTests.Indexing
                 .Returns<IEnumerable<FoundWord>>(null);
             IndexObject indexObject = new IndexObject(_repository.Object);
 
-            List<FoundWord> foundWords = indexObject.Index((ArticleIndexedValues)article);
+            List<FoundWord> foundWords = indexObject.Index((VisibleArticleValues)article);
 
             CollectionAssert.IsEmpty(foundWords);
         }

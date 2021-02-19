@@ -3,7 +3,7 @@ using Moq;
 using NUnit.Framework;
 using Repo.Interfaces;
 using Services.Implementation.Indexing;
-using Services.IndexedValues;
+using Services.VisibleValues;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace Services.UnitTests.Indexing
                 .Returns(foundWords2);
 
             IndexObject indexObject = new IndexObject(_repository.Object);
-            List<FoundWord> oldFoundWords = indexObject.Index((ArticleIndexedValues)article);
+            List<FoundWord> oldFoundWords = indexObject.Index((VisibleArticleValues)article);
 
             List<IndexInfo> indexInfos = new List<IndexInfo>();
             foreach (var foundWord in oldFoundWords)
@@ -46,7 +46,7 @@ namespace Services.UnitTests.Indexing
 
             article.Header = "something";
             IndexedObjectsObserver observer = new IndexedObjectsObserver(_repository2.Object);
-            await observer.OnUpdatedEntityAsync((ArticleIndexedValues)article);
+            await observer.OnUpdatedEntityAsync((VisibleArticleValues)article);
 
             _repository2.Verify(r => r.FoundWords.UpdateRangeAsync(It.IsNotNull<IEnumerable<FoundWord>>()));
             _repository2.Verify(r => r.FoundWords.DeleteRangeAsync(It.IsNotNull<IEnumerable<FoundWord>>()));
@@ -62,7 +62,7 @@ namespace Services.UnitTests.Indexing
                 .Returns<IEnumerable<FoundWord>>(null);
 
             IndexObject indexObject = new IndexObject(_repository.Object);
-            List<FoundWord> oldFoundWords = indexObject.Index((ArticleIndexedValues)article);
+            List<FoundWord> oldFoundWords = indexObject.Index((VisibleArticleValues)article);
 
             var indexInfos = oldFoundWords.ElementAt(0).IndexInfos;
             foreach (var indexInfo in indexInfos)
@@ -75,7 +75,7 @@ namespace Services.UnitTests.Indexing
 
             article.Header = "something something";
             IndexedObjectsObserver observer = new IndexedObjectsObserver(_repository.Object);
-            await observer.OnUpdatedEntityAsync((ArticleIndexedValues)article);
+            await observer.OnUpdatedEntityAsync((VisibleArticleValues)article);
 
             _repository.Verify(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()), Times.AtLeast(2));
             _repository.Verify(r => r.IndexInfos.Find(It.IsAny<Func<IndexInfo, bool>>()));
@@ -92,7 +92,7 @@ namespace Services.UnitTests.Indexing
             _repository.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
                 .Returns<IEnumerable<FoundWord>>(null);
             IndexObject indexObject = new IndexObject(_repository.Object);
-            List<FoundWord> oldFoundWords = indexObject.Index((ArticleIndexedValues)article);
+            List<FoundWord> oldFoundWords = indexObject.Index((VisibleArticleValues)article);
 
             var indexInfos = oldFoundWords.ElementAt(0).IndexInfos;
             foreach (var indexInfo in indexInfos)
@@ -103,7 +103,7 @@ namespace Services.UnitTests.Indexing
             _repository.Setup(r => r.FoundWords.DeleteRangeAsync(It.IsAny<IEnumerable<FoundWord>>()));
 
             IndexedObjectsObserver observer = new IndexedObjectsObserver(_repository.Object);
-            await observer.OnDeletedEntityAsync((ArticleIndexedValues)article);
+            await observer.OnDeletedEntityAsync((VisibleArticleValues)article);
 
             _repository.Verify(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()));
             _repository.Verify(r => r.IndexInfos.Find(It.IsAny<Func<IndexInfo, bool>>()));
@@ -122,8 +122,8 @@ namespace Services.UnitTests.Indexing
                 .Returns<IEnumerable<FoundWord>>(null);
 
             IndexObject indexObject = new IndexObject(_repository.Object);
-            List<FoundWord> articleFoundWords = indexObject.Index((ArticleIndexedValues)article);
-            List<FoundWord> articleToDeleteFoundWords = indexObject.Index((ArticleIndexedValues)articleToDelete);
+            List<FoundWord> articleFoundWords = indexObject.Index((VisibleArticleValues)article);
+            List<FoundWord> articleToDeleteFoundWords = indexObject.Index((VisibleArticleValues)articleToDelete);
             articleToDeleteFoundWords.ElementAt(0).IndexInfos.Add(articleFoundWords.ElementAt(0).IndexInfos[0]);
             List<IndexInfo> indexInfos = new List<IndexInfo>();
             foreach (var foundWord in articleToDeleteFoundWords)
@@ -136,7 +136,7 @@ namespace Services.UnitTests.Indexing
             _repository.Setup(r => r.IndexInfos.DeleteRangeAsync(It.IsAny<IEnumerable<IndexInfo>>()));
 
             IndexedObjectsObserver observer = new IndexedObjectsObserver(_repository.Object);
-            await observer.OnDeletedEntityAsync((ArticleIndexedValues)articleToDelete);
+            await observer.OnDeletedEntityAsync((VisibleArticleValues)articleToDelete);
 
             _repository.Verify(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()), Times.Exactly(2));
             _repository.Verify(r => r.IndexInfos.Find(It.IsAny<Func<IndexInfo, bool>>()));

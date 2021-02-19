@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 using Repo.Interfaces;
-using Services.IndexedValues;
+using Services.VisibleValues;
 using Services.Interfaces.Indexing;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace Services.Implementation.Indexing
             Repository = repository;
         }
 
-        public async Task OnNewEntityAsync(IndexedObject indexedObject)
+        public async Task OnNewEntityAsync(VisibleObjectValues indexedObject)
         {
             IndexObject indexObject = new IndexObject(Repository);
             List<FoundWord> foundWords = indexObject.Index(indexedObject);
@@ -33,7 +33,7 @@ namespace Services.Implementation.Indexing
             }
         }
 
-        public async Task OnUpdatedEntityAsync(IndexedObject indexedObject)
+        public async Task OnUpdatedEntityAsync(VisibleObjectValues indexedObject)
         {
             List<FoundWord> oldFoundWords = Repository.IndexInfos
                 .Find(ii => ii.EntityId == indexedObject.Id)
@@ -74,7 +74,7 @@ namespace Services.Implementation.Indexing
             }
         }
 
-        public async Task OnDeletedEntityAsync(IndexedObject indexedObject)
+        public async Task OnDeletedEntityAsync(VisibleObjectValues indexedObject)
         {
             List<FoundWord> foundWords = Repository.IndexInfos
                 .Find(ii => ii.EntityId == indexedObject.Id)

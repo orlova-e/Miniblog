@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 using Repo.Interfaces;
-using Services.IndexedValues;
+using Services.VisibleValues;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace Services.Implementation.Indexing
 {
     public class IndexObject
     {
-        private IndexedObject IndexedObject { get; set; }
+        private VisibleObjectValues IndexedObject { get; set; }
         private List<FoundWord> FoundWords { get; set; }
         private IRepository Repository { get; }
         public IndexObject(IRepository repository)
@@ -18,7 +18,7 @@ namespace Services.Implementation.Indexing
             Repository = repository;
         }
 
-        public List<FoundWord> Index(IndexedObject indexedObject)
+        public List<FoundWord> Index(VisibleObjectValues indexedObject)
         {
             IndexedObject = indexedObject;
             FoundWords = new List<FoundWord>();
