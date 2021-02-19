@@ -14,10 +14,10 @@ namespace Services.Implementation
     {
         public IRepository Repository { get; private set; }
         public IUserService UserService { get; private set; }
-        public IIndexedObjectsObserver IndexedObjectsObserver { get; }
+        public IVisibleObjectsObserver IndexedObjectsObserver { get; }
         public ArticleService(IRepository repository,
             IUserService userService,
-            IIndexedObjectsObserver indexedObjectsObserver)
+            IVisibleObjectsObserver indexedObjectsObserver)
         {
             Repository = repository;
             UserService = userService;
@@ -68,7 +68,7 @@ namespace Services.Implementation
 
             await Repository.Articles.CreateAsync(article);
             article = Repository.Articles.Find(a => a.Link == article.Link).FirstOrDefault();
-            await IndexedObjectsObserver.OnNewEntityAsync((VisibleArticleValues)article);
+            await IndexedObjectsObserver.CheckNewEntityAsync((VisibleArticleValues)article);
             return article;
         }
 
@@ -84,7 +84,7 @@ namespace Services.Implementation
         {
             Article article = await Repository.Articles.GetByIdAsync(articleId);
             await Repository.Articles.DeleteAsync(articleId);
-            await IndexedObjectsObserver.OnDeletedEntityAsync((VisibleArticleValues)article);
+            await IndexedObjectsObserver.CheckDeletedEntityAsync((VisibleArticleValues)article);
         }
 
         public async Task UpdateArticleAsync(Article article, ArticleData articleData)
@@ -104,7 +104,7 @@ namespace Services.Implementation
 
             await Repository.Articles.UpdateAsync(updated);
             updated = await Repository.Articles.GetByIdAsync(article.Id);
-            await IndexedObjectsObserver.OnUpdatedEntityAsync((VisibleArticleValues)updated);
+            await IndexedObjectsObserver.CheckUpdatedEntityAsync((VisibleArticleValues)updated);
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Services.UnitTests.Indexing
 
             article.Header = "something";
             IndexedObjectsObserver observer = new IndexedObjectsObserver(_repository2.Object);
-            await observer.OnUpdatedEntityAsync((VisibleArticleValues)article);
+            await observer.CheckUpdatedEntityAsync((VisibleArticleValues)article);
 
             _repository2.Verify(r => r.FoundWords.UpdateRangeAsync(It.IsNotNull<IEnumerable<FoundWord>>()));
             _repository2.Verify(r => r.FoundWords.DeleteRangeAsync(It.IsNotNull<IEnumerable<FoundWord>>()));
@@ -75,7 +75,7 @@ namespace Services.UnitTests.Indexing
 
             article.Header = "something something";
             IndexedObjectsObserver observer = new IndexedObjectsObserver(_repository.Object);
-            await observer.OnUpdatedEntityAsync((VisibleArticleValues)article);
+            await observer.CheckUpdatedEntityAsync((VisibleArticleValues)article);
 
             _repository.Verify(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()), Times.AtLeast(2));
             _repository.Verify(r => r.IndexInfos.Find(It.IsAny<Func<IndexInfo, bool>>()));
@@ -103,7 +103,7 @@ namespace Services.UnitTests.Indexing
             _repository.Setup(r => r.FoundWords.DeleteRangeAsync(It.IsAny<IEnumerable<FoundWord>>()));
 
             IndexedObjectsObserver observer = new IndexedObjectsObserver(_repository.Object);
-            await observer.OnDeletedEntityAsync((VisibleArticleValues)article);
+            await observer.CheckDeletedEntityAsync((VisibleArticleValues)article);
 
             _repository.Verify(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()));
             _repository.Verify(r => r.IndexInfos.Find(It.IsAny<Func<IndexInfo, bool>>()));
@@ -136,7 +136,7 @@ namespace Services.UnitTests.Indexing
             _repository.Setup(r => r.IndexInfos.DeleteRangeAsync(It.IsAny<IEnumerable<IndexInfo>>()));
 
             IndexedObjectsObserver observer = new IndexedObjectsObserver(_repository.Object);
-            await observer.OnDeletedEntityAsync((VisibleArticleValues)articleToDelete);
+            await observer.CheckDeletedEntityAsync((VisibleArticleValues)articleToDelete);
 
             _repository.Verify(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()), Times.Exactly(2));
             _repository.Verify(r => r.IndexInfos.Find(It.IsAny<Func<IndexInfo, bool>>()));

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Services.Implementation.Indexing
 {
-    public class IndexedObjectsObserver : IIndexedObjectsObserver
+    public class IndexedObjectsObserver : IVisibleObjectsObserver
     {
         private IRepository Repository { get; }
         public IndexedObjectsObserver(IRepository repository)
@@ -16,10 +16,10 @@ namespace Services.Implementation.Indexing
             Repository = repository;
         }
 
-        public async Task OnNewEntityAsync(VisibleObjectValues indexedObject)
+        public async Task CheckNewEntityAsync(VisibleObjectValues visibleValues)
         {
             IndexObject indexObject = new IndexObject(Repository);
-            List<FoundWord> foundWords = indexObject.Index(indexedObject);
+            List<FoundWord> foundWords = indexObject.Index(visibleValues);
             foreach (var foundword in foundWords)
             {
                 if (Repository.FoundWords.Find(fw => fw.Word == foundword.Word).Any())
@@ -33,15 +33,15 @@ namespace Services.Implementation.Indexing
             }
         }
 
-        public async Task OnUpdatedEntityAsync(VisibleObjectValues indexedObject)
+        public async Task CheckUpdatedEntityAsync(VisibleObjectValues visibleValues)
         {
             List<FoundWord> oldFoundWords = Repository.IndexInfos
-                .Find(ii => ii.EntityId == indexedObject.Id)
+                .Find(ii => ii.EntityId == visibleValues.Id)
                 .Select(ii => ii.FoundWord)
                 .ToList();
 
             IndexObject indexObject = new IndexObject(Repository);
-            List<FoundWord> foundWords = indexObject.Index(indexedObject);
+            List<FoundWord> foundWords = indexObject.Index(visibleValues);
 
             var newFoundWords = foundWords.ExceptBy(f => f.Word, oldFoundWords);
 
@@ -57,13 +57,13 @@ namespace Services.Implementation.Indexing
 
             var excludedIndexInfos = excludedFoundWords
                 .SelectMany(f => f.IndexInfos)
-                .Where(i => i.EntityId != indexedObject.Id);
+                .Where(i => i.EntityId != visibleValues.Id);
 
             if (excludedIndexInfos.Any())
             {
                 excludedIndexInfos = excludedFoundWords
                     .SelectMany(f => f.IndexInfos)
-                    .Where(i => i.EntityId == indexedObject.Id);
+                    .Where(i => i.EntityId == visibleValues.Id);
 
                 if (excludedIndexInfos.Any())
                     await Repository.IndexInfos.DeleteRangeAsync(excludedIndexInfos);
@@ -74,17 +74,17 @@ namespace Services.Implementation.Indexing
             }
         }
 
-        public async Task OnDeletedEntityAsync(VisibleObjectValues indexedObject)
+        public async Task CheckDeletedEntityAsync(VisibleObjectValues visibleValues)
         {
             List<FoundWord> foundWords = Repository.IndexInfos
-                .Find(ii => ii.EntityId == indexedObject.Id)
+                .Find(ii => ii.EntityId == visibleValues.Id)
                 .Select(ii => ii.FoundWord)
                 .Distinct()
                 .ToList();
 
             var leftWords = (from foundWord in foundWords
                              from indexInfo in foundWord.IndexInfos
-                             where indexInfo.EntityId != indexedObject.Id
+                             where indexInfo.EntityId != visibleValues.Id
                              select foundWord)?
                             .Distinct();
 
@@ -95,7 +95,7 @@ namespace Services.Implementation.Indexing
 
             var indexInfosToDelete = leftWords
                 .SelectMany(f => f.IndexInfos)
-                .Where(i => i.EntityId == indexedObject.Id);
+                .Where(i => i.EntityId == visibleValues.Id);
 
             if (indexInfosToDelete.Any())
                 await Repository.IndexInfos.DeleteRangeAsync(indexInfosToDelete);

@@ -38,7 +38,7 @@ namespace Services
 
         private static IServiceCollection AddIndexedObjectsObserver(this IServiceCollection services)
         {
-            services.AddScoped<IIndexedObjectsObserver, IndexedObjectsObserver>();
+            services.AddScoped<IVisibleObjectsObserver, IndexedObjectsObserver>();
             return services;
         }
 
