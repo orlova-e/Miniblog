@@ -8,6 +8,7 @@ namespace Repo.Implementation
     {
         public MiniblogDb Db { get; private set; }
 
+        IPlainRepository<Entity> entities;
         IPlainRepository<User> users;
         IPlainRepository<Article> articles;
         IPlainRepository<Comment> comments;
@@ -32,6 +33,15 @@ namespace Repo.Implementation
         public Repository(MiniblogDb miniblogDb)
         {
             Db = miniblogDb;
+        }
+        public IPlainRepository<Entity> Entities
+        {
+            get
+            {
+                if (entities == null)
+                    entities = new EntityRepository(Db);
+                return entities;
+            }
         }
         public IPlainRepository<User> Users
         {

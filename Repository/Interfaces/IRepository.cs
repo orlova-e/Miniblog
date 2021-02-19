@@ -8,6 +8,7 @@ namespace Repo.Interfaces
     /// </summary>
     public interface IRepository : IDisposable
     {
+        IPlainRepository<Entity> Entities { get; }
         IPlainRepository<User> Users { get; }
         IPlainRepository<Article> Articles { get; }
         IPlainRepository<Comment> Comments { get; }
