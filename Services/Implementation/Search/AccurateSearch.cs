@@ -58,7 +58,7 @@ namespace Services.Implementation.Search
                 User => new List<Func<T, bool>>
                 {
                     _ => (_ as User).Username.Contains(query),
-                    _ => (_ as User).Description.Contains(query)
+                    _ => (_ as User).Description?.Contains(query) ?? false
                 },
                 Article => new List<Func<T, bool>>
                 {
@@ -66,6 +66,7 @@ namespace Services.Implementation.Search
                 },
                 Comment => new List<Func<T, bool>>
                 {
+                    _ => (_ as Comment).Author.Username.Contains(query),
                     _ => (_ as Comment).Text.Contains(query)
                 },
                 Topic => new List<Func<T, bool>>
