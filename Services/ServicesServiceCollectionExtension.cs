@@ -4,7 +4,6 @@ using Repo;
 using Repo.Implementation;
 using Repo.Interfaces;
 using Services.Implementation;
-using Services.Implementation.Indexing;
 using Services.Interfaces;
 
 namespace Services
@@ -16,7 +15,7 @@ namespace Services
             services.AddRepository(dbConnectionString);
             services.AddArticleService();
             services.AddUserService();
-            services.AddIndexedObjectsObserver();
+            services.AddEntitesObserver();
             services.AddListCreator();
             services.AddTextService();
             services.AddRolesRepo();
@@ -35,9 +34,9 @@ namespace Services
             return services;
         }
 
-        private static IServiceCollection AddIndexedObjectsObserver(this IServiceCollection services)
+        private static IServiceCollection AddEntitesObserver(this IServiceCollection services)
         {
-            services.AddScoped<IVisibleObjectsObserver, IndexedObjectsObserver>();
+            services.AddScoped<IEntityObserver, EntityObserver>();
             return services;
         }
 

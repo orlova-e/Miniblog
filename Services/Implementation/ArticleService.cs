@@ -11,16 +11,16 @@ namespace Services.Implementation
 {
     public class ArticleService : IArticleService
     {
-        public IRepository Repository { get; private set; }
+        private IRepository Repository { get; }
         public IUserService UserService { get; private set; }
-        public IVisibleObjectsObserver IndexedObjectsObserver { get; }
+        private IEntityObserver EntityObserver { get; }
         public ArticleService(IRepository repository,
             IUserService userService,
-            IVisibleObjectsObserver indexedObjectsObserver)
+            IEntityObserver entityObserver)
         {
             Repository = repository;
             UserService = userService;
-            IndexedObjectsObserver = indexedObjectsObserver;
+            EntityObserver = entityObserver;
         }
 
         public async Task<Article> GetArticleByLinkAsync(string link)
@@ -67,14 +67,14 @@ namespace Services.Implementation
 
             await Repository.Articles.CreateAsync(article);
             article = Repository.Articles.Find(a => a.Link == article.Link).FirstOrDefault();
-            await IndexedObjectsObserver.CheckNewEntityAsync((VisibleArticleValues)article);
+            await EntityObserver.OnNewEntryAsync((VisibleArticleValues)article);
             return article;
         }
 
         public bool HasArticle(Func<Article, bool> predicate)
         {
             var article = Repository.Articles.Find(predicate).FirstOrDefault();
-            if (article == null)
+            if (article is null)
                 return false;
             return true;
         }
@@ -82,8 +82,11 @@ namespace Services.Implementation
         public async Task DeleteArticleAsync(Guid articleId)
         {
             Article article = await Repository.Articles.GetByIdAsync(articleId);
-            await Repository.Articles.DeleteAsync(articleId);
-            await IndexedObjectsObserver.CheckDeletedEntityAsync((VisibleArticleValues)article);
+            if (article is not null)
+            {
+                await EntityObserver.OnDeleteAsync((VisibleArticleValues)article);
+                await Repository.Articles.DeleteAsync(article.Id);
+            }
         }
 
         public async Task UpdateArticleAsync(Article article, ArticleData articleData)
@@ -103,7 +106,7 @@ namespace Services.Implementation
 
             await Repository.Articles.UpdateAsync(updated);
             updated = await Repository.Articles.GetByIdAsync(article.Id);
-            await IndexedObjectsObserver.CheckUpdatedEntityAsync((VisibleArticleValues)updated);
+            await EntityObserver.OnUpdateAsync((VisibleArticleValues)updated);
         }
     }
 }
