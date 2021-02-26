@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Repo.Interfaces;
 using Services.Interfaces;
+using Services.VisibleValues;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -16,20 +17,23 @@ namespace Web.Hubs
     public class ArticleHub : Hub
     {
         string DateTimePattern { get; }
-        public IRepository Repository { get; private set; }
-        public IArticleService ArticleService { get; private set; }
-        public ITextService TextService { get; private set; }
-        public IUserService UserService { get; private set; }
+        public IRepository Repository { get; }
+        public IArticleService ArticleService { get; }
+        public ITextService TextService { get; }
+        public IUserService UserService { get; }
+        public IEntityObserver EntityObserver { get; }
 
         public ArticleHub(IRepository repository,
             IArticleService articlesService,
             ITextService textService,
-            IUserService userService)
+            IUserService userService,
+            IEntityObserver entityObserver)
         {
             Repository = repository;
             ArticleService = articlesService;
             TextService = textService;
             UserService = userService;
+            EntityObserver = entityObserver;
             DateTimePattern = new DateTimeFormatInfo().RoundtripDtPattern();
         }
 
@@ -83,6 +87,8 @@ namespace Web.Hubs
                 int commentsNumber = Repository.Comments
                     .Find(c => c.ArticleId == article.Id)
                     .Count();
+
+                await EntityObserver.OnNewEntryAsync((VisibleCommentValues)comment);
                 await Clients.All.SendAsync("AddedComment", newComment, commentsNumber);        // to method from article's page
                 await Clients.All.SendAsync("CommentsCounted", article.Link, commentsNumber);   // to method from articles' list
             }
@@ -122,6 +128,7 @@ namespace Web.Hubs
                             UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),
                             Text = comment.Text
                         };
+                        await EntityObserver.OnUpdateAsync((VisibleCommentValues)comment);
                         await Clients.All.SendAsync("UpdatedComment", updatedComment);
                     }
                 }
@@ -166,10 +173,12 @@ namespace Web.Hubs
                         UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),
                         Text = comment.Text
                     };
+                    await EntityObserver.OnDeleteAsync((VisibleCommentValues)comment);
                     await Clients.All.SendAsync("DeletedComment", deletedComment);
                 }
             }
         }
+
         public async Task LikeArticle(string title)
         {
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
