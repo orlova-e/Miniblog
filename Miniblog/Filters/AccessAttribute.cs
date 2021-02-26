@@ -36,7 +36,7 @@ namespace Web.Filters
                 List<string> allowedActions = new List<string>();
                 foreach (var property in propertyInfos)
                 {
-                    if ((bool)property.GetValue(role))
+                    if (property.GetValue(role) is bool)
                     {
                         allowedActions.Add(property.Name);
                     }
