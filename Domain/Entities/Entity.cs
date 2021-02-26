@@ -8,5 +8,6 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public bool? Accepted { get; set; }
+        public string VerifiedMatches { get; set; }
     }
 }
