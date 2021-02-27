@@ -8,7 +8,11 @@ caption {
 }
 
 tr {
-   border: 1px solid lightgrey;
+    border-bottom: 1px solid rgb(230, 230, 230);
+}
+
+tbody tr:last-child {
+    border-bottom: none;
 }
 
 th {
@@ -17,34 +21,40 @@ th {
 
 th,
 td {
-    padding: 8px 6px;
-    width: 100px;
+    padding: 14px 6px;
     word-wrap: break-word;
     vertical-align: top;
 }
 
 thead th {
-    vertical-align: center;
-}
-
-thead,
-tbody tr:nth-child(even) {
-    background-color: rgb(247, 247, 247);
+    vertical-align: middle;
 }
 
 tbody tr:hover {
-    background-color: rgb(238, 238, 238);
+    background-color: rgb(247, 247, 247);
 }
 
-tr td:first-child {
-    min-width: 200px;
-    max-width: 200px;
-    text-align: left;
+.verify-result tr td:first-child {
+    min-width: 160px;
+    max-width: 160px;
 }
 
-th, td {
-    min-width: 35px;
-    width: 40px;
+.verify-result tr td:nth-child(2),
+.verify-result tr td:nth-child(3) {
+    width: auto;
+    min-width: 215px;
+}
+
+.verify-result th,
+.verify-result td {
     max-width: 170px;
 }
 
+table * {
+    font-size: 18px;
+}
+
+.verify-result a,
+.verify-result a:hover {
+    color: black;
+}
