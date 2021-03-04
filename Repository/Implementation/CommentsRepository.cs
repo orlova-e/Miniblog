@@ -29,15 +29,16 @@ namespace Repo.Implementation
         }
         public IEnumerable<Comment> Find(Func<Comment, bool> predicate)
         {
-            return Db.Comments.Include(c => c.Author)
+            return Db.Comments
+                .Include(c => c.Author)
+                .Include(c => c.Article)
+                .Include(c => c.Likes)
                 .Where(predicate)
                 .ToList();
         }
         public async Task<IEnumerable<Comment>> FindAsync(Func<Comment, bool> predicate)
         {
-            return await Task.Run(() => Db.Comments.Include(c => c.Author)
-                .Where(predicate)
-                .ToList());
+            return await Task.Run(() => Find(predicate));
         }
         public async Task CreateAsync(Comment entity)
         {
