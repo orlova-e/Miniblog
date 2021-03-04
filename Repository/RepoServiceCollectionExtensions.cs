@@ -16,7 +16,8 @@ namespace Repo
 
         private static IServiceCollection AddDatabase(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<MiniblogDb>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<MiniblogDb>(options => options.UseSqlServer(connectionString,
+                options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
             return services;
         }
     }
