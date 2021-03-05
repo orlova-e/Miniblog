@@ -38,6 +38,10 @@ namespace Web
             services.AddServicesLayer(connectionString);
             services.AddScoped<IConfigurationWriter>(x => ActivatorUtilities.CreateInstance<ConfigurationWriter>(x, ConfigurationFilePath));
 
+            services.AddMemoryCache();
+            services.AddScoped<ICommon, Common>();
+            services.AddScoped<IChangeCommon, Common>();
+
             services.AddScoped<IListPreparer, ListPreparer>();
             services.AddScoped<IListCreator, ListCreator>();
 
@@ -52,6 +56,11 @@ namespace Web
                     options.KeepAliveInterval = TimeSpan.FromMinutes(15);
                 })
                 .AddHubOptions<ArticleHub>(options =>
+                {
+                    options.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
+                    options.KeepAliveInterval = TimeSpan.FromMinutes(30);
+                })
+                .AddHubOptions<QueueHub>(options =>
                 {
                     options.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
                     options.KeepAliveInterval = TimeSpan.FromMinutes(30);
@@ -114,6 +123,7 @@ namespace Web
             {
                 endpoints.MapHub<ArticleHub>("/articlehub");
                 endpoints.MapHub<SubscriptionHub>("/subscription");
+                endpoints.MapHub<QueueHub>("/queuehub");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
