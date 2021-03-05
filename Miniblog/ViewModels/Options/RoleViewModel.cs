@@ -12,6 +12,7 @@ namespace Web.ViewModels.Options
         [Required]
         public string Discriminator { get; set; }
         public bool WriteArticles { get; set; }
+        public bool ModerateArticles { get; set; }
         public bool CreateTopics { get; set; }
         public bool ModerateTopics { get; set; }
         public bool CreateTags { get; set; }
@@ -27,6 +28,7 @@ namespace Web.ViewModels.Options
                 CreateTopics = role.CreateTopics,
                 CreateTags = role.CreateTags,
                 OverrideOwnArticle = role.OverrideOwnArticle,
+                ModerateArticles = false,
                 ModerateTopics = false,
                 ModerateTags = false
             };
@@ -40,6 +42,7 @@ namespace Web.ViewModels.Options
                 CreateTopics = extendedRole.CreateTopics,
                 CreateTags = extendedRole.CreateTags,
                 OverrideOwnArticle = extendedRole.OverrideOwnArticle,
+                ModerateArticles = extendedRole.ModerateArticles,
                 ModerateTopics = extendedRole.ModerateTopics,
                 ModerateTags = extendedRole.ModerateTags
             };
@@ -70,6 +73,7 @@ namespace Web.ViewModels.Options
             extendedRole.CreateTopics = roleViewModel.CreateTopics;
             extendedRole.CreateTags = roleViewModel.CreateTags;
             extendedRole.OverrideOwnArticle = roleViewModel.OverrideOwnArticle;
+            extendedRole.ModerateArticles = roleViewModel.ModerateArticles;
             extendedRole.ModerateTopics = roleViewModel.ModerateTopics;
             extendedRole.ModerateTags = roleViewModel.ModerateTags;
 
