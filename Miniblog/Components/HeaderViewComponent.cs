@@ -77,6 +77,7 @@ namespace Web.Components
 
             if (User.Identity.IsAuthenticated)
             {
+                pages.Add("Favourites", Url.Action("Favourites", "Articles"));
                 pages.Add("Account settings", Url.Action("Settings", "Account"));
                 if (role.Type is RoleType.Administrator)
                 {
