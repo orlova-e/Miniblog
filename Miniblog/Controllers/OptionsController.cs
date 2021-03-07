@@ -1,23 +1,22 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Enums;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Repo.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Web.App.Interfaces;
 using Web.Configuration;
+using Web.Filters;
 using Web.Infrastructure.Extensions;
 using Web.ViewModels.Options;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = nameof(RoleType.Administrator))]
+    [TypeFilter(typeof(AccessByRolesAttribute), Arguments = new object[] { new RoleType[] { RoleType.Administrator } })]
     public class OptionsController : Controller
     {
         public BlogOptions BlogOptions { get; private set; }
