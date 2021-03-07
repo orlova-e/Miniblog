@@ -1,18 +1,16 @@
 ﻿@using Domain.Entities.Enums
-@using System.Security.Claims
-@using Repo.Interfaces
+@using Services.Interfaces 
 
-@inject IOptionRepository<Role> rolesRepository
+@inject IUserService userService
 
 @{
-    RoleType type = (RoleType)Enum.Parse(typeof(RoleType), User.FindFirst(ClaimsIdentity.DefaultRoleClaimType).Value);
-    Role role = rolesRepository.Find(r => r.Type == type).FirstOrDefault();
+    ExtendedRole role = userService.FindByName(User.Identity.Name).Role as ExtendedRole;
 }
 
 <aside class="options-menu-bar">
 
     <ul class="blog-menu-list">
-        @if (type == RoleType.Administrator)
+        @if (role.Type is RoleType.Administrator)
         {
             <li class="blog-menu-list-point drop-menu actual-menu-list">
                 <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Main</h5></button>
@@ -32,47 +30,49 @@
 
             <ul id="" class="blog-links-list">
                 <li><a href="@Url.Action("Add", "Articles")">Add new</a></li>
-                <li><a href="#">Topics</a></li>
-                <li><a href="#">Tags</a></li>
-                <li><a href="#">Queue</a></li>
+                @if (role.ModerateArticles)
+                {
+                    <li><a href="@Url.Action("List", "Queue", new { queueList = "articles" })">Queue</a></li>
+                }
+                @if (role.ModerateTopics)
+                {
+                    <li><a href="@Url.Action("List", "Queue", new { queueList = "topics" })">Topics</a></li>
+                }
+                @if (role.ModerateTags)
+                {
+                    <li><a href="@Url.Action("List", "Queue", new { queueList = "tags" })">Tags</a></li>
+                }
+                @if (role.ModerateArticles)
+                {
+                    <li><a href="@Url.Action("List", "Queue", new { queueList = "series" })">Series</a></li>
+                }
             </ul>
         </li>
 
-        <li class="blog-menu-list-point drop-menu">
-            <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Pages</h5></button>
-
-            <ul id="" class="blog-links-list">
-                <li><a href="@Url.Action("Add", "Articles")">Add new</a></li>
-                <li><a href="#">Queue</a></li>
-                <li><a href="@Url.Action("List", "Articles", new { name = "pages"})">All pages</a></li>
-            </ul>
-        </li>
-
-        <li class="blog-menu-list-point drop-menu">
-            <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Comments</h5></button>
-
-            <ul id="" class="blog-links-list">
-                <li><a href="#">Queue</a></li>
-            </ul>
-        </li>
-
-        <li class="blog-menu-list-point drop-menu">
-            <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Users</h5></button>
-
-            <ul id="" class="blog-links-list">
-                <li><a href="#">Roles</a></li>
-                <li><a href="#">Blocked</a></li>
-            </ul>
-        </li>
-
-        @*<li class="blog-menu-list-point drop-menu">
-                <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Media files</h5></button>
+        @if (role.Type is RoleType.Administrator)
+        {
+            <li class="blog-menu-list-point drop-menu">
+                <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Pages</h5></button>
 
                 <ul id="" class="blog-links-list">
-                    <li><a href="#">All files</a></li>
-                    <li><a href="#">Content rules</a></li>
+                    <li><a href="@Url.Action("Add", "Articles")">Add new</a></li>
+                    <li><a href="@Url.Action("List", "Queue", new { queueList = "pages" })">Queue</a></li>
+                    <li><a href="@Url.Action("List", "Articles", new { name = "pages"})">All pages</a></li>
                 </ul>
-            </li>*@
+            </li>
+        }
+
+        <li class="blog-menu-list-point drop-menu">
+            <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Other</h5></button>
+
+            <ul id="" class="blog-links-list">
+                <li><a href="@Url.Action("List", "Queue", new { queueList = "users" })">Users</a></li>
+                @if (role.ModerateComments)
+                {
+                    <li><a href="@Url.Action("List", "Queue", new { queueList = "comments" })">Comments</a></li>
+                }
+            </ul>
+        </li>
     </ul>
 
 </aside>
