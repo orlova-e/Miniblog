@@ -52,6 +52,12 @@ namespace Repo.Implementation
         public async Task DeleteAsync(Guid id)
         {
             var user = await Db.Users.FindAsync(id);
+            IEnumerable<Article> articles = Db.Articles.Where(a => a.UserId == id);
+            foreach(var article in articles)
+            {
+                article.UserId = null;
+            }
+            Db.Articles.UpdateRange(articles);
             Db.Users.Remove(user);
             await Db.SaveChangesAsync();
         }

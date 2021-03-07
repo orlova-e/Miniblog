@@ -80,6 +80,16 @@ namespace Services.Implementation
             return user;
         }
 
+        public async Task DeleteUserAsync(Guid id)
+        {
+            User user = await repository.Users.GetByIdAsync(id);
+            if(user is not null)
+            {
+                await EntityObserver.OnDeleteAsync((VisibleUserValues)user);
+                await repository.Users.DeleteAsync(id);
+            }
+        }
+
         public string GetHash(string password)
         {
             byte[] pass = Encoding.UTF8.GetBytes(password);

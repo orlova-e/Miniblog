@@ -10,8 +10,6 @@ namespace Domain.Entities
     {
         [Required]
         public string Name { get; set; }
-        public Guid? AuthorId { get; set; }
-        public User Author { get; set; }
         public List<Article> Articles { get; set; }
         public Topic()
         {

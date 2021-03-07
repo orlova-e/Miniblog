@@ -55,7 +55,20 @@ namespace Repo
             modelBuilder.Entity<Article>()
                 .HasOne(a => a.User)
                 .WithMany(u => u.Articles)
-                .HasForeignKey(a => a.UserId);
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Article>()
+                .HasOne(a => a.Topic)
+                .WithMany(t => t.Articles)
+                .HasForeignKey(a => a.TopicId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Article>()
+                .HasOne(a => a.Series)
+                .WithMany(t => t.Articles)
+                .HasForeignKey(a => a.SeriesId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<UserBookmark>()
                 .HasKey(k => new { k.UserId, k.ArticleId });
@@ -94,13 +107,13 @@ namespace Repo
                 .HasOne(a => a.Article)
                 .WithMany(at => at.ArticleTags)
                 .HasForeignKey(k => k.ArticleId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ArticleTag>()
                 .HasOne(at => at.Tag)
                 .WithMany(t => t.ArticleTags)
                 .HasForeignKey(fk => fk.TagId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Comment>()
                 .HasOne(c => c.Author)
@@ -141,7 +154,6 @@ namespace Repo
                 .HasIndex(f => f.Word)
                 .IsUnique();
 
-            //ArticleOptions
             modelBuilder.Entity<ArticleOptions>()
                 .HasOne(u => u.Article)
                 .WithOne(ar => ar.DisplayOptions)
@@ -153,10 +165,6 @@ namespace Repo
                 v => v.ToString(),
                 v => (ColorTheme)Enum.Parse(typeof(ColorTheme), v));
 
-            modelBuilder.Entity<Topic>()
-                .HasOne(t => t.Author)
-                .WithMany(u => u.Topics)
-                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Role)

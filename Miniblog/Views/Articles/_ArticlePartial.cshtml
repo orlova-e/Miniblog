@@ -26,12 +26,22 @@
                     <li class="article-info-user">
                         @if (Model.Article.DisplayOptions.Username)
                         {
-                            <a href="@Url.Action("Account", "Users", new { username = Model.Article.User.Username })">
+                            if(Model.Article.User is not null)
+                            {
+                                <a href="@Url.Action("Account", "Users", new { username = Model.Article.User?.Username })">
+                                    <div class="user-info-container">
+                                        <avatar user="Model.Article.User" />
+                                        <span>@Model.Article.User.Username</span>
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
                                 <div class="user-info-container">
-                                    <avatar user="Model.Article.User"/>
-                                    <span>@Model.Article.User.Username</span>
+                                    <avatar user="Model.Article.User" />
+                                    <span><i>deleted</i></span>
                                 </div>
-                            </a>
+                            }
                         }
                         @if (Model.Article.DisplayOptions.DateAndTime)
                         {
@@ -40,50 +50,50 @@
                             </a>
                             <div class="time-info-utc time-info-created">@Model.Article.DateTime.ToString("O")</div>
                         }
-                    </li>
-                    <li>
-                        @if (Model.Article.DisplayOptions.Likes)
-                        {
-                            <img src="/img/buttons/heart.png" alt="likes" height="20px" width="20px">
-                            <span id="articleLikesInfo">@Model.Article.Likes.Count</span>
-                        }
-                        @if (Model.Article.DisplayOptions.Bookmarks)
-                        {
-                            <img src="/img/ico/bookmark5.png" alt="bookmarks" height="20px" width="20px">
-                            <span id="articleBookmarksInfo">@Model.Article.Bookmarks.Count</span>
-                        }
-                        @if (Model.Article.DisplayOptions.Comments)
-                        {
-                            <img src="/img/buttons/chat-2.png" alt="comments" height="18px" width="18px">
-                            <span id="articleCommentsInfo">@Model.Article.Comments.Count</span>
-                        }
-                        @if (Model.Article.DisplayOptions.Topic)
-                        {
-                            <span>Topic: </span><a href="#">@(Model.Article.Topic?.Name ?? "no topic")</a>
-                        }
-                        @if (Model.Article.DisplayOptions.Series)
-                        {
-                            <span>Series: </span><a href="#">@(Model.Article.Series?.Name ?? "no series")</a>
-                        }
-                    </li>
-                    @if (Model.Article.DisplayOptions.Tags)
-                    {
+                        </li>
                         <li>
-                            Tags:
-                            @{
-                                List<string> tags = Model.Article.ArticleTags.Select(t => t.Tag).Select(t => t.Name).ToList();
-                                for (int i = 0; i < tags.Count; i++)
-                                {
-                                    <a href="#">@tags[i]</a>
-                                }
-                                if (tags.Count == 0)
-                                {
-                                    <span>no tags</span>
-                                }
+                            @if (Model.Article.DisplayOptions.Likes)
+                            {
+                                <img src="/img/buttons/heart.png" alt="likes" height="20px" width="20px">
+                                <span id="articleLikesInfo">@Model.Article.Likes.Count</span>
+                            }
+                            @if (Model.Article.DisplayOptions.Bookmarks)
+                            {
+                                <img src="/img/ico/bookmark5.png" alt="bookmarks" height="20px" width="20px">
+                                <span id="articleBookmarksInfo">@Model.Article.Bookmarks.Count</span>
+                            }
+                            @if (Model.Article.DisplayOptions.Comments)
+                            {
+                                <img src="/img/buttons/chat-2.png" alt="comments" height="18px" width="18px">
+                                <span id="articleCommentsInfo">@Model.Article.Comments.Count</span>
+                            }
+                            @if (Model.Article.DisplayOptions.Topic)
+                            {
+                                <span>Topic: </span><a href="#">@(Model.Article.Topic?.Name ?? "no topic")</a>
+                            }
+                            @if (Model.Article.DisplayOptions.Series)
+                            {
+                                <span>Series: </span><a href="#">@(Model.Article.Series?.Name ?? "no series")</a>
                             }
                         </li>
-                    }
-                </ul>
+                        @if (Model.Article.DisplayOptions.Tags)
+                        {
+                            <li>
+                                Tags:
+                                @{
+                                    List<string> tags = Model.Article.ArticleTags.Select(t => t.Tag).Select(t => t.Name).ToList();
+                                    for (int i = 0; i < tags.Count; i++)
+                                    {
+                                        <a href="#">@tags[i]</a>
+                                    }
+                                    if (tags.Count == 0)
+                                    {
+                                        <span>no tags</span>
+                                    }
+                                }
+                            </li>
+                        }
+                    </ul>
             </div>
             <div class="blog-text">
                 @{

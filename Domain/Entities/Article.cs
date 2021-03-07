@@ -9,7 +9,7 @@ namespace Domain.Entities
     [Table("Articles")]
     public class Article : Entity
     {
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
         public User User { get; set; }
         [Required, StringLength(200, ErrorMessage = "Header's maximum length is 50 characters")]
         public string Header { get; set; }

@@ -28,17 +28,13 @@ namespace Domain.Entities
         public List<UserFavourite> Liked { get; set; }
         public List<UserBookmark> Bookmarked { get; set; }
         public List<CommentLikes> LikedComments { get; set; }
-        public List<Topic> Topics { get; set; }
-        public List<Tag> Tags { get; set; }
         public User()
         {
             Subscribers = new List<User>();
             Comments = new List<Comment>();
             Articles = new List<Article>();
-            Topics = new List<Topic>();
             Liked = new List<UserFavourite>();
             Bookmarked = new List<UserBookmark>();
-            Tags = new List<Tag>();
         }
     }
 }

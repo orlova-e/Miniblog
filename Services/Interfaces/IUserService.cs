@@ -28,6 +28,7 @@ namespace Services.Interfaces
         /// <returns>New user object</returns>
         Task<User> CreateIntoDbAsync(Account account);
         Task<User> UpdateAsync(User user, string newPassword = null);
+        Task DeleteUserAsync(Guid id);
         User GetFromDb(Account account);
         User GetUserFromDb(Func<User, bool> predicate);
         Task<User> GetFromDbAsync(Guid id);

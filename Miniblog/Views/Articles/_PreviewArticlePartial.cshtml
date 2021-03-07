@@ -1,13 +1,13 @@
 ﻿@using Domain.Entities
-@using Microsoft.Extensions.Options;
 @using Web.Configuration;
+@using Web.App.Interfaces 
 
-@inject IOptionsSnapshot<BlogOptions> optionsSnapshoot
+@inject ICommon common
 
 @model Article
 
 @{ 
-    ListOptions listOptions = optionsSnapshoot.Value.ListOptions;
+    ListOptions listOptions = common.Options.ListOptions;
     ArticleOptions articleOptions = Model.DisplayOptions;
 
     if (listOptions.OverrideForUserArticle)
@@ -26,22 +26,32 @@
             <ul class="article-info clearfix">
                 @if (articleOptions.Username)
                 {
-                    <li class="article-info-user">
-                        <a href="@Url.Action("Account", "Users", new { username = Model.User.Username })">
+                    if (Model.User is not null)
+                    {
+                        <li class="article-info-user">
+                            <a href="@Url.Action("Account", "Users", new { username = Model.User.Username })">
+                                <div class="user-info-container">
+                                    <avatar user="Model.User"/>
+                                    <span>@Model.User.Username</span>
+                                </div>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="article-info-user">
                             <div class="user-info-container">
                                 <avatar user="Model.User"/>
-                                <span>@Model.User.Username</span>
+                                <span><i>deleted</i></span>
                             </div>
-                        </a>
-                    </li>
-
-                    @*<li><a href="@Url.Action("User", "Users", new { username = Model.User.Username })">@Model.User.Username</a></li>*@
+                        </li>
+                    }
                 }
                 @if (articleOptions.DateAndTime)
                 {
                     <li class="article-datetime"><a href="#">@Model.DateTime.ToString("g")</a></li>
                 }
-                
+
                 @if (articleOptions.Likes)
                 {
                     <li>
@@ -89,7 +99,7 @@
                                     <a href="#">@tags[i]</a>
                                 }
                             }
-                            if(counter == 0)
+                            if (counter == 0)
                             {
                                 <span>no tags</span>
                             }
