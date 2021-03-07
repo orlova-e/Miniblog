@@ -1,20 +1,11 @@
-﻿@using Web.Configuration
-@using Microsoft.Extensions.Options
-@using Domain.Entities.Enums
-@using Domain.Entities
-@using System.Security.Claims
-@using Repo.Interfaces
-
-@inject IOptionsSnapshot<BlogOptions> optionsSnapshoot
-@inject IOptionRepository<Role> rolesRepo
+﻿@inject ICommon common
 
 @model ArticleData
 
 @{
-    BlogOptions blogOptions = optionsSnapshoot.Value;
-    RoleType type = (RoleType)Enum.Parse(typeof(RoleType), User.FindFirst(ClaimsIdentity.DefaultRoleClaimType).Value);
-    Role role = rolesRepo.Find(r => r.Type == type).FirstOrDefault();
+    BlogOptions blogOptions = common.Options;
     WebsiteOptions websiteOptions = blogOptions.WebsiteOptions;
+    Role role = common.GetRole(User);
 }
 
 <div class="blog-container">
@@ -60,7 +51,7 @@
 
                             <h6>Display as</h6>
 
-                            @if ((bool)(role as ExtendedRole)?.OverrideMenu)
+                            @if ((role as ExtendedRole)?.OverrideMenu ?? false)
                             {
                                 @foreach (var entryType in Enum.GetValues(typeof(EntryType)))
                                 {
@@ -128,7 +119,7 @@
                                 Hidden
                             </label>
 
-                            @if ((role as ExtendedRole).OverrideMenu)
+                            @if ((role as ExtendedRole)?.OverrideMenu ?? false)
                             {
                                 Html.CheckBoxFor(model => model.MenuVisibility);
                                 Html.LabelFor(model => model.MenuVisibility);
