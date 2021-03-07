@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Repo.Interfaces;
 using Services.Interfaces;
-using Services.VisibleValues;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -16,167 +15,95 @@ namespace Web.Hubs
     [Authorize]
     public class ArticleHub : Hub
     {
-        string DateTimePattern { get; }
+        readonly string DateTimePattern = new DateTimeFormatInfo().RoundtripDtPattern();
         public IRepository Repository { get; }
         public IArticleService ArticleService { get; }
-        public ITextService TextService { get; }
         public IUserService UserService { get; }
-        public IEntityObserver EntityObserver { get; }
+        public ICommentsService CommentsService { get; }
 
         public ArticleHub(IRepository repository,
             IArticleService articlesService,
-            ITextService textService,
             IUserService userService,
-            IEntityObserver entityObserver)
+            ICommentsService commentsService)
         {
             Repository = repository;
             ArticleService = articlesService;
-            TextService = textService;
             UserService = userService;
-            EntityObserver = entityObserver;
-            DateTimePattern = new DateTimeFormatInfo().RoundtripDtPattern();
+            CommentsService = commentsService;
         }
 
-        public async Task AddComment(string title, string text, string parentId = null)
+        public async Task AddComment(string title, string text, Guid? parentId = null)
         {
-            Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await UserService.GetFromDbAsync(userId);
-            if (!(user?.Role?.WriteComments ?? false))
-                return;
+            Comment comment = await CommentsService.AddCommentAsync(Context.UserIdentifier, title, text, parentId);
 
-            text = TextService.GetPrepared(text);
+            string avatar = null;
+            if (comment.Author.Avatar is not null)
+                avatar = Convert.ToBase64String(comment.Author.Avatar);
 
-            Article article = await ArticleService.GetArticleByLinkAsync(title);
-
-            if (article != null)
+            CommentViewModel newComment = new CommentViewModel
             {
-                Comment parentComment = null;
-                if (Guid.TryParse(parentId, out Guid parentGuid))
-                {
-                    parentComment = await Repository.Comments.GetByIdAsync(parentGuid);
-                    if (!article.Comments.Contains(parentComment))
-                        return;
-                }
-                Comment comment = new Comment()
-                {
-                    Id = Guid.NewGuid(),
-                    Author = user,
-                    Article = article,
-                    Text = text,
-                    DateTime = DateTimeOffset.UtcNow,
-                    Parent = parentComment
-                };
-                if (parentComment != null)
-                    parentComment.Children.Add(comment);
-                await Repository.Comments.CreateAsync(comment);
-                if (parentComment != null)
-                    await Repository.Comments.UpdateAsync(parentComment);
-                string avatar = null;
-                if (comment.Author.Avatar != null)
-                    avatar = Convert.ToBase64String(comment.Author.Avatar);
-                CommentViewModel newComment = new CommentViewModel
-                {
-                    ArticleId = comment.ArticleId.ToString(),
-                    CommentId = comment.Id.ToString(),
-                    ParentId = comment.ParentId.ToString(),
-                    Author = comment.Author.Username,
-                    Avatar = avatar,
-                    DateTime = comment.DateTime.ToString(DateTimePattern),
-                    Text = text
-                };
-                int commentsNumber = Repository.Comments
-                    .Find(c => c.ArticleId == article.Id)
-                    .Count();
+                ArticleId = comment.ArticleId.ToString(),
+                CommentId = comment.Id.ToString(),
+                ParentId = comment.ParentId.ToString(),
+                Author = comment.Author.Username,
+                Avatar = avatar,
+                DateTime = comment.DateTime.ToString(DateTimePattern),
+                Text = text
+            };
 
-                await EntityObserver.OnNewEntryAsync((VisibleCommentValues)comment);
-                await Clients.All.SendAsync("AddedComment", newComment, commentsNumber);        // to method from article's page
-                await Clients.All.SendAsync("CommentsCounted", article.Link, commentsNumber);   // to method from articles' list
-            }
+            int commentsNumber = Repository.Comments
+                .Find(c => c.ArticleId == comment.ArticleId)
+                .Count();
+
+            await Clients.All.SendAsync("AddedComment", newComment, commentsNumber);
+            //await Clients.All.SendAsync("CommentsCounted", article.Link, commentsNumber);   // to method from articles' list
         }
 
-        public async Task UpdateComment(string title, string text, string commentId)
+        public async Task UpdateComment(string title, string text, Guid commentId)
         {
-            Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await UserService.GetFromDbAsync(userId);
-            if (!(user?.Role?.WriteComments ?? false))
-                return;
+            Comment comment = await CommentsService.UpdateCommentAsync(Context.UserIdentifier, text, commentId);
 
-            Article article = await ArticleService.GetArticleByLinkAsync(title);
+            string avatar = null;
+            if (comment.Author.Avatar is not null)
+                avatar = Convert.ToBase64String(comment.Author.Avatar);
 
-            if (article != null)
+            CommentViewModel updatedComment = new CommentViewModel
             {
-                if (Guid.TryParse(commentId, out Guid commentGuid))
-                {
-                    Comment comment = await Repository.Comments.GetByIdAsync(commentGuid);
-                    if (userId.Equals(comment.AuthorId) && !comment.IsDeleted && article.Comments.Contains(comment))
-                    {
-                        text = TextService.GetPrepared(text);
-                        comment.Text = text;
-                        comment.UpdatedDateTime = DateTimeOffset.UtcNow;
-                        await Repository.Comments.UpdateAsync(comment);
-                        string avatar = null;
-                        if (comment.Author.Avatar != null)
-                            avatar = Convert.ToBase64String(comment.Author.Avatar);
-                        CommentViewModel updatedComment = new CommentViewModel
-                        {
-                            ArticleId = comment.ArticleId.ToString(),
-                            CommentId = comment.Id.ToString(),
-                            ParentId = comment.ParentId.ToString(),
-                            Author = comment.Author.Username,
-                            Avatar = avatar,
-                            DateTime = comment.DateTime.ToString(DateTimePattern),
-                            UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),
-                            Text = comment.Text
-                        };
-                        await EntityObserver.OnUpdateAsync((VisibleCommentValues)comment);
-                        await Clients.All.SendAsync("UpdatedComment", updatedComment);
-                    }
-                }
-            }
+                ArticleId = comment.ArticleId.ToString(),
+                CommentId = comment.Id.ToString(),
+                ParentId = comment.ParentId.ToString(),
+                Author = comment.Author.Username,
+                Avatar = avatar,
+                DateTime = comment.DateTime.ToString(DateTimePattern),
+                UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),
+                Text = comment.Text
+            };
+
+            await Clients.All.SendAsync("UpdatedComment", updatedComment);
         }
 
-        public async Task DeleteComment(string title, string commentId)
+        public async Task DeleteComment(string title, Guid commentId)
         {
-            Article article = await ArticleService.GetArticleByLinkAsync(title);
+            await CommentsService.DeleteCommentAsync(Context.UserIdentifier, commentId);
+            Comment comment = await Repository.Comments.GetByIdAsync(commentId);
 
-            Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await UserService.GetFromDbAsync(userId);
+            string avatar = null;
+            if (comment.Author.Avatar != null)
+                avatar = Convert.ToBase64String(comment.Author.Avatar);
 
-            if (user == null || article == null || article.User == null)
-                return;
-
-            if ((!(user.Role?.WriteComments ?? default)
-                && !article.User.Username.Equals(user.Username))
-                || (!(user.Role as ExtendedRole)?.ModerateComments ?? default))
-                return;
-
-            if (Guid.TryParse(commentId, out Guid commentGuid))
+            CommentViewModel deletedComment = new CommentViewModel
             {
-                Comment comment = await Repository.Comments.GetByIdAsync(commentGuid);
-                if (comment != null && !comment.IsDeleted && article.Comments.Contains(comment))
-                {
-                    comment.IsDeleted = true;
-                    comment.Text = string.Empty;
-                    comment.UpdatedDateTime = DateTimeOffset.UtcNow;
-                    await Repository.Comments.UpdateAsync(comment);
-                    string avatar = null;
-                    if (comment.Author.Avatar != null)
-                        avatar = Convert.ToBase64String(comment.Author.Avatar);
-                    CommentViewModel deletedComment = new CommentViewModel
-                    {
-                        ArticleId = comment.ParentId.ToString(),
-                        CommentId = comment.Id.ToString(),
-                        ParentId = comment.ParentId.ToString(),
-                        Author = comment.Author.Username,
-                        Avatar = avatar,
-                        DateTime = comment.DateTime.ToString(DateTimePattern),
-                        UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),
-                        Text = comment.Text
-                    };
-                    await EntityObserver.OnDeleteAsync((VisibleCommentValues)comment);
-                    await Clients.All.SendAsync("DeletedComment", deletedComment);
-                }
-            }
+                ArticleId = comment.ParentId.ToString(),
+                CommentId = comment.Id.ToString(),
+                ParentId = comment.ParentId.ToString(),
+                Author = comment.Author.Username,
+                Avatar = avatar,
+                DateTime = comment.DateTime.ToString(DateTimePattern),
+                UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),
+                Text = comment.Text
+            };
+
+            await Clients.All.SendAsync("DeletedComment", deletedComment);
         }
 
         public async Task LikeArticle(string title)
@@ -229,32 +156,13 @@ namespace Web.Hubs
             }
         }
 
-        public async Task LikeComment(string commentId)
+        public async Task LikeComment(Guid commentId)
         {
-            Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await UserService.GetFromDbAsync(userId);
-            if (user == null)
-                return;
+            bool isLiked = await CommentsService.LikeComment(Context.UserIdentifier, commentId);
+            await Clients.User(Context.UserIdentifier).SendAsync("CommentLikeIsChanged", commentId, isLiked);
 
-            if (Guid.TryParse(commentId, out Guid commentGuid))
-            {
-                Comment comment = await Repository.Comments.GetByIdAsync(commentGuid);
-                if (comment is object)
-                {
-                    if (!await Repository.CommentLikes.ContainsAsync(commentGuid, userId) && !comment.IsDeleted)
-                    {
-                        await Repository.CommentLikes.AddForAsync(commentGuid, userId);
-                        await Clients.User(Context.UserIdentifier).SendAsync("CommentLikeIsChanged", commentId, true);
-                    }
-                    else
-                    {
-                        await Repository.CommentLikes.RemoveForAsync(commentGuid, userId);
-                        await Clients.User(Context.UserIdentifier).SendAsync("CommentLikeIsChanged", commentId, false);
-                    }
-                    int number = await Repository.CommentLikes.CountAsync(commentGuid);
-                    await Clients.All.SendAsync("CommentLikesCounted", commentId, number);
-                }
-            }
+            int number = await Repository.CommentLikes.CountAsync(commentId);
+            await Clients.All.SendAsync("CommentLikesCounted", commentId, number);
         }
     }
 }

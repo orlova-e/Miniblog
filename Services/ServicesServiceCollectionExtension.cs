@@ -15,6 +15,7 @@ namespace Services
             services.AddRepository(dbConnectionString);
             services.AddArticleService();
             services.AddUserService();
+            services.AddCommentsService();
             services.AddEntitesObserver();
             services.AddListCreator();
             services.AddTextService();
@@ -31,6 +32,12 @@ namespace Services
         private static IServiceCollection AddUserService(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
+            return services;
+        }
+        
+        private static IServiceCollection AddCommentsService(this IServiceCollection services)
+        {
+            services.AddScoped<ICommentsService, CommentsService>();
             return services;
         }
 
