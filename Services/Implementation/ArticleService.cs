@@ -12,14 +12,11 @@ namespace Services.Implementation
     public class ArticleService : IArticleService
     {
         private IRepository Repository { get; }
-        public IUserService UserService { get; private set; }
         private IEntityObserver EntityObserver { get; }
         public ArticleService(IRepository repository,
-            IUserService userService,
             IEntityObserver entityObserver)
         {
             Repository = repository;
-            UserService = userService;
             EntityObserver = entityObserver;
         }
 
