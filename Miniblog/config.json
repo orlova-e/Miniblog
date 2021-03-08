@@ -9,8 +9,7 @@
     "ShowAuthors": true,
     "ShowTopics": true,
     "ShowSearchOption": true,
-    "ColorTheme": 2,
-    "WebsiteDateFormat": ""
+    "ColorTheme": 2
   },
   "ListOptions": {
     "OverrideForUserArticle": true,
