@@ -66,7 +66,7 @@ namespace Services.Implementation.Search
                 },
                 Comment => new List<Func<T, bool>>
                 {
-                    _ => (_ as Comment).Author.Username.Contains(query),
+                    _ => (_ as Comment).Author?.Username.Contains(query) ?? false,
                     _ => (_ as Comment).Text.Contains(query)
                 },
                 Topic => new List<Func<T, bool>>

@@ -60,7 +60,7 @@ namespace Web
                     options.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
                     options.KeepAliveInterval = TimeSpan.FromMinutes(30);
                 })
-                .AddHubOptions<QueueHub>(options =>
+                .AddHubOptions<VerificationHub>(options =>
                 {
                     options.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
                     options.KeepAliveInterval = TimeSpan.FromMinutes(30);
@@ -123,7 +123,7 @@ namespace Web
             {
                 endpoints.MapHub<ArticleHub>("/articlehub");
                 endpoints.MapHub<SubscriptionHub>("/subscription");
-                endpoints.MapHub<QueueHub>("/queuehub");
+                endpoints.MapHub<VerificationHub>("/verificationhub");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

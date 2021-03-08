@@ -8,7 +8,7 @@ namespace Domain.Entities
     [Table("Comments")]
     public class Comment : Entity
     {
-        public Guid AuthorId { get; set; }
+        public Guid? AuthorId { get; set; }
         public User Author { get; set; }
         public Guid ArticleId { get; set; }
         public Article Article { get; set; }

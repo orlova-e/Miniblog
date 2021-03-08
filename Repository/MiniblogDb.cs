@@ -77,13 +77,13 @@ namespace Repo
                 .HasOne(u => u.User)
                 .WithMany(a => a.Bookmarked)
                 .HasForeignKey(ub => ub.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<UserBookmark>()
                 .HasOne(a => a.Article)
                 .WithMany(u => u.Bookmarks)
                 .HasForeignKey(ub => ub.ArticleId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<UserFavourite>()
                 .HasKey(k => new { k.UserId, k.ArticleId });
@@ -92,13 +92,13 @@ namespace Repo
                 .HasOne(a => a.User)
                 .WithMany(uf => uf.Liked)
                 .HasForeignKey(k => k.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<UserFavourite>()
                 .HasOne(uf => uf.Article)
                 .WithMany(a => a.Likes)
                 .HasForeignKey(uf => uf.ArticleId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ArticleTag>()
                 .HasKey(k => new { k.ArticleId, k.TagId });
@@ -118,7 +118,8 @@ namespace Repo
             modelBuilder.Entity<Comment>()
                 .HasOne(c => c.Author)
                 .WithMany(a => a.Comments)
-                .HasForeignKey(c => c.AuthorId);
+                .HasForeignKey(c => c.AuthorId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<CommentLikes>()
                 .HasKey(k => new { k.UserId, k.CommentId });
@@ -127,18 +128,13 @@ namespace Repo
                 .HasOne(cl => cl.User)
                 .WithMany(u => u.LikedComments)
                 .HasForeignKey(cl => cl.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CommentLikes>()
                 .HasOne(cl => cl.Comment)
                 .WithMany(c => c.Likes)
                 .HasForeignKey(cl => cl.CommentId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Comment>()
-                .HasOne(c => c.Author)
-                .WithMany(us => us.Comments)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Image>()
                 .HasOne(i => i.Article)
@@ -164,7 +160,6 @@ namespace Repo
                 .HasConversion(
                 v => v.ToString(),
                 v => (ColorTheme)Enum.Parse(typeof(ColorTheme), v));
-
 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Role)

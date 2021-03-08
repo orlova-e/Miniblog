@@ -37,7 +37,7 @@ namespace Web.Hubs
             Comment comment = await CommentsService.AddCommentAsync(Context.UserIdentifier, title, text, parentId);
 
             string avatar = null;
-            if (comment.Author.Avatar is not null)
+            if (comment.Author?.Avatar is not null)
                 avatar = Convert.ToBase64String(comment.Author.Avatar);
 
             CommentViewModel newComment = new CommentViewModel
@@ -45,7 +45,7 @@ namespace Web.Hubs
                 ArticleId = comment.ArticleId.ToString(),
                 CommentId = comment.Id.ToString(),
                 ParentId = comment.ParentId.ToString(),
-                Author = comment.Author.Username,
+                Author = comment.Author?.Username,
                 Avatar = avatar,
                 DateTime = comment.DateTime.ToString(DateTimePattern),
                 Text = text
@@ -64,7 +64,7 @@ namespace Web.Hubs
             Comment comment = await CommentsService.UpdateCommentAsync(Context.UserIdentifier, text, commentId);
 
             string avatar = null;
-            if (comment.Author.Avatar is not null)
+            if (comment.Author?.Avatar is not null)
                 avatar = Convert.ToBase64String(comment.Author.Avatar);
 
             CommentViewModel updatedComment = new CommentViewModel
@@ -72,7 +72,7 @@ namespace Web.Hubs
                 ArticleId = comment.ArticleId.ToString(),
                 CommentId = comment.Id.ToString(),
                 ParentId = comment.ParentId.ToString(),
-                Author = comment.Author.Username,
+                Author = comment.Author?.Username,
                 Avatar = avatar,
                 DateTime = comment.DateTime.ToString(DateTimePattern),
                 UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),
@@ -88,7 +88,7 @@ namespace Web.Hubs
             Comment comment = await Repository.Comments.GetByIdAsync(commentId);
 
             string avatar = null;
-            if (comment.Author.Avatar != null)
+            if (comment.Author?.Avatar is not null)
                 avatar = Convert.ToBase64String(comment.Author.Avatar);
 
             CommentViewModel deletedComment = new CommentViewModel
@@ -96,7 +96,7 @@ namespace Web.Hubs
                 ArticleId = comment.ParentId.ToString(),
                 CommentId = comment.Id.ToString(),
                 ParentId = comment.ParentId.ToString(),
-                Author = comment.Author.Username,
+                Author = comment.Author?.Username,
                 Avatar = avatar,
                 DateTime = comment.DateTime.ToString(DateTimePattern),
                 UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),

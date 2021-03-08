@@ -1,0 +1,125 @@
+﻿@model IEnumerable<Entity>
+
+<div class="blog-container">
+    <div class="page-container text-alegreya-style">
+        <div class="blog-content">
+            <div class="options-container">
+
+                @await Html.PartialAsync("~/Views/Options/_OptionsMenuPartial.cshtml")
+
+                <div id="optionsContent" class="options-content">
+
+                    <h3>@ViewBag.Header</h3>
+
+                    <input class="usual-input" id="searchInput" oninput="searchEntities(this)" placeholder="Search..." type="search">
+
+                    <ul style="display: none;" id="searchResultsList" class="@ViewBag.UsersExtendedList search-results verify-result"></ul>
+
+                    <table id="verifyResultsList" class="verify-result">
+                        <thead>
+                            <tr>
+                                <th>Author</th>
+                                <th>Verifiable</th>
+                                <th>Verify</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Entity entity in Model)
+                            {
+                                (string username, string text, string link) = entity switch
+                                {
+                                    User u => (u.Username, u.Description, Url.Action("account", "users", new { username = u.Username })),
+                                    Article a => (a.User?.Username, a.Header, Url.Action("article", "articles", new { title = a.Link })),
+                                    Comment c => (c.Author?.Username ?? "", c.Text, Url.Action("article", "articles", new { title = c.Article.Link })),
+                                    _ => throw new NotImplementedException()
+                                };
+
+                                <tr data-item-id="@entity.Id" class="verify-result">
+                                    <td><a class="verify-user-link" href="@Url.Action("account", "users", new { username = username})"><b>@username</b></a></td>
+                                    <td><a class="verify-item-link" href="@link">@text</a></td>
+                                    <td>@entity.VerifiedMatches</td>
+                                    <td>
+                                        <button type="button" onclick="acceptEntity(this)" class="verify-accept-button">
+                                            <img src="~/img/ico/accept.png">
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" onclick="deleteEntity(this)" class="verify-delete-button">
+                                            <img src="~/img/ico/close.png">
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<template id="searchResultsItemsTemplate">
+    <li data-item-id="" class="verify-result">
+
+        @if (!string.IsNullOrWhiteSpace(ViewBag.UsersExtendedList))
+        {
+            <select asp-items="Html.GetEnumSelectList<RoleType>()" onchange="changeRole(this)" class="user-role-select"></select>
+        }
+
+        <div class="verify-result-buttons">
+            <button type="button" onclick="acceptEntity(this)" class="verify-accept-button">
+                <img src="~/img/ico/accept.png">
+            </button>
+            <button type="button" onclick="deleteEntity(this)" class="verify-delete-button">
+                <img src="~/img/ico/close.png">
+            </button>
+        </div>
+    </li>
+</template>
+
+<template id="verifyResultsItemsTemplate">
+    <tr data-item-id="" class="verify-result">
+        <td><a class="verify-user-link" href=""><b></b></a></td>
+        <td><a class="verify-item-link" href=""></a></td>
+        <td class="verify-matches"></td>
+        <td>
+            <button type="button" class="verify-accept-button">
+                <img src="~/img/ico/accept.png">
+            </button>
+        </td>
+        <td>
+            <button type="button" class="verify-delete-button">
+                <img src="~/img/ico/close.png">
+            </button>
+        </td>
+    </tr>
+</template>
+
+<template id="resultsLinksTemplates">
+    <a class="search-result-item user-result-item" href="#">
+        <div class="user-info-container">
+            <avatar user="null" class="search-item-user-img" />
+            <span class="search-item-username"></span>
+        </div>
+    </a>
+
+    <a href="#" class="search-result-item usual-result-item">
+        <p class="item-name"></p>
+    </a>
+
+    <a href="#" class="search-result-item article-result-item">
+        <span class="article-info-header"><b></b></span>
+        <div class="user-info-container">
+            <p><i class="item-author">Author: </i></p>
+            <p class="item-name"></p>
+        </div>
+    </a>
+</template>
+
+@section Hubs {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/verification/verificationHub.js"></script>
+    <script src="~/js/options_actions/openList.js"></script>
+}

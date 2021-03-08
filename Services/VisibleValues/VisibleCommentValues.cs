@@ -12,7 +12,7 @@ namespace Services.VisibleValues
             => new VisibleCommentValues
             {
                 Id = comment.Id,
-                Username = comment.Author.Username,
+                Username = comment.Author?.Username,
                 Text = comment.Text
             };
 

@@ -1,7 +1,6 @@
 ﻿@model CommentsViewModel
 
 @{
-    //#nullable disable
     async Task GetComment(List<Comment> children, int currentDepth)
     {
         ++currentDepth;
@@ -31,14 +30,23 @@
                 <div class="text-comment-container clearfix">
 
                     <div class="blog-comment-meta">
-                        <a class="comment-username" href="@Url.Action("account", "users", new { username = children[i].Author.Username })">
-                            @children[i].Author.Username
-                        </a>
+                        @if (children[i].Author is not null)
+                        {
+                            <a class="comment-username" href="@Url.Action("account", "users", new { username = children[i].Author.Username })">
+                                @children[i].Author.Username
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="comment-username" href="#">
+                                <i>deleted</i>
+                            </a>
+                        }
 
                         @if (User.Identity.IsAuthenticated && !children[i].IsDeleted)
                         {
                             bool allowEditing = false;
-                            if (children[i].AuthorId.Equals(Model.User.Id) && (Model.User.Role?.WriteComments ?? default))
+                            if (Model.User.Id.Equals(children[i].AuthorId) && (Model.User.Role?.WriteComments ?? default))
                             {
                                 allowEditing = true;
                             }
@@ -93,7 +101,7 @@
                         <div class="hearts">
                             @{ 
                                 CommentLikes commentLike = children[i].Likes
-                                    .Where(cl => cl.UserId == Model.User?.Id && Model.User.Id != null)
+                                    .Where(cl => cl.UserId == Model.User?.Id /*&& Model.User.Id != null*/)
                                     .FirstOrDefault();
 
                                 <button type="button" class="heart-button" onclick="likeComment(this)">
@@ -133,7 +141,6 @@
         }
         --currentDepth;
     }
-    //#nullable restore
 }
 
 <section class="article-comments text-sans-style">
@@ -192,7 +199,8 @@
             {
                 <h3 id="commentsAreExistMessage">Comments</h3>
             }
-            <div data-comments-depth="@Model.Depth" class="article-comments-collection">
+            <div data-comments-depth="@Model.Depth"
+                 class="article-comments-collection">
                 @if (Model.Comments.Any())
                 {
                     List<Comment> rootComments = (from comment in Model.Comments

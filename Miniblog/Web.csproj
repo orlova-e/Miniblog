@@ -26,6 +26,7 @@
   <ItemGroup>
     <None Remove="App\Implementation\UserImagePreparer.cs~RF1c48621.TMP" />
     <None Remove="Controllers\ve-BDBB.tmp" />
+    <None Remove="Hubs\OptionsHub.cs~RF1e68c07.TMP" />
     <None Remove="Models\App\Interfaces\IArticlesService.cs~RFebb58d.TMP" />
     <None Remove="Models\Services\UsersRepository.cs~RF115f6df.TMP" />
     <None Remove="Views\Account\SignIn.cshtml~RF758544.TMP" />

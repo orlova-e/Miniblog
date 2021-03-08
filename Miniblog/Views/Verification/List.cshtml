@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Entity>
+
+<div class="blog-container">
+    <div class="page-container text-alegreya-style">
+        <div class="blog-content">
+            <div class="options-container">
+
+                @await Html.PartialAsync("~/Views/Options/_OptionsMenuPartial.cshtml")
+
+                <div id="optionsContent" class="options-content">
+
+                    <h3>@ViewBag.Header</h3>
+
+                    <input class="usual-input" id="searchInput" oninput="searchEntities(this)" placeholder="Search..." type="search">
+
+                    <ul style="display: none;" id="searchResultsList" class="search-results verify-result"></ul>
+
+                    <ul id="verifyResultsList" class="search-results verify-result">
+                        @foreach (var entity in Model)
+                        {
+                            @:<li data-item-id="@entity.Id" class="verify-result">
+                                
+                                (string text, string link) = entity switch
+                                {
+                                    Tag t => (t.Name, ""),
+                                    Topic t => (t.Name, ""),
+                                    Series s => (s.Name, ""),
+                                    _ => throw new NotImplementedException()
+                                };
+
+                                <a href="@link" class="search-result-item usual-result-item">
+                                    <p class="item-name">@text</p>
+                                </a>
+                                
+                                <div class="verify-result-buttons">
+                                    <button type="button" onclick="acceptEntity(this)" class="verify-accept-button">
+                                        <img src="~/img/ico/accept.png">
+                                    </button>
+                                    <button type="button" onclick="deleteEntity(this)" class="verify-delete-button">
+                                        <img src="~/img/ico/close.png">
+                                    </button>
+                                </div>
+                            @:</li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<template id="searchResultsItemsTemplate">
+    <li data-item-id="" class="verify-result">
+
+        <div class="verify-result-buttons">
+            <button type="button" onclick="acceptEntity(this)" class="verify-accept-button">
+                <img src="~/img/ico/accept.png">
+            </button>
+            <button type="button" onclick="deleteEntity(this)" class="verify-delete-button">
+                <img src="~/img/ico/close.png">
+            </button>
+        </div>
+    </li>
+</template>
+
+<template id="resultsLinksTemplates">
+    <a href="#" class="search-result-item usual-result-item">
+        <p class="item-name"></p>
+    </a>
+</template>
+
+@section Hubs {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/verification/verificationHub.js"></script>
+    <script src="~/js/options_actions/openList.js"></script>
+}

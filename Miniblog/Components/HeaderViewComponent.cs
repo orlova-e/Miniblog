@@ -85,7 +85,7 @@ namespace Web.Components
                 }
                 else if (role.Type is RoleType.Editor)
                 {
-                    pages.Add("Verification list", Url.Action("List", "Queue", new { queueList = "users" }));
+                    pages.Add("Verification list", Url.Action("List", "Verification", new { queueList = "users" }));
                 }
                 pages.Add("Sign Out", Url.Action("SignOut", "Account"));
             }

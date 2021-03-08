@@ -19,7 +19,7 @@ namespace Services.VisibleValues
                 Id = article.Id,
                 Header = article.Header,
                 Text = article.Text,
-                Author = article.User.Username,
+                Author = article.User?.Username,
                 Tags = string.Join(", ", article.ArticleTags?
                     .Select(t => t.Tag)?
                     .Select(t => t.Name)),

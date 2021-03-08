@@ -18,6 +18,7 @@ namespace Services
             services.AddCommentsService();
             services.AddEntitesObserver();
             services.AddListCreator();
+            services.AddCheckPreparerBuilder();
             services.AddTextService();
             services.AddRolesRepo();
             return services;
@@ -34,7 +35,7 @@ namespace Services
             services.AddScoped<IUserService, UserService>();
             return services;
         }
-        
+
         private static IServiceCollection AddCommentsService(this IServiceCollection services)
         {
             services.AddScoped<ICommentsService, CommentsService>();
@@ -44,6 +45,12 @@ namespace Services
         private static IServiceCollection AddEntitesObserver(this IServiceCollection services)
         {
             services.AddScoped<IEntityObserver, EntityObserver>();
+            return services;
+        }
+
+        private static IServiceCollection AddCheckPreparerBuilder(this IServiceCollection services)
+        {
+            services.AddScoped<CheckPreparerBuilder>();
             return services;
         }
 

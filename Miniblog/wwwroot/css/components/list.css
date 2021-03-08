@@ -87,6 +87,10 @@ ul.usual-ul {
     grid-template-columns: 5fr 1fr;
 }
 
+.search-results.verify-result.user-search-results li {
+    grid-template-columns: 5fr 2.5fr 1fr;
+}
+
 .search-results.verify-result li div:last-child {
     justify-self: end;
     align-self: center;
