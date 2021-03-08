@@ -55,7 +55,7 @@
                 <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Pages</h5></button>
 
                 <ul id="" class="blog-links-list">
-                    <li><a href="@Url.Action("Add", "Articles")">Add new</a></li>
+                    <li><a href="@Url.Action("Add", "Articles", new { page = true })">Add new</a></li>
                     <li><a href="@Url.Action("List", "Verification", new { queueList = "pages" })">Queue</a></li>
                     <li><a href="@Url.Action("List", "Articles", new { name = "pages"})">All pages</a></li>
                 </ul>

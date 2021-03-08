@@ -49,14 +49,14 @@
 
                         <div style="display: none;" class="article-display-options">
 
-                            <h6>Display as</h6>
-
-                            @if ((role as ExtendedRole)?.OverrideMenu ?? false)
+                            @if (role is ExtendedRole extended && extended.OverrideMenu)
                             {
+                                <h6>Display as</h6>
+
                                 @foreach (var entryType in Enum.GetValues(typeof(EntryType)))
                                 {
                                     <label class="usual-label radio-label">
-                                        <input type="radio" asp-for="@Model.EntryType" value="@((int)entryType)" checked="@((int)entryType == (int)EntryType.Article)">
+                                        <input type="radio" asp-for="@Model.EntryType" value="@((int)entryType)" checked="@((int)entryType == (int)Model.EntryType)">
                                         @Enum.GetName(typeof(EntryType), entryType)
                                     </label>
                                 }
@@ -115,14 +115,14 @@
                             </label>
 
                             <label class="usual-label radio-label">
-                                @Html.RadioButton(nameof(Model.Visibility), "false")
+                                @Html.RadioButton(nameof(Model.Visibility), "false", false)
                                 Hidden
                             </label>
 
-                            @if ((role as ExtendedRole)?.OverrideMenu ?? false)
+                            @if (role is ExtendedRole extendedRole && extendedRole.OverrideMenu)
                             {
-                                Html.CheckBoxFor(model => model.MenuVisibility);
-                                Html.LabelFor(model => model.MenuVisibility);
+                                <input type="checkbox" asp-for="@Model.MenuVisibility" class="usual-checkbox">
+                                <label class="usual-label checkbox-label" asp-for="@Model.MenuVisibility"></label>
                             }
 
                         </div>

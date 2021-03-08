@@ -18,6 +18,7 @@ namespace Domain.Entities
         public string Tags { get; set; }
         public EntryType EntryType { get; set; }
         public bool Visibility { get; set; }
+        [Display(Name = "Add to menu")]
         public bool MenuVisibility { get; set; }
         public ArticleOptions DisplayOptions { get; set; }
     }

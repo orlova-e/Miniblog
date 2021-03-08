@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Implementation\CheckPreparerBuilder.cs~RF77f0c5.TMP" />
     <None Remove="Implementation\Indexing\IndexedObjectsObserver.cs~RF99435a.TMP" />
     <None Remove="Implementation\Search\ArticleAccurateSearch.cs~RF63b9ed2.TMP" />
     <None Remove="Implementation\UserService.cs~RF8c58a6.TMP" />
