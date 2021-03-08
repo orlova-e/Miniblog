@@ -54,7 +54,6 @@ namespace Services.Implementation
 
             Comment comment = new Comment
             {
-                //Id = Guid.NewGuid(),
                 Author = user,
                 Article = article,
                 Text = text,
