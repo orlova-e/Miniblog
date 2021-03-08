@@ -15,8 +15,6 @@ namespace Web.ViewModels.Options
         public bool ShowTopics { get; set; }
         [Display(Name = "Show search option")]
         public bool ShowSearchOption { get; set; }
-        [Range(0, 2)]
-        public Visibility WebsiteVisibility { get; set; }
 
         public static explicit operator WebsiteOptionsPartially(WebsiteOptions websiteOptions)
             => new WebsiteOptionsPartially
@@ -25,7 +23,6 @@ namespace Web.ViewModels.Options
                 ShowAuthors = websiteOptions.ShowAuthors,
                 ShowTopics = websiteOptions.ShowTopics,
                 ShowSearchOption = websiteOptions.ShowSearchOption,
-                WebsiteVisibility = websiteOptions.WebsiteVisibility
             };
 
         public static WebsiteOptions operator +(WebsiteOptions websiteOptions, WebsiteOptionsPartially partially)
@@ -34,7 +31,6 @@ namespace Web.ViewModels.Options
             websiteOptions.ShowAuthors = partially.ShowAuthors;
             websiteOptions.ShowTopics = partially.ShowTopics;
             websiteOptions.ShowSearchOption = partially.ShowSearchOption;
-            websiteOptions.WebsiteVisibility = partially.WebsiteVisibility;
 
             return websiteOptions;
         }

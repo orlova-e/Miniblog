@@ -143,20 +143,6 @@
                             </p>
                         </fieldset>
 
-                        <fieldset>
-                            <legend>The visibility of the website</legend>
-                            @foreach (Visibility visibility in Enum.GetValues(typeof(Visibility)))
-                            {
-                                <p class="options-input-container">
-                                    <input type="radio" class="usual-radiobutton"
-                                           checked="@((int)visibility == (int)Model.WebsiteOptionsPartially.WebsiteVisibility)"
-                                           value="@((int)visibility)"
-                                           asp-for="@Model.WebsiteOptionsPartially.WebsiteVisibility">
-                                    <label class="usual-label radio-label">@Enums.GetEnumName(visibility)</label>
-                                </p>
-                            }
-                        </fieldset>
-
                         <button type="submit" class="usual-submit-button usual-button">Save</button>
                     </form>
 
