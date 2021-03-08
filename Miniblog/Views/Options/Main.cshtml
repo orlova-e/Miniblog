@@ -35,17 +35,6 @@
                             <span class="text-sans-style" asp-validation-for="@Model.AvatarFile"></span>
                         </fieldset>
 
-                        <fieldset>
-                            <legend>Language</legend>
-                            @foreach (var language in Enum.GetValues(typeof(Languages)))
-                            {
-                                <p class="options-input-container">
-                                    <input type="radio" asp-for="@Model.Language" value="@((int)language)" checked="@((int)language == (int)Model.Language)" class="usual-radiobutton">
-                                    <label class="usual-label radio-label">@Enums.GetEnumName(language)</label>
-                                </p>
-                            }
-                            <span class="text-sans-style" asp-validation-for="@Model.Language"></span>
-                        </fieldset>
 
                         <button type="submit" class="usual-submit-button usual-button">Save</button>
                     </form>

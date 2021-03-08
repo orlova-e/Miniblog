@@ -19,26 +19,17 @@
                     <div class="author-info">
                         <h3 class="">
                             <b id="author_username">@user.Username</b>
-                            @if (user.FullName != null)
+                            @if (user.FullName is not null)
                             {
                                 <span class="auhor-name-info">
                                     // @user.FullName
                                 </span>
                             }
                         </h3>
-                        @if (CultureInfo.CurrentCulture.Equals(new CultureInfo("en")))
-                        {
-                            <span class="author-expirience">
-                                With us from @user.DateOfRegistration.ToString("D", CultureInfo.CurrentCulture)
-                            </span>
-                        }
-                        else if (CultureInfo.CurrentCulture.Equals(new CultureInfo("ru")))
-                        {
-                            <span class="author-expirience">
-                                С нами с @user.DateOfRegistration.ToString("D", CultureInfo.CurrentCulture)
-                            </span>
-                        }
-                        @if (user.City != null)
+                        <span class="author-expirience">
+                            With us from @user.DateOfRegistration.ToString("D", new CultureInfo("en"))
+                        </span>
+                        @if (user.City is not null)
                         {
                             <div>
                                 <span class="author-place">Place: @user.City</span>
@@ -60,7 +51,6 @@
                                 <span class="author-subscribers-word">@subscribers</span>
                             </span>
                         </div>
-                        @*<button class="usual-button usual-button-reverse">Chat</button>*@
                         @if (!User.Identity.IsAuthenticated || !user.Username.Equals(User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value))
                         {
                             @if (subscribed)
@@ -82,7 +72,7 @@
                     </div>
                 </div>
 
-                @if (user.Description != null)
+                @if (user.Description is not null)
                 {
                     <div class="author-description">
                         <h3><b>About</b></h3>

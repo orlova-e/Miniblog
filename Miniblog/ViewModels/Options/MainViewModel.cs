@@ -12,9 +12,6 @@ namespace Web.ViewModels.Options
         [Required(ErrorMessage = "The title must be specified")]
         public string Title { get; set; }
         public string Subtitle { get; set; }
-        [Required(ErrorMessage = "The field must be specified")]
-        [Range(0, 2, ErrorMessage = "Invalid range")]
-        public Languages Language { get; set; }
         public string IconPath { get; set; }
         [MaxFileSize(1 * 1024 * 1024), AllowedFileExtensions("ico", "jpeg", "jpg", "png")]
         public IFormFile IconFile { get; set; }
@@ -26,7 +23,6 @@ namespace Web.ViewModels.Options
         {
             websiteOptions.Name = mainViewModel.Title;
             websiteOptions.Subtitle = mainViewModel.Subtitle;
-            websiteOptions.WebsiteLanguage = mainViewModel.Language;
             websiteOptions.IconPath = mainViewModel.IconPath;
             websiteOptions.StandardAvatarPath = mainViewModel.AvatarPath;
 
@@ -38,7 +34,6 @@ namespace Web.ViewModels.Options
             {
                 Title = websiteOptions.Name,
                 Subtitle = websiteOptions.Subtitle,
-                Language = websiteOptions.WebsiteLanguage,
                 IconPath = websiteOptions.IconPath,
                 AvatarPath = websiteOptions.StandardAvatarPath
             };

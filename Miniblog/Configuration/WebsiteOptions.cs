@@ -17,7 +17,7 @@ namespace Web.Configuration
         public bool ShowTopics { get; set; }
         public bool ShowSearchOption { get; set; }
         public ColorTheme ColorTheme { get; set; }
-        public Languages WebsiteLanguage { get; set; }
+        //public Languages WebsiteLanguage { get; set; }
         public Visibility WebsiteVisibility { get; set; }
         [Required]
         public string WebsiteDateFormat { get; set; }

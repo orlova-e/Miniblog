@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +10,6 @@ using Services;
 using Services.Implementation;
 using Services.Interfaces;
 using System;
-using System.Globalization;
 using System.IO;
 using Web.App.Implementation;
 using Web.App.Interfaces;
@@ -76,14 +73,11 @@ namespace Web
 
             services.AddAuthorization();
 
-            services.AddLocalization(/*options => options.ResourcesPath = "Resources"*/);
-
             services.AddMvc()
                 .AddMvcOptions(options =>
                 {
                     options.Filters.AddService<IdAttribute>();
-                })
-                .AddViewLocalization();
+                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -97,19 +91,6 @@ namespace Web
                 //app.UseExceptionHandler("/errors");
                 app.UseHsts();
             }
-
-            CultureInfo[] supportedCultures = new[]
-            {
-                new CultureInfo("en"),
-                new CultureInfo("ru")
-            };
-
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture("en"),
-                SupportedCultures = supportedCultures,
-                SupportedUICultures = supportedCultures
-            });
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
