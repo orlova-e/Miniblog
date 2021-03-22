@@ -38,8 +38,6 @@ namespace Web
             services.AddMemoryCache();
             services.AddScoped<ICommon, Common>();
             services.AddScoped<IChangeCommon, Common>();
-
-            services.AddScoped<IListPreparer, ListPreparer>();
             services.AddScoped<IListCreator, ListCreator>();
 
             services.AddScoped<IdAttribute>();

@@ -15,17 +15,14 @@ namespace Web.Components
         public BlogOptions BlogOptions { get; private set; }
         public IRepository Repository { get; set; }
         public IUserService UserService { get; private set; }
-        public IListPreparer ListPreparer { get; private set; }
         public IListCreator ListCreator { get; private set; }
         public HeaderViewComponent(IRepository repository,
             IUserService userService,
-            IListPreparer listPreparer,
             IListCreator listCreator,
             IOptionsSnapshot<BlogOptions> optionsSnapshot)
         {
             BlogOptions = optionsSnapshot.Value;
             UserService = userService;
-            ListPreparer = listPreparer;
             ListCreator = listCreator;
             Repository = repository;
         }

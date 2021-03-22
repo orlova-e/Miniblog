@@ -9,7 +9,7 @@
     {
         string action = Model.PageName;
         string controller = action.Equals("Account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
-        return Url.Action(action, controller, new { page = Model.CurrentPageNumber, sortby = Enum.GetName(typeof(ListSorting), sortingType).ToLower() });
+        return Url.Action(action, controller, new { page = Model.Current, sortby = Enum.GetName(typeof(ListSorting), sortingType).ToLower() });
     }
 }
 
@@ -19,7 +19,7 @@
         <div class="drop-menu">
             <button onclick="sortArticlesList()" class="drop-button text-alegreya-style">
                 <img class="sort-list-filter" src="~/img/ico/filter.png" alt="filter by Chameleon Design from the Noun Project">
-                <h5>@Enums.GetEnumName(Model.ListSortingType)</h5>
+                <h5>@Enums.GetEnumName(Model.ListSorting)</h5>
             </button>
             <div id="sortListDropdown" class="display-sort-menu-content">
                 <a href="@GetUrl(ListSorting.MostLiked)" class="sort-list-item">@Enums.GetEnumName(ListSorting.MostLiked)</a>

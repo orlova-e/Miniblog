@@ -18,19 +18,16 @@ namespace Web.Controllers
     public class ArticlesController : Controller
     {
         private IArticleService ArticleService { get; }
-        private IListPreparer ListPreparer { get; }
         private IListCreator ListCreator { get; }
         private IUserService UserService { get; }
         private ICommon Common { get; }
 
         public ArticlesController(IArticleService articleService,
-            IListPreparer listPreparer,
             IListCreator listCreator,
             IUserService userService,
             ICommon common)
         {
             ArticleService = articleService;
-            ListPreparer = listPreparer;
             ListCreator = listCreator;
             UserService = userService;
             Common = common;
@@ -112,7 +109,7 @@ namespace Web.Controllers
                 return NotFound();
             }
 
-            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortBy);
+            ListViewModel listViewModel = new(page, articles, Common.Options.ListOptions, sortBy);
             listViewModel.PageName = listName;
             if(page > 1 && !listViewModel.Articles.Any())
                 return NotFound();
