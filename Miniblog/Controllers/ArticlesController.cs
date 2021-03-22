@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Web.App.Interfaces;
 using Web.Configuration;
 using Web.ViewModels;
+using System.Linq;
 
 namespace Web.Controllers
 {
@@ -20,7 +21,7 @@ namespace Web.Controllers
         private IListPreparer ListPreparer { get; }
         private IListCreator ListCreator { get; }
         private IUserService UserService { get; }
-        public ICommon Common { get; }
+        private ICommon Common { get; }
 
         public ArticlesController(IArticleService articleService,
             IListPreparer listPreparer,
@@ -84,52 +85,39 @@ namespace Web.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> List(uint page = 1, ListSorting sortBy = ListSorting.NewFirst) // create method for series ?
-        {
-            List<Article> articles = await ListCreator
-                .FindArticlesAsync(a => true);
-            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortBy);
-            listViewModel.PageName = "List";
-            return View(listViewModel);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Favourites(uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
+        [Route("{controller}/{action}/{listName=default}")]
+        public async Task<IActionResult> Lists([FromRoute] string listName, int page = 1, ListSorting sortBy = ListSorting.NewFirst) // create method for series ?
         {
             Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = await ListCreator.GetFavouritesAsync(userId);
-            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortBy);
-            listViewModel.PageName = "Favourites";
-            return View("~/Views/Articles/Saved.cshtml", listViewModel);
-        }
+            List<Article> articles = new();
 
-        [HttpGet]
-        public async Task<IActionResult> Bookmarks(uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
-        {
-            Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = await ListCreator.GetBookmarkedAsync(userId);
-            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortBy);
-            listViewModel.PageName = "Bookmarks";
-            return View("~/Views/Articles/Saved.cshtml", listViewModel);
-        }
+            try
+            {
+                articles = listName.ToLower() switch
+                {
+                    "default" => await ListCreator.FindArticlesAsync(a => true),
+                    "favourites" => await ListCreator.GetFavouritesAsync(userId),
+                    "bookmarks" => await ListCreator.GetBookmarkedAsync(userId),
+                    "commented" => await ListCreator.GetCommentedAsync(userId),
+                    "drafts" => ListCreator.FindDrafts(userId),
+                    _ => throw new ArgumentException("Undefined list", nameof(listName))
+                };
+            }
+            catch (ArgumentNullException)
+            {
+                return NotFound();
+            }
+            catch (ArgumentException)
+            {
+                return NotFound();
+            }
 
-        [HttpGet]
-        public async Task<IActionResult> Commented(uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
-        {
-            Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = await ListCreator.GetCommentedAsync(userId);
             ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortBy);
-            listViewModel.PageName = "Commented";
-            return View("~/Views/Articles/Saved.cshtml", listViewModel);
-        }
-
-        [HttpGet]
-        public IActionResult Drafts(uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
-        {
-            Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-            List<Article> articles = ListCreator.FindDrafts(userId);
-            ListViewModel listViewModel = ListPreparer.GetListModel(articles, page, sortBy);
-            listViewModel.PageName = "Drafts";
+            listViewModel.PageName = listName;
+            if(page > 1 && !listViewModel.Articles.Any())
+                return NotFound();
+            if(listName is "default")
+                return View(listViewModel);
             return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
 

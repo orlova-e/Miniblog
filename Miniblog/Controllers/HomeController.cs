@@ -12,8 +12,7 @@ namespace Web.Controllers
         }
         public IActionResult Index()
         {
-            return RedirectToAction("List", "Articles");
-            //return View("~/Views/Articles/List.cs");
+            return RedirectToAction("Lists", "Articles");
         }
     }
 }

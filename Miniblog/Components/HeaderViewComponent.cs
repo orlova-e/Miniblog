@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Repo.Interfaces;
 using Services.Interfaces;
 using System.Collections.Generic;
-using Web.App.Interfaces;
 using Web.Configuration;
 using Web.ViewModels;
 
@@ -56,15 +55,15 @@ namespace Web.Components
 
             if (displayOptions.ShowListOfPopularAndRecent)
             {
-                pages.Add("Popular", Url.Action("List", "Articles", new { name = "Popular" }));
+                pages.Add("Popular", Url.Action("Lists", "Articles", new { listName = "Popular" }));
             }
             if (displayOptions.ShowAuthors)
             {
-                pages.Add("Authors", Url.Action("List", "Articles", new { name = "Authors" }));
+                pages.Add("Authors", Url.Action("Lists", "Articles", new { name = "Authors" }));
             }
             if (displayOptions.ShowTopics)
             {
-                pages.Add("Topics", Url.Action("List", "Articles", new { name = "Topics" }));
+                pages.Add("Topics", Url.Action("Lists", "Articles", new { name = "Topics" }));
             }
 
             List<Article> pagesDb = ListCreator
@@ -77,7 +76,7 @@ namespace Web.Components
 
             if (User.Identity.IsAuthenticated)
             {
-                pages.Add("Favourites", Url.Action("Favourites", "Articles"));
+                pages.Add("Favourites", Url.Action("Lists", "Articles", new { listName = "Favourites"}));
                 pages.Add("Account settings", Url.Action("Settings", "Account"));
                 if (role.Type is RoleType.Administrator)
                 {

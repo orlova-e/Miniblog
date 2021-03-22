@@ -8,7 +8,7 @@
                 string[] links = new[] { "Favourites", "Bookmarks", "Commented", "Drafts" };
                 foreach (string link in links)
                 {
-                    string action = link.ToLower();
+                    string listName = link.ToLower();
                     string controller = link.Equals("Account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
 
                     string activePage = string.Empty;
@@ -17,21 +17,20 @@
                     else
                         activePage = string.Empty;
 
-                    <a href="@Url.Action(action, controller)" @activePage><h3>@link</h3></a>
+                    <a href="@Url.Action("lists", controller, new { listName = listName})" @activePage><h3>@link</h3></a>
                 }
             }
         </div>
     }
 }
 
-@if (Model.Articles.Any())
-{
+@{ 
     await GetLinks();
 }
 
 @if (Model.Articles.Any())
 {
-    await Html.RenderPartialAsync("~/Views/Articles/List.cshtml", Model);
+    await Html.RenderPartialAsync("~/Views/Articles/Lists.cshtml", Model);
 
     @section Scripts {
         @await Html.PartialAsync("_ListScripts")

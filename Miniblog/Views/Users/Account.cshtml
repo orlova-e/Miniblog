@@ -6,7 +6,7 @@
     bool subscribed = ViewBag.Subscribed;
 }
 
-@if (listViewModel.CurrentPageNumber == 1)
+@if (listViewModel.Current == 1)
 {
     <div class="blog-container">
         <div class="page-container text-alegreya-style">
@@ -94,7 +94,7 @@
 {
     <a name="author-articles"></a>
 
-    await Html.RenderPartialAsync("~/Views/Articles/List.cshtml", listViewModel);
+    await Html.RenderPartialAsync("~/Views/Articles/Lists.cshtml", listViewModel);
 
     @section Scripts {
         @await Html.PartialAsync("_ListScripts")
