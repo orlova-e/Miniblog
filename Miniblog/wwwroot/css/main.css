@@ -1,0 +1,154 @@
+h1, h2, h3, h4, h5, h6, legend,
+.uk-article-title, .uk-card-title, .blog-title {
+    font-family: 'Roboto Slab', serif;
+}
+
+.blog-btn {
+    border: none;
+    background-color: transparent;
+    font: inherit;
+    color: inherit;
+    outline: none;
+    cursor: pointer;
+}
+
+.blog-vertical-msg {
+    margin: 8% 0 0 0;
+}
+
+.blog-msg,
+.blog-msg * {
+    font-family: 'Roboto Slab', serif;
+    font-weight: 500;
+    text-align: center;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.blog-msg-kaomoji {
+    font-weight: 500;
+    font-size: 4rem;
+}
+
+.blog-btn-img {
+    height: 20px;
+    width: 20px;
+    max-height: 20px;
+    max-width: 20px;
+}
+
+/* Forms */
+
+.blog-label-hidden {
+    visibility: hidden;
+}
+
+/* Forms' validation */
+
+.blog-field-validation {
+    display: none;
+}
+
+.blog-field-validation.field-validation-error {
+    display: inline;
+    color: #f0506e;
+}
+
+.blog-field-validation.field-validation-valid {
+    display: inline;
+    color: #32d296;
+}
+
+input.input-validation-error,
+textarea.input-validation-error,
+input[type="checkbox"].input-validation-error,
+input[type="radio"].input-validation-error {
+    color: #f0506e;
+    border-color: #f0506e;
+}
+
+input[type="checkbox"]:checked.input-validation-error,
+input[type="radio"]:checked.input-validation-error {
+    background-color: #f0506e;
+}
+
+input.valid.show-input-valid
+/* input[type="checkbox"].valid.show-input-valid,
+input[type="radio"].valid.show-input-valid  */
+{
+    color: #32d296;
+    border-color: #32d296;
+}
+
+/* input[type="checkbox"]:checked.valid.show-input-valid,
+input[type="radio"]:checked.valid.show-input-valid {
+    background-color: #32d296;
+} */
+
+.validation-summary-errors {
+    color: #f0506e;
+}
+
+.validation-summary-valid {
+    color: #32d296;
+}
+
+/* Table */
+
+.uk-table-hover tbody tr:hover, .uk-table-hover>tr:hover {
+    background: lightgray;
+}
+
+/* Author's page */
+
+.author-info p {
+    margin: auto 0;
+    line-height: 1.8;
+}
+
+.author-info {
+    margin: 0 auto;
+    width: 50%;
+}
+
+.user-description {
+    width: 80%;
+    margin: 40px auto 0 auto;
+    text-align: center;
+}
+
+/* Comments */
+
+.uk-comment-list#comments-container li {
+    margin-top: 35px;
+}
+
+.blog-comment-footer {
+    margin-top: 15px;
+}
+
+.blog-comment.parental {
+    grid-template-columns: 1fr 8fr;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.blog-comment.parental-1 {
+    width: 90%;
+}
+
+.blog-comment.parental-2 {
+    width: 85%;
+}
+
+.blog-comment.parental-3 {
+    width: 80%;
+}
+
+.blog-comment.parental-4 {
+    width: 75%;
+}
+
+.blog-comment.parental-5 {
+    width: 70%;
+}

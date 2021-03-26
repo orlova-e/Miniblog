@@ -1,62 +1,90 @@
 ﻿@model UserViewModel
 
-<div class="blog-container">
-    <div class="page-container text-alegreya-style">
-        <div class="blog-content">
-            <div class="options-container">
-                <div id="optionsContent" class="options-content">
+<div class="uk-container uk-margin-bottom">
+    <div class="uk-card uk-card-default uk-card-body uk-card-hover">
+        <form asp-action="settings" asp-controller="account" method="post" enctype="multipart/form-data" class="uk-form-horizontal uk-width-auto uk-width-3-5@m">
 
-                    <form method="post" asp-action="Settings" asp-controller="Account" enctype="multipart/form-data" class="usual-form">
+            <h2 class="blog-title">Account settings</h2>
 
-                        <fieldset>
-                            <legend>Main</legend>
-                            <label class="usual-label" asp-for="@Model.Email"></label>
-                            <input class="usual-input usual-input-text" asp-for="@Model.Email">
-                            <span class="text-sans-style" asp-validation-for="@Model.Email"></span>
-                        </fieldset>
+            <fieldset class="uk-fieldset">
+                <legend class="uk-legend">Main</legend>
 
-                        <fieldset>
-                            <legend>Avatar</legend>
-                            <avatar username="@Model.Username" image="@Model.Avatar" px="120" />
-                            <input type="file" accept=".jpg,.jpeg,.png, image/jpeg,image/png" asp-for="@Model.FormFile">
-                            <span class="text-sans-style" asp-validation-for="@Model.FormFile"></span>
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>Change password</legend>
-                            <label class="usual-label" asp-for="@Model.OldPassword"></label>
-                            <input class="usual-input usual-input-text" asp-for="@Model.OldPassword">
-                            <span class="text-sans-style" asp-validation-for="@Model.OldPassword"></span>
-
-                            <label class="usual-label" asp-for="@Model.Password"></label>
-                            <input class="usual-input usual-input-text" asp-for="@Model.Password">
-                            <span class="text-sans-style" asp-validation-for="@Model.Password"></span>
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>Details</legend>
-                            <label class="usual-label" asp-for="@Model.FullName"></label>
-                            <input type="text" class="usual-input usual-input-text" asp-for="@Model.FullName">
-
-                            <label class="usual-label" asp-for="@Model.City"></label>
-                            <input type="text" class="usual-input usual-input-text" asp-for="@Model.City">
-
-                            <label class="usual-label" asp-for="@Model.Description"></label>
-                            <input type="text" class="usual-input usual-input-text" asp-for="@Model.Description">
-                        </fieldset>
-
-                        <div asp-validation-summary="ModelOnly"></div>
-
-                        <button type="submit" class="usual-submit-button usual-button">Save</button>
-                    </form>
-
+                <div class="uk-margin">
+                    <label class="uk-form-label" asp-for="Email"></label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input show-input-valid" asp-for="Email">
+                        <span class="blog-field-validation" asp-validation-for="Email"></span>
+                    </div>
                 </div>
-            </div>
-        </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" asp-for="Avatar"></label>
+                    <div class="uk-form-controls">
+                        <avatar username="@Model.Username" image="@Model.Avatar" px="120" classes="uk-border-circle uk-margin uk-margin-top" />
+                        <br>
+                        <div uk-form-custom="target: true">
+                            <input asp-for="FormFile" accept=".jpg,.jpeg,.png, image/jpeg,image/png" type="file">
+                            <input class="uk-input uk-form-width-medium" type="text" placeholder="Select file" disabled>
+                            <button class="uk-button uk-button-default uk-text-middle">Select</button>
+                            <span class="blog-field-validation" asp-validation-for="FormFile"></span>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="uk-fieldset">
+                <legend class="uk-legend">Change password</legend>
+
+                <div class="uk-margin">
+                    <label asp-for="OldPassword" class="uk-form-label"></label>
+                    <div class="uk-form-controls">
+                        <input asp-for="OldPassword" class="uk-input show-input-valid">
+                        <span class="blog-field-validation" asp-validation-for="OldPassword"></span>
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label asp-for="Password" class="uk-form-label"></label>
+                    <div class="uk-form-controls">
+                        <input asp-for="Password" class="uk-input show-input-valid">
+                        <span class="blog-field-validation" asp-validation-for="Password"></span>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="uk-fieldset">
+                <legend class="uk-legend">Details</legend>
+
+                <div class="uk-margin">
+                    <label asp-for="FullName" class="uk-form-label"></label>
+                    <div class="uk-form-controls">
+                        <input asp-for="FullName" class="uk-input">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label asp-for="City" class="uk-form-label"></label>
+                    <div class="uk-form-controls">
+                        <input asp-for="City" class="uk-input">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label asp-for="Description" class="uk-form-label"></label>
+                    <div class="uk-form-controls">
+                        <input asp-for="Description" class="uk-input">
+                    </div>
+                </div>
+            </fieldset>
+
+            <button class="uk-button uk-button-secondary" type="submit">Save</button>
+        </form>
     </div>
 </div>
 
 @section Validation {
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"
             asp-fallback-src="~/lib/jquery-validate/jquery.validate.min.js"
             asp-fallback-test="window.jQuery && window.jQuery.validator"></script>

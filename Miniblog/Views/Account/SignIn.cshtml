@@ -1,31 +1,32 @@
 ﻿@model LoginViewModel
 
-<div class="blog-container">
+<div class="uk-container uk-width-large">
+    <div class="uk-card uk-card-default uk-card-body uk-card-hover">
 
-    <div class="text-sans-style">
+        <div uk-grid class="uk-flex-center up-flex-middle">
+            <div>
+                <form asp-action="signin" asp-controller="account" asp-antiforgery="true" method="post" class="uk-width-auto">
+                    <fieldset class="uk-fieldset">
 
-        <div class="sign-container">
+                        <legend class="uk-article-title uk-text-secondary uk-text-center">Sign in</legend>
 
-            <div class="signin-container">
-                <h2 class="text-roboto-style">Sign In</h2>
+                        <div class="uk-margin uk-form-controls">
+                            <label class="uk-text-muted" asp-for="Username"></label>
+                            <input class="uk-input show-input-valid" asp-for="Username">
+                            <span class="blog-field-validation" asp-validation-for="Username"></span>
+                        </div>
 
-                <form asp-action="SignIn"
-                      asp-controller="Account"
-                      asp-antiforgery="true" method="post" class="usual-form">
+                        <div class="uk-margin uk-form-controls">
+                            <label class="uk-text-muted" asp-for="Password"></label>
+                            <input class="uk-input show-input-valid" asp-for="Password">
+                            <span class="blog-field-validation" asp-validation-for="Password"></span>
+                        </div>
 
-                    <div style="display: none;" asp-validation-summary="All"></div>
+                    </fieldset>
 
-                    <label class="usual-label" asp-for="Username"></label>
-                    <input class="usual-input usual-input-text" asp-for="Username">
-                    <span class="text-sans-style usual-error-message" asp-validation-for="Username"></span>
+                    <button class="uk-button uk-button-secondary uk-margin uk-align-center" type="submit">Sign In</button>
 
-                    <label class="usual-label" asp-for="Password"></label>
-                    <input class="usual-input usual-input-text" asp-for="Password">
-                    <span class="text-sans-style usual-error-message" asp-validation-for="Password"></span>
-
-                    <button type="submit" class="usual-submit-button usual-button">Sign In</button>
-
-                    <a class="sign-suggestion" href="@Url.RouteUrl("default", new { controller = "Account", action = "SignUp" })">or Sign Up</a>
+                    <a href="@Url.Action("signup", "account")" class="uk-link uk-link-primary uk-text-center uk-align-center">or Sign up</a>
                 </form>
             </div>
         </div>
@@ -33,6 +34,7 @@
 </div>
 
 @section Validation {
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"
             asp-fallback-src="~/lib/jquery-validate/jquery.validate.min.js"
             asp-fallback-test="window.jQuery && window.jQuery.validator"></script>

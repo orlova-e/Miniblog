@@ -1,0 +1,27 @@
+﻿@model ServerMessage
+
+<div uk-grid="masonry: true" class="uk-grid-medium blog-vertical-msg uk-child-width-1-1@m">
+    <div>
+        <div class="blog-msg">
+            @if (Model is not null)
+            {
+                @if (Model.ShowSmile)
+                {
+                    <h1 class="blog-msg-kaomoji">¯\_(ツ)_/¯</h1>
+                }
+                @if (Model.StatusCode is not default(int))
+                {
+                    <h1 class="blog-msg-text">@Model.StatusCode</h1>
+                }
+                <h1 class="blog-msg-text">@Model.MessageText</h1>
+            }
+            else
+            {
+                <h1 class="blog-msg-kaomoji">¯\_(ツ)_/¯</h1>
+                <h1 class="blog-msg-text">404</h1>
+                <h1 class="blog-msg-text">Not found</h1>
+            }
+
+        </div>
+    </div>
+</div>

@@ -1,31 +1,27 @@
 ﻿@model ListViewModel
 
 @{
-    async Task GetLinks()
+    async Task GetLinksAsync()
     {
-        <div class="menu-links-collection">
-            @{
-                string[] links = new[] { "Favourites", "Bookmarks", "Commented", "Drafts" };
-                foreach (string link in links)
-                {
-                    string listName = link.ToLower();
-                    string controller = link.Equals("Account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
+        <div class="uk-container uk-margin-bottom">
+            <ul class="uk-subnav" uk-margin>
+                @{
+                    string[] links = new[] { "favourites", "bookmarks", "commented", "drafts" };
+                    foreach (string listName in links)
+                    {
+                        string controller = listName.Equals("account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
+                        string activePage = string.Empty;
+                        if (listName.Equals(Model.PageName))
+                            activePage = "uk-active";
 
-                    string activePage = string.Empty;
-                    if (link.Equals(Model.PageName))
-                        activePage = @"class=""active-page""";
-                    else
-                        activePage = string.Empty;
-
-                    <a href="@Url.Action("lists", controller, new { listName = listName})" @activePage><h3>@link</h3></a>
+                        <li class="@activePage"><a href="@Url.Action("lists", controller, new { listName = listName})">@listName</a></li>
+                    }
                 }
-            }
+            </ul>
         </div>
     }
-}
 
-@{ 
-    await GetLinks();
+    await GetLinksAsync();
 }
 
 @if (Model.Articles.Any())
@@ -38,10 +34,10 @@
 }
 else
 {
-    ServerMessage serverMessage = new ServerMessage
+    ServerMessage serverMessage = new()
     {
         ShowSmile = true,
         MessageText = "No articles here"
     };
-    await Html.RenderPartialAsync("~/Views/Shared/_ServerMessagePartial.cshtml", serverMessage);
+    await Html.RenderPartialAsync("~/Views/Shared/_MessagePartial.cshtml", serverMessage);
 }

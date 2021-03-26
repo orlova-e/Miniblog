@@ -1,12 +1,12 @@
 ﻿@using Domain.Entities
 @using Web.Configuration;
-@using Web.App.Interfaces 
+@using Web.App.Interfaces
 
 @inject ICommon common
 
 @model Article
 
-@{ 
+@{
     ListOptions listOptions = common.Options.ListOptions;
     ArticleOptions articleOptions = Model.DisplayOptions;
 
@@ -16,118 +16,91 @@
     }
 }
 
-<article class="art text-alegreya-style">
-    <div class="blog-content">
-
-        <div class="article-meta text-roboto-style">
-            <a href="@Url.Action("Article", "Articles", new { title = Model.Link })" class="article-header">
-                <h2><b>@Model.Header</b></h2>
-            </a>
-            <ul class="article-info clearfix">
-                @if (articleOptions.Username)
-                {
-                    if (Model.User is not null)
-                    {
-                        <li class="article-info-user">
-                            <a href="@Url.Action("Account", "Users", new { username = Model.User.Username })">
-                                <div class="user-info-container">
-                                    <avatar user="Model.User"/>
-                                    <span>@Model.User.Username</span>
-                                </div>
-                            </a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="article-info-user">
-                            <div class="user-info-container">
-                                <avatar user="Model.User"/>
-                                <span><i>deleted</i></span>
-                            </div>
-                        </li>
-                    }
-                }
-                @if (articleOptions.DateAndTime)
-                {
-                    <li class="article-datetime"><a href="#">@Model.DateTime.ToString("g")</a></li>
-                }
-
-                @if (articleOptions.Likes)
-                {
-                    <li>
-                        <img src="/img/buttons/heart.png" alt="likes" height="20px" width="20px">
-                        <span name="articleLikesInfo">@Model.Likes.Count</span>
-                    </li>
-                }
-                @if (articleOptions.Bookmarks)
-                {
-                    <li>
-                        <img src="/img/ico/bookmark5.png" alt="bookmarks" height="20px" width="20px">
-                        <span name="articleBookmarksInfo">@Model.Bookmarks.Count</span>
-                    </li>
-                }
-                @if (articleOptions.Comments)
-                {
-                    <li>
-                        <img src="/img/buttons/chat-2.png" alt="comments" height="18px" width="18px">
-                        <span name="articleCommentsInfo">@Model.Comments.Count</span>
-                    </li>
-                }
-                @if (articleOptions.Topic)
-                {
-                    <li><span>Topic: </span><a href="#">@(Model.Topic?.Name ?? "no topic")</a></li>
-                }
-                @if (articleOptions.Series)
-                {
-                    <li><span>Series: </span><a href="#">@(Model.Series?.Name ?? "no series")</a></li>
-                }
-                @if (articleOptions.Tags)
-                {
-                    <li>
-                        Tags:
-                        @{
-                            List<string> tags = Model.ArticleTags.Select(t => t.Tag).Select(t => t.Name).ToList();
-                            int counter = tags.Count <= 5 ? tags.Count : 5;
-                            for (int i = 0; i < counter; i++)
+<div>
+    <div class="uk-card uk-card-default uk-card-hover">
+        <div class="uk-card-header">
+            <div class="uk-grid-small uk-flex-middle" uk-grid>
+                <div class="uk-width-auto">
+                    <a class="uk-link" href="#">
+                        <avatar user="Model.User" px="40"/>
+                    </a>
+                </div>
+                <div class="uk-width-expand">
+                    <h3 class="uk-card-title uk-margin-remove-bottom"><a class="uk-link-heading" href="@Url.Action("Article", "Articles", new { title = Model.Link })">@Model.Header</a></h3>
+                    <p class="uk-text-meta uk-margin-remove-top">
+                        @if (articleOptions.Username)
+                        {
+                            if (Model.User is not null)
                             {
-                                if (i != counter - 1)
-                                {
-                                    <a href="#">@tags[i],</a>
-                                }
-                                else
-                                {
-                                    <a href="#">@tags[i]</a>
-                                }
+                                <a class="uk-link-muted" href="@Url.Action("Account", "Users", new { username = Model.User.Username })">
+                                    Author: @Model.User.Username
+                                </a>
                             }
-                            if (counter == 0)
+                            else
                             {
-                                <span>no tags</span>
+                                <a class="uk-link-muted" href="#">
+                                    Author: <i>was deleted</i>
+                                </a>
                             }
                         }
-                    </li>
-                }
-            </ul>
-        </div>
 
-        @{
-            if (Model.Images.Any())
-            {
-                <div class="article-image">
-                    <img src="data:image/@Model.Images[0].FileExtension;base64,@(Convert.ToBase64String(Model.Images[0].File))" alt="preview image">
+                        @if (articleOptions.DateAndTime)
+                        {
+                            <a class="uk-link-muted" href="#"><time datetime="@Model.DateTime.ToString("s")">@Model.DateTime.ToString("g")</time></a>
+                        }
+                    </p>
                 </div>
-            }
+            </div>
+        </div>
+        @if (Model.Images.Any())
+        {
+            <div class="uk-card-media-top uk-cover-container">
+                <canvas width="200" height="400"></canvas>
+                <img src="data:image/@Model.Images[0].FileExtension;base64,@(Convert.ToBase64String(Model.Images[0].File))" alt="preview" uk-img uk-cover>
+            </div>
         }
-
-        <div class="blog-text">
+        <div class="uk-card-body">
             @{
                 string[] words = Model.Text.Split(new string[] { " ", Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 int count = words.Length < 30 ? words.Length : 30;
                 string previewText = string.Join(" ", words, 0, count);
-                <p>@previewText</p>
+                <p>@previewText</p>}
+        <div class="uk-text-meta uk-margin-remove-top">
+            @if (articleOptions.Topic)
+            {
+                <a class="uk-link-muted" href="#"><span uk-icon="chevron-double-right"></span>@(Model.Topic?.Name ?? "no topic")</a>
             }
-            <div class="read-action">
-                <a href="@Url.Action("Article", "Articles", new { title = Model.Link })">Read more &RightArrow;</a>
-            </div>
+            @if (articleOptions.Series)
+            {
+                <a class="uk-link-muted" href="#"><span uk-icon="folder"></span> @(Model.Series?.Name ?? "no series")</a>
+            }
+            @if (articleOptions.Tags)
+            {
+                List<string> tags = Model.ArticleTags.Select(t => t.Tag).Select(t => t.Name).ToList();
+                int counter = tags.Count <= 5 ? tags.Count : 5;
+                for (int i = 0; i < counter; i++)
+                {
+                    <a class="uk-link-muted" href="#"><span uk-icon="hashtag"></span>@tags[i]</a>
+                }
+            }
+            <br>
+            <br>
+            @if (articleOptions.Likes)
+            {
+                <span uk-icon="heart"></span> <span>@Model.Likes.Count</span>
+            }
+            @if (articleOptions.Bookmarks)
+            {
+                <span uk-icon="bookmark"></span> <span>@Model.Bookmarks.Count</span>
+            }
+            @if (articleOptions.Comments)
+            {
+                <span uk-icon="comments"></span> <span>@Model.Comments.Count</span>
+            }
+        </div>
+        </div>
+        <div class="uk-card-footer">
+            <a href="@Url.Action("Article", "Articles", new { title = Model.Link })" class="uk-button uk-button-text">Read more</a>
         </div>
     </div>
-</article>
+</div>

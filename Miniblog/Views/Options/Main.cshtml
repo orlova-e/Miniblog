@@ -1,51 +1,68 @@
 ﻿@model MainViewModel
 
-<div class="blog-container">
-    <div class="page-container text-alegreya-style">
-        <div class="blog-content">
-            <div class="options-container">
+<div class="uk-container uk-margin-bottom">
+    <div class="uk-card uk-card-default uk-card-body uk-card-hover">
 
-                @await Html.PartialAsync("_OptionsMenuPartial")
+        <div uk-grid>
 
-                <div id="optionsContent" class="options-content">
+            @await Html.PartialAsync("_OptionsMenuPartial")
 
-                    <form method="post" asp-action="Main" asp-controller="Options" enctype="multipart/form-data" class="usual-form">
+            <div>
+                <form asp-action="main" asp-controller="options" method="post" enctype="multipart/form-data" class="uk-form-horizontal uk-margin-large">
+                    <fieldset class="uk-fieldset">
 
-                        <fieldset>
-                            <legend>Main</legend>
-                            <label class="usual-label" asp-for="@Model.Title"></label>
-                            <input type="text" class="usual-input usual-input-text" asp-for="@Model.Title">
-                            <span class="text-sans-style" asp-validation-for="@Model.Title"></span>
+                        <legend class="uk-legend">Main</legend>
 
-                            <label class="usual-label" asp-for="@Model.Subtitle"></label>
-                            <input type="text" class="usual-input usual-input-text" asp-for="@Model.Subtitle">
-                        </fieldset>
+                        <div class="uk-margin">
+                            <label class="uk-form-label" asp-for="Title"></label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" asp-for="Title">
+                                <span class="blog-field-validation" asp-validation-for="Title"></span>
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>Icon</legend>
-                            <img src="@Url.Content(Model.IconPath)" height="100px" width="100px" alt="icon" />
-                            <input type="file" accept=".jpg,.jpeg,.png,.ico image/jpeg,image/png,image/x-icon" asp-for="@Model.IconFile">
-                            <span class="text-sans-style" asp-validation-for="@Model.IconFile"></span>
-                        </fieldset>
+                        <div class="uk-margin">
+                            <label class="uk-form-label" asp-for="Subtitle"></label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" asp-for="Subtitle">
+                                <span class="blog-field-validation" asp-validation-for="Subtitle"></span>
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>Standard user's avatar</legend>
-                            <img src="@Url.Content(Model.AvatarPath)" height="100px" width="100px" alt="icon" />
-                            <input type="file" accept=".jpg,.jpeg,.png,.ico image/jpeg,image/png,image/x-icon" asp-for="@Model.AvatarFile">
-                            <span class="text-sans-style" asp-validation-for="@Model.AvatarFile"></span>
-                        </fieldset>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Icon</label>
+                            <div class="uk-form-controls">
+                                <img src="@Url.Content(Model.IconPath)" class="uk-border-circle uk-margin uk-margin-top" height="100px" width="100px" alt="icon"/>
+                                <br>
+                                <div uk-form-custom="target: true">
+                                    <input asp-for="IconFile" type="file" accept=".jpg,.jpeg,.png,.ico image/jpeg,image/png,image/x-icon">
+                                    <input class="uk-input uk-form-width-medium" type="text" placeholder="Select file" disabled>
+                                    <button class="uk-button uk-button-default uk-text-middle">Select</button>
+                                    <span class="blog-field-validation" asp-validation-for="IconFile"></span>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
 
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Standard user's avatar</label>
+                            <div class="uk-form-controls">
+                                <img src="@Url.Content(Model.AvatarPath)" class="uk-border-circle uk-margin uk-margin-top" height="100px" width="100px" alt="icon">
+                                <br>
+                                <div uk-form-custom="target: true">
+                                    <input asp-for="AvatarFile" type="file" accept=".jpg,.jpeg,.png,.ico image/jpeg,image/png,image/x-icon">
+                                    <input class="uk-input uk-form-width-medium" type="text" placeholder="Select file" disabled>
+                                    <button class="uk-button uk-button-default uk-text-middle">Select</button>
+                                    <span class="blog-field-validation" asp-validation-for="AvatarFile"></span>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
 
-                        <button type="submit" class="usual-submit-button usual-button">Save</button>
-                    </form>
-
-                </div>
-
+                        <button type="submit" class="uk-button uk-button-secondary">Save</button>
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
-@section Scripts{
-    <script src="~/js/options_actions/openList.js"></script>
-}

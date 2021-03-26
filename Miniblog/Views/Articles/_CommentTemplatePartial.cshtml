@@ -2,75 +2,64 @@
 @model User
 
 <template id="templateBlogComment">
-    <div class="blog-comment" data-comment-id="" data-parent-id="">
 
-        <div class="user-info-container">
+    <li data-comment-id="" data-parent-id="" class="blog-comment">
+        <article class="uk-visible-toggle uk-comment" tabindex="-1">
+            <header class="uk-comment-header uk-position-relative">
+                <div class="uk-grid-medium uk-flex-middle" uk-grid>
+                    <div class="user-info-container uk-width-auto">
+                        <img class="uk-comment-avatar" src="" width="80" height="80" alt="">
+                    </div>
+                    <div class="uk-width-expand">
+                        <h4 class="comment-username uk-comment-title uk-margin-remove"><a class="uk-link-reset" href="#"></a></h4>
+                        <div class="comment-time-info time-info uk-comment-meta uk-margin-remove-top">
+                            <time class="time-info-created" datetime=""></time>
+                            <span>(updated at <time class="time-info-updated" datetime=""></time>)</span>
+                        </div>
 
-        </div>
-
-        <div class="text-comment-container clearfix">
-
-            <div class="blog-comment-meta">
-                <a class="comment-username" href="#">
-
-                </a>
-
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div class="comment-change">
-                        @if (Model.Role?.WriteComments ?? default)
+                        @if (User.Identity.IsAuthenticated)
                         {
-                            <button type="button" onclick="getUpdateCommentForm(this)" class="reply-button">
-                                <img src="~/img/ico/rewrite.png" alt="reply">
-                            </button>
-                        }
+                            <div>
+                                <div class="comment-change uk-button-group uk-position-top-right">
+                                    @if (Model.Role?.WriteComments ?? default)
+                                    {
+                                        <button class="reply-button blog-btn" onclick="getUpdateCommentForm(this)" type="button">
+                                            <span uk-icon="icon: pencil"></span>
+                                        </button>
+                                    }
 
-                        @if ((Model.Role?.WriteComments ?? default) || ((Model.Role as ExtendedRole)?.ModerateComments ?? default))
-                        {
-                            <button class="comment-change-delete reply-button" type="button" onclick="deleteActions(this)">
-                                <img src="~/img/ico/delete7.png" alt="reply">
-                            </button>
+                                    @if ((Model.Role?.WriteComments ?? default) || ((Model.Role as ExtendedRole)?.ModerateComments ?? default))
+                                    {
+                                        <button class="comment-change-delete reply-button blog-btn" onclick="deleteActions(this)" type="button">
+                                            <span uk-icon="icon: close"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
                         }
                     </div>
-                }
-
-                <span class="comment-time-info time-info"></span>
-                <span class="time-info-utc time-info-created"></span>
-                <span class="time-info-utc time-info-updated"></span>
-
-            </div>
-
-            <div class="comment-container">
-
-            </div>
-
-
-            <div class="comment-actions-container">
-
-                <div class="hearts">
-                    @* class="heart-clicked" *@
-                    <button type="button" class="heart-button" onclick="likeComment(this)">
-                        <img class="comment-action-unchecked" src="~/img/buttons/heart.png" alt="like">
-                        <img class="comment-action-inactive comment-action-checked" src="~/img/buttons/heart red.png" alt="like">
-                    </button>
-
-                    <span name="commentLikesNumber" class="hearts-counter text-sans-style comment-hearts-count">0</span>
                 </div>
+            </header>
 
-                @if (User.Identity.IsAuthenticated && (Model.Role?.WriteComments ?? default))
-                {
-                    <div class="comment-reply">
-                        <button type="button" onclick="getReplyCommentForm(this)" class="reply-button">
-                            <img src="~/img/buttons/next.png" alt="reply">
-                        </button>
-                    </div>
-                }
+            <div class="uk-comment-body">
+                <p class="comment-container"></p>
             </div>
 
-            @*<div class="users-comment-answer-collection">
+            <div class="comment-actions-container uk-comment-footer blog-comment-footer">
+                <div class="uk-button-group">
+                    <button class="blog-btn heart-button" onclick="likeComment(this)" type="button">
+                        <img src="img/buttons/heart.png" alt="like" class="blog-btn-img">
+                        <span name="commentLikesNumber">50</span>
+                    </button>
+                    @if (User.Identity.IsAuthenticated && (Model.Role?.WriteComments ?? default))
+                    {
+                        <button class="blog-btn" onclick="getReplyCommentForm(this)" type="button">
+                            <span uk-icon="icon: reply"></span>
+                        </button>
+                    }
+                </div>
+            </div>
+        </article>
+    </li>
 
-            </div>*@
-        </div>
-
-    </div>
 </template>

@@ -1,5 +1,5 @@
 ﻿@using Domain.Entities.Enums
-@using Services.Interfaces 
+@using Services.Interfaces
 
 @inject IUserService userService
 
@@ -7,72 +7,54 @@
     ExtendedRole role = userService.FindByName(User.Identity.Name).Role as ExtendedRole;
 }
 
-<aside class="options-menu-bar">
-
-    <ul class="blog-menu-list">
+<div class="uk-width-1-3@s uk-width-1-5@m uk-width-1-5@l">
+    <ul class="uk-nav uk-nav-default">
         @if (role.Type is RoleType.Administrator)
         {
-            <li class="blog-menu-list-point drop-menu actual-menu-list">
-                <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Main</h5></button>
-
-                <ul id="sortListDropdown" class="blog-links-list">
-                    <li><a href="@Url.Action("Main", "Options")">Main</a></li>
-                    <li><a href="@Url.Action("Writing", "Options")">Writing</a></li>
-                    <li><a href="@Url.Action("Reading", "Options")">Reading</a></li>
-                    <li><a href="@Url.Action("Discussion", "Options")">Discussion</a></li>
-                    <li><a href="@Url.Action("Checklists", "Options")">Check lists</a></li>
-                </ul>
-            </li>
+            <li class="uk-nav-header">Common</li>
+            <li><a href="@Url.Action("main", "options")">Main</a></li>
+            <li><a href="@Url.Action("writing", "options")">Writing</a></li>
+            <li><a href="@Url.Action("reading", "options")">Reading</a></li>
+            <li><a href="@Url.Action("discussion", "options")">Discussion</a></li>
+            <li><a href="@Url.Action("checklists", "options")">Check lists</a></li>
+            <li class="uk-nav-divider"></li>
         }
 
-        <li class="blog-menu-list-point drop-menu">
-            <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Articles</h5></button>
-
-            <ul id="" class="blog-links-list">
-                <li><a href="@Url.Action("Add", "Articles")">Add new</a></li>
-                @if (role.ModerateArticles)
-                {
-                    <li><a href="@Url.Action("List", "Verification", new { queueList = "articles" })">Queue</a></li>
-                }
-                @if (role.ModerateTopics)
-                {
-                    <li><a href="@Url.Action("List", "Verification", new { queueList = "topics" })">Topics</a></li>
-                }
-                @if (role.ModerateTags)
-                {
-                    <li><a href="@Url.Action("List", "Verification", new { queueList = "tags" })">Tags</a></li>
-                }
-                @if (role.ModerateArticles)
-                {
-                    <li><a href="@Url.Action("List", "Verification", new { queueList = "series" })">Series</a></li>
-                }
-            </ul>
-        </li>
+        <li class="uk-nav-header">Articles</li>
+        @if (role.WriteArticles)
+        {
+            <li><a href="@Url.Action("Add", "Articles")">Add new</a></li>
+        }
+        @if (role.ModerateArticles)
+        {
+            <li><a href="@Url.Action("list", "verification", new { queueList = "articles" })">Queue</a></li>
+        }
+        @if (role.ModerateTopics)
+        {
+            <li><a href="@Url.Action("list", "verification", new { queueList = "topics" })">Topics</a></li>
+        }
+        @if (role.ModerateTags)
+        {
+            <li><a href="@Url.Action("list", "verification", new { queueList = "tags" })">Tags</a></li>
+        }
+        <li><a href="@Url.Action("list", "verification", new { queueList = "series" })">Series</a></li>
+        <li class="uk-nav-divider"></li>
 
         @if (role.Type is RoleType.Administrator)
         {
-            <li class="blog-menu-list-point drop-menu">
-                <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Pages</h5></button>
-
-                <ul id="" class="blog-links-list">
-                    <li><a href="@Url.Action("Add", "Articles", new { page = true })">Add new</a></li>
-                    <li><a href="@Url.Action("List", "Verification", new { queueList = "pages" })">Queue</a></li>
-                    <li><a href="@Url.Action("List", "Articles", new { name = "pages"})">All pages</a></li>
-                </ul>
-            </li>
+            <li class="uk-nav-header">Pages</li>
+            <li><a href="@Url.Action("add", "articles", new { page = true })">Add new</a></li>
+            <li><a href="@Url.Action("list", "verification", new { queueList = "pages" })">Queue</a></li>
+            <li><a href="@Url.Action("lists", "articles", new { listName = "pages"})">All pages</a></li>
+            <li class="uk-nav-divider"></li>
         }
 
-        <li class="blog-menu-list-point drop-menu">
-            <button onclick="openList(this)" class="drop-button text-alegreya-style"><h5>Other</h5></button>
+        <li class="uk-nav-header">Other</li>
+        <li><a href="@Url.Action("list", "verification", new { queueList = "users" })">Users</a></li>
+        @if (role.ModerateComments)
+        {
+            <li><a href="@Url.Action("list", "verification", new { queueList = "comments" })">Comments</a></li>
+        }
 
-            <ul id="" class="blog-links-list">
-                <li><a href="@Url.Action("List", "Verification", new { queueList = "users" })">Users</a></li>
-                @if (role.ModerateComments)
-                {
-                    <li><a href="@Url.Action("List", "Verification", new { queueList = "comments" })">Comments</a></li>
-                }
-            </ul>
-        </li>
     </ul>
-
-</aside>
+</div>

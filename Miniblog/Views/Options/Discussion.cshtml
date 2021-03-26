@@ -1,80 +1,79 @@
 ﻿@model DiscussionViewModel
 
-<div class="blog-container">
-    <div class="page-container text-alegreya-style">
-        <div class="blog-content">
+<div class="uk-container uk-margin-bottom">
+    <div class="uk-card uk-card-default uk-card-body uk-card-hover">
 
-            <div class="options-container">
+        <div uk-grid>
 
-                @await Html.PartialAsync("_OptionsMenuPartial")
+            @await Html.PartialAsync("_OptionsMenuPartial")
 
-                <div id="optionsContent" class="options-content">
+            <div>
+                <form asp-action="discussion" asp-controller="options" method="post" class="uk-form-horizontal uk-margin-large">
+                    <fieldset class="uk-fieldset">
 
-                    <form method="post" asp-action="discussion" asp-controller="options" class="usual-form">
+                        <legend class="uk-legend">Discussion</legend>
 
-                        <fieldset>
-                            <legend>Sorting comments</legend>
-                            <select asp-for="@Model.CommentsOptions.SortingCommentsDefaultType" asp-items="Html.GetEnumSelectList<SortingComments>()">
-                            </select>
-                        </fieldset>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Sorting comments</label>
+                            <div class="uk-form-controls">
+                                <select class="uk-select" asp-for="CommentsOptions.SortingCommentsDefaultType" asp-items="Html.GetEnumSelectList<SortingComments>()"></select>
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>Displaying comments</legend>
-                            <p class="options-input-container">
-                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.CommentsOptions.AllowNesting">
-                                <label class="usual-label checkbox-label" asp-for="@Model.CommentsOptions.AllowNesting"></label>
-                            </p>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Displaying comments</label>
+                            <div class="uk-form-controls">
+                                <input asp-for="CommentsOptions.AllowNesting" type="checkbox" class="uk-checkbox">
+                                <label asp-for="CommentsOptions.AllowNesting"></label>
+                            </div>
+                        </div>
 
-                            <label class="usual-label">
-                                Depth of nested comments:
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Depth of nested comments:</label>
+                            <div class="uk-form-controls">
                                 @Html.DropDownListFor(d => d.CommentsOptions.Depth.Value,
                                     new SelectList(Model.CommentsOptions.Depth.Available),
-                                    "")
-                            </label>
-                        </fieldset>
+                                    new { @class = "uk-select" })
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>Who can write comments</legend>
-                            @for (int i = 0; i < Model.DiscussionRoles.Count; i++)
-                            {
-                                <p class="options-input-container">
-                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model.DiscussionRoles[i].WriteComments">
-                                    <label class="usual-label checkbox-label">@Model.DiscussionRoles[i].Type</label>
-                                </p>
-                            }
-                        </fieldset>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Who can write comments</label>
+                            <div class="uk-form-controls">
+                                @for (int i = 0; i < Model.DiscussionRoles.Count; i++)
+                                {
+                                    <input asp-for="DiscussionRoles[i].WriteComments" type="checkbox" class="uk-checkbox">
+                                    <label>@Model.DiscussionRoles[i].Type</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>Who can moderate comments</legend>
-                            @for (int i = 0; i < Model.DiscussionRoles.Count; i++)
-                            {
-                                if (Model.DiscussionRoles[i].Discriminator.Equals("Role"))
-                                    continue;
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Who can moderate comments</label>
+                            <div class="uk-form-controls">
+                                @for (int i = 0; i < Model.DiscussionRoles.Count; i++)
+                                {
+                                    if (Model.DiscussionRoles[i].Discriminator.Equals("Role"))
+                                        continue;
 
-                                <p class="options-input-container">
-                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model.DiscussionRoles[i].ModerateComments">
-                                    <label class="usual-label checkbox-label">@Model.DiscussionRoles[i].Type</label>
-                                </p>
-                            }
+                                    <input asp-for="DiscussionRoles[i].ModerateComments" type="checkbox" class="uk-checkbox">
+                                    <label>@Model.DiscussionRoles[i].Type</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
-                            <span class="blog-info-span text-alegreya-style"><mark>Note:</mark> If comments are available only to administrators or only to editors and administrators, then only administrators can moderate comments.</span>
-                        </fieldset>
-
-                        @for(int i = 0; i < Model.DiscussionRoles.Count; i++)
+                        @for (int i = 0; i < Model.DiscussionRoles.Count; i++)
                         {
-                            <input type="hidden" asp-for="@Model.DiscussionRoles[i].Type" value="@((int)Model.DiscussionRoles[i].Type)">
-                            <input type="hidden" asp-for="@Model.DiscussionRoles[i].Discriminator" value="@Model.DiscussionRoles[i].Discriminator">
+                            <input type="hidden" asp-for="DiscussionRoles[i].Type" value="@((int)Model.DiscussionRoles[i].Type)">
+                            <input type="hidden" asp-for="DiscussionRoles[i].Discriminator" value="@Model.DiscussionRoles[i].Discriminator">
                         }
 
-                        <button type="submit" class="usual-submit-button usual-button">Save</button>
-                    </form>
-
-                </div>
+                        <button type="submit" class="uk-button uk-button-secondary">Save</button>
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
-@section Scripts{
-    <script src="~/js/options_actions/openList.js"></script>
-}

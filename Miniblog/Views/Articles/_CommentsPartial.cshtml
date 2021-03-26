@@ -1,89 +1,83 @@
 ﻿@model CommentsViewModel
 
 @{
-    async Task GetComment(List<Comment> children, int currentDepth)
+    CommentViewModel commentViewModel = new();
+
+    async Task GetCommentAsync(List<Comment> children, int currentDepth)
     {
         ++currentDepth;
         for (int i = 0; i < children.Count(); i++)
         {
-            string commentParentId = string.Empty;
-            if (children[i].ParentId is object)
-                commentParentId = children[i].ParentId.ToString();
-
             string parentalClass = string.Empty;
-
-            if(currentDepth > Model.Depth)
+            if (currentDepth > Model.Depth)
             {
                 parentalClass = $"parental parental-{Model.Depth}";
             }
-            else if(currentDepth > 0)
+            else if (currentDepth > 0)
             {
                 parentalClass = $"parental parental-{currentDepth}";
             }
 
-            <div data-comment-id="@children[i].Id.ToString()" data-parent-id="@commentParentId" class="blog-comment @parentalClass">
+            <li data-comment-id="@children[i].Id.ToString()" data-parent-id="@(children[i].ParentId?.ToString() ?? "")" class="blog-comment @parentalClass">
+                <article class="uk-visible-toggle uk-comment" tabindex="-1">
+                    <header class="uk-comment-header uk-position-relative">
+                        <div class="uk-grid-medium uk-flex-middle" uk-grid>
+                            <div class="user-info-container uk-width-auto">
+                                <avatar user="@children[i].Author" px="80" classes="uk-comment-avatar" />
+                            </div>
+                            <div class="uk-width-expand">
+                                <h4 class="comment-username uk-comment-title uk-margin-remove">
+                                    @if (children[i].Author is not null)
+                                    {
+                                        <a class="uk-link-reset" href="@Url.Action("account", "users", new { username = children[i].Author.Username })">@children[i].Author.Username</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="uk-link-reset" href="#"><i>deleted</i></a>
+                                    }
+                                </h4>
+                                <div class="comment-time-info time-info uk-comment-meta uk-margin-remove-top">
+                                    <time class="time-info-created" datetime="@children[i].DateTime.ToString("s")">@children[i].DateTime.ToString("g")</time>
+                                    @if (children[i].UpdatedDateTime is not null)
+                                    {
+                                        <span>(updated at <time class="time-info-updated" datetime="@children[i].UpdatedDateTime?.ToString("s")">@children[i].UpdatedDateTime?.ToString("g")</time>)</span>
+                                    }
+                                </div>
 
-                <div class="user-info-container">
-                    <avatar user="children[i].Author"/>
-                </div>
-
-                <div class="text-comment-container clearfix">
-
-                    <div class="blog-comment-meta">
-                        @if (children[i].Author is not null)
-                        {
-                            <a class="comment-username" href="@Url.Action("account", "users", new { username = children[i].Author.Username })">
-                                @children[i].Author.Username
-                            </a>
-                        }
-                        else
-                        {
-                            <a class="comment-username" href="#">
-                                <i>deleted</i>
-                            </a>
-                        }
-
-                        @if (User.Identity.IsAuthenticated && !children[i].IsDeleted)
-                        {
-                            bool allowEditing = false;
-                            if (Model.User.Id.Equals(children[i].AuthorId) && (Model.User.Role?.WriteComments ?? default))
-                            {
-                                allowEditing = true;
-                            }
-
-                            <div class="comment-change">
-                                @if (allowEditing)
+                                @if (User.Identity.IsAuthenticated && !children[i].IsDeleted)
                                 {
-                                    <button type="button" onclick="getUpdateCommentForm(this)" class="reply-button">
-                                        <img src="/img/ico/rewrite.png" alt="reply">
-                                    </button>
-                                }
+                                    bool allowEditing = false;
+                                    if (Model.User.Id.Equals(children[i].AuthorId) && (Model.User.Role?.WriteComments ?? default))
+                                    {
+                                        allowEditing = true;
+                                    }
 
-                                @if (allowEditing || ((Model.User.Role as ExtendedRole)?.ModerateComments ?? default))
-                                {
-                                    <button class="comment-change-delete reply-button" type="button" onclick="deleteActions(this)">
-                                        <img src="/img/ico/delete7.png" alt="reply">
-                                    </button>
+                                    <div>
+                                        <div class="comment-change uk-button-group uk-position-top-right">
+                                            @if (allowEditing)
+                                            {
+                                                <button class="reply-button blog-btn" onclick="getUpdateCommentForm(this)" type="button">
+                                                    <span uk-icon="icon: pencil"></span>
+                                                </button>
+                                            }
+                                            @if (allowEditing || ((Model.User.Role as ExtendedRole)?.ModerateComments ?? default))
+                                            {
+                                                <button class="comment-change-delete reply-button blog-btn" onclick="deleteActions(this)" type="button">
+                                                    <span uk-icon="icon: close"></span>
+                                                </button>
+                                            }
+                                        </div>
+                                    </div>
                                 }
                             </div>
-                        }
-                        else
-                        {
-                            <div></div>
-                        }
+                        </div>
+                    </header>
 
-                        <span class="comment-time-info time-info">
-
-                        </span>
-                        <span class="time-info-utc time-info-created">@children[i].DateTime.ToString("O")</span>
-                        <span class="time-info-utc time-info-updated">@children[i].UpdatedDateTime?.ToString("O")</span>
-                    </div>
-
-                    <div class="comment-container">
+                    <div class="uk-comment-body">
                         @{
                             if (children[i].IsDeleted)
                             {
-                                <p><i>Deleted</i></p>
+                                <p><i>[deleted]</i></p>
                             }
                             else
                             {
@@ -96,121 +90,103 @@
                         }
                     </div>
 
-                    <div class="comment-actions-container">
+                    @{
+                        CommentLikes commentLike = children[i].Likes
+                            .Where(cl => cl.UserId == Model.User?.Id)
+                            .FirstOrDefault();
+                    }
 
-                        <div class="hearts">
-                            @{ 
-                                CommentLikes commentLike = children[i].Likes
-                                    .Where(cl => cl.UserId == Model.User?.Id /*&& Model.User.Id != null*/)
-                                    .FirstOrDefault();
-
-                                <button type="button" class="heart-button" onclick="likeComment(this)">
-                                    @if (commentLike != null)
-                                    {
-                                        <img src="~/img/buttons/heart red.png" class="comment-action-checked" alt="like">
-                                        <img src="~/img/buttons/heart.png" class="comment-action-inactive comment-action-unchecked" alt="like">
-                                    }
-                                    else
-                                    {
-                                        <img src="~/img/buttons/heart red.png" class="comment-action-inactive comment-action-checked" alt="like">
-                                        <img src="~/img/buttons/heart.png" class="comment-action-unchecked" alt="like">
-                                    }
+                    <div class="comment-actions-container uk-comment-footer blog-comment-footer">
+                        <div class="uk-button-group">
+                            <button class="blog-btn heart-button" onclick="likeComment(this)" type="button">
+                                @if (commentLike is not null)
+                                {
+                                    <img src="img/buttons/heart red.png" alt="like-ckecked" class="blog-btn-img">
+                                }
+                                else
+                                {
+                                    <img src="img/buttons/heart.png" alt="like" class="blog-btn-img">
+                                }
+                                <span name="commentLikesNumber">@children[i].Likes.Count</span>
+                            </button>
+                            @if (Model.WriteComments)
+                            {
+                                <button class="blog-btn" onclick="getReplyCommentForm(this)" type="button">
+                                    <span uk-icon="icon: reply"></span>
                                 </button>
                             }
-                            
-                            <span name="commentLikesNumber" class="hearts-counter text-sans-style comment-hearts-count">@children[i].Likes.Count</span>
                         </div>
-
-                        @if (Model.WriteComments)
-                        {
-                            <div class="comment-reply">
-                                <button type="button" onclick="getReplyCommentForm(this)" class="reply-button">
-                                    <img src="/img/buttons/next.png" alt="reply">
-                                </button>
-                            </div>
-                        }
                     </div>
-                </div>
-            </div>
+                </article>
+            </li>
 
             @if (children[i].Children.Any())
             {
-                await GetComment(children[i].Children, currentDepth);
+                await GetCommentAsync(children[i].Children, currentDepth);
             }
-
         }
         --currentDepth;
     }
 }
 
-<section class="article-comments text-sans-style">
-
-    <div class="article-comments">
-
-        <div class="comment-appeal text-alegreya-style">
+<div class="uk-container uk-margin">
+    <div class="uk-card uk-card-default uk-card-hover">
+        <div class="uk-card-header">
             @if (!Model.CommentsVisibility)
             {
-                <h3>Comments are hidden by author</h3>
+                <h3 class="uk-text-bottom uk-text-center"><span class="uk-text-middle" uk-icon="lock"></span> Comments are hidden</h3>
             }
             else if (!User.Identity.IsAuthenticated)
             {
-                <h3><a href="@Url.Action("signin", "account")">Sign In</a> to leave a comment</h3>
-            }
-            else /*if (User.Identity.IsAuthenticated && Model.CurrentUser.Role.WriteComments)*/
-            {
-                <h3>Comment</h3>
-            }
-        </div>
-
-        @if (User.Identity.IsAuthenticated && Model.User.Role.WriteComments)
-        {
-            <div class="root-comment-answer comment-answer">
-
-                <div class="user-info-container">
-                    <avatar user="Model.User"/>
-                </div>
-
-                <form class="root-answer-form comment-form">
-                    <div>
-                        @{
-                            CommentViewModel commentViewModel = new CommentViewModel();
-                        }
-                        <textarea placeholder="Add comment..." class="comment-input comment-input-textarea" asp-for="@commentViewModel.Text"></textarea>
-                        <span class="text-sans-style" asp-validation-for="@commentViewModel.Text"></span>
-                    </div>
-
-                    <button type="button" onclick="sendComment(this)" class="usual-submit-button comment-button">Add comment</button>
-                </form>
-
-            </div>
-        }
-    </div>
-
-    <div class="blog-comments text-alegreya-style">
-
-        <a name="commentsAnch"></a>
-
-        @{
-            if (!Model.Comments.Any())
-            {
-                <h4 id="noCommentsMessage">Leave a comment first!</h4>
+                <h3><a href="#">Sign in </a> to leave a comment</h3>
             }
             else
             {
-                <h3 id="commentsAreExistMessage">Comments</h3>
+                <form>
+                    <fieldset class="uk-fieldset">
+                        <legend class="uk-legend uk-text-secondary uk-margin-bottom">Leave a comment</legend>
+                        <a href="#" class="uk-link-reset">
+                            <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                <div class="uk-width-auto">
+                                    <avatar user="Model.User" px="40" classes="uk-border-circle"/>
+                                </div>
+                                <div class="uk-width-expand">
+                                    <h3 class="uk-card-title uk-text-secondary uk-margin-remove-bottom">@Model.User.Username</h3>
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="uk-margin">
+                            <textarea class="uk-textarea" rows="5" placeholder="Add comment"></textarea>
+                            <span class="blog-field-validation" asp-validation-for="@commentViewModel.Text"></span>
+                        </div>
+                    </fieldset>
+
+                    <button onclick="sendComment(this)" class="uk-button uk-button-secondary" type="button">Add</button>
+                </form>
             }
-            <div data-comments-depth="@Model.Depth"
-                 class="article-comments-collection">
+        </div>
+        <div class="uk-card-body">
+            @if (!Model.Comments.Any())
+            {
+                <h3 id="noCommentsMessage" class="uk-margin-remove">There is no comments yet</h3>
+            }
+            else
+            {
+                <h3 id="commentsAreExistMessage" class="uk-text-secondary">Comments</h3>
+            }
+            <ul data-comments-depth="@Model.Depth" id="comments-container" class="uk-comment-list article-comments-collection">
+
                 @if (Model.Comments.Any())
                 {
-                    List<Comment> rootComments = (from comment in Model.Comments
-                                                  where comment.ParentId == null
-                                                  orderby comment.DateTime.Ticks
-                                                  select comment).ToList();
-                    await GetComment(rootComments, -1);
+                    List<Comment> root = Model.Comments
+                        .Where(c => c.ParentId is null)
+                        .OrderBy(c => c.DateTime.Ticks)
+                        .ToList();
+                    await GetCommentAsync(root, -1);
                 }
-            </div>
-        }
-    </div>
 
-</section>
+            </ul>
+        </div>
+    </div>
+</div>

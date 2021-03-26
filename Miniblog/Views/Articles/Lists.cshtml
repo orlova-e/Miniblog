@@ -1,50 +1,46 @@
 ﻿@using Domain.Entities.Enums
-@using Repo.Interfaces;
-@using System.Security.Claims;
+@using Services.Interfaces
+
+@inject IUserService userService
 
 @model ListViewModel
-@inject IOptionRepository<Role> rolesRepo
 
 @{
     Role role = null;
     if (User.Identity.IsAuthenticated)
     {
-        string roleType = User.FindFirstValue(ClaimsIdentity.DefaultRoleClaimType);
-        RoleType rt = (RoleType)Enum.Parse(typeof(RoleType), roleType);
-        role = rolesRepo.Find(r => r.Type == rt).FirstOrDefault();
+        role = userService.FindByName(User.Identity.Name).Role;
     }
 }
 
-@if (Model.Articles.Any())
+@if (!Model.Articles.Any())
+{
+    ServerMessage serverMessage = new()
+    {
+        ShowSmile = true,
+        MessageText = "There is no articles yet"
+    };
+    await Html.RenderPartialAsync("_MessagePartial", serverMessage);
+    if (Model.PageName is "default" && (role?.WriteArticles ?? false))
+    {
+        <div class="uk-align-center uk-text-center">
+            <a class="uk-button uk-button-secondary" href="@Url.Action("add", "articles")">Add new</a>
+        </div>
+    }
+}
+else
 {
     await Html.RenderPartialAsync("~/Views/Articles/_ListParametersPartial.cshtml", Model);
-}
 
-<div id="articlesContainer" class="blog-container">
-
-    @{
-        if (!Model.Articles.Any())
-        {
-            ServerMessage serverMessage = new ServerMessage()
-            {
-                ShowSmile = true,
-                MessageText = "No articles yet"
-            };
-            await Html.RenderPartialAsync("_ServerMessagePartial", serverMessage);
-        }
-        else
-        {
-            foreach (var article in Model.Articles)
+    <div class="uk-container uk-margin">
+        <div id="articlesContainer" uk-grid="masonry: true" class="uk-grid-medium uk-child-width-1-1@m">
+            @foreach (Article article in Model.Articles)
             {
                 await Html.RenderPartialAsync("~/Views/Articles/_PreviewArticlePartial.cshtml", article);
             }
-        }
-    }
+        </div>
+    </div>
 
-</div>
-
-@if (Model.Articles.Any())
-{
     string previous = Url.Action(Model.PageName.ToLower(), "articles", new
     {
         page = Model.Current - 1,
@@ -56,33 +52,25 @@
         sortby = Enum.GetName(typeof(ListSorting), Model.ListSorting).ToLower()
     });
 
-    string containerClass = "blog";
-    if (!Model.HasNext || !Model.HasPrevious)
+    @if (Model.HasPrevious || Model.HasNext)
     {
-        containerClass = "one-button-container";
-    }
-
-    if (Model.Current > 1 && Model.Current < Model.Total)
-    {
-        <div class="load-more-container @containerClass">
-            @if (Model.HasPrevious)
-            {
-                <a href="@previous" class="button-left usual-button usual-button-reverse" id="previousPageButton">Previous</a>
-            }
-            @if (Model.HasNext)
-            {
-                <a href="@next" class="button-right usual-button" id="nextPageButton">Next</a>
-            }
+        <div class="uk-flex-center uk-margin" uk-grid>
+            <div>
+                <ul class="uk-pagination">
+                    @if (Model.HasPrevious)
+                    {
+                        <li><a href="@previous"><span class="uk-margin-small-right" uk-pagination-previous></span> Previous</a></li>
+                    }
+                    @if (Model.HasNext)
+                    {
+                        <li class="uk-margin-auto-left"><a href="@next">Next <span class="uk-margin-small-left" uk-pagination-next></span></a></li>
+                    }
+                </ul>
+            </div>
         </div>
     }
 
     @section Scripts {
         @await Html.PartialAsync("_ListScripts")
     }
-}
-else if (Model.PageName.Equals("List") && User.Identity.IsAuthenticated && (role?.WriteArticles ?? default))
-{
-    <div class="load-more-container one-button-container">
-        <a asp-action="Add" asp-controller="Articles" class="usual-button usual-button-reverse">Add new</a>
-    </div>
 }

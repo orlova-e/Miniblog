@@ -1,49 +1,54 @@
 ﻿@model IEnumerable<Entity>
 
-<div class="blog-container">
-    <div class="page-container text-alegreya-style">
-        <div class="blog-content">
-            <div class="options-container">
+<div class="uk-container uk-margin-bottom">
+    <div class="uk-card uk-card-default uk-card-body uk-card-hover">
+        <div uk-grid>
 
-                @await Html.PartialAsync("~/Views/Options/_OptionsMenuPartial.cshtml")
+            @await Html.PartialAsync("~/Views/Options/_OptionsMenuPartial.cshtml")
 
-                <div id="optionsContent" class="options-content">
+            <div>
+                <div class="uk-width-expand">
+                    <h2 class="blog-title">@ViewBag.Header</h2>
 
-                    <h3>@ViewBag.Header</h3>
+                    <div class="uk-form-controls uk-margin">
+                        <input id="searchInput" oninput="searchEntities(this)" class="uk-input uk-width-large@m" placeholder="Search" type="search">
+                    </div>
 
-                    <input class="usual-input" id="searchInput" oninput="searchEntities(this)" placeholder="Search..." type="search">
+                    <table style="display: none;" id="searchResultsList" class="uk-table uk-table-justify uk-table-divider uk-table-responsive uk-table-hover uk-table-middle">
+                        <tbody>
+                        </tbody>
+                    </table>
 
-                    <ul style="display: none;" id="searchResultsList" class="search-results verify-result"></ul>
+                    <table id="verifyResultsList" class="uk-table uk-table-justify uk-table-divider uk-table-responsive uk-table-hover uk-table-middle">
+                        <tbody>
+                            @foreach (var entity in Model)
+                            {
+                                @:<tr data-item-id="@entity.Id" class="verify-result">
 
-                    <ul id="verifyResultsList" class="search-results verify-result">
-                        @foreach (var entity in Model)
-                        {
-                            @:<li data-item-id="@entity.Id" class="verify-result">
-                                
-                                (string text, string link) = entity switch
-                                {
-                                    Tag t => (t.Name, ""),
-                                    Topic t => (t.Name, ""),
-                                    Series s => (s.Name, ""),
-                                    _ => throw new NotImplementedException()
-                                };
+                                    (string text, string link) = entity switch
+                                    {
+                                        Tag t => (t.Name, ""),
+                                        Topic t => (t.Name, ""),
+                                        Series s => (s.Name, ""),
+                                        _ => throw new NotImplementedException()
+                                    };
 
-                                <a href="@link" class="search-result-item usual-result-item">
-                                    <p class="item-name">@text</p>
-                                </a>
-                                
-                                <div class="verify-result-buttons">
-                                    <button type="button" onclick="acceptEntity(this)" class="verify-accept-button">
-                                        <img src="~/img/ico/accept.png">
-                                    </button>
-                                    <button type="button" onclick="deleteEntity(this)" class="verify-delete-button">
-                                        <img src="~/img/ico/close.png">
-                                    </button>
-                                </div>
-                            @:</li>
-                        }
-                    </ul>
+                                    <td class="uk-table-link">
+                                        <a href="@link" class="uk-link uk-link-reset search-result-item usual-result-item">@text</a>
+                                    </td>
 
+                                    <td class="uk-width-small">
+                                        <button class="blog-btn" type="button">
+                                            <span uk-icon="check"></span>
+                                        </button>
+                                        <button class="blog-btn" type="button">
+                                            <span uk-icon="close"></span>
+                                        </button>
+                                    </td>
+                                @:</tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -51,23 +56,23 @@
 </div>
 
 <template id="searchResultsItemsTemplate">
-    <li data-item-id="" class="verify-result">
+    <tr data-item-id="" class="verify-result">
 
-        <div class="verify-result-buttons">
-            <button type="button" onclick="acceptEntity(this)" class="verify-accept-button">
-                <img src="~/img/ico/accept.png">
+        <td class="uk-width-small">
+            <button class="blog-btn" type="button">
+                <span uk-icon="check"></span>
             </button>
-            <button type="button" onclick="deleteEntity(this)" class="verify-delete-button">
-                <img src="~/img/ico/close.png">
+            <button class="blog-btn" type="button">
+                <span uk-icon="close"></span>
             </button>
-        </div>
-    </li>
+        </td>
+    </tr>
 </template>
 
 <template id="resultsLinksTemplates">
-    <a href="#" class="search-result-item usual-result-item">
-        <p class="item-name"></p>
-    </a>
+    <td class="uk-table-link">
+        <a href="#" class="uk-link uk-link-reset search-result-item usual-result-item item-name"></a>
+    </td>
 </template>
 
 @section Hubs {

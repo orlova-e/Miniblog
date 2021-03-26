@@ -1,101 +1,110 @@
 ﻿@model List<RoleViewModel>
 
-<div class="blog-container">
-    <div class="page-container text-alegreya-style">
-        <div class="blog-content">
+<div class="uk-container uk-margin-bottom">
+    <div class="uk-card uk-card-default uk-card-body uk-card-hover">
 
-            <div class="options-container">
+        <div uk-grid>
 
-                @await Html.PartialAsync("_OptionsMenuPartial")
+            @await Html.PartialAsync("_OptionsMenuPartial")
 
-                <div id="optionsContent" class="options-content">
+            <div>
+                <form asp-action="writing" asp-controller="options" method="post" class="uk-form-horizontal uk-margin-large">
+                    <fieldset class="uk-fieldset">
 
-                    <form method="post" asp-action="Writing" asp-controller="Options" class="usual-form">
-                        <fieldset>
-                            <legend>Who can write articles</legend>
-                            @for (int i = 0; i < Model.Count; i++)
-                            {
-                                <p class="options-input-container">
-                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].WriteArticles">
-                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
-                                </p>
-                            }
-                        </fieldset>
+                        <legend class="uk-legend">Writing</legend>
 
-                        <fieldset>
-                            <legend>Who can override own articles</legend>
-                            @for (int i = 0; i < Model.Count; i++)
-                            {
-                                <p class="options-input-container">
-                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].OverrideOwnArticle">
-                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
-                                </p>
-                            }
-                        </fieldset>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Who can write articles</label>
+                            <div class="uk-form-controls">
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <input asp-for="@Model[i].WriteArticles" type="checkbox" class="uk-checkbox">
+                                    <label>@Model[i].Type</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>Who can moderate articles</legend>
-                            @for (int i = 0; i < Model.Count; i++)
-                            {
-                                if (Model[i].Discriminator.Equals("Role"))
-                                    continue;
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Who can override own articles</label>
+                            <div class="uk-form-controls">
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <input asp-for="@Model[i].OverrideOwnArticle" type="checkbox" class="uk-checkbox">
+                                    <label>@Model[i].Type</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
-                                <p class="options-input-container">
-                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].ModerateArticles">
-                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
-                                </p>
-                            }
-                        </fieldset>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Who can moderate articles</label>
+                            <div class="uk-form-controls">
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    if (Model[i].Discriminator.Equals("Role"))
+                                        continue;
 
-                        <fieldset>
-                            <legend>Who can create topics</legend>
-                            @for (int i = 0; i < Model.Count; i++)
-                            {
-                                <p class="options-input-container">
-                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].CreateTopics">
-                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
-                                </p>
-                            }
-                        </fieldset>
+                                    <input asp-for="@Model[i].ModerateArticles" type="checkbox" class="uk-checkbox">
+                                    <label>@Model[i].Type</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>Who can moderate topics</legend>
-                            @for (int i = 0; i < Model.Count; i++)
-                            {
-                                if (Model[i].Discriminator.Equals("Role"))
-                                    continue;
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Who can create topics</label>
+                            <div class="uk-form-controls">
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <input asp-for="@Model[i].CreateTopics" type="checkbox" class="uk-checkbox">
+                                    <label>@Model[i].Type</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
-                                <p class="options-input-container">
-                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].ModerateTopics">
-                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
-                                </p>
-                            }
-                        </fieldset>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Who can moderate topics</label>
+                            <div class="uk-form-controls">
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    if (Model[i].Discriminator.Equals("Role"))
+                                        continue;
 
-                        <fieldset>
-                            <legend>Who can create articles' tags</legend>
-                            @for (int i = 0; i < Model.Count; i++)
-                            {
-                                <p class="options-input-container">
-                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].CreateTags">
-                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
-                                </p>
-                            }
-                        </fieldset>
+                                    <input asp-for="@Model[i].ModerateTopics" type="checkbox" class="uk-checkbox">
+                                    <label>@Model[i].Type</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>Who can moderate tags</legend>
-                            @for (int i = 0; i < Model.Count; i++)
-                            {
-                                if (Model[i].Discriminator.Equals("Role"))
-                                    continue;
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Who can create articles' tags</label>
+                            <div class="uk-form-controls">
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <input asp-for="@Model[i].CreateTags" type="checkbox" class="uk-checkbox">
+                                    <label>@Model[i].Type</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
-                                <p class="options-input-container">
-                                    <input type="checkbox" class="usual-radiobutton" asp-for="@Model[i].ModerateTags">
-                                    <label class="usual-label checkbox-label">@Model[i].Type</label>
-                                </p>
-                            }
-                        </fieldset>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Who can moderate tags</label>
+                            <div class="uk-form-controls">
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    if (Model[i].Discriminator.Equals("Role"))
+                                        continue;
+
+                                    <input asp-for="@Model[i].ModerateTags" type="checkbox" class="uk-checkbox">
+                                    <label>@Model[i].Type</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
                         @for (int i = 0; i < Model.Count; i++)
                         {
@@ -103,15 +112,10 @@
                             <input type="hidden" asp-for="@Model[i].Discriminator" value="@Model[i].Discriminator">
                         }
 
-                        <button type="submit" class="usual-submit-button usual-button">Save</button>
-                    </form>
-
-                </div>
+                        <button type="submit" class="uk-button uk-button-secondary">Save</button>
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
-@section Scripts{ 
-    <script src="~/js/options_actions/openList.js"></script>
-}

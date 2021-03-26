@@ -1,63 +1,90 @@
 ﻿@model HeaderViewModel
 
-<header>
-    <div id="head-container" class="container-fluid head-container">
-        <div class="container">
-            <nav class="text-sans-style navbar navbar-expand-lg navbar-light bg-white">
-                <a class="text-roboto-style navbar-brand" href="@Url.Action("Index", "Home")">
-                    <h2>@Model.Title</h2>
-                </a>
-                <a href="#" id="menuButton" class="navbar-toggler justify-content-end" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </a>
-                <div class=" collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link user-info" href="@Url.Action("Account", "Users", new { username = Model.User.Username })">
-                                    <div class="user-info-container">
-                                        <avatar user="Model.User" />
-                                        <span>@Model.User.Username</span>
-                                    </div>
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.RouteUrl("default", new { controller = "Account", action = "SignIn" })">Sign In</a>
-                            </li>
-                        }
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
-                            <div class="dropdown-menu" style="min-width: auto;" aria-labelledby="navbarDropdown">
+<header class="uk-container">
+    <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+        <div class="uk-navbar-left">
+            <ul class="uk-navbar-nav">
+                <li class="uk-active">
+                    <h1 class="uk-heading-small">
+                        <a class="uk-link-heading uk-link-reset uk-text-middle blog-title" href="@Url.Action("Index", "Home")" style="font-weight: 500;">@Model.Title</a>
+                    </h1>
+                </li>
+            </ul>
+        </div>
+        <div class="uk-navbar-right">
+            <ul class="uk-navbar-nav">
+                @if (Model.ShowSearch)
+                {
+                    <li>
+                        <div>
+                            <a class="uk-navbar-toggle" href="#" uk-search-icon></a>
+                            <div class="uk-navbar-dropdown" uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav">
 
-                                @if (Model.Pages != null)
-                                {
-                                    foreach (KeyValuePair<string, string> pg in Model.Pages)
-                                    {
-                                        <a class="dropdown-item" href="@pg.Value">@pg.Key</a>
-                                    }
-                                }
-                                @*<a class="dropdown-item" href="#">Topics</a>
-                                    <a class="dropdown-item" href="#">Authors</a>*@
-                                @if (Model.ShowSearch)
-                                {
-                                    <div class="dropdown-divider"></div>
-                                    <div class="dropdown-item" href="#">
-                                        <form action="" class="inline-form">
-                                            <input style="display: inline-block; width: min-content;" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                            <a href="#" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</a>
+                                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                    <div class="uk-width-expand">
+                                        <form class="uk-search uk-search-navbar uk-width-1-1">
+                                            <input class="uk-search-input" type="search" placeholder="Search" autofocus>
                                         </form>
                                     </div>
-                                }
+                                    <div class="uk-width-auto">
+                                        <a class="uk-navbar-dropdown-close" href="#" uk-close></a>
+                                    </div>
+                                </div>
+
                             </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+                        </div>
+                    </li>
+                }
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li>
+                        <a href="@Url.Action("Account", "Users", new { username = Model.User.Username })" class="uk-text-middle">@Model.User.Username</a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="@Url.RouteUrl("default", new { controller = "Account", action = "SignIn" })" class="uk-text-middle">Sign in</a>
+                    </li>
+                }
+                <li>
+                    <a href="#" uk-icon="more"></a>
+                    <div class="uk-navbar-dropdown" uk-dropdown="pos: bottom-right">
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            @if (Model.ShowSearch)
+                            {
+                                <li>
+                                    <div class="uk-margin">
+                                        <form class="uk-search uk-search-default">
+                                            <a href="#" uk-search-icon></a>
+                                            <input class="uk-search-input" type="search" placeholder="Search">
+                                        </form>
+                                    </div>
+                                </li>
+                            }
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li><a href="@Url.Action("Account", "Users", new { username = Model.User.Username })" class="uk-text">@Model.User.Username</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="@Url.RouteUrl("default", new { controller = "Account", action = "SignIn" })" class="uk-text">Sign in</a></li>
+                            }
+                            <li class="uk-nav-divider"></li>
+
+                            @if (Model.Pages is not null)
+                            {
+                                foreach (KeyValuePair<string, string> link in Model.Pages)
+                                {
+                                    <li><a href="@link.Value">@link.Key</a></li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </div>
-        <div class="header-separator" id="header-separator"></div>
-    </div>
+    </nav>
+    <hr class="uk-margin-remove-top uk-margin-bottom">
 </header>

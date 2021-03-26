@@ -7,33 +7,53 @@
 
     string GetUrl(ListSorting sortingType)
     {
-        string action = Model.PageName;
-        string controller = action.Equals("Account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
-        return Url.Action(action, controller, new { page = Model.Current, sortby = Enum.GetName(typeof(ListSorting), sortingType).ToLower() });
+        string type = Enum.GetName<ListSorting>(sortingType);
+        string listName = Model.PageName.ToLower();
+        string controller = listName.Equals("account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
+
+        string url = listName switch
+        {
+            "account" => Url.Action(listName, controller, new { page = Model.Current, sortby = type }),
+            _ => Url.Action("lists", controller, new { listName = listName, page = Model.Current, sortby = type })
+        };
+
+        return url;
     }
 }
 
-<div class="articles-menu-container text-roboto-style">
-
-    <div class="display-parameters">
-        <div class="drop-menu">
-            <button onclick="sortArticlesList()" class="drop-button text-alegreya-style">
-                <img class="sort-list-filter" src="~/img/ico/filter.png" alt="filter by Chameleon Design from the Noun Project">
-                <h5>@Enums.GetEnumName(Model.ListSorting)</h5>
-            </button>
-            <div id="sortListDropdown" class="display-sort-menu-content">
-                <a href="@GetUrl(ListSorting.MostLiked)" class="sort-list-item">@Enums.GetEnumName(ListSorting.MostLiked)</a>
-                <a href="@GetUrl(ListSorting.NewFirst)" class="sort-list-item">@Enums.GetEnumName(ListSorting.NewFirst)</a>
-                <a href="@GetUrl(ListSorting.OldFirst)" class="sort-list-item">@Enums.GetEnumName(ListSorting.OldFirst)</a>
-                <a href="@GetUrl(ListSorting.Alphabetically)" class="sort-list-item">@Enums.GetEnumName(ListSorting.Alphabetically)</a>
-                <a href="@GetUrl(ListSorting.AlphabeticallyDescending)" class="sort-list-item">@Enums.GetEnumName(ListSorting.AlphabeticallyDescending)</a>
-            </div>
+<div class="uk-container">
+    <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+        <div class="uk-navbar-left">
+            <ul class="uk-navbar-nav">
+                <li>
+                    <button class="uk-button uk-button-default" type="button">Sort by</button>
+                    <div uk-dropdown>
+                        <ul class="uk-nav uk-dropdown-nav">
+                            @foreach(ListSorting type in Enum.GetValues<ListSorting>())
+                            {
+                                string liClass = string.Empty;
+                                if (Model.ListSorting == type)
+                                    liClass = @"class=""uk-active""";
+                                <li @liClass><a href="@GetUrl(type)">@Enums.GetEnumName(type)</a></li>
+                            }
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </div>
-
-        <div class="display-character" data-btn-active="@layoutType">
-            <button id="RowsArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="~/img/ico/rows.png" alt=""></button>
-            <button id="GridArticlesLayout" onclick="articlesLayoutVisibility(this)"><img src="~/img/ico/grid_nonactive.png" alt=""></button>
+        <div class="uk-navbar-right">
+            <ul class="uk-navbar-nav">
+                <li>
+                    <div class="uk-button-group display-character" data-btn-active="@layoutType">
+                        <button id="RowsArticlesLayout" onclick="articlesLayoutVisibility(this)" class="blog-btn" type="button">
+                            <img src="~/img/buttons/rows.png" alt="rows" class="blog-btn-img">
+                        </button>
+                        <button id="GridArticlesLayout" onclick="articlesLayoutVisibility(this)" class="blog-btn" type="button">
+                            <img src="~/img/buttons/grid_nonactive.png" alt="grid" class="blog-btn-img">
+                        </button>
+                    </div>
+                </li>
+            </ul>
         </div>
-    </div>
-
+    </nav>
 </div>

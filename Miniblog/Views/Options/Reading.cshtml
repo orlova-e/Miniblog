@@ -3,155 +3,129 @@
 
 @model ReadingViewModel
 
-<div class="blog-container">
-    <div class="page-container text-alegreya-style">
-        <div class="blog-content">
-            <div class="options-container">
+<div class="uk-container uk-margin-bottom">
+    <div class="uk-card uk-card-default uk-card-body uk-card-hover">
 
-                @await Html.PartialAsync("_OptionsMenuPartial")
+        <div uk-grid>
 
-                <div id="optionsContent" class="options-content">
+            @await Html.PartialAsync("_OptionsMenuPartial")
 
-                    <form method="post" asp-action="reading" asp-controller="options" class="usual-form">
+            <div>
+                <form asp-action="reading" asp-controller="options" method="post" class="uk-form-horizontal uk-margin-large">
+                    <fieldset class="uk-fieldset">
 
-                        <fieldset>
-                            <legend>Show pages:</legend>
-                            <p class="options-input-container">
-                                <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowListOfPopularAndRecent">
-                                <label class="usual-label checkbox-label" asp-for="@Model.WebsiteOptionsPartially.ShowListOfPopularAndRecent"></label>
-                            </p>
+                        <legend class="uk-legend">Reading</legend>
 
-                            <p class="options-input-container">
-                                <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowAuthors">
-                                <label class="usual-label checkbox-label" asp-for="@Model.WebsiteOptionsPartially.ShowAuthors"></label>
-                            </p>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Show pages:</label>
+                            <div class="uk-form-controls">
+                                <input asp-for="WebsiteOptionsPartially.ShowListOfPopularAndRecent" type="checkbox" class="uk-checkbox">
+                                <label asp-for="WebsiteOptionsPartially.ShowListOfPopularAndRecent"></label>
+                                <br>
+                                <input asp-for="WebsiteOptionsPartially.ShowAuthors" type="checkbox" class="uk-checkbox">
+                                <label asp-for="WebsiteOptionsPartially.ShowAuthors"></label>
+                                <br>
+                                <input asp-for="WebsiteOptionsPartially.ShowTopics" type="checkbox" class="uk-checkbox">
+                                <label asp-for="WebsiteOptionsPartially.ShowTopics"></label>
+                                <br>
+                                <input asp-for="WebsiteOptionsPartially.ShowSearchOption" type="checkbox" class="uk-checkbox">
+                                <label asp-for="WebsiteOptionsPartially.ShowSearchOption"></label>
+                            </div>
+                        </div>
 
-                            <p class="options-input-container">
-                                <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowTopics">
-                                <label class="usual-label checkbox-label" asp-for="@Model.WebsiteOptionsPartially.ShowTopics"></label>
-                            </p>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Number of articles per page</label>
+                            <div class="uk-form-controls">
+                                @Html.DropDownListFor(n => n.ListOptions.ArticlesPerPage.Value,
+                                   new SelectList(Model.ListOptions.ArticlesPerPage.Available),
+                                   new { @class = "uk-select" })
+                            </div>
+                        </div>
 
-                            <p class="options-input-container">
-                                <input class="usual-checkbox" asp-for="@Model.WebsiteOptionsPartially.ShowSearchOption">
-                                <label class="usual-label checkbox-label" asp-for="@Model.WebsiteOptionsPartially.ShowSearchOption"></label>
-                            </p>
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>Number of articles per page</legend>
-                            @Html.DropDownListFor(n => n.ListOptions.ArticlesPerPage.Value,
-                               new SelectList(Model.ListOptions.ArticlesPerPage.Available),
-                               "")
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>Articles list displaying type</legend>
-                            @foreach (var displayingType in Enum.GetValues(typeof(DisplayType)))
-                            {
-                                <p class="options-input-container">
-                                    <input type="radio" class="usual-radiobutton"
-                                           checked="@((int)displayingType == (int)Model.ListOptions.ListDisplayDefaultType)"
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Articles list displaying type</label>
+                            <div class="uk-form-controls">
+                                @foreach (var displayingType in Enum.GetValues(typeof(DisplayType)))
+                                {
+                                    <input asp-for="ListOptions.ListDisplayDefaultType"
                                            value="@((int)displayingType)"
-                                           asp-for="@Model.ListOptions.ListDisplayDefaultType">
-                                    <label class="usual-label radio-label">@Enums.GetEnumName(displayingType)</label>
-                                </p>
-                            }
-                        </fieldset>
+                                           checked="@((int)displayingType == (int)Model.ListOptions.ListDisplayDefaultType)"
+                                           class="uk-radio" type="radio">
+                                    <label>@Enums.GetEnumName(displayingType)</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>Number of words in preview</legend>
-                            <label class="usual-label">
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Number of words in preview</label>
+                            <div class="uk-form-controls">
                                 @Html.DropDownListFor(n => n.ListOptions.WordsPerPreview.Value,
-                                new SelectList(Model.ListOptions.WordsPerPreview.Available),
-                                "")
-                            </label>
-                        </fieldset>
+                                   new SelectList(Model.ListOptions.WordsPerPreview.Available),
+                                   new { @class = "uk-select" })
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>Website's layout type</legend>
-                            @foreach (var layoutType in Enum.GetValues(typeof(ListLayoutType)))
-                            {
-                                <p class="options-input-container">
-                                    <input type="radio" class="usual-radiobutton"
-                                           checked="@((int)layoutType == (int)Model.ListOptions.LayoutDefaultType)"
-                                           value="@((int)layoutType)"
-                                           asp-for="@Model.ListOptions.LayoutDefaultType">
-                                    <label class="usual-label radio-label">@Enums.GetEnumName(layoutType)</label>
-                                </p>
-                            }
-                        </fieldset>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Website's layout type</label>
+                            <div class="uk-form-controls">
+                                @foreach (var layoutType in Enum.GetValues(typeof(ListLayoutType)))
+                                {
+                                    <input asp-for="ListOptions.LayoutDefaultType" value="@((int)layoutType)" checked="@((int)layoutType == (int)Model.ListOptions.LayoutDefaultType)" class="uk-radio" type="radio">
+                                    <label>@Enums.GetEnumName(layoutType)</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>List sorting default type</legend>
-                            @foreach (var sortingType in Enum.GetValues(typeof(ListSorting)))
-                            {
-                                <p class="options-input-container">
-                                     <input type="radio" class="usual-radiobutton"
-                                           checked="@((int)sortingType == (int)Model.ListOptions.ListSortingDefaultType)"
-                                           value="@((int)sortingType)"
-                                           asp-for="@Model.ListOptions.ListSortingDefaultType">
-                                    <label class="usual-label radio-label">@Enums.GetEnumName(sortingType)</label>
-                                </p>
-                            }
-                        </fieldset>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">List sorting default type</label>
+                            <div class="uk-form-controls">
+                                @foreach (var sortingType in Enum.GetValues(typeof(ListSorting)))
+                                {
+                                    <input asp-for="ListOptions.ListSortingDefaultType" value="@((int)sortingType)" checked="@((int)sortingType == (int)Model.ListOptions.ListSortingDefaultType)" class="uk-radio" type="radio">
+                                    <label>@Enums.GetEnumName(sortingType)</label>
+                                    <br>
+                                }
+                            </div>
+                        </div>
 
-                        <fieldset>
-                            <legend>Displaying data in any articles' list</legend>
-                            <p class="options-input-container">
-                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Username">
-                                <label class="usual-label checkbox-label" asp-for="@Model.ListOptions.Username"></label>
-                            </p>
+                        <div class="uk-margin">
+                            <label class="uk-form-label">Displaying data in any articles' list</label>
+                            <div class="uk-form-controls">
+                                <input asp-for="ListOptions.Username" class="uk-checkbox" type="checkbox">
+                                <label asp-for="ListOptions.Username"></label>
+                                <br>
+                                <input asp-for="ListOptions.DateAndTime" class="uk-checkbox" type="checkbox">
+                                <label asp-for="ListOptions.DateAndTime"></label>
+                                <br>
+                                <input asp-for="ListOptions.Tags" class="uk-checkbox" type="checkbox">
+                                <label asp-for="ListOptions.Tags"></label>
+                                <br>
+                                <input asp-for="ListOptions.Topic" class="uk-checkbox" type="checkbox">
+                                <label asp-for="ListOptions.Topic"></label>
+                                <br>
+                                <input asp-for="ListOptions.Series" class="uk-checkbox" type="checkbox">
+                                <label asp-for="ListOptions.Series"></label>
+                                <br>
+                                <input asp-for="ListOptions.Likes" class="uk-checkbox" type="checkbox">
+                                <label asp-for="ListOptions.Likes"></label>
+                                <br>
+                                <input asp-for="ListOptions.Bookmarks" class="uk-checkbox" type="checkbox">
+                                <label asp-for="ListOptions.Bookmarks"></label>
+                                <br>
+                                <input asp-for="ListOptions.Comments" class="uk-checkbox" type="checkbox">
+                                <label asp-for="ListOptions.Comments"></label>
+                                <br>
+                                <input asp-for="ListOptions.OverrideForUserArticle" class="uk-checkbox" type="checkbox">
+                                <label asp-for="ListOptions.OverrideForUserArticle"></label>
+                            </div>
+                        </div>
 
-                            <p class="options-input-container">
-                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.DateAndTime">
-                                <label class="usual-label checkbox-label" asp-for="@Model.ListOptions.DateAndTime"></label>
-                            </p>
-
-                            <p class="options-input-container">
-                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Tags">
-                                <label class="usual-label checkbox-label" asp-for="@Model.ListOptions.Tags"></label>
-                            </p>
-                            
-                            <p class="options-input-container">
-                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Topic">
-                                <label class="usual-label checkbox-label" asp-for="@Model.ListOptions.Topic"></label>
-                            </p>
-                            
-                            <p class="options-input-container">
-                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Series">
-                                <label class="usual-label checkbox-label" asp-for="@Model.ListOptions.Series"> </label>
-                            </p>
-                            
-                            <p class="options-input-container">
-                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Likes">
-                                <label class="usual-label checkbox-label" asp-for="@Model.ListOptions.Likes"></label>
-                            </p>
-                            
-                            <p class="options-input-container">
-                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Bookmarks">
-                                <label class="usual-label checkbox-label" asp-for="@Model.ListOptions.Bookmarks"></label>
-                            </p>
-                            
-                            <p class="options-input-container">
-                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.Comments">
-                                <label class="usual-label checkbox-label" asp-for="@Model.ListOptions.Comments"></label>
-                            </p>
-                            
-                            <p class="options-input-container">
-                                <input type="checkbox" class="usual-checkbox" asp-for="@Model.ListOptions.OverrideForUserArticle">
-                                <label class="usual-label checkbox-label" asp-for="@Model.ListOptions.OverrideForUserArticle"></label>
-                            </p>
-                        </fieldset>
-
-                        <button type="submit" class="usual-submit-button usual-button">Save</button>
-                    </form>
-
-                </div>
+                        <button type="submit" class="uk-button uk-button-secondary">Save</button>
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script src="~/js/options_actions/openList.js"></script>
-}

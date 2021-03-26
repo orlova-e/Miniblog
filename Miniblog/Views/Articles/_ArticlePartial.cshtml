@@ -2,177 +2,125 @@
 @using System.Linq
 @using Web.ViewModels
 
-@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
-
 @model ArticleReadViewModel
-@*@{
-    //ListDisplayOptions listOptions = await listDisplayRepo.FirstOrDefaultAsync();
-    //ArticleOptions articleOptions = Model.Article.DisplayOptions;
-    //if (listOptions.OverrideForUserArticle)
-    //{
-    //    listOptions = (ListDisplayOptions)articleOptions;
-    //}
-    }*@
 
-<div class="blog-container article-page-container">
-
-    <article class="art text-alegreya-style" id="@Model.Article.Id.ToString()">
-        <div class="blog-content">
-            <div class="article-meta text-sans-style">
-                <a href="#" class="article-header">
-                    <h2><b>@Model.Article.Header</b></h2>
-                </a>
-                <ul class="article-info clearfix">
-                    <li class="article-info-user">
-                        @if (Model.Article.DisplayOptions.Username)
-                        {
-                            if(Model.Article.User is not null)
-                            {
-                                <a href="@Url.Action("Account", "Users", new { username = Model.Article.User?.Username })">
-                                    <div class="user-info-container">
-                                        <avatar user="Model.Article.User" />
-                                        <span>@Model.Article.User.Username</span>
-                                    </div>
-                                </a>
-                            }
-                            else
-                            {
-                                <div class="user-info-container">
-                                    <avatar user="Model.Article.User" />
-                                    <span><i>deleted</i></span>
-                                </div>
-                            }
+    <div class="uk-container">
+        <article id="@Model.Article.Id.ToString()" class="uk-article uk-card uk-card-default uk-card-hover">
+            <div class="uk-card-header">
+                <h1 class="uk-article-title"><a class="uk-link-reset" href="@Url.Action("Article", "Articles", new { title = Model.Article.Link })">@Model.Article.Header</a></h1>
+                @if (Model.Article.DisplayOptions.Username || Model.Article.DisplayOptions.DateAndTime)
+                {
+                    <p class="uk-article-meta">
+                    @if (Model.Article.DisplayOptions.Username)
+                    {
+                        if(Model.Article.User is not null)
+                        { 
+                            @:Written by <a href="@Url.Action("Account", "Users", new { username = Model.Article.User?.Username })">@Model.Article.User.Username</a>
                         }
-                        @if (Model.Article.DisplayOptions.DateAndTime)
+                        else
                         {
-                            <a class="article-time-info" href="@Url.Action("List", "Articles", new { date = Model.Article.DateTime.ToString("yyyy/MM/dd") })">
-
-                            </a>
-                            <div class="time-info-utc time-info-created">@Model.Article.DateTime.ToString("O")</div>
+                            @:Written by <a href="#"><i>deleted</i></a>
                         }
-                        </li>
-                        <li>
-                            @if (Model.Article.DisplayOptions.Likes)
-                            {
-                                <img src="/img/buttons/heart.png" alt="likes" height="20px" width="20px">
-                                <span id="articleLikesInfo">@Model.Article.Likes.Count</span>
-                            }
-                            @if (Model.Article.DisplayOptions.Bookmarks)
-                            {
-                                <img src="/img/ico/bookmark5.png" alt="bookmarks" height="20px" width="20px">
-                                <span id="articleBookmarksInfo">@Model.Article.Bookmarks.Count</span>
-                            }
-                            @if (Model.Article.DisplayOptions.Comments)
-                            {
-                                <img src="/img/buttons/chat-2.png" alt="comments" height="18px" width="18px">
-                                <span id="articleCommentsInfo">@Model.Article.Comments.Count</span>
-                            }
-                            @if (Model.Article.DisplayOptions.Topic)
-                            {
-                                <span>Topic: </span><a href="#">@(Model.Article.Topic?.Name ?? "no topic")</a>
-                            }
-                            @if (Model.Article.DisplayOptions.Series)
-                            {
-                                <span>Series: </span><a href="#">@(Model.Article.Series?.Name ?? "no series")</a>
-                            }
-                        </li>
-                        @if (Model.Article.DisplayOptions.Tags)
-                        {
-                            <li>
-                                Tags:
-                                @{
-                                    List<string> tags = Model.Article.ArticleTags.Select(t => t.Tag).Select(t => t.Name).ToList();
-                                    for (int i = 0; i < tags.Count; i++)
-                                    {
-                                        <a href="#">@tags[i]</a>
-                                    }
-                                    if (tags.Count == 0)
-                                    {
-                                        <span>no tags</span>
-                                    }
-                                }
-                            </li>
-                        }
-                    </ul>
+                    }
+                    @if (Model.Article.DisplayOptions.DateAndTime)
+                    {
+                        @:on <a class="uk-link-muted" href="#"><time datetime="@Model.Article.DateTime.ToString("s")">@Model.Article.DateTime.ToString("g")</time></a>
+                    }
+                    </p>
+                }
             </div>
-            <div class="blog-text">
-                @{
+            <div class="uk-card-body">
+                @{ 
                     string[] paragraphs = Model.Article.Text.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.None);
                     int imagesNumber = Model.Article.Images.Count;
                     for (int i = 0; i < paragraphs.Length + imagesNumber; i++)
                     {
-                        Image currentImage = (from image in Model.Article.Images
-                                              where image.Position == i
-                                              select image).FirstOrDefault();
-                        if (currentImage is object)
+                        Image image = Model.Article.Images
+                            .Where(img => img.Position == i)
+                            .FirstOrDefault();
+
+                        if (image is not null)
                         {
-                            <div class="article-image">
-                                <image source="currentImage"/>
-                            </div>
+                            <image source="image"/>
                         }
                         else
                         {
-                            <p>@paragraphs[i]</p>
+                            if(i is 1)
+                            {
+                                <p class="uk-dropcap">@paragraphs[i]</p>
+                            }
+                            else
+                            {
+                                <p>@paragraphs[i]</p>
+                            }
                         }
                     }
                 }
+                <div class="blog-article-data">
+                    @if (Model.Article.DisplayOptions.Topic)
+                    {
+                        <a class="uk-link-muted" href="#"><span uk-icon="chevron-double-right"></span>@(Model.Article.Topic?.Name ?? "no topic")</a>
+                    }
+                    @if (Model.Article.DisplayOptions.Series)
+                    {
+                        <a class="uk-link-muted" href="#"><span uk-icon="folder"></span> @(Model.Article.Series?.Name ?? "no series")</a>
+                    }
+                    @if (Model.Article.DisplayOptions.Tags)
+                    {
+                        List<string> tags = Model.Article.ArticleTags.Select(t => t.Tag).Select(t => t.Name).ToList();
+                        for (int i = 0; i < tags.Count; i++)
+                        {
+                            <a class="uk-link-muted" href="#"><span uk-icon="hashtag"></span>@tags[i]</a>
+                        }
+                    }
+                </div>
             </div>
-
-            <div class="article-user-actions text-roboto-style">
-                <div class="like-action">
-                    <button type="button" onclick="likeArticle()">
-                        @{
+            <div class="uk-card-footer">
+                <div class="uk-grid-small uk-child-width-1-2" uk-grid>
+                    <div>
+                        @if (Model.Article.DisplayOptions.Likes)
+                        {
                             UserFavourite like = Model.Article.Likes
                                 .Where(l => l.UserId == Model.User?.Id)
                                 .FirstOrDefault();
-                            if (like is object)
-                            {
-                                <img class="article-action-checked" src="~/img/buttons/heart red.png" alt="like">
-                                <img class="article-action-inactive article-action-unchecked" src="~/img/buttons/heart.png" alt="like">
-                            }
-                            else
-                            {
-                                <img class="article-action-inactive article-action-checked" src="~/img/buttons/heart red.png" alt="like">
-                                <img class="article-action-unchecked" src="~/img/buttons/heart.png" alt="like">
-                            }
+                            <button class="blog-btn uk-text-middle" type="button">
+                                @if (like is not null)
+                                {
+                                    <img src="img/buttons/heart red.png" alt="like-checked" class="blog-btn-img">
+                                }
+                                else
+                                {
+                                    <img src="img/buttons/heart.png" alt="like" class="blog-btn-img">
+                                }
+                                <span>@Model.Article.Likes.Count</span>
+                            </button>
                         }
-                    </button>
-                    <span id="articleLikesNumber">@Model.Article.Likes.Count</span> @*ID changed*@
-                </div>
-
-                <div class="bookmark-action">
-                    <button type="button" onclick="bookmarkArticle()">
-                        @{
+                        @if (Model.Article.DisplayOptions.Likes)
+                        {
                             UserBookmark bookmark = Model.Article.Bookmarks
                                 .Where(b => b.UserId == Model.User?.Id)
                                 .FirstOrDefault();
-                            if (bookmark is object)
-                            {
-                                <img class="article-action-checked" src="~/img/ico/bookmark-checked.png" alt="bookmark by Calvin Goodman from the Noun Project">
-                                <img class="article-action-inactive article-action-unchecked" src="~/img/ico/bookmark-unchecked.png" alt="bookmark by Calvin Goodman from the Noun Project">
-                            }
-                            else
-                            {
-                                <img class="article-action-inactive article-action-checked" src="~/img/ico/bookmark-checked.png" alt="bookmark by Calvin Goodman from the Noun Project">
-                                <img class="article-action-unchecked" src="~/img/ico/bookmark-unchecked.png" alt="bookmark by Calvin Goodman from the Noun Project">
-                            }
+                            <button class="blog-btn uk-text-middle" type="button">
+                                @if (bookmark is not null)
+                                {
+                                    <img src="img/buttons/bookmark-checked.png" alt="bookmark-checked" class="blog-btn-img">
+                                }
+                                else
+                                {
+                                    <img src="img/buttons/bookmark-unchecked.png" alt="bookmark" class="blog-btn-img">
+                                }
+                                <span>@Model.Article.Bookmarks.Count</span>
+                            </button>
                         }
-                    </button>
-                    <span id="articleBookmarksNumber">@Model.Article.Bookmarks.Count</span> @*ID changed*@
-                </div>
-
-                @if (Model.Article.DisplayOptions.Comments)
-                {
-                    <div class="comment-action">
-                        <a href="#commentsAnch">
-                            <img src="~/img/ico/chat.png" alt="from the Noun Project">
-                        </a>
-                        <span id="articleCommentsNumber">@Model.Article.Comments.Count</span>
+                        @if (Model.Article.DisplayOptions.Comments)
+                        {
+                            <span class="uk-text-middle uk-link-reset uk-margin-small-right">
+                                <span uk-icon="comments"></span>
+                                <span>@Model.Article.Comments.Count</span>
+                            </span>
+                        }
                     </div>
-                }
-
+                </div>
             </div>
-        </div>
-    </article>
-
-</div>
+        </article>
+    </div>

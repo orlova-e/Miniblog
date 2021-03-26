@@ -1,99 +1,77 @@
-﻿@using System.Security.Claims
-
-@{
-    User user = ViewBag.Author;
+﻿@{
+    User author = ViewBag.Author;
     ListViewModel listViewModel = ViewBag.ListViewModel;
     bool subscribed = ViewBag.Subscribed;
 }
 
-@if (listViewModel.Current == 1)
+@if (listViewModel.Current is 1)
 {
-    <div class="blog-container">
-        <div class="page-container text-alegreya-style">
-            <div class="author-container">
-                <div class="author-info-container">
-                    <div class="user-info-container">
-                        <avatar user="user"/>
-                    </div>
-
-                    <div class="author-info">
-                        <h3 class="">
-                            <b id="author_username">@user.Username</b>
-                            @if (user.FullName is not null)
+    <div class="uk-container uk-margin-bottom">
+        <div uk-grid class="uk-grid-medium">
+            <div class="uk-width-1-1">
+                <div class="uk-card uk-card-default uk-card-body uk-card-hover">
+                    <div class="uk-flex-middle author-info" uk-grid>
+                        <div class="uk-width-auto">
+                            <avatar classes="uk-border-circle" user="author" px="170" />
+                        </div>
+                        <div class="uk-width-expand">
+                            <h3 class="uk-card-title uk-text-secondary uk-margin-remove-bottom">@author.Username</h3>
+                            @if (author.FullName is not null)
                             {
-                                <span class="auhor-name-info">
-                                    // @user.FullName
-                                </span>
+                                <p>// @author.FullName</p>
                             }
-                        </h3>
-                        <span class="author-expirience">
-                            With us from @user.DateOfRegistration.ToString("D", new CultureInfo("en"))
-                        </span>
-                        @if (user.City is not null)
-                        {
-                            <div>
-                                <span class="author-place">Place: @user.City</span>
-                            </div>
-                        }
-                        <div class="statistics">
-                            <span class="author-articles-number">
-                                <span class="author-articles-count"><b>@listViewModel.Articles.Count</b></span>
-                                <span class="author-articles-word">articles</span>
-                            </span>
-                            <br>
-                            <span class="author-subscribers">
-                                <span class="author-subscribers-count"><b id="subscribersNumber">@(user.Subscribers?.Count ?? 0)</b></span>
+                            <p>With us from @author.DateOfRegistration.ToString("D", new CultureInfo("en"))</p>
+                            @if (author.City is not null)
+                            {
+                                <p>@author.City</p>
+                            }
+                            <p class="blog-author-articles-number">
+                                <b>@listViewModel.Articles.Count</b>
+                                @{ 
+                                    string articles = "articles";
+                                    if ((author.Articles.Count is 1))
+                                        articles = "article";
+                                }
+                                <span>@articles</span>
+                            </p>
+                            <p class="author-subscribers">
+                                <b id="subscribersNumber">@(author.Subscribers?.Count ?? 0)</b>
                                 @{
                                     string subscribers = "subscribers";
-                                    if ((user.Subscribers?.Count ?? 0) == 1)
+                                    if ((author.Subscribers?.Count ?? 0) is 1)
                                         subscribers = "subscriber";
                                 }
                                 <span class="author-subscribers-word">@subscribers</span>
-                            </span>
+                            </p>
+
+                            @if (!author.Username.Equals(User.Identity.Name))
+                            {
+                                @if (subscribed)
+                                {
+                                    <button id="subscribeButton" onclick="unsubscribe()" class="uk-button" style="margin-top: 10px;">Subscribed</button>
+                                }
+                                else if (User.Identity.IsAuthenticated)
+                                {
+                                    <button id="subscribeButton" onclick="subscribe()" class="uk-button uk-button-secondary" style="margin-top: 10px;">+ Subscribe</button>
+                                }
+                            }
                         </div>
-                        @if (!User.Identity.IsAuthenticated || !user.Username.Equals(User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value))
-                        {
-                            @if (subscribed)
-                            {
-                                <button id="subscribeButton" onclick="unsubscribe()" class="subscribe-button usual-button usual-button-reverse">Subscribed</button>
-                            }
-                            else
-                            {
-                                if (User.Identity.IsAuthenticated)
-                                {
-                                    <button id="subscribeButton" onclick="subscribe()" class="subscribe-button usual-button">+ Subscribe</button>
-                                }
-                                else
-                                {
-                                    <button id="subscribeButton" class="subscribe-button usual-button">+ Subscribe</button>
-                                }
-                            }
-                        }
                     </div>
+
+                    @if (author.Description is not null)
+                    {
+                        <div class="user-description">
+                            <p>@author.Description</p>
+                        </div>
+                    }
                 </div>
-
-                @if (user.Description is not null)
-                {
-                    <div class="author-description">
-                        <h3><b>About</b></h3>
-                        <p>@user.Description</p>
-                    </div>
-                }
-
             </div>
-            @if (listViewModel.Articles.Any())
-            {
-                <a id="articlesLink" href="#author-articles"><h4>&#709; Articles</h4></a>
-            }
         </div>
     </div>
 }
 
-
 @if (listViewModel.Articles.Any())
 {
-    <a name="author-articles"></a>
-
     await Html.RenderPartialAsync("~/Views/Articles/Lists.cshtml", listViewModel);
 
     @section Scripts {
@@ -102,17 +80,17 @@
 }
 else
 {
-    ServerMessage serverMessage = new ServerMessage
+    ServerMessage serverMessage = new()
     {
         ShowSmile = true,
-        MessageText = $"{user.Username} has no articles"
+        MessageText = $"{author.Username} has no articles"
     };
-    await Html.RenderPartialAsync("~/Views/Shared/_ServerMessagePartial.cshtml", serverMessage);
+    await Html.RenderPartialAsync("~/Views/Shared/_MessagePartial.cshtml", serverMessage);
 }
 
 @section Hubs {
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
-    @if (User.Identity.IsAuthenticated && !user.Username.Equals(User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value))
+    @if (User.Identity.IsAuthenticated && !author.Username.Equals(User.Identity.Name))
     {
         <script src="~/js/subscription/subscribe.js"></script>
     }
