@@ -15,12 +15,14 @@ namespace Web.ViewModels
         [DataType(DataType.Password)]
         [MinLength(8, ErrorMessage = "The minimum length is 8 characters")]
         public string Password { get; set; }
+        [Display(Name = "Old password")]
         [DataType(DataType.Password)]
         [MinLength(8, ErrorMessage = "The minimum length is 8 characters")]
         public string OldPassword { get; set; }
         public byte[] Avatar { get; set; }
         [MaxFileSize(1 * 1024 * 1024), AllowedFileExtensions("jpg", "jpeg", "png")]
         public IFormFile FormFile { get; set; }
+        [Display(Name = "Full name")]
         public string FullName { get; set; }
         public string City { get; set; }
         public string Description { get; set; }
