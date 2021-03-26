@@ -24,6 +24,7 @@ namespace Web.ViewModels
         [Required(ErrorMessage = "Password confirmation is required")]
         [Display(Name = "Confirm password")]
         [DataType(DataType.Password)]
+        [MinLength(8, ErrorMessage = "The minimum length is 8 characters")]
         [Compare(nameof(Password), ErrorMessage = "The value must be identical to the password")]
         public string PasswordConfirmation { get; set; }
 
