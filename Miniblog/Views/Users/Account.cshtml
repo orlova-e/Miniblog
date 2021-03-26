@@ -75,7 +75,7 @@
     await Html.RenderPartialAsync("~/Views/Articles/Lists.cshtml", listViewModel);
 
     @section Scripts {
-        @await Html.PartialAsync("_ListScripts")
+        <script src="~/js/list/articlesLayout.js"></script>
     }
 }
 else

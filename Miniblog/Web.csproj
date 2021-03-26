@@ -7,16 +7,12 @@
   <ItemGroup>
     <Compile Remove="Migrations\**" />
     <Compile Remove="Views\Home\**" />
-    <Compile Remove="wwwroot\js\list\**" />
     <Content Remove="Migrations\**" />
     <Content Remove="Views\Home\**" />
-    <Content Remove="wwwroot\js\list\**" />
     <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="Views\Home\**" />
-    <EmbeddedResource Remove="wwwroot\js\list\**" />
     <None Remove="Migrations\**" />
     <None Remove="Views\Home\**" />
-    <None Remove="wwwroot\js\list\**" />
   </ItemGroup>
 
   <ItemGroup>
