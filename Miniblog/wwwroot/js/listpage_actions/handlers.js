@@ -12,5 +12,3 @@ if (localStorage.getItem(layoutType) !== null) {
 }
 
 window.addEventListener("load", () => articlesLayoutVisibility(articlesLayoutBtn));
-window.addEventListener("scroll", closeSortList);
-window.addEventListener("click", windowClickEvent.bind(event));
