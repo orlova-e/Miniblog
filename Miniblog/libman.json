@@ -25,6 +25,10 @@
       "files": [
         "dist/browser/signalr.min.js"
       ]
+    },
+    {
+      "library": "uikit@3.6.18",
+      "destination": "wwwroot/lib/uikit/"
     }
   ]
 }
