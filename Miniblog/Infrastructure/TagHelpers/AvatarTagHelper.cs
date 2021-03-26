@@ -12,6 +12,7 @@ namespace Web.Infrastructure.TagHelpers
     {
         public User User { get; set; }
         public string Username { get; set; }
+        public string Classes { get; set; } = "uk-border-circle";
         public byte[] Image { get; set; }
         public int? Px { get; set; } = 100;
         [HtmlAttributeNotBound]
@@ -42,6 +43,7 @@ namespace Web.Infrastructure.TagHelpers
                 output.Attributes.SetAttribute("alt", "User");
             }
 
+            output.Attributes.SetAttribute("class", Classes);
             output.Attributes.SetAttribute("height", Px + "px");
             output.Attributes.SetAttribute("width", Px + "px");
         }
