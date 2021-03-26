@@ -7,43 +7,45 @@ const subscribeHubConnection = new signalR.HubConnectionBuilder()
 subscribeHubConnection.serverTimeoutInMilliseconds = 1000 * 60 * 2 * 15;
 
 function subscribe() {
-    let authorName = document.getElementById("author_username").innerText;
+    let authorName = document.getElementById("authorUsername").textContent;
     subscribeHubConnection.invoke("Subscribe", authorName);
 }
 
-subscribeHubConnection.on("Subscribed", function (statusCode) {
-    if (statusCode === 200) {
-        let btn = document.getElementById("subscribeButton");
-        btn.classList.add("usual-button-reverse");
-        btn.innerText = "Subscribed";
-        btn.onclick = unsubscribe;
-        count();
-    }
+subscribeHubConnection.on("Subscribed", function (wasSubscribed) {
+    if (!wasSubscribed)
+        return;
+
+    let btn = document.getElementById("subscribeButton");
+    btn.classList.remove("uk-button-secondary");
+    btn.textContent = "Subscribed";
+    btn.onclick = unsubscribe;
+    count();
 });
 
 function unsubscribe() {
-    let authorName = document.getElementById("author_username").innerText;
+    let authorName = document.getElementById("authorUsername").textContent;
     subscribeHubConnection.invoke("Unsubscribe", authorName);
 }
 
-subscribeHubConnection.on("Unsubscribed", function (statusCode) {
-    if (statusCode === 200) {
-        let btn = document.getElementById("subscribeButton");
-        btn.classList.remove("usual-button-reverse");
-        btn.innerText = "+ Subscribe";
-        btn.onclick = subscribe;
-        count();
-    }
+subscribeHubConnection.on("Unsubscribed", function (wasUnsubscribed) {
+    if (!wasUnsubscribed)
+        return;
+
+    let btn = document.getElementById("subscribeButton");
+    btn.classList.add("uk-button-secondary");
+    btn.textContent = "+ Subscribe";
+    btn.onclick = subscribe;
+    count();
 });
 
 function count() {
-    let authorName = document.getElementById("author_username").innerText;
+    let authorName = document.getElementById("authorUsername").textContent;
     subscribeHubConnection.invoke("Count", authorName);
 }
 
 subscribeHubConnection.on("Counted", function (number) {
     let subscribers = document.getElementById("subscribersNumber");
-    subscribers.innerText = number;
+    subscribers.textContent = number;
 });
 
 subscribeHubConnection.start();

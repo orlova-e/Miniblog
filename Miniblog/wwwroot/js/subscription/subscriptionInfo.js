@@ -8,7 +8,7 @@ subscribeHubConnection.serverTimeoutInMilliseconds = 1000 * 60 * 2 * 15;
 
 subscribeHubConnection.on("Counted", function (number) {
     let subscribers = document.getElementById("subscribersNumber");
-    subscribers.innerText = number;
+    subscribers.textContent = number;
 });
 
 subscribeHubConnection.start();

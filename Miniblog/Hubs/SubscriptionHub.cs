@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Repo.Interfaces;
 using Services.Interfaces;
@@ -26,7 +25,7 @@ namespace Web.Hubs
         [Authorize]
         public async Task Subscribe(string authorName)
         {
-            int statusCode = StatusCodes.Status404NotFound;
+            bool wasSubscribed = false;
 
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid subscriberId);
 
@@ -36,31 +35,29 @@ namespace Web.Hubs
             if (subscriber != null && author != null && !subscriber.Username.Equals(author.Username))
             {
                 await Repository.Subscriptions.AddSubscriberAsync(author.Id, subscriberId);
-                statusCode = StatusCodes.Status200OK;
+                wasSubscribed = true;
             }
 
-            //await Clients.Caller.SendAsync("Subscribed", statusCode);
-            await Clients.User(Context.UserIdentifier).SendAsync("Subscribed", statusCode);
+            await Clients.Caller.SendAsync("Subscribed", wasSubscribed);
         }
 
         [Authorize]
         public async Task Unsubscribe(string authorName)
         {
-            int statusCode = StatusCodes.Status404NotFound;
+            bool wasUnsubscribed = false;
 
             Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid subscriberId);
 
             User subscriber = UserService.GetUserFromDb(u => u.Id == subscriberId);
             User author = UserService.GetUserFromDb(u => u.Username.Equals(authorName));
 
-            if (subscriber != null && author != null && !subscriber.Username.Equals(author.Username))
+            if (subscriber is not null && author is not null && !subscriber.Username.Equals(author.Username))
             {
                 await Repository.Subscriptions.RemoveSubscriberAsync(author.Id, subscriberId);
-                statusCode = StatusCodes.Status200OK;
+                wasUnsubscribed = true;
             }
 
-            //await Clients.Caller.SendAsync("Unsubscribed", statusCode);
-            await Clients.User(Context.UserIdentifier).SendAsync("Unsubscribed", statusCode);
+            await Clients.Caller.SendAsync("Unsubscribed", wasUnsubscribed);
         }
 
         [AllowAnonymous]
