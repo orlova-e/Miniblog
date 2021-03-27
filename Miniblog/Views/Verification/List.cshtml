@@ -6,50 +6,55 @@
 
             @await Html.PartialAsync("~/Views/Options/_OptionsMenuPartial.cshtml")
 
-            <div>
-                <div class="uk-width-expand">
-                    <h2 class="blog-title">@ViewBag.Header</h2>
+            <div class="uk-width-expand">
+                <h2 class="blog-title">@ViewBag.Header</h2>
 
-                    <div class="uk-form-controls uk-margin">
-                        <input id="searchInput" oninput="searchEntities(this)" class="uk-input uk-width-large@m" placeholder="Search" type="search">
-                    </div>
-
-                    <table style="display: none;" id="searchResultsList" class="uk-table uk-table-justify uk-table-divider uk-table-responsive uk-table-hover uk-table-middle">
-                        <tbody>
-                        </tbody>
-                    </table>
-
-                    <table id="verifyResultsList" class="uk-table uk-table-justify uk-table-divider uk-table-responsive uk-table-hover uk-table-middle">
-                        <tbody>
-                            @foreach (var entity in Model)
-                            {
-                                @:<tr data-item-id="@entity.Id" class="verify-result">
-
-                                    (string text, string link) = entity switch
-                                    {
-                                        Tag t => (t.Name, ""),
-                                        Topic t => (t.Name, ""),
-                                        Series s => (s.Name, ""),
-                                        _ => throw new NotImplementedException()
-                                    };
-
-                                    <td class="uk-table-link">
-                                        <a href="@link" class="uk-link uk-link-reset search-result-item usual-result-item">@text</a>
-                                    </td>
-
-                                    <td class="uk-width-small">
-                                        <button class="blog-btn" type="button">
-                                            <span uk-icon="check"></span>
-                                        </button>
-                                        <button class="blog-btn" type="button">
-                                            <span uk-icon="close"></span>
-                                        </button>
-                                    </td>
-                                @:</tr>
-                            }
-                        </tbody>
-                    </table>
+                <div class="uk-form-controls uk-margin">
+                    <input id="searchInput" oninput="searchEntities(this)" class="uk-input uk-width-large@m" placeholder="Search" type="search">
                 </div>
+
+                <table style="visibility: collapse;" id="searchResultsList" class="uk-table uk-table-justify uk-table-divider uk-table-responsive uk-table-hover uk-table-middle">
+                    <tbody>
+                    </tbody>
+                </table>
+
+                <table id="verifyResultsList" class="uk-table uk-table-justify uk-table-divider uk-table-responsive uk-table-hover uk-table-middle">
+                    <thead>
+                        <tr>
+                            <th>Verifiable</th>
+                            <th class="uk-width-small"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var entity in Model)
+                        {
+                            @:<tr data-item-id="@entity.Id" class="verify-result">
+
+
+                                (string text, string link) = entity switch
+                                {
+                                    Tag t => (t.Name, ""),
+                                    Topic t => (t.Name, ""),
+                                    Series s => (s.Name, ""),
+                                    _ => throw new NotImplementedException()
+                                };
+
+                                <td class="uk-table-link usual-result-item">
+                                    <a href="@link" class="uk-link uk-link-reset item-name">@text</a>
+                                </td>
+
+                                <td class="uk-width-small">
+                                    <button onclick="acceptEntity(this)" class="blog-btn" type="button">
+                                        <span uk-icon="check"></span>
+                                    </button>
+                                    <button onclick="deleteEntity(this)" class="blog-btn" type="button">
+                                        <span uk-icon="close"></span>
+                                    </button>
+                                </td>
+                            @:</tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -58,11 +63,13 @@
 <template id="searchResultsItemsTemplate">
     <tr data-item-id="" class="verify-result">
 
+
+
         <td class="uk-width-small">
-            <button class="blog-btn" type="button">
+            <button onclick="acceptEntity(this)" class="blog-btn" type="button">
                 <span uk-icon="check"></span>
             </button>
-            <button class="blog-btn" type="button">
+            <button onclick="deleteEntity(this)" class="blog-btn" type="button">
                 <span uk-icon="close"></span>
             </button>
         </td>
@@ -70,8 +77,8 @@
 </template>
 
 <template id="resultsLinksTemplates">
-    <td class="uk-table-link">
-        <a href="#" class="uk-link uk-link-reset search-result-item usual-result-item item-name"></a>
+    <td class="uk-table-link usual-result-item">
+        <a href="#" class="uk-link uk-link-reset item-name"></a>
     </td>
 </template>
 

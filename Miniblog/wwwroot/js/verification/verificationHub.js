@@ -20,7 +20,9 @@ function acceptOrDelete(btn, action) {
         existElementsIds[i] = elements[i].dataset.itemId;
     }
     let index = existElementsIds.indexOf(id);
-    existElementsIds.splice(index, 1);
+    if (index >= 0) {
+        existElementsIds.splice(index, 1);
+    }
 
     hubConnection.invoke(action, id, existElementsIds);
 }
@@ -39,9 +41,9 @@ function searchEntities(input) {
         hubConnection.invoke("Search", query);
     } else {
         let rows = document.getElementById("searchResultsList");
-        rows.style.display = "none";
-        let tables = document.getElementById("verifyResultsList");
-        tables.style.display = "block";
+        rows.style.visibility = "collapse";
+        let table = document.getElementById("verifyResultsList");
+        table.style.visibility = "visible";
     }
 }
 
@@ -60,9 +62,6 @@ hubConnection.on("AcceptedOrDeleted", function (id, next) {
     if (!next)
         return;
 
-    let pathname = window.location.pathname;
-    let queueList = pathname.substring(pathname.lastIndexOf('/') + 1);
-
     if (queueList == "articles" || queueList == "pages" || queueList == "users" || queueList == "comments") {
         addItemToTable(next);
     } else {
@@ -72,67 +71,93 @@ hubConnection.on("AcceptedOrDeleted", function (id, next) {
 
 hubConnection.on("SearchResults", function (results) {
     let rows = document.getElementById("searchResultsList");
-    rows.style.display = "block";
-    rows.innerHTML = "";
+    if (results?.length > 0) {
+        rows.style.visibility = "visible";
+    } else {
+        rows.style.visibility = "collapse";
+    }
+    let rowsTBody = rows.querySelector("tbody");
+    rowsTBody.innerHTML = "";
     for (let result of results) {
         addItemToList(result, true);
     }
 });
 
 function addItemToTable(item) {
+    let row = createTableRow(item);
+    let rows = document.getElementById("verifyResultsList").querySelector("tbody");
+    rows.append(row);
+}
+
+function createTableRow(item) {
     let template = document.getElementById("verifyResultsItemsTemplate");
     let row = template.content.querySelector("tr").cloneNode(true);
 
     row.dataset.itemId = item.id;
 
     let userLink = row.querySelector("a.verify-user-link");
-    userLink.href = window.location.origin + '/' + item.username;
-    userLink.textContent = item.username;
+    if (item.author) {
+        userLink.href = window.location.origin + "/users/" + item.author;
+        userLink.querySelector("b").textContent = item.author;
+    } else {
+        let italic = document.createElement("i");
+        italic.textContent = "[deleted]";
+        let userLinkInner = userLink.querySelector("b");
+        userLinkInner.append(italic);
+    }
 
     let itemLink = row.querySelector("a.verify-item-link");
     itemLink.href = window.location.origin + '/' + item.link;
-    itemLink.querySelector("b").textContent = item.name;
+    itemLink.textContent = item.value;
 
     let matches = row.querySelector(".verify-matches");
     matches.textContent = item.matches;
 
-    let rows = document.getElementById("verifyResultsList").querySelector("tbody");
-    rows.append(row);
+    return row;
 }
 
 function addItemToList(item, isSearchItem = true) {
+    let row = createListRow(item);
+    let id = isSearchItem ? "searchResultsList" : "verifyResultsList";
+    let rows = document.getElementById(id).querySelector("tbody");
+    rows.append(row);
+}
+
+function createListRow(item, isSearchItem = true) {
     let template = document.getElementById("searchResultsItemsTemplate");
-    let row = template.content.querySelector("li").cloneNode(true);
+    let row = template.content.querySelector("tr").cloneNode(true);
 
     row.dataset.itemId = item.id;
-
-    let linkTemplate = document.getElementById("resultsLinksTemplates");
-    let requiredClass = ".usual-result-item";
-    let info;
 
     let selectElement = row.querySelector(".user-role-select");
     if (!item.role) {
         selectElement?.remove();
     }
 
+    let linkTemplate = document.getElementById("resultsLinksTemplates");
+    let requiredClass = ".usual-result-item";
+    let info = linkTemplate.content.querySelector("td" + requiredClass).cloneNode(true);
+    let infoLink = info.querySelector("a");
+
     if (!isSearchItem) {
-        info = linkTemplate.content.querySelector("a" + requiredClass).cloneNode(true);
-        info.href = window.location.origin + '/' + item.link;
-        info.querySelector(".item-name").textContent = item.name;
-    } else if (isSearchItem) {
+        infoLink.href = window.location.origin + '/' + item.link;
+        infoLink.querySelector(".item-name").textContent = item.value;
+    } else {
         if (queueList == "users") {
             requiredClass = ".user-result-item";
+            info = linkTemplate.content.querySelector("td" + requiredClass).cloneNode(true);
+            infoLink = info.querySelector("a");
+            infoLink.href = "/users/" + item.author;
 
-            info = linkTemplate.content.querySelector("a" + requiredClass).cloneNode(true);
-            info.href = "/users/" + item.author;
-
-            let img = info.querySelector(".search-item-user-img");
-            if (item.avatar)
+            if (item.avatar) {
+                let img = infoLink.querySelector(".search-item-user-img");
                 img.src = "data:image/jpeg;base64," + item.avatar;
-            info.querySelector(".search-item-username").textContent = item.author;
+            }
+
+            infoLink.querySelector(".search-item-username").textContent = item.author;
 
             if (item.role) {
-                let options = selectElement.children;
+                let options = selectElement.querySelector("select").options;
                 for (let i = 0; i < options.length; i++) {
                     if (options[i].textContent == item.role) {
                         options[i].setAttribute("selected", true);
@@ -142,47 +167,39 @@ function addItemToList(item, isSearchItem = true) {
             }
         } else if (queueList == "articles") {
             requiredClass = ".article-result-item";
+            info = linkTemplate.content.querySelector("td" + requiredClass).cloneNode(true);
+            infoLink = info.querySelector("a");
+            infoLink.href = window.location.origin + '/' + item.link;
 
-            info = linkTemplate.content.querySelector("a" + requiredClass).cloneNode(true);
-            info.href = window.location.origin + '/' + item.link;
+            infoLink.querySelector(".article-info-header").textContent = item.value;
 
-            info.querySelector(".article-info-header b").textContent = item.value;
-
-            info.querySelector(".item-name").textContent = item.author;
+            if (item.author) {
+                infoLink.querySelector(".item-name").textContent = item.author;
+            } else {
+                let italic = document.createElement("i");
+                italic.textContent = "[deleted]";
+                let itemName = infoLink.querySelector(".item-name");
+                itemName.innerHTML = "";
+                itemName.append(italic);
+            }
         } else if (queueList == "comments") {
-            info = linkTemplate.content.querySelector("a" + requiredClass).cloneNode(true);
+            infoLink.href = window.location.origin + '/' + item.link;
 
-            info.href = window.location.origin + '/' + item.link;
-
-            let text = (item.author ? item.author : "deleted") + ": ";
+            let text = (item.author ? item.author : "[deleted]") + ": ";
             if (item.value.length > 50) {
                 item.value = item.value.substring(0, 50);
             }
             text += item.value;
-
-            info.querySelector(".item-name").textContent = text;
-
+            infoLink.textContent = text;
         } else {
-            requiredClass = ".usual-result-item";
-            info = linkTemplate.content.querySelector("a" + requiredClass).cloneNode(true);
-
             if (item.value.length > 50) {
                 item.value = item.value.substring(0, 50);
             }
-
-            info.href = window.location.origin + '/' + item.link;
-            info.querySelector(".item-name").textContent = item.value;
+            infoLink.href = window.location.origin + (item.link ? "/" + item.link : "#");
+            infoLink.textContent = item.value;
         }
     }
 
     row.prepend(info);
-
-    let rows;
-    if (isSearchItem) {
-        rows = document.getElementById("searchResultsList");
-    } else {
-        rows = document.getElementById("verifyResultsList").querySelector("tbody");
-    }
-
-    rows.append(row);
+    return row;
 }

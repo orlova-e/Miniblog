@@ -30,7 +30,7 @@ namespace Web.ViewModels.Options
                         byte[] avatar => Convert.ToBase64String(avatar),
                         null => null
                     },
-                    Link = "users/account/" + user.Username,
+                    Link = "users/" + user.Username,
                     Matches = user.VerifiedMatches
                 },
                 Article article => new Verifiable
@@ -39,7 +39,7 @@ namespace Web.ViewModels.Options
                     Author = article.User?.Username,
                     Value = article.Header,
                     Matches = article.VerifiedMatches,
-                    Link = "articles/article/title?" + article.Link
+                    Link = "articles?title=" + article.Link
                 },
                 Comment comment => new Verifiable
                 {
@@ -52,7 +52,7 @@ namespace Web.ViewModels.Options
                         null => null
                     },
                     Matches = comment.VerifiedMatches,
-                    Link = "articles/article/title?" + comment.Article.Link
+                    Link = "articles?title=" + comment.Article.Link
                 },
                 Topic topic => new Verifiable
                 {

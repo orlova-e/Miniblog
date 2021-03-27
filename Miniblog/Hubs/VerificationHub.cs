@@ -12,7 +12,7 @@ using Web.ViewModels.Options;
 
 namespace Web.Hubs
 {
-    [Authorize]
+    [Authorize(Roles = nameof(RoleType.Editor) + "," + nameof(RoleType.Administrator))]
     public class VerificationHub : Hub
     {
         private string queueList;

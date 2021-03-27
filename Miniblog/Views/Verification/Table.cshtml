@@ -6,60 +6,67 @@
 
             @await Html.PartialAsync("~/Views/Options/_OptionsMenuPartial.cshtml")
 
-            <div>
-                <div class="uk-width-expand">
-                    <h2 class="blog-title">@ViewBag.Header</h2>
+            <div class="uk-width-expand">
+                <h2 class="blog-title">@ViewBag.Header</h2>
 
-                    <div class="uk-form-controls uk-margin">
-                        <input id="searchInput" oninput="searchEntities(this)" class="uk-input uk-width-large@m" placeholder="Search" type="search">
-                    </div>
-
-                    <table style="display: none;" id="searchResultsList" class="uk-table uk-table-justify uk-table-divider uk-table-responsive uk-table-hover uk-table-middle">
-                        <tbody>
-                        </tbody>
-                    </table>
-
-                    <table id="verifyResultsList" class="uk-table uk-table-justify uk-table-striped uk-table-responsive uk-table-hover">
-                        <thead>
-                            <tr>
-                                <th class="uk-width-small">Author</th>
-                                <th class="uk-width-medium">Verifiable</th>
-                                <th>Verify</th>
-                                <th class="uk-width-small"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (Entity entity in Model)
-                            {
-                                (string username, string text, string link) = entity switch
-                                {
-                                    User u => (u.Username, u.Description, Url.Action("account", "users", new { username = u.Username })),
-                                    Article a => (a.User?.Username, a.Header, Url.Action("article", "articles", new { title = a.Link })),
-                                    Comment c => (c.Author?.Username ?? "", c.Text, Url.Action("article", "articles", new { title = c.Article.Link })),
-                                    _ => throw new NotImplementedException()
-                                };
-
-                                <tr data-item-id="@entity.Id" class="verify-result">
-                                    <td class="uk-table-link">
-                                        <a href="@Url.Action("account", "users", new { username = username})" class="uk-link uk-link-reset verify-user-link"><b>@username</b></a>
-                                    </td>
-                                    <td class="uk-table-link">
-                                        <a href="@link" class="uk-link uk-link-reset verify-item-link">@text</a>
-                                    </td>
-                                    <td class="verify-matches">@entity.VerifiedMatches</td>
-                                    <td>
-                                        <button onclick="acceptEntity(this)" class="blog-btn verify-accept-button" type="button">
-                                            <span uk-icon="check"></span>
-                                        </button>
-                                        <button onclick="deleteEntity(this)" class="blog-btn verify-delete-button" type="button">
-                                            <span uk-icon="close"></span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                <div class="uk-form-controls uk-margin">
+                    <input id="searchInput" oninput="searchEntities(this)" class="uk-input uk-width-large@m" placeholder="Search" type="search">
                 </div>
+
+                <table style="visibility: collapse;" id="searchResultsList" class="uk-table uk-table-justify uk-table-divider uk-table-responsive uk-table-hover uk-table-middle">
+                    <tbody>
+                    </tbody>
+                </table>
+
+                <table id="verifyResultsList" class="uk-table uk-table-justify uk-table-striped uk-table-responsive uk-table-hover">
+                    <thead>
+                        <tr>
+                            <th class="uk-width-small">Author</th>
+                            <th class="uk-width-medium">Verifiable</th>
+                            <th>Verify</th>
+                            <th class="uk-width-small"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Entity entity in Model)
+                        {
+                            (string username, string text, string link) = entity switch
+                            {
+                                User u => (u.Username, u.Description, Url.Action("account", "users", new { username = u.Username })),
+                                Article a => (a.User?.Username, a.Header, Url.Action("article", "articles", new { title = a.Link })),
+                                Comment c => (c.Author?.Username, c.Text, Url.Action("article", "articles", new { title = c.Article.Link })),
+                                _ => throw new NotImplementedException()
+                            };
+
+                            <tr data-item-id="@entity.Id" class="verify-result">
+                                <td class="uk-table-link">
+                                    @{
+                                        if (username is null)
+                                        {
+                                            <a href="#" class="uk-link uk-link-reset verify-user-link"><b><i>[deleted]</i></b></a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("account", "users", new { username = username})" class="uk-link uk-link-reset verify-user-link"><b>@username</b></a>
+                                        }
+                                    }
+                                </td>
+                                <td class="uk-table-link">
+                                    <a href="@link" class="uk-link uk-link-reset verify-item-link">@text</a>
+                                </td>
+                                <td class="verify-matches">@entity.VerifiedMatches</td>
+                                <td>
+                                    <button onclick="acceptEntity(this)" class="blog-btn verify-accept-button" type="button">
+                                        <span uk-icon="check"></span>
+                                    </button>
+                                    <button onclick="deleteEntity(this)" class="blog-btn verify-delete-button" type="button">
+                                        <span uk-icon="close"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -67,17 +74,20 @@
 
 <template id="searchResultsItemsTemplate">
     <tr data-item-id="" class="verify-result">
+
+
+
         @if (!string.IsNullOrWhiteSpace(ViewBag.UsersExtendedList))
         {
-            <td class="uk-width-medium">
-                <select asp-items="Html.GetEnumSelectList<RoleType>()" onchange="changeRole(this)" class="uk-select uk-form-small user-role-select"></select>
+            <td class="uk-width-medium user-role-select">
+                <select asp-items="Html.GetEnumSelectList<RoleType>()" onchange="changeRole(this)" class="uk-select uk-form-small"></select>
             </td>
         }
         <td class="uk-width-small verify-result-buttons">
-            <button class="blog-btn" type="button">
+            <button onclick="acceptEntity(this)" class="blog-btn" type="button">
                 <span uk-icon="check"></span>
             </button>
-            <button class="blog-btn" type="button">
+            <button onclick="deleteEntity(this)" class="blog-btn" type="button">
                 <span uk-icon="close"></span>
             </button>
         </td>
@@ -87,10 +97,10 @@
 <template id="verifyResultsItemsTemplate">
     <tr data-item-id="" class="verify-result">
         <td class="uk-table-link">
-            <a href="" class="uk-link uk-link-reset verify-user-link"><b></b></a>
+            <a href="#" class="uk-link uk-link-reset verify-user-link"><b></b></a>
         </td>
         <td class="uk-table-link">
-            <a href="" class="uk-link uk-link-reset verify-item-link"></a>
+            <a href="#" class="uk-link uk-link-reset verify-item-link"></a>
         </td>
         <td class="verify-matches"></td>
         <td>
@@ -105,19 +115,19 @@
 </template>
 
 <template id="resultsLinksTemplates">
-    <td class="uk-table-link">
-        <a href="#" class="uk-link uk-link-reset search-result-item usual-result-item">
-            <avatar user="null" classes="uk-border-circle search-item-user-img" px="30" alt="">
+    <td class="uk-table-link user-result-item">
+        <a href="#" class="uk-link uk-link-reset">
+            <avatar user="null" classes="uk-border-circle search-item-user-img" px="30">
             <span class="uk-text-middle search-item-username"></span>
         </a>
     </td>
 
-    <td class="uk-table-link">
-        <a href="#" class="uk-link uk-link-reset search-result-item usual-result-item"></a>
+    <td class="uk-table-link usual-result-item">
+        <a href="#" class="uk-link uk-link-reset item-name"></a>
     </td>
 
-    <td class="uk-table-link">
-        <a href="#" class="uk-link uk-link-reset search-result-item article-result-item">
+    <td class="uk-table-link article-result-item">
+        <a href="#" class="uk-link uk-link-reset">
             <p class="uk-margin-remove article-info-header"></p>
             <p class="uk-margin-remove"><i class="item-author">Author:</i> <span class="item-name">Username</span></p>
         </a>
