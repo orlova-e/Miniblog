@@ -3,32 +3,37 @@
 function sendComment(btn) {
     let text = null;
     let parentId = null;
-    if (btn.closest('form.root-answer-form.comment-form')) {
-        let commentForm = btn.closest('form.root-answer-form.comment-form');
-        text = commentForm.querySelector('textarea.comment-input-textarea').value;
+    if (btn.closest('.root-answer-form')) {
+        let commentForm = btn.closest('.root-answer-form');
+        text = commentForm.querySelector('textarea').value;
     } else {
-        let commentForm = btn.closest('.answer-form.comment-form');
-        text = commentForm.querySelector('textarea.comment-input-textarea').value;
-        let queryString = 'div.blog-comment';
-        parentId = commentForm.closest(queryString).dataset.commentId;
+        let commentForm = btn.closest('form');
+        text = commentForm.querySelector('textarea').value;
+        parentId = commentForm.dataset.parentId;
     }
-    articleHubConnection.invoke("AddComment", title, text, parentId);
+
+    if (!text)
+        return;
+
+    articleHubConnection.invoke("AddComment", text, parentId);
 }
 
 function sendCommentUpdates(btn) {
-    let comment = btn.closest('div.blog-comment');
+    let comment = btn.closest('.blog-comment');
     let commentId = comment.dataset.commentId;
-    let commentElements = comment.querySelector('textarea.comment-input-textarea').value;
+    let commentElements = comment.querySelector('textarea').value;
     let text = String(commentElements);
-    articleHubConnection.invoke("UpdateComment", title, text, commentId);
+
+    articleHubConnection.invoke("UpdateComment", text, commentId);
 }
 
 function deleteActions(btn) {
-    let comment = btn.closest('div.blog-comment');
-    if (comment.querySelector('.answer-form')) {
+    let comment = btn.closest('.blog-comment');
+    if (comment.querySelector('.comment-update-form')) {
         removeUpdateCommentForm(btn);
     } else {
         let commentId = comment.dataset.commentId;
-        articleHubConnection.invoke("DeleteComment", title, commentId);
+
+        articleHubConnection.invoke("DeleteComment", commentId);
     }
 }

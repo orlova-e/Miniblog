@@ -1,20 +1,18 @@
-﻿@using Domain.Entities 
-@model User
+﻿@model User
 
 <template id="templateBlogComment">
-
     <li data-comment-id="" data-parent-id="" class="blog-comment">
         <article class="uk-visible-toggle uk-comment" tabindex="-1">
             <header class="uk-comment-header uk-position-relative">
                 <div class="uk-grid-medium uk-flex-middle" uk-grid>
                     <div class="user-info-container uk-width-auto">
-                        <img class="uk-comment-avatar" src="" width="80" height="80" alt="">
+                        <avatar user="null" classes="uk-comment-avatar" px="80">
                     </div>
                     <div class="uk-width-expand">
                         <h4 class="comment-username uk-comment-title uk-margin-remove"><a class="uk-link-reset" href="#"></a></h4>
                         <div class="comment-time-info time-info uk-comment-meta uk-margin-remove-top">
                             <time class="time-info-created" datetime=""></time>
-                            <span>(updated at <time class="time-info-updated" datetime=""></time>)</span>
+                            <span class="datetime-updated-text" style="visibility: collapse;">(updated at <time class="time-info-updated" datetime=""></time>)</span>
                         </div>
 
                         @if (User.Identity.IsAuthenticated)
@@ -41,15 +39,14 @@
                 </div>
             </header>
 
-            <div class="uk-comment-body">
-                <p class="comment-container"></p>
+            <div class="uk-comment-body comment-container">
             </div>
 
             <div class="comment-actions-container uk-comment-footer blog-comment-footer">
                 <div class="uk-button-group">
                     <button class="blog-btn heart-button" onclick="likeComment(this)" type="button">
                         <img src="img/buttons/heart.png" alt="like" class="blog-btn-img">
-                        <span name="commentLikesNumber">50</span>
+                        <span name="commentLikesNumber">0</span>
                     </button>
                     @if (User.Identity.IsAuthenticated && (Model.Role?.WriteComments ?? default))
                     {
@@ -61,5 +58,43 @@
             </div>
         </article>
     </li>
-
 </template>
+
+@if (User.Identity.IsAuthenticated && (bool)Model.Role?.WriteComments)
+{
+    <template id="commentResponseForm">
+        <form data-parent-id="" class="uk-form uk-margin-top">
+            <fieldset class="uk-fieldset uk-margin-remove-bottom">
+                <a href="#" class="uk-link-reset">
+                    <div class="uk-grid-small uk-flex-middle" uk-grid>
+                        <div class="uk-width-auto">
+                            <avatar user="Model" classes="uk-border-circle" px="40"/>
+                        </div>
+                        <div class="uk-width-expand">
+                            <h3 class="uk-card-title uk-text-secondary uk-margin-remove-bottom">@Model.Username</h3>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="uk-margin">
+                    <textarea class="uk-textarea" rows="3" placeholder="Add comment"></textarea>
+                </div>
+            </fieldset>
+
+            <div>
+                <button onclick="sendComment(this)" type="button" class="uk-button uk-button-secondary">Add</button>
+                <button onclick="removeReplyCommentForm(this)" type="button" class="uk-button uk-button-default">Cancel</button>
+            </div>
+        </form>
+    </template>
+
+    <template id="commentChangeForm">
+        <form class="comment-update-form">
+            <textarea class="uk-textarea" rows="4"></textarea>
+            <div>
+                <button onclick="sendCommentUpdates(this)" type="button" class="uk-button uk-button-secondary uk-margin-top uk-margin-remove-bottom">Update</button>
+                <button onclick="removeUpdateCommentForm(this)" type="button" class="uk-button uk-button-default uk-margin-top">Cancel</button>
+            </div>
+        </form>
+    </template>
+}

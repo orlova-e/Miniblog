@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using Repo.Interfaces;
 using Services.Interfaces;
 using System;
-using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Web.ViewModels;
 
@@ -15,7 +13,6 @@ namespace Web.Hubs
     [Authorize]
     public class ArticleHub : Hub
     {
-        readonly string DateTimePattern = new DateTimeFormatInfo().RoundtripDtPattern();
         public IRepository Repository { get; }
         public IArticleService ArticleService { get; }
         public IUserService UserService { get; }
@@ -32,9 +29,13 @@ namespace Web.Hubs
             CommentsService = commentsService;
         }
 
-        public async Task AddComment(string title, string text, Guid? parentId = null)
+        private string GetTitle() => Context.GetHttpContext().Request.Query["title"];
+
+        public override async Task OnConnectedAsync() => await Groups.AddToGroupAsync(Context.ConnectionId, GetTitle());
+
+        public async Task AddComment(string text, Guid? parentId = null)
         {
-            Comment comment = await CommentsService.AddCommentAsync(Context.UserIdentifier, title, text, parentId);
+            Comment comment = await CommentsService.AddCommentAsync(Context.UserIdentifier, GetTitle(), text, parentId);
 
             string avatar = null;
             if (comment.Author?.Avatar is not null)
@@ -47,7 +48,7 @@ namespace Web.Hubs
                 ParentId = comment.ParentId.ToString(),
                 Author = comment.Author?.Username,
                 Avatar = avatar,
-                DateTime = comment.DateTime.ToString(DateTimePattern),
+                DateTime = comment.DateTime.UtcDateTime.ToString("o"),
                 Text = text
             };
 
@@ -55,11 +56,10 @@ namespace Web.Hubs
                 .Find(c => c.ArticleId == comment.ArticleId)
                 .Count();
 
-            await Clients.All.SendAsync("AddedComment", newComment, commentsNumber);
-            //await Clients.All.SendAsync("CommentsCounted", article.Link, commentsNumber);   // to method from articles' list
+            await Clients.Group(GetTitle()).SendAsync("AddedComment", newComment, commentsNumber);
         }
 
-        public async Task UpdateComment(string title, string text, Guid commentId)
+        public async Task UpdateComment(string text, Guid commentId)
         {
             Comment comment = await CommentsService.UpdateCommentAsync(Context.UserIdentifier, text, commentId);
 
@@ -74,15 +74,15 @@ namespace Web.Hubs
                 ParentId = comment.ParentId.ToString(),
                 Author = comment.Author?.Username,
                 Avatar = avatar,
-                DateTime = comment.DateTime.ToString(DateTimePattern),
-                UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),
+                DateTime = comment.DateTime.UtcDateTime.ToString("o"),
+                UpdatedDateTime = comment.UpdatedDateTime?.UtcDateTime.ToString("o"),
                 Text = comment.Text
             };
 
-            await Clients.All.SendAsync("UpdatedComment", updatedComment);
+            await Clients.Group(GetTitle()).SendAsync("UpdatedComment", updatedComment);
         }
 
-        public async Task DeleteComment(string title, Guid commentId)
+        public async Task DeleteComment(Guid commentId)
         {
             await CommentsService.DeleteCommentAsync(Context.UserIdentifier, commentId);
             Comment comment = await Repository.Comments.GetByIdAsync(commentId);
@@ -98,71 +98,63 @@ namespace Web.Hubs
                 ParentId = comment.ParentId.ToString(),
                 Author = comment.Author?.Username,
                 Avatar = avatar,
-                DateTime = comment.DateTime.ToString(DateTimePattern),
-                UpdatedDateTime = comment.UpdatedDateTime?.ToString(DateTimePattern),
+                DateTime = comment.DateTime.UtcDateTime.ToString("o"),
+                UpdatedDateTime = comment.UpdatedDateTime?.UtcDateTime.ToString("o"),
                 Text = comment.Text
             };
 
-            await Clients.All.SendAsync("DeletedComment", deletedComment);
+            await Clients.Group(GetTitle()).SendAsync("DeletedComment", deletedComment);
         }
 
-        public async Task LikeArticle(string title)
+        public async Task LikeArticle()
         {
-            Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await UserService.GetFromDbAsync(userId);
-            if (user == null)
+            User user = UserService.FindByName(Context.UserIdentifier);
+            Article article = await ArticleService.GetArticleByLinkAsync(GetTitle());
+            if (user is null || article is null)
                 return;
 
-            Article article = await ArticleService.GetArticleByLinkAsync(title);
-            if (article != null)
+            if (!await Repository.ArticleLikes.ContainsAsync(article.Id, user.Id))
             {
-                if (!await Repository.ArticleLikes.ContainsAsync(article.Id, userId))
-                {
-                    await Repository.ArticleLikes.AddForAsync(article.Id, userId);
-                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleLikeIsChanged", true);
-                }
-                else
-                {
-                    await Repository.ArticleLikes.RemoveForAsync(article.Id, userId);
-                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleLikeIsChanged", false);
-                }
-                int number = await Repository.ArticleLikes.CountAsync(article.Id);
-                await Clients.All.SendAsync("ArticleLikesCounted", article.Link, number);
+                await Repository.ArticleLikes.AddForAsync(article.Id, user.Id);
+                await Clients.Caller.SendAsync("ArticleLikeIsChanged", true);
             }
+            else
+            {
+                await Repository.ArticleLikes.RemoveForAsync(article.Id, user.Id);
+                await Clients.Caller.SendAsync("ArticleLikeIsChanged", false);
+            }
+            int number = await Repository.ArticleLikes.CountAsync(article.Id);
+            await Clients.Group(GetTitle()).SendAsync("ArticleLikesCounted", number);
         }
 
-        public async Task BookmarkArticle(string title)
+        public async Task BookmarkArticle()
         {
-            Guid.TryParse(Context.User.FindFirstValue("Id"), out Guid userId);
-            User user = await UserService.GetFromDbAsync(userId);
-            if (user == null)
+            User user = UserService.FindByName(Context.UserIdentifier);
+            Article article = await ArticleService.GetArticleByLinkAsync(GetTitle());
+            if (article is null || user is null)
                 return;
 
-            Article article = await ArticleService.GetArticleByLinkAsync(title);
-            if (article != null)
+            if (!await Repository.ArticleBookmarks.ContainsAsync(article.Id, user.Id))
             {
-                if (!await Repository.ArticleBookmarks.ContainsAsync(article.Id, userId))
-                {
-                    await Repository.ArticleBookmarks.AddForAsync(article.Id, userId);
-                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleBookmarkIsChanged", true);
-                }
-                else
-                {
-                    await Repository.ArticleBookmarks.RemoveForAsync(article.Id, userId);
-                    await Clients.User(Context.UserIdentifier).SendAsync("ArticleBookmarkIsChanged", false);
-                }
-                int number = await Repository.ArticleBookmarks.CountAsync(article.Id);
-                await Clients.All.SendAsync("ArticleBookmarksCounted", article.Link, number);
+                await Repository.ArticleBookmarks.AddForAsync(article.Id, user.Id);
+                await Clients.Caller.SendAsync("ArticleBookmarkIsChanged", true);
             }
+            else
+            {
+                await Repository.ArticleBookmarks.RemoveForAsync(article.Id, user.Id);
+                await Clients.Caller.SendAsync("ArticleBookmarkIsChanged", false);
+            }
+            int number = await Repository.ArticleBookmarks.CountAsync(article.Id);
+            await Clients.Group(GetTitle()).SendAsync("ArticleBookmarksCounted", number);
         }
 
         public async Task LikeComment(Guid commentId)
         {
             bool isLiked = await CommentsService.LikeComment(Context.UserIdentifier, commentId);
-            await Clients.User(Context.UserIdentifier).SendAsync("CommentLikeIsChanged", commentId, isLiked);
+            await Clients.Caller.SendAsync("CommentLikeIsChanged", commentId, isLiked);
 
             int number = await Repository.CommentLikes.CountAsync(commentId);
-            await Clients.All.SendAsync("CommentLikesCounted", commentId, number);
+            await Clients.Group(GetTitle()).SendAsync("CommentLikesCounted", commentId, number);
         }
     }
 }

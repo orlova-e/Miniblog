@@ -4,123 +4,123 @@
 
 @model ArticleReadViewModel
 
-    <div class="uk-container">
-        <article id="@Model.Article.Id.ToString()" class="uk-article uk-card uk-card-default uk-card-hover">
-            <div class="uk-card-header">
-                <h1 class="uk-article-title"><a class="uk-link-reset" href="@Url.Action("Article", "Articles", new { title = Model.Article.Link })">@Model.Article.Header</a></h1>
-                @if (Model.Article.DisplayOptions.Username || Model.Article.DisplayOptions.DateAndTime)
+<div class="uk-container">
+    <article id="@Model.Article.Id.ToString()" class="uk-article uk-card uk-card-default uk-card-hover">
+        <div class="uk-card-header">
+            <h1 class="uk-article-title"><a class="uk-link-reset" href="@Url.Action("Article", "Articles", new { title = Model.Article.Link })">@Model.Article.Header</a></h1>
+            @if (Model.Article.DisplayOptions.Username || Model.Article.DisplayOptions.DateAndTime)
+            {
+                <p class="uk-article-meta">
+                @if (Model.Article.DisplayOptions.Username)
                 {
-                    <p class="uk-article-meta">
-                    @if (Model.Article.DisplayOptions.Username)
+                    if(Model.Article.User is not null)
+                    { 
+                        @:Written by <a href="@Url.Action("Account", "Users", new { username = Model.Article.User?.Username })">@Model.Article.User.Username</a>
+                    }
+                    else
                     {
-                        if(Model.Article.User is not null)
-                        { 
-                            @:Written by <a href="@Url.Action("Account", "Users", new { username = Model.Article.User?.Username })">@Model.Article.User.Username</a>
+                        @:Written by <a href="#"><i>deleted</i></a>
+                    }
+                }
+                @if (Model.Article.DisplayOptions.DateAndTime)
+                {
+                    @:on <a class="uk-link-muted" href="#"><time class="article-time-info" datetime="@Model.Article.DateTime.UtcDateTime.ToString("o")">@Model.Article.DateTime.ToString("g")</time></a>
+                }
+                </p>
+            }
+        </div>
+        <div class="uk-card-body">
+            @{ 
+                string[] paragraphs = Model.Article.Text.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.None);
+                int imagesNumber = Model.Article.Images.Count;
+                for (int i = 0; i < paragraphs.Length + imagesNumber; i++)
+                {
+                    Image image = Model.Article.Images
+                        .Where(img => img.Position == i)
+                        .FirstOrDefault();
+
+                    if (image is not null)
+                    {
+                        <image source="image"/>
+                    }
+                    else
+                    {
+                        if(i is 1)
+                        {
+                            <p class="uk-dropcap">@paragraphs[i]</p>
                         }
                         else
                         {
-                            @:Written by <a href="#"><i>deleted</i></a>
+                            <p>@paragraphs[i]</p>
                         }
                     }
-                    @if (Model.Article.DisplayOptions.DateAndTime)
+                }
+            }
+            <div class="blog-article-data">
+                @if (Model.Article.DisplayOptions.Topic)
+                {
+                    <a class="uk-link-muted" href="#"><span uk-icon="chevron-double-right"></span>@(Model.Article.Topic?.Name ?? "no topic")</a>
+                }
+                @if (Model.Article.DisplayOptions.Series)
+                {
+                    <a class="uk-link-muted" href="#"><span uk-icon="folder"></span> @(Model.Article.Series?.Name ?? "no series")</a>
+                }
+                @if (Model.Article.DisplayOptions.Tags)
+                {
+                    List<string> tags = Model.Article.ArticleTags.Select(t => t.Tag).Select(t => t.Name).ToList();
+                    for (int i = 0; i < tags.Count; i++)
                     {
-                        @:on <a class="uk-link-muted" href="#"><time datetime="@Model.Article.DateTime.ToString("s")">@Model.Article.DateTime.ToString("g")</time></a>
+                        <a class="uk-link-muted" href="#"><span uk-icon="hashtag"></span>@tags[i]</a>
                     }
-                    </p>
                 }
             </div>
-            <div class="uk-card-body">
-                @{ 
-                    string[] paragraphs = Model.Article.Text.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.None);
-                    int imagesNumber = Model.Article.Images.Count;
-                    for (int i = 0; i < paragraphs.Length + imagesNumber; i++)
+        </div>
+        <div class="uk-card-footer">
+            <div class="uk-grid-small uk-child-width-1-2 article-user-actions" uk-grid>
+                <div>
+                    @if (Model.Article.DisplayOptions.Likes)
                     {
-                        Image image = Model.Article.Images
-                            .Where(img => img.Position == i)
+                        UserFavourite like = Model.Article.Likes
+                            .Where(l => l.UserId == Model.User?.Id)
                             .FirstOrDefault();
-
-                        if (image is not null)
-                        {
-                            <image source="image"/>
-                        }
-                        else
-                        {
-                            if(i is 1)
+                        <button class="blog-btn uk-text-middle like-action" type="button" onclick="likeArticle()">
+                            @if (like is not null)
                             {
-                                <p class="uk-dropcap">@paragraphs[i]</p>
+                                <img src="img/buttons/heart red.png" alt="liked" class="blog-btn-img">
                             }
                             else
                             {
-                                <p>@paragraphs[i]</p>
+                                <img src="img/buttons/heart.png" alt="like" class="blog-btn-img">
                             }
-                        }
+                            <span id="articleLikesNumber">@Model.Article.Likes.Count</span>
+                        </button>
                     }
-                }
-                <div class="blog-article-data">
-                    @if (Model.Article.DisplayOptions.Topic)
+                    @if (Model.Article.DisplayOptions.Bookmarks)
                     {
-                        <a class="uk-link-muted" href="#"><span uk-icon="chevron-double-right"></span>@(Model.Article.Topic?.Name ?? "no topic")</a>
+                        UserBookmark bookmark = Model.Article.Bookmarks
+                            .Where(b => b.UserId == Model.User?.Id)
+                            .FirstOrDefault();
+                        <button class="blog-btn uk-text-middle bookmark-action" type="button" onclick="bookmarkArticle()">
+                            @if (bookmark is not null)
+                            {
+                                <img src="img/buttons/bookmark-checked.png" alt="bookmarked" class="blog-btn-img">
+                            }
+                            else
+                            {
+                                <img src="img/buttons/bookmark-unchecked.png" alt="bookmark" class="blog-btn-img">
+                            }
+                            <span id="articleBookmarksNumber">@Model.Article.Bookmarks.Count</span>
+                        </button>
                     }
-                    @if (Model.Article.DisplayOptions.Series)
+                    @if (Model.Article.DisplayOptions.Comments)
                     {
-                        <a class="uk-link-muted" href="#"><span uk-icon="folder"></span> @(Model.Article.Series?.Name ?? "no series")</a>
-                    }
-                    @if (Model.Article.DisplayOptions.Tags)
-                    {
-                        List<string> tags = Model.Article.ArticleTags.Select(t => t.Tag).Select(t => t.Name).ToList();
-                        for (int i = 0; i < tags.Count; i++)
-                        {
-                            <a class="uk-link-muted" href="#"><span uk-icon="hashtag"></span>@tags[i]</a>
-                        }
+                        <span class="uk-text-middle uk-link-reset uk-margin-small-right">
+                            <span uk-icon="comments"></span>
+                            <span id="articleCommentsNumber">@Model.Article.Comments.Count</span>
+                        </span>
                     }
                 </div>
             </div>
-            <div class="uk-card-footer">
-                <div class="uk-grid-small uk-child-width-1-2" uk-grid>
-                    <div>
-                        @if (Model.Article.DisplayOptions.Likes)
-                        {
-                            UserFavourite like = Model.Article.Likes
-                                .Where(l => l.UserId == Model.User?.Id)
-                                .FirstOrDefault();
-                            <button class="blog-btn uk-text-middle" type="button">
-                                @if (like is not null)
-                                {
-                                    <img src="img/buttons/heart red.png" alt="like-checked" class="blog-btn-img">
-                                }
-                                else
-                                {
-                                    <img src="img/buttons/heart.png" alt="like" class="blog-btn-img">
-                                }
-                                <span>@Model.Article.Likes.Count</span>
-                            </button>
-                        }
-                        @if (Model.Article.DisplayOptions.Likes)
-                        {
-                            UserBookmark bookmark = Model.Article.Bookmarks
-                                .Where(b => b.UserId == Model.User?.Id)
-                                .FirstOrDefault();
-                            <button class="blog-btn uk-text-middle" type="button">
-                                @if (bookmark is not null)
-                                {
-                                    <img src="img/buttons/bookmark-checked.png" alt="bookmark-checked" class="blog-btn-img">
-                                }
-                                else
-                                {
-                                    <img src="img/buttons/bookmark-unchecked.png" alt="bookmark" class="blog-btn-img">
-                                }
-                                <span>@Model.Article.Bookmarks.Count</span>
-                            </button>
-                        }
-                        @if (Model.Article.DisplayOptions.Comments)
-                        {
-                            <span class="uk-text-middle uk-link-reset uk-margin-small-right">
-                                <span uk-icon="comments"></span>
-                                <span>@Model.Article.Comments.Count</span>
-                            </span>
-                        }
-                    </div>
-                </div>
-            </div>
-        </article>
-    </div>
+        </div>
+    </article>
+</div>

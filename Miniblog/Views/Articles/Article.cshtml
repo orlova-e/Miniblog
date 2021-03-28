@@ -1,20 +1,41 @@
-﻿@using Web.ViewModels
-
-@{
+﻿@{
     ArticleReadViewModel articleReadModel = ViewBag.ArticleReadModel;
     CommentsViewModel commentsViewModel = ViewBag.CommentsViewModel;
     await Html.RenderPartialAsync("_ArticlePartial", articleReadModel);
     await Html.RenderPartialAsync("_CommentsPartial", commentsViewModel);
-    await Html.RenderPartialAsync("_CommentTemplatePartial", articleReadModel.User);
+    await Html.RenderPartialAsync("_CommentTemplatesPartial", articleReadModel.User);
 }
 
-<template id="anonymousUserImgTemplate">
-    <avatar user="null" />
-</template>
+@section Scripts {
+    <script src="~/js/datetime.js"></script>
+    <script src="~/js/article/comment/insertDate.js"></script>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script src="~/js/article/articleActions.js"></script>
+    }
+    @if (articleReadModel.Article.DisplayOptions.Comments)
+    {
+        <script src="~/js/article/updateInfo.js"></script>
+        <script src="~/js/article/events.js"></script>
+        <script src="~/js/article/comment/add.js"></script>
+        <script src="~/js/article/comment/create.js"></script>
+        <script src="~/js/article/comment/update.js"></script>
+        <script src="~/js/article/comment/replace.js"></script>
+        <script src="~/js/article/comment/delete.js"></script>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <script src="~/js/article/comment/like.js"></script>
 
-@if (User.Identity.IsAuthenticated && articleReadModel.User.Avatar is not null)
-{
-    <template id="userImgTemplate">
-        <avatar user="articleReadModel.User" />
-    </template>
+            @if (articleReadModel.User.Role.WriteComments)
+            {
+                <script src="~/js/article/comment/getForm.js"></script>
+                <script src="~/js/article/comment/send.js"></script>
+            }
+        }
+    }
+}
+
+@section Hubs {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/article/articleHub.js"></script>
 }

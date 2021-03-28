@@ -3,63 +3,72 @@
 function getReplyCommentForm(btn) {
     let comment = btn.closest('.blog-comment');
 
-    if (!comment.querySelector('.text-comment-container .comment-answer')) {
-        let template = document.getElementById("commentResponseForm");
-        let commentForm = template.content.cloneNode(true);
-        let previousElement = comment.querySelector('.text-comment-container .comment-actions-container');
-        previousElement.after(commentForm);
+    let template = document.getElementById("commentResponseForm");
+    let commentForm = template.content.querySelector("form").cloneNode(true);
+
+    if (!document.querySelector(`form[data-parent-id="${comment.dataset.commentId}"]`)) {
+        commentForm.dataset.parentId = comment.dataset.commentId;
+        commentForm.className += " " + comment.className;
+        if (!commentForm.classList.contains("parental"))
+            commentForm.classList.add("parental");
+
+        if (commentForm.className.includes("parental-")) {
+            let position = commentForm.className.indexOf('parental-');
+            let maxDepth = document.querySelector('.article-comments-collection').dataset.commentsDepth;
+            let number = 0;
+            if (position > 0) {
+                number = commentForm.className.substring(position + 'parental-'.length);
+                if (number >= maxDepth)
+                    number = --maxDepth;
+                commentForm.classList.remove("parental-" + number);
+            }
+            
+            commentForm.classList.add("parental-" + ++number);
+        } else {
+            commentForm.classList.add("parental-1");
+        }
+
+        comment.after(commentForm);
     }
 }
 
 function removeReplyCommentForm(btn) {
-    let comment = btn.closest('.blog-comment');
-    let replyForm = comment.querySelector('.comment-answer');
-    if (replyForm) {
-        replyForm.remove();
-    }
+    let replyForm = btn.closest('form');
+    replyForm?.remove();
 }
 
 function getUpdateCommentForm(btn) {
-    let comment = btn.closest('div.blog-comment');
+    let comment = btn.closest('.blog-comment');
     if (!comment.querySelector('form.comment-update-form')) {
-        let template = document.getElementById('commentChangeForm').content.cloneNode(true);
-        let commentContainer = comment.querySelector('.comment-container');
+        let template = document.getElementById('commentChangeForm').content.querySelector("form").cloneNode(true);
+        let textContainer = comment.querySelector('.comment-container');
+        let formText = template.querySelector("textarea");
+        formText.value = "";
 
-        let oldContent = document.createElement('div');
-        oldContent.className = 'comment-old-content';
-        oldContent.hidden = true;
-        oldContent.innerHTML = commentContainer.innerHTML;
-        commentContainer.after(oldContent);
-        commentContainer.innerHTML = '';
-
-        for (let i = 0; i < oldContent.childNodes.length; i++) {
-            if (oldContent.childNodes[i].tagName === 'P') {
-                template.querySelector('.comment-input-textarea').textContent += oldContent.childNodes[i].textContent.trim();
-                if (i !== oldContent.childNodes.length - 1) {
-                    template.querySelector('.comment-input-textarea').textContent += '\n';
-                }
+        for (let i = 0; i < textContainer.childNodes.length; i++) {
+            if (textContainer.childNodes[i].tagName === 'P') {
+                formText.value += textContainer.childNodes[i].textContent;
             }
         }
 
-        commentContainer.append(template);
+        textContainer.after(template);
+        textContainer.style.display = "none";
 
-        // hide action buttons and date
-        comment.querySelector('.comment-actions-container').hidden = true;
-        comment.querySelector('.comment-time-info').hidden = true;
+        comment.querySelector(".comment-time-info").style.visibility = "collapse";
+        comment.querySelector('.comment-actions-container').style.visibility = "collapse";
     }
 }
 
 function removeUpdateCommentForm(btn) {
-    let comment = btn.closest('div.blog-comment');
+    let comment = btn.closest('.blog-comment');
     let commentUpdateForm = comment.querySelector('form.comment-update-form');
     if (commentUpdateForm) {
         commentUpdateForm.remove();
-        let currentContent = comment.querySelector('.comment-old-content');
-        let commentContainer = comment.querySelector('.comment-container');
-        commentContainer.innerHTML = currentContent.innerHTML;
 
-        // show action buttons and date
-        comment.querySelector('.comment-actions-container').hidden = false;
-        comment.querySelector('.comment-time-info').hidden = false;
+        comment.querySelector(".comment-time-info").style.visibility = "visible";
+        comment.querySelector('.comment-actions-container').style.visibility = "visible";
+
+        let textContainer = comment.querySelector('.comment-container');
+        textContainer.style.display = "block";
     }
 }

@@ -37,10 +37,10 @@
                                     }
                                 </h4>
                                 <div class="comment-time-info time-info uk-comment-meta uk-margin-remove-top">
-                                    <time class="time-info-created" datetime="@children[i].DateTime.ToString("s")">@children[i].DateTime.ToString("g")</time>
+                                    <time class="time-info-created" datetime="@children[i].DateTime.UtcDateTime.ToString("o")">@children[i].DateTime.ToString("g")</time>
                                     @if (children[i].UpdatedDateTime is not null)
                                     {
-                                        <span>(updated at <time class="time-info-updated" datetime="@children[i].UpdatedDateTime?.ToString("s")">@children[i].UpdatedDateTime?.ToString("g")</time>)</span>
+                                        <span class="datetime-updated-text">(updated at <time class="time-info-updated" datetime="@children[i].UpdatedDateTime?.UtcDateTime.ToString("o")">@children[i].UpdatedDateTime?.ToString("g")</time>)</span>
                                     }
                                 </div>
 
@@ -73,7 +73,7 @@
                         </div>
                     </header>
 
-                    <div class="uk-comment-body">
+                    <div class="uk-comment-body comment-container">
                         @{
                             if (children[i].IsDeleted)
                             {
@@ -101,7 +101,7 @@
                             <button class="blog-btn heart-button" onclick="likeComment(this)" type="button">
                                 @if (commentLike is not null)
                                 {
-                                    <img src="img/buttons/heart red.png" alt="like-ckecked" class="blog-btn-img">
+                                    <img src="img/buttons/heart red.png" alt="liked" class="blog-btn-img">
                                 }
                                 else
                                 {
@@ -142,7 +142,7 @@
             }
             else
             {
-                <form>
+                <form class="root-comment-answer root-answer-form">
                     <fieldset class="uk-fieldset">
                         <legend class="uk-legend uk-text-secondary uk-margin-bottom">Leave a comment</legend>
                         <a href="#" class="uk-link-reset">
