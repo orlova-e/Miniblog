@@ -22,6 +22,8 @@ namespace Repo.Implementation
                 .Where(a => a.Id == id)
                 .Include(a => a.Comments)
                     .ThenInclude(c => c.Author)
+                .Include(a => a.Comments)
+                    .ThenInclude(c => c.Likes)
                 .Include(a => a.Images)
                 .FirstOrDefaultAsync();
             return article;
@@ -45,7 +47,9 @@ namespace Repo.Implementation
                 .Include(a => a.Bookmarks)
                 .Include(a => a.Comments)
                     .ThenInclude(c => c.Author)
-                .Include(a=>a.Images)
+                .Include(a => a.Comments)
+                    .ThenInclude(c => c.Likes)
+                .Include(a => a.Images)
                 .Where(predicate)
                 .ToList();
         }
