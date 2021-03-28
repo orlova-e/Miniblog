@@ -83,7 +83,7 @@ namespace Web.Components
                 {
                     pages.Add("Verification list", Url.Action("List", "Verification", new { queueList = "users" }));
                 }
-                pages.Add("Sign Out", Url.Action("SignOut", "Account"));
+                pages.Add("Sign Out", Url.Action("signout", "account"));
             }
 
             header.Pages = pages;
