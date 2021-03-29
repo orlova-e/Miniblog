@@ -18,5 +18,6 @@ namespace Web.ViewModels
         public string UpdatedDateTime { get; set; }
         [Required]
         public string Text { get; set; }
+        public bool? Requirements { get; set; }
     }
 }

@@ -31,14 +31,14 @@ namespace Services.Implementation
             EntityObserver = entityObserver;
         }
 
-        public async Task<Comment> AddCommentAsync(string username, string title, string text, Guid? parentId = null)
+        public async Task<Comment> AddCommentAsync(string username, Guid articleId, string text, Guid? parentId = null)
         {
             User user = Repository.Users.Find(u => u.Username == username).FirstOrDefault();
 
             if (!(user?.Role?.WriteComments ?? false))
                 throw new InvalidOperationException();
 
-            Article article = Repository.Articles.Find(a => a.Link == title).FirstOrDefault();
+            Article article = await Repository.Articles.GetByIdAsync(articleId);
             if (article is null)
                 throw new InvalidOperationException();
 
@@ -101,7 +101,7 @@ namespace Services.Implementation
         {
             User user = Repository.Users.Find(u => u.Username == username).FirstOrDefault();
             Comment comment = await Repository.Comments.GetByIdAsync(commentId);
-            if (comment?.AuthorId != user?.Id || !(user.Role as ExtendedRole).ModerateComments || comment.IsDeleted)
+            if (!((user.Role as ExtendedRole)?.ModerateComments ?? false) && comment?.AuthorId != user?.Id || comment.IsDeleted)
             {
                 throw new InvalidOperationException();
             }

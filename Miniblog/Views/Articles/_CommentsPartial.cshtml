@@ -148,7 +148,7 @@
                         <a href="#" class="uk-link-reset">
                             <div class="uk-grid-small uk-flex-middle" uk-grid>
                                 <div class="uk-width-auto">
-                                    <avatar user="Model.User" px="40" classes="uk-border-circle"/>
+                                    <avatar user="Model.User" px="40" classes="uk-border-circle" />
                                 </div>
                                 <div class="uk-width-expand">
                                     <h3 class="uk-card-title uk-text-secondary uk-margin-remove-bottom">@Model.User.Username</h3>
@@ -166,27 +166,30 @@
                 </form>
             }
         </div>
-        <div class="uk-card-body">
-            @if (!Model.Comments.Any())
-            {
-                <h3 id="noCommentsMessage" class="uk-margin-remove">There is no comments yet</h3>
-            }
-            else
-            {
-                <h3 id="commentsAreExistMessage" class="uk-text-secondary">Comments</h3>
-            }
-            <ul data-comments-depth="@Model.Depth" id="comments-container" class="uk-comment-list article-comments-collection">
-
-                @if (Model.Comments.Any())
+        @if (Model.CommentsVisibility)
+        {
+            <div class="uk-card-body">
+                @if (!Model.Comments.Any())
                 {
-                    List<Comment> root = Model.Comments
-                        .Where(c => c.ParentId is null)
-                        .OrderBy(c => c.DateTime.Ticks)
-                        .ToList();
-                    await GetCommentAsync(root, -1);
+                    <h3 id="noCommentsMessage" class="uk-margin-remove">There is no comments yet</h3>
                 }
+                else
+                {
+                    <h3 id="commentsAreExistMessage" class="uk-text-secondary">Comments</h3>
+                }
+                <ul data-comments-depth="@Model.Depth" id="comments-container" class="uk-comment-list article-comments-collection">
 
-            </ul>
-        </div>
+                    @if (Model.Comments.Any())
+                    {
+                        List<Comment> root = Model.Comments
+                            .Where(c => c.ParentId is null)
+                            .OrderBy(c => c.DateTime.Ticks)
+                            .ToList();
+                        await GetCommentAsync(root, -1);
+                    }
+
+                </ul>
+            </div>
+        }
     </div>
 </div>

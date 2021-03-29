@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Articles\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

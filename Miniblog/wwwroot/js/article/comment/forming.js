@@ -1,8 +1,19 @@
 ﻿"use strict";
 
+function replaceComment(comment) {
+    let oldComment = document.querySelector(`.blog-comment[data-comment-id="${comment.dataset.commentId}"]`);
+    oldComment.replaceWith(comment);
+}
+
 function createComment(comment) {
     let template = document.getElementById('templateBlogComment');
-    let newComment = template.content.querySelector('.blog-comment').cloneNode(true);
+
+    let newComment;
+    if (comment.requirements) {
+        newComment = template.content.querySelector('.blog-comment.own-comment').cloneNode(true);
+    } else {
+        newComment = template.content.querySelector('.blog-comment.not-own-comment').cloneNode(true);
+    }
 
     newComment.dataset.commentId = comment.commentId;
 
@@ -55,4 +66,48 @@ function createComment(comment) {
     insertCommentDate(newComment);
 
     return newComment;
+}
+
+function addComment(comment) {
+    let newComment = createComment(comment);
+    if (comment.parentId) {
+        let parentComment = document.querySelector('.blog-comment[data-comment-id="' + comment.parentId + '"]');
+        parentComment.after(newComment);
+
+        let commentForm = document.querySelector(`form[data-parent-id="${comment.parentId}"]`);
+        commentForm.remove();
+    } else {
+        document.querySelector(".article-comments-collection").append(newComment);
+        let noCommentsMessage = document.getElementById('noCommentsMessage');
+        if (noCommentsMessage) {
+            let commentsMessage = document.createElement('h3');
+            commentsMessage.id = 'commentsAreExistMessage';
+            commentsMessage.textContent = 'Comments';
+            noCommentsMessage.replaceWith(commentsMessage);
+        }
+        let commentAnswerForm = document.querySelector('.root-answer-form');
+        if (commentAnswerForm) {
+            commentAnswerForm.querySelector('textarea').value = '';
+        }
+    }
+}
+
+function updateComment(updatedComment) {
+    let comment = createComment(updatedComment);
+    replaceComment(comment);
+}
+
+function deleteComment(comment) {
+    let deletedComment = createComment(comment);
+
+    let commentText = document.createElement('p');
+    commentText.append(document.createElement('i'));
+    commentText.querySelector('i').textContent = '[deleted]';
+
+    let textContainer = deletedComment.querySelector('.comment-container');
+    textContainer.append(commentText);
+    let commentChangeActions = deletedComment.querySelector('.comment-change');
+    commentChangeActions?.remove();
+
+    replaceComment(deletedComment);
 }

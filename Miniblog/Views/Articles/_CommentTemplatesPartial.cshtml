@@ -1,7 +1,58 @@
 ﻿@model User
 
 <template id="templateBlogComment">
-    <li data-comment-id="" data-parent-id="" class="blog-comment">
+    @if (User.Identity.IsAuthenticated && (Model.Role?.WriteComments ?? default))
+    {
+        <li data-comment-id="" data-parent-id="" class="blog-comment own-comment">
+            <article class="uk-visible-toggle uk-comment" tabindex="-1">
+                <header class="uk-comment-header uk-position-relative">
+                    <div class="uk-grid-medium uk-flex-middle" uk-grid>
+                        <div class="user-info-container uk-width-auto">
+                            <avatar user="null" classes="uk-comment-avatar" px="80">
+                        </div>
+                        <div class="uk-width-expand">
+                            <h4 class="comment-username uk-comment-title uk-margin-remove"><a class="uk-link-reset" href="#"></a></h4>
+                            <div class="comment-time-info time-info uk-comment-meta uk-margin-remove-top">
+                                <time class="time-info-created" datetime=""></time>
+                                <span class="datetime-updated-text" style="visibility: collapse;">(updated at <time class="time-info-updated" datetime=""></time>)</span>
+                            </div>
+
+
+                            <div>
+                                <div class="comment-change uk-button-group uk-position-top-right">
+                                    <button class="reply-button blog-btn" onclick="getUpdateCommentForm(this)" type="button">
+                                        <span uk-icon="icon: pencil"></span>
+                                    </button>
+
+                                    <button class="comment-change-delete reply-button blog-btn" onclick="deleteActions(this)" type="button">
+                                        <span uk-icon="icon: close"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="uk-comment-body comment-container">
+                </div>
+
+                <div class="comment-actions-container uk-comment-footer blog-comment-footer">
+                    <div class="uk-button-group">
+                        <button class="blog-btn heart-button" onclick="likeComment(this)" type="button">
+                            <img src="img/buttons/heart.png" alt="like" class="blog-btn-img">
+                            <span name="commentLikesNumber">0</span>
+                        </button>
+
+                        <button class="blog-btn" onclick="getReplyCommentForm(this)" type="button">
+                            <span uk-icon="icon: reply"></span>
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </li>
+    }
+
+    <li data-comment-id="" data-parent-id="" class="blog-comment not-own-comment">
         <article class="uk-visible-toggle uk-comment" tabindex="-1">
             <header class="uk-comment-header uk-position-relative">
                 <div class="uk-grid-medium uk-flex-middle" uk-grid>
@@ -15,23 +66,13 @@
                             <span class="datetime-updated-text" style="visibility: collapse;">(updated at <time class="time-info-updated" datetime=""></time>)</span>
                         </div>
 
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.Identity.IsAuthenticated && ((Model.Role as ExtendedRole)?.ModerateComments ?? default))
                         {
                             <div>
                                 <div class="comment-change uk-button-group uk-position-top-right">
-                                    @if (Model.Role?.WriteComments ?? default)
-                                    {
-                                        <button class="reply-button blog-btn" onclick="getUpdateCommentForm(this)" type="button">
-                                            <span uk-icon="icon: pencil"></span>
-                                        </button>
-                                    }
-
-                                    @if ((Model.Role?.WriteComments ?? default) || ((Model.Role as ExtendedRole)?.ModerateComments ?? default))
-                                    {
-                                        <button class="comment-change-delete reply-button blog-btn" onclick="deleteActions(this)" type="button">
-                                            <span uk-icon="icon: close"></span>
-                                        </button>
-                                    }
+                                    <button class="comment-change-delete reply-button blog-btn" onclick="deleteActions(this)" type="button">
+                                        <span uk-icon="icon: close"></span>
+                                    </button>
                                 </div>
                             </div>
                         }

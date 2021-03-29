@@ -1,10 +1,11 @@
 ﻿"use strict";
 
-const title = new URL(window.location.href).searchParams.get("title");
-const depth = document.querySelector('.article-comments-collection').dataset?.commentsDepth;
+const currentArticleId = document.querySelector('article').id;
+//const title = new URL(window.location.href).searchParams.get("title");
+//const depth = document.querySelector('.article-comments-collection')?.dataset?.commentsDepth;
 
 const articleHubConnection = new signalR.HubConnectionBuilder()
-    .withUrl(`/articlehub?title=${title}`)
+    .withUrl(`/articlehub?articleId=${currentArticleId}`)
     .build();
 
 articleHubConnection.serverTimeoutInMilliseconds = 1000 * 60 * 2 * 30;
@@ -13,7 +14,8 @@ articleHubConnection.start();
 
 articleHubConnection.on("AddedComment", function (newComment, number) {
     addComment(newComment);
-    updateArticleCommentsNumber(number);
+    let commentsNumber = document.getElementById("articleCommentsNumber");
+    commentsNumber.textContent = number;
 });
 
 articleHubConnection.on("UpdatedComment", function (updatedComment) {
@@ -24,8 +26,18 @@ articleHubConnection.on("DeletedComment", function (deletedComment) {
     deleteComment(deletedComment);
 });
 
+function likeArticle() {
+    articleHubConnection.invoke("LikeArticle");
+}
 
-articleHubConnection.on("ArticleLikeIsChanged", function (state) {
+function bookmarkArticle() {
+    articleHubConnection.invoke("BookmarkArticle");
+}
+
+articleHubConnection.on("ArticleLikeIsChanged", function (articleId, state) {
+    if (currentArticleId !== articleId)
+        return;
+
     let img = document.querySelector(".article-user-actions button.like-action img");
     if (state) {
         img.src = "/img/buttons/heart red.png";
@@ -37,10 +49,14 @@ articleHubConnection.on("ArticleLikeIsChanged", function (state) {
 });
 
 articleHubConnection.on("ArticleLikesCounted", function (number) {
-    updateArticleLikesNumber(number);
+    let likesNumber = document.getElementById("articleLikesNumber");
+    likesNumber.textContent = number;
 });
 
-articleHubConnection.on("ArticleBookmarkIsChanged", function (state) {
+articleHubConnection.on("ArticleBookmarkIsChanged", function (articleId, state) {
+    if (currentArticleId !== articleId)
+        return;
+
     let img = document.querySelector(".article-user-actions button.bookmark-action img");
     if (state) {
         img.src = "/img/buttons/bookmark-checked.png";
@@ -52,10 +68,20 @@ articleHubConnection.on("ArticleBookmarkIsChanged", function (state) {
 });
 
 articleHubConnection.on("ArticleBookmarksCounted", function (number) {
-    updateArticleBookmarksNumber(number);
-})
+    let bookmarksNumber = document.getElementById("articleBookmarksNumber");
+    bookmarksNumber.textContent = number;
+});
 
-articleHubConnection.on("CommentLikeIsChanged", function (commentId, state) {
+function likeComment(btn) {
+    let commentId = btn.closest('.blog-comment').dataset.commentId;
+
+    articleHubConnection.invoke("LikeComment", commentId);
+}
+
+articleHubConnection.on("CommentLikeIsChanged", function (articleId, commentId, state) {
+    if (currentArticleId !== articleId)
+        return;
+
     let comment = document.querySelector('.blog-comment[data-comment-id="' + commentId + '"]');
     let img = comment.querySelector(".heart-button img");
     if (state) {
