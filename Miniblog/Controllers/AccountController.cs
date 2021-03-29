@@ -96,7 +96,7 @@ namespace Web.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
         }
 
-        [Route("SignOut")]
+        [Route("[controller]/SignOut")]
         public async Task<IActionResult> SignOutAsync()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
