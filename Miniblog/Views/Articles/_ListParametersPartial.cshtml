@@ -25,6 +25,13 @@
     }
 }
 
+@if (Model.PageName.Contains(": "))
+{
+    <div class="uk-container uk-margin-bottom">
+        <h3 class="blog-title">@Model.PageName</h3>
+    </div>
+}
+
 <div class="uk-container">
     <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
         <div class="uk-navbar-left">

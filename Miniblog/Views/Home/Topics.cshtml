@@ -1,0 +1,64 @@
+﻿@model ListViewModel<Topic>
+
+@{ 
+    ViewBag.Page = Model.PageName;
+    string[] actions = { "Topics", "Series", "Authors" };
+}
+
+<div class="uk-container uk-margin-bottom">
+    <div class="uk-card uk-card-default uk-card-body uk-card-hover">
+
+        <div class="uk-flex-center uk-flex">
+            <ul class="uk-subnav" uk-margin>
+                <li class="uk-active"><a href="@Url.Action("topics", "home")">Topics</a></li>
+                <li><a href="@Url.Action("authors", "users")">Authors</a></li>
+            </ul>
+        </div>
+
+        @if (!Model.Entities.Any())
+        {
+            ServerMessage message = new()
+            {
+                MessageText = $"There is no {Model.PageName.ToLower()} yet",
+                ShowSmile = true
+            };
+            await Html.RenderPartialAsync("_MessagePartial", message);
+        }
+        else
+        {
+            <div class="uk-flex uk-flex-center"><hr class="uk-divider-small"></div>
+            <div uk-grid class="uk-flex-center uk-text-center uk-margin-remove-top">
+                <div class="uk-width-1-4 ">
+                    <dl class="uk-description-list ">
+                        @foreach (Topic topic in Model.Entities)
+                        {
+                            <dt><a class="uk-link-reset" href="@Url.Action("topic", "home", new { name = topic.Name })">@topic.Name</a></dt>
+                        }
+                    </dl>
+                </div>
+            </div>
+        }
+
+        @if (Model.HasPrevious || Model.HasNext)
+        {
+            string previous = Url.Action(Model.PageName.ToLower(), "home", new { page = Model.Current - 1 });
+            string next = Url.Action(Model.PageName.ToLower(), "home", new { page = Model.Current + 1 });
+
+            <div class="uk-flex uk-flex-center uk-margin-top"><hr class="uk-divider-small"></div>
+            <div class="uk-flex-center uk-margin uk-margin-remove-top" uk-grid>
+                <div>
+                    <ul class="uk-pagination">
+                        @if (Model.HasPrevious)
+                        {
+                            <li><a href="@previous"><span class="uk-margin-small-right" uk-pagination-previous></span> Previous</a></li>
+                        }
+                        @if (Model.HasNext)
+                        {
+                            <li class="uk-margin-auto-left"><a href="@next">Next <span class="uk-margin-small-left" uk-pagination-next></span></a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</div>
