@@ -6,13 +6,9 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\**" />
-    <Compile Remove="Views\Home\**" />
     <Content Remove="Migrations\**" />
-    <Content Remove="Views\Home\**" />
     <EmbeddedResource Remove="Migrations\**" />
-    <EmbeddedResource Remove="Views\Home\**" />
     <None Remove="Migrations\**" />
-    <None Remove="Views\Home\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +18,7 @@
   <ItemGroup>
     <None Remove="App\Implementation\UserImagePreparer.cs~RF1c48621.TMP" />
     <None Remove="Controllers\ve-BDBB.tmp" />
+    <None Remove="Hubs\ArticleHub.cs~RF1843096.TMP" />
     <None Remove="Hubs\OptionsHub.cs~RF1e68c07.TMP" />
     <None Remove="Models\App\Interfaces\IArticlesService.cs~RFebb58d.TMP" />
     <None Remove="Models\Services\UsersRepository.cs~RF115f6df.TMP" />

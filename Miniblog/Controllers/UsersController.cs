@@ -25,6 +25,7 @@ namespace Web.Controllers
             UserService = userService;
             Common = common;
         }
+
         [HttpGet]
         [Route("[controller]/{username}")]
         public async Task<IActionResult> Account(string username, int page = 1, ListSorting sortBy = ListSorting.NewFirst)
@@ -35,7 +36,7 @@ namespace Web.Controllers
                 return NotFound();
 
             List<Article> articles = await ListCreator.FindArticlesAsync(a => a.User?.Id == author.Id);
-            ListViewModel listViewModel = new(page, articles, Common.Options.ListOptions, sortBy);
+            ListViewModel<Article> listViewModel = new(page, articles, Common.Options.ListOptions, sortBy);
             listViewModel.PageName = "Account";
 
             bool subscribed = false;

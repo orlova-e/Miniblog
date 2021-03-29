@@ -110,9 +110,9 @@ namespace Web.Controllers
                 return NotFound();
             }
 
-            ListViewModel listViewModel = new(page, articles, Common.Options.ListOptions, sortBy);
+            ListViewModel<Article> listViewModel = new(page, articles, Common.Options.ListOptions, sortBy);
             listViewModel.PageName = listName;
-            if (page > 1 && !listViewModel.Articles.Any())
+            if (page > 1 && !listViewModel.Entities.Any())
                 return NotFound();
             if (listName is "default" or "pages")
                 return View(listViewModel);

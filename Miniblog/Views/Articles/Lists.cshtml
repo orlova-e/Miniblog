@@ -3,7 +3,7 @@
 
 @inject IUserService userService
 
-@model ListViewModel
+@model ListViewModel<Article>
 
 @{
     Role role = null;
@@ -13,7 +13,7 @@
     }
 }
 
-@if (!Model.Articles.Any())
+@if (!Model.Entities.Any())
 {
     ServerMessage serverMessage = new()
     {
@@ -34,26 +34,26 @@ else
 
     <div class="uk-container uk-margin">
         <div id="articlesContainer" uk-grid="masonry: true" class="uk-grid-medium uk-child-width-1-1@m">
-            @foreach (Article article in Model.Articles)
+            @foreach (Article article in Model.Entities)
             {
                 await Html.RenderPartialAsync("~/Views/Articles/_PreviewArticlePartial.cshtml", article);
             }
         </div>
     </div>
 
-    string previous = Url.Action(Model.PageName.ToLower(), "articles", new
-    {
-        page = Model.Current - 1,
-        sortby = Enum.GetName(typeof(ListSorting), Model.ListSorting).ToLower()
-    });
-    string next = Url.Action(Model.PageName.ToLower(), "articles", new
-    {
-        page = Model.Current + 1,
-        sortby = Enum.GetName(typeof(ListSorting), Model.ListSorting).ToLower()
-    });
-
     @if (Model.HasPrevious || Model.HasNext)
     {
+        string previous = Url.Action(Model.PageName.ToLower(), "articles", new
+        {
+            page = Model.Current - 1,
+            sortby = Enum.GetName(typeof(ListSorting), Model.ListSorting).ToLower()
+        });
+        string next = Url.Action(Model.PageName.ToLower(), "articles", new
+        {
+            page = Model.Current + 1,
+            sortby = Enum.GetName(typeof(ListSorting), Model.ListSorting).ToLower()
+        });
+
         <div class="uk-flex-center uk-margin" uk-grid>
             <div>
                 <ul class="uk-pagination">

@@ -1,4 +1,4 @@
-﻿@model ListViewModel
+﻿@model ListViewModel<Article>
 
 @{
     async Task GetLinksAsync()
@@ -24,7 +24,7 @@
     await GetLinksAsync();
 }
 
-@if (Model.Articles.Any())
+@if (Model.Entities.Any())
 {
     await Html.RenderPartialAsync("~/Views/Articles/Lists.cshtml", Model);
 

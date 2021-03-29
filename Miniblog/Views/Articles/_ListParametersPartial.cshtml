@@ -1,21 +1,25 @@
 ﻿@inject IOptionsSnapshot<ListOptions> listOptions
 
-@model ListViewModel
+@model ListViewModel<Article>
 
 @{
     ListLayoutType layoutType = listOptions.Value.LayoutDefaultType;
 
     string GetUrl(ListSorting sortingType)
     {
-        string type = Enum.GetName<ListSorting>(sortingType);
-        string listName = Model.PageName.ToLower();
-        string controller = listName.Equals("account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
-
-        string url = listName switch
+        string url = "#";
+        if(!Model.PageName.Contains(": "))
         {
-            "account" => Url.Action(listName, controller, new { page = Model.Current, sortby = type }),
-            _ => Url.Action("lists", controller, new { listName = listName, page = Model.Current, sortby = type })
-        };
+            string type = Enum.GetName<ListSorting>(sortingType);
+            string listName = Model.PageName.ToLower();
+            string controller = listName.Equals("account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
+
+            url = listName switch
+            {
+                "account" => Url.Action(listName, controller, new { page = Model.Current, sortby = type }),
+                _ => Url.Action("lists", controller, new { listName = listName, page = Model.Current, sortby = type })
+            };
+        }
 
         return url;
     }
@@ -29,7 +33,7 @@
                     <button class="uk-button uk-button-default" type="button">Sort by</button>
                     <div uk-dropdown>
                         <ul class="uk-nav uk-dropdown-nav">
-                            @foreach(ListSorting type in Enum.GetValues<ListSorting>())
+                            @foreach (ListSorting type in Enum.GetValues<ListSorting>())
                             {
                                 string liClass = string.Empty;
                                 if (Model.ListSorting == type)

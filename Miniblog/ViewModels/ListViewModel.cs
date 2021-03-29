@@ -7,27 +7,27 @@ using Web.Configuration;
 
 namespace Web.ViewModels
 {
-    public class ListViewModel
+    public class ListViewModel<T> where T : Entity
     {
         public string PageName { get; set; }
         public uint Current { get; private set; }
         public int Total { get; private set; }
         public bool HasPrevious => Current > 1;
-        public bool HasNext => Current > Total;
+        public bool HasNext => Current > Total && Total > 0;
         public ListSorting ListSorting { get; private set; }
-        public List<Article> Articles { get; private set; }
+        public List<T> Entities { get; private set; }
 
         public ListViewModel() { }
         public ListViewModel(int current,
-            List<Article> articles,
+            List<T> entities,
             ListOptions listOptions,
             ListSorting listSorting = ListSorting.NewFirst)
         {
             Current = (uint)Math.Abs(current);
-            Total = (int)Math.Ceiling(articles.Count / (double)listOptions.ArticlesPerPage.Value);
+            Total = (int)Math.Ceiling(entities.Count / (double)listOptions.ArticlesPerPage.Value);
             ListSorting = listSorting;
 
-            if (articles is not null)
+            if (entities is List<Article> articles)
             {
                 var sortedArticles = ListSorting switch
                 {
@@ -37,12 +37,25 @@ namespace Web.ViewModels
                     ListSorting.AlphabeticallyDescending => articles.OrderByDescending(a => a.Header),
                     _ => articles.OrderByDescending(a => a.DateTime),
                 };
-
-                Articles = sortedArticles
-                    .Skip(((int)Current - 1) * listOptions.ArticlesPerPage.Value)
-                    .Take(listOptions.ArticlesPerPage.Value)
-                    .ToList();
+                entities = sortedArticles.ToList() as List<T>;
             }
+            else if (entities.Any())
+            {
+                Type type = entities.GetType().DeclaringType;
+                entities = typeof(T).Name switch
+                {
+                    nameof(Topic) => (entities as List<Topic>).OrderBy(t => t.Name).ToList() as List<T>,
+                    nameof(Series) => (entities as List<Series>).OrderBy(s => s.Name).ToList() as List<T>,
+                    nameof(User) => (entities as List<User>).OrderBy(u => u.Username).ToList() as List<T>,
+                    nameof(Tag) => (entities as List<Tag>).OrderBy(t => t.Name).ToList() as List<T>,
+                    _ => throw new NotImplementedException()
+                };
+            }
+
+            Entities = entities
+                .Skip(((int)Current - 1) * listOptions.ArticlesPerPage.Value)
+                .Take(listOptions.ArticlesPerPage.Value)
+                .ToList() as List<T>;
         }
     }
 }
