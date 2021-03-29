@@ -1,6 +1,6 @@
 ﻿@{
     User author = ViewBag.Author;
-    ListViewModel listViewModel = ViewBag.ListViewModel;
+    ListViewModel<Article> listViewModel = ViewBag.ListViewModel;
     bool subscribed = ViewBag.Subscribed;
 }
 
@@ -26,7 +26,7 @@
                                 <p>@author.City</p>
                             }
                             <p class="blog-author-articles-number">
-                                <b>@listViewModel.Articles.Count</b>
+                                <b>@listViewModel.Entities.Count</b>
                                 @{ 
                                     string articles = "articles";
                                     if ((author.Articles.Count is 1))
@@ -70,7 +70,7 @@
     </div>
 }
 
-@if (listViewModel.Articles.Any())
+@if (listViewModel.Entities.Any())
 {
     await Html.RenderPartialAsync("~/Views/Articles/Lists.cshtml", listViewModel);
 
