@@ -71,7 +71,7 @@ namespace Web.Controllers
         public IActionResult SeriesWith(string name, uint page = 1)
         {
             ListViewModel<Article> listViewModel;
-            Series series = Repository.Series.Find(s => s.Link == name && s.Accepted is not false).First();
+            Series series = Repository.Series.Find(s => s.Link == name && s.Accepted is not false).FirstOrDefault();
             if (series is null)
                 return NotFound();
             var articles = Repository.Articles.Find(a => a.Series?.Name == series.Name).ToList();
