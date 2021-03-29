@@ -60,7 +60,7 @@ namespace Web.Components
             }
             if (displayOptions.ShowTopics)
             {
-                pages.Add("Topics", Url.Action("Lists", "Articles", new { name = "Topics" }));
+                pages.Add("Topics", Url.Action("Topics", "Home"));
             }
 
             List<Article> pagesDb = ListCreator

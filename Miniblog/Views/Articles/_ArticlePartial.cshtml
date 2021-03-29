@@ -59,11 +59,17 @@
             <div class="blog-article-data">
                 @if (Model.Article.DisplayOptions.Topic)
                 {
-                    <a class="uk-link-muted" href="#"><span uk-icon="chevron-double-right"></span>@(Model.Article.Topic?.Name ?? "no topic")</a>
+                    string topicUrl = "#";
+                    if (!string.IsNullOrWhiteSpace(Model.Article.Topic?.Name))
+                        topicUrl = Url.Action("topic", "home", new { name = Model.Article.Topic.Name });
+                    <a class="uk-link-muted" href="@topicUrl"><span uk-icon="chevron-double-right"></span>@(Model.Article.Topic?.Name ?? "no topic")</a>
                 }
                 @if (Model.Article.DisplayOptions.Series)
                 {
-                    <a class="uk-link-muted" href="#"><span uk-icon="folder"></span> @(Model.Article.Series?.Name ?? "no series")</a>
+                    string seriesUrl = "#";
+                    if (!string.IsNullOrWhiteSpace(Model.Article.Series?.Name))
+                        seriesUrl = Url.Action("serieswith", "home", new { name = Model.Article.Series.Name });
+                    <a class="uk-link-muted" href="@seriesUrl"><span uk-icon="folder"></span> @(Model.Article.Series?.Name ?? "no series")</a>
                 }
                 @if (Model.Article.DisplayOptions.Tags)
                 {
