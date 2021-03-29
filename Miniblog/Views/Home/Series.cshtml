@@ -1,8 +1,7 @@
-﻿@model ListViewModel<Topic>
+﻿@model ListViewModel<Series>
 
 @{ 
     ViewBag.Page = Model.PageName;
-    string[] actions = { "Topics", "Series", "Authors" };
 }
 
 <div class="uk-container uk-margin-bottom">
@@ -10,8 +9,8 @@
 
         <div class="uk-flex-center uk-flex">
             <ul class="uk-subnav" uk-margin>
-                <li class="uk-active"><a href="@Url.Action("topics", "home")">Topics</a></li>
-                <li><a href="@Url.Action("series", "home")">Series</a></li>
+                <li><a href="@Url.Action("topics", "home")">Topics</a></li>
+                <li class="uk-active"><a href="@Url.Action("series", "home")">Series</a></li>
                 <li><a href="@Url.Action("authors", "users")">Authors</a></li>
             </ul>
         </div>
@@ -31,9 +30,10 @@
             <div uk-grid class="uk-flex-center uk-text-center uk-margin-remove-top">
                 <div class="uk-width-1-4 ">
                     <dl class="uk-description-list ">
-                        @foreach (Topic topic in Model.Entities)
+                        @foreach (Series series in Model.Entities)
                         {
-                            <dt><a class="uk-link-reset" href="@Url.Action("topic", "home", new { name = topic.Name })">@topic.Name</a></dt>
+                            <dt><a class="uk-link-reset" href="@Url.Action("serieswith", "home", new { name = series.Link })">@series.Name</a></dt>
+                            <dd>Author: @series.User.Username</dd>
                         }
                     </dl>
                 </div>

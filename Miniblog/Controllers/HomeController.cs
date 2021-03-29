@@ -42,19 +42,41 @@ namespace Web.Controllers
         public IActionResult Topic([FromQuery] string name, int page = 1)
         {
             ListViewModel<Article> listViewModel;
-            try
-            {
-                Topic topic = Repository.Topics.Find(t => t.Name == name && t.Accepted is not false).FirstOrDefault();
-                if (topic is null)
-                    throw new ArgumentNullException();
-                var articles = Repository.Articles.Find(a => a.Topic?.Name == topic.Name).ToList();
-                listViewModel = new(page, articles, Common.Options.ListOptions);
-                listViewModel.PageName = "Topic: " + topic.Name;
-            }
-            catch (ArgumentNullException)
-            {
+            Topic topic = Repository.Topics.Find(t => t.Name == name && t.Accepted is not false).FirstOrDefault();
+            if (topic is null)
                 return NotFound();
-            }
+            var articles = Repository.Articles.Find(a => a.Topic?.Name == topic.Name).ToList();
+            listViewModel = new(page, articles, Common.Options.ListOptions);
+            listViewModel.PageName = "Topic: " + topic.Name;
+            if (page > 1 && !listViewModel.Entities.Any())
+                return NotFound();
+
+            return View("~/Views/Articles/Lists.cshtml", listViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Series(int page = 1)
+        {
+            List<Series> series = (await Repository.Series.GetAllAsync())
+                .Where(s => s.Accepted is not false)
+                .ToList();
+            ListViewModel<Series> listViewModel = new(page, series, Common.Options.ListOptions);
+            listViewModel.PageName = "Series";
+            if (page > 1 && !listViewModel.Entities.Any())
+                return NotFound();
+            return View(listViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult SeriesWith(string name, int page = 1)
+        {
+            ListViewModel<Article> listViewModel;
+            Series series = Repository.Series.Find(s => s.Link == name && s.Accepted is not false).First();
+            if (series is null)
+                return NotFound();
+            var articles = Repository.Articles.Find(a => a.Series?.Name == series.Name).ToList();
+            listViewModel = new(page, articles, Common.Options.ListOptions);
+            listViewModel.PageName = "Series: " + series.Name;
             if (page > 1 && !listViewModel.Entities.Any())
                 return NotFound();
 
