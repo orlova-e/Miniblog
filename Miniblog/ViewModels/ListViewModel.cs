@@ -18,12 +18,11 @@ namespace Web.ViewModels
         public List<T> Entities { get; private set; }
 
         public ListViewModel() { }
-        public ListViewModel(int current,
+        public ListViewModel(uint current,
             List<T> entities,
             ListOptions listOptions,
             ListSorting listSorting = ListSorting.NewFirst)
         {
-            Current = (uint)Math.Abs(current);
             Total = (int)Math.Ceiling(entities.Count / (double)listOptions.ArticlesPerPage.Value);
             ListSorting = listSorting;
 

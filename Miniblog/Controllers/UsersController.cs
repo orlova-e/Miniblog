@@ -28,7 +28,7 @@ namespace Web.Controllers
 
         [HttpGet]
         [Route("[controller]/{username}")]
-        public async Task<IActionResult> Account(string username, int page = 1, ListSorting sortBy = ListSorting.NewFirst)
+        public async Task<IActionResult> Account(string username, uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
         {
             User author = UserService.GetUserFromDb(u => u.Username == username);
 

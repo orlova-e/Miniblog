@@ -83,7 +83,7 @@ namespace Web.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("[controller]/[action]/{listName=default}")]
-        public async Task<IActionResult> Lists(string listName, int page = 1, ListSorting sortBy = ListSorting.NewFirst)
+        public async Task<IActionResult> Lists(string listName, uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
         {
             List<Article> articles = new();
 

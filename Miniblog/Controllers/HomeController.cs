@@ -26,7 +26,7 @@ namespace Web.Controllers
             return RedirectToAction("Lists", "Articles");
         }
 
-        public async Task<IActionResult> Topics(int page = 1)
+        public async Task<IActionResult> Topics(uint page = 1)
         {
             List<Topic> topics = (await Repository.Topics.GetAllAsync())
                 .Where(t => t.Accepted is not false)
@@ -39,7 +39,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Topic([FromQuery] string name, int page = 1)
+        public IActionResult Topic([FromQuery] string name, uint page = 1)
         {
             ListViewModel<Article> listViewModel;
             Topic topic = Repository.Topics.Find(t => t.Name == name && t.Accepted is not false).FirstOrDefault();
@@ -55,7 +55,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Series(int page = 1)
+        public async Task<IActionResult> Series(uint page = 1)
         {
             List<Series> series = (await Repository.Series.GetAllAsync())
                 .Where(s => s.Accepted is not false)
@@ -68,7 +68,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult SeriesWith(string name, int page = 1)
+        public IActionResult SeriesWith(string name, uint page = 1)
         {
             ListViewModel<Article> listViewModel;
             Series series = Repository.Series.Find(s => s.Link == name && s.Accepted is not false).First();
