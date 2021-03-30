@@ -4,7 +4,9 @@ using Repo;
 using Repo.Implementation;
 using Repo.Interfaces;
 using Services.Implementation;
+using Services.Implementation.Search;
 using Services.Interfaces;
+using Services.Interfaces.Search;
 
 namespace Services
 {
@@ -13,6 +15,7 @@ namespace Services
         public static IServiceCollection AddServicesLayer(this IServiceCollection services, string dbConnectionString)
         {
             services.AddRepository(dbConnectionString);
+            services.AddSearch();
             services.AddArticleService();
             services.AddUserService();
             services.AddCommentsService();
@@ -21,6 +24,12 @@ namespace Services
             services.AddCheckPreparerBuilder();
             services.AddTextService();
             services.AddRolesRepo();
+            return services;
+        }
+
+        private static IServiceCollection AddSearch(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(IAggregateSearch<>), typeof(AggregateSearch<>));
             return services;
         }
 
