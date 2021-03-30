@@ -13,7 +13,7 @@ namespace Web.ViewModels
         public uint Current { get; private set; }
         public int Total { get; private set; }
         public bool HasPrevious => Current > 1;
-        public bool HasNext => Current > Total && Total > 0;
+        public bool HasNext => Current < Total && Total > 0;
         public ListSorting ListSorting { get; private set; }
         public List<T> Entities { get; private set; }
 
@@ -23,7 +23,8 @@ namespace Web.ViewModels
             ListOptions listOptions,
             ListSorting listSorting = ListSorting.NewFirst)
         {
-            Total = (int)Math.Ceiling(entities.Count / (double)listOptions.ArticlesPerPage.Value);
+            Current = current;
+            Total = (int)Math.Round(entities.Count / (double)listOptions.ArticlesPerPage.Value, MidpointRounding.ToPositiveInfinity);
             ListSorting = listSorting;
 
             if (entities is List<Article> articles)
