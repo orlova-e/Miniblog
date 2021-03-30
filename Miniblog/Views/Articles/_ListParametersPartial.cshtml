@@ -13,7 +13,7 @@
         string pageName = Model.PageName.ToLower();
         return pageName switch
         {
-            "account" => Url.Action(Model.ItemName, "users", new { page = Model.Current, sortby = type }),
+            "account" => Url.Action("account", "users", new { username = Model.ItemName, page = Model.Current, sortby = type }),
             "topic" or "series" => Url.Action(pageName, "home", new { name = Model.ItemName, page = Model.Current }),
             _ => Url.Action("lists", "articles", new { listName = pageName, page = Model.Current, sortby = type })
         };

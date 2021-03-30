@@ -31,7 +31,7 @@
         string sortBy = Enum.GetName(typeof(ListSorting), Model.ListSorting).ToLower();
         return pageName switch
         {
-            "account" => Url.Action(Model.ItemName, "users", new { page = page, sortby = sortBy }),
+            "account" => Url.Action("account", "users", new { username = Model.ItemName, page = page, sortby = sortBy }),
             "topic" or "series" => Url.Action(pageName, "home", new { name = Model.ItemName, page = page }),
             _ => Url.Action("lists", "articles", new { listName = pageName, page = page, sortby = sortBy })
         };

@@ -8,15 +8,18 @@
         <div class="uk-container uk-margin-bottom">
             <ul class="uk-subnav" uk-margin>
                 @{
-                    string[] links = new[] { "favourites", "bookmarks", "commented", "drafts" };
-                    foreach (string listName in links)
+                    string[] listNames = new[] { "favourites", "bookmarks", "subscriptions", "commented", "drafts" };
+                    foreach (string listName in listNames)
                     {
-                        string controller = listName.Equals("account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
-                        string activePage = string.Empty;
-                        if (listName.Equals(Model.PageName))
-                            activePage = "uk-active";
-
-                        <li class="@activePage"><a href="@Url.Action("lists", controller, new { listName = listName})">@listName</a></li>
+                        string activePage = listName.Equals(Model.PageName, StringComparison.OrdinalIgnoreCase) ? "uk-active" : string.Empty;
+                        if (listName is "subscriptions")
+                        {
+                            <li><a href="@Url.Action("subscriptions", "users")">@listName</a></li>
+                        }
+                        else
+                        {
+                            <li class="@activePage"><a href="@Url.Action("lists", "articles", new { listName = listName})">@listName</a></li>
+                        }
                     }
                 }
             </ul>
