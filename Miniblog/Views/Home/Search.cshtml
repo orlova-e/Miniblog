@@ -85,8 +85,8 @@
 
         @if (Model.HasPrevious || Model.HasNext)
         {
-            string previous = Url.Action(Model.PageName.ToLower(), "users", new { page = Model.Current - 1 });
-            string next = Url.Action(Model.PageName.ToLower(), "users", new { page = Model.Current + 1 });
+            string previous = Url.Action("search", "home", new { query = Model.ItemName, page = Model.Current - 1 });
+            string next = Url.Action("search", "home", new { query = Model.ItemName, page = Model.Current + 1 });
 
             <div class="uk-flex uk-flex-center uk-margin-top"><hr class="uk-divider-small"></div>
             <div class="uk-flex-center uk-margin uk-margin-remove-top" uk-grid>
