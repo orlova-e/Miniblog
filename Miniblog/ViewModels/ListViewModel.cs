@@ -10,6 +10,7 @@ namespace Web.ViewModels
     public class ListViewModel<T> where T : Entity
     {
         public string PageName { get; set; }
+        public string ItemName { get; set; }
         public uint Current { get; private set; }
         public int Total { get; private set; }
         public bool HasPrevious => Current > 1;

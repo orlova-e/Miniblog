@@ -47,7 +47,8 @@ namespace Web.Controllers
                 return NotFound();
             var articles = Repository.Articles.Find(a => a.Topic?.Name == topic.Name).ToList();
             listViewModel = new(page, articles, Common.Options.ListOptions);
-            listViewModel.PageName = "Topic: " + topic.Name;
+            listViewModel.PageName = "Topic";
+            listViewModel.ItemName = topic.Name;
             if (page > 1 && !listViewModel.Entities.Any())
                 return NotFound();
 
@@ -76,7 +77,8 @@ namespace Web.Controllers
                 return NotFound();
             var articles = Repository.Articles.Find(a => a.Series?.Name == series.Name).ToList();
             listViewModel = new(page, articles, Common.Options.ListOptions);
-            listViewModel.PageName = "Series: " + series.Name;
+            listViewModel.PageName = "Series";
+            listViewModel.ItemName = series.Link;
             if (page > 1 && !listViewModel.Entities.Any())
                 return NotFound();
 

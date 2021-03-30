@@ -1,34 +1,29 @@
-﻿@inject IOptionsSnapshot<ListOptions> listOptions
+﻿@inject ICommon common
 
 @model ListViewModel<Article>
 
 @{
-    ListLayoutType layoutType = listOptions.Value.LayoutDefaultType;
+    ListLayoutType layoutType = common.Options.ListOptions.LayoutDefaultType;
+}
 
+@functions {
     string GetUrl(ListSorting sortingType)
     {
-        string url = "#";
-        if(!Model.PageName.Contains(": "))
+        string type = Enum.GetName<ListSorting>(sortingType);
+        string pageName = Model.PageName.ToLower();
+        return pageName switch
         {
-            string type = Enum.GetName<ListSorting>(sortingType);
-            string listName = Model.PageName.ToLower();
-            string controller = listName.Equals("account", StringComparison.OrdinalIgnoreCase) ? "users" : "articles";
-
-            url = listName switch
-            {
-                "account" => Url.Action(listName, controller, new { page = Model.Current, sortby = type }),
-                _ => Url.Action("lists", controller, new { listName = listName, page = Model.Current, sortby = type })
-            };
-        }
-
-        return url;
+            "account" => Url.Action(Model.ItemName, "users", new { page = Model.Current, sortby = type }),
+            "topic" or "series" => Url.Action(pageName, "home", new { name = Model.ItemName, page = Model.Current }),
+            _ => Url.Action("lists", "articles", new { listName = pageName, page = Model.Current, sortby = type })
+        };
     }
 }
 
-@if (Model.PageName.Contains(": "))
+@if (Model.PageName is "Topic" or "Series")
 {
     <div class="uk-container uk-margin-bottom">
-        <h3 class="blog-title">@Model.PageName</h3>
+        <h3 class="blog-title">@(Model.PageName + ": " + Model.ItemName)</h3>
     </div>
 }
 

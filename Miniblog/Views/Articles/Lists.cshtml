@@ -13,6 +13,23 @@
     }
 }
 
+@functions {
+    string GetPrevious() => GetLink(Model.Current - 1);
+    string GetNext() => GetLink(Model.Current + 1);
+
+    string GetLink(uint page)
+    {
+        string pageName = Model.PageName.ToLower();
+        string sortBy = Enum.GetName(typeof(ListSorting), Model.ListSorting).ToLower();
+        return pageName switch
+        {
+            "account" => Url.Action(Model.ItemName, "users", new { page = page, sortby = sortBy }),
+            "topic" or "series" => Url.Action(pageName, "home", new { name = Model.ItemName, page = page }),
+            _ => Url.Action("lists", "articles", new { listName = pageName, page = page, sortby = sortBy })
+        };
+    }
+}
+
 @if (!Model.Entities.Any())
 {
     ServerMessage serverMessage = new()
@@ -43,27 +60,16 @@ else
 
     @if (Model.HasPrevious || Model.HasNext)
     {
-        string previous = Url.Action(Model.PageName.ToLower(), "articles", new
-        {
-            page = Model.Current - 1,
-            sortby = Enum.GetName(typeof(ListSorting), Model.ListSorting).ToLower()
-        });
-        string next = Url.Action(Model.PageName.ToLower(), "articles", new
-        {
-            page = Model.Current + 1,
-            sortby = Enum.GetName(typeof(ListSorting), Model.ListSorting).ToLower()
-        });
-
         <div class="uk-flex-center uk-margin" uk-grid>
             <div>
                 <ul class="uk-pagination">
                     @if (Model.HasPrevious)
                     {
-                        <li><a href="@previous"><span class="uk-margin-small-right" uk-pagination-previous></span> Previous</a></li>
+                        <li><a href="@GetPrevious()"><span class="uk-margin-small-right" uk-pagination-previous></span> Previous</a></li>
                     }
                     @if (Model.HasNext)
                     {
-                        <li class="uk-margin-auto-left"><a href="@next">Next <span class="uk-margin-small-left" uk-pagination-next></span></a></li>
+                        <li class="uk-margin-auto-left"><a href="@GetNext()">Next <span class="uk-margin-small-left" uk-pagination-next></span></a></li>
                     }
                 </ul>
             </div>

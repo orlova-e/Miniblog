@@ -38,6 +38,7 @@ namespace Web.Controllers
             List<Article> articles = await ListCreator.FindArticlesAsync(a => a.User?.Id == author.Id);
             ListViewModel<Article> listViewModel = new(page, articles, Common.Options.ListOptions, sortBy);
             listViewModel.PageName = "Account";
+            listViewModel.ItemName = author.Username;
 
             bool subscribed = false;
             if (User.Identity.IsAuthenticated)
