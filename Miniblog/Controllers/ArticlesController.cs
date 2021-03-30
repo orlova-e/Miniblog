@@ -122,7 +122,7 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Add(bool page = false)
         {
-            Role role = Common.GetRole(User);
+            Role role = UserService.FindByName(User.Identity.Name).Role;
             if (!role.WriteArticles)
                 return NotFound();
             ArticleData article = new();

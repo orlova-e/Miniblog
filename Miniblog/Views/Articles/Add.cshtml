@@ -1,11 +1,13 @@
-﻿@inject ICommon common
+﻿@using Services.Interfaces
+
+@inject ICommon common
+@inject IUserService userService 
 
 @model ArticleData
 
 @{
-    BlogOptions blogOptions = common.Options;
-    WebsiteOptions websiteOptions = blogOptions.WebsiteOptions;
-    Role role = common.GetRole(User);
+    WebsiteOptions websiteOptions = common.Options.WebsiteOptions;
+    Role role = userService.FindByName(User.Identity.Name).Role;
 }
 
 <div class="uk-container uk-margin">
