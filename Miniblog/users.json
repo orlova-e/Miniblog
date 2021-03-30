@@ -1,0 +1,59 @@
+﻿{
+  "Users": {
+    "User": {
+      "Username": "User",
+      "Email": "user@test.com",
+      "Password": "12345678",
+      "Role": {
+        "Type": "User",
+        "WriteArticles": true,
+        "WriteComments": true,
+        "WriteMessages": true,
+        "OverrideOwnArticle": true,
+        "CreateTopics": true,
+        "CreateTags": true
+      },
+      "DateOfRegistration": "01/01/2021"
+    },
+    "Editor": {
+      "Username": "Editor",
+      "Email": "editor@test.com",
+      "Password": "12345678",
+      "Role": {
+        "Type": "Editor",
+        "WriteArticles": true,
+        "WriteComments": true,
+        "WriteMessages": true,
+        "OverrideOwnArticle": true,
+        "CreateTopics": true,
+        "CreateTags": true,
+        "ModerateArticles": true,
+        "ModerateComments": true,
+        "ModerateTopics": true,
+        "ModerateTags": true,
+        "OverrideMenu": true
+      },
+      "DateOfRegistration": "01/01/2021"
+    },
+    "Administrator": {
+      "Username": "Administrator",
+      "Email": "administrator@test.com",
+      "Password": "12345678",
+      "Role": {
+        "Type": "Administrator",
+        "WriteArticles": true,
+        "WriteComments": true,
+        "WriteMessages": true,
+        "OverrideOwnArticle": true,
+        "CreateTopics": true,
+        "CreateTags": true,
+        "ModerateArticles": true,
+        "ModerateComments": true,
+        "ModerateTopics": true,
+        "ModerateTags": true,
+        "OverrideMenu": true
+      },
+      "DateOfRegistration": "01/01/2021"
+    }
+  }
+}
