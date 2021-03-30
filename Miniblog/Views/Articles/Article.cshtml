@@ -1,4 +1,6 @@
 ﻿@{
+    ViewBag.Page = ViewBag.ArticleReadModel.Article.Header;
+
     ArticleReadViewModel articleReadModel = ViewBag.ArticleReadModel;
     CommentsViewModel commentsViewModel = ViewBag.CommentsViewModel;
     await Html.RenderPartialAsync("_ArticlePartial", articleReadModel);

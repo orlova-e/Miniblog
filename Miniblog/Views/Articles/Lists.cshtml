@@ -6,6 +6,14 @@
 @model ListViewModel<Article>
 
 @{
+    ViewBag.Page = Model.PageName.ToLower() switch
+    {
+        "default" => string.Empty,
+        "account" => Model.ItemName,
+        "topic" => Model.PageName + ": " + Model.ItemName,
+        _ => Model.PageName
+    };
+
     Role role = null;
     if (User.Identity.IsAuthenticated)
     {

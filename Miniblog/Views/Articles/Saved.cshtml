@@ -1,6 +1,8 @@
 ﻿@model ListViewModel<Article>
 
 @{
+    ViewBag.Page = Model.PageName;
+
     async Task GetLinksAsync()
     {
         <div class="uk-container uk-margin-bottom">

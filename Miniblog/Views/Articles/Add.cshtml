@@ -6,6 +6,8 @@
 @model ArticleData
 
 @{
+    ViewBag.Page = "Add article";
+
     WebsiteOptions websiteOptions = common.Options.WebsiteOptions;
     Role role = userService.FindByName(User.Identity.Name).Role;
 }

@@ -1,5 +1,9 @@
 ﻿@model UserViewModel
 
+@{ 
+    ViewBag.Page = "Settings";
+}
+
 <div class="uk-container uk-margin-bottom">
     <div class="uk-card uk-card-default uk-card-body uk-card-hover">
         <form asp-action="settings" asp-controller="account" method="post" enctype="multipart/form-data" class="uk-form-horizontal uk-width-auto uk-width-3-5@m">

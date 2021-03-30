@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<Entity>
 
+@{
+    ViewBag.Page = ViewBag.Header;
+}
+
 <div class="uk-container uk-margin-bottom">
     <div class="uk-card uk-card-default uk-card-body uk-card-hover">
         <div uk-grid>
@@ -118,7 +122,7 @@
     <td class="uk-table-link user-result-item">
         <a href="#" class="uk-link uk-link-reset">
             <avatar user="null" classes="uk-border-circle search-item-user-img" px="30">
-            <span class="uk-text-middle search-item-username"></span>
+                <span class="uk-text-middle search-item-username"></span>
         </a>
     </td>
 
