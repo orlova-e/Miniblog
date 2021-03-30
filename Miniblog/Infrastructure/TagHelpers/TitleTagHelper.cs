@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Options;
+using Web.App.Interfaces;
 using Web.Configuration;
 
 namespace Web.Infrastructure.TagHelpers
@@ -10,9 +10,9 @@ namespace Web.Infrastructure.TagHelpers
         public string Page { get; set; }
         [HtmlAttributeNotBound]
         public WebsiteOptions WebsiteOptions { get; private set; }
-        public TitleTagHelper(IOptionsSnapshot<BlogOptions> optionsSnapshot)
+        public TitleTagHelper(ICommon common)
         {
-            WebsiteOptions = optionsSnapshot.Value.WebsiteOptions;
+            WebsiteOptions = common.Options.WebsiteOptions;
         }
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
