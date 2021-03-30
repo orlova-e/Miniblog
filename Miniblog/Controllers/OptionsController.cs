@@ -3,7 +3,6 @@ using Domain.Entities.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Repo.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,17 +18,14 @@ namespace Web.Controllers
     [TypeFilter(typeof(AccessByRolesAttribute), Arguments = new object[] { new RoleType[] { RoleType.Administrator } })]
     public class OptionsController : Controller
     {
-        public BlogOptions BlogOptions { get; private set; }
-        public IConfigurationWriter ConfigurationWriter { get; private set; }
-        public IWebHostEnvironment WebHostEnvironment { get; private set; }
-        public IRepository Repository { get; private set; }
-        public OptionsController(IOptionsSnapshot<BlogOptions> optionsSnapshot,
-            IConfigurationWriter configurationWriter,
+        private IChangeCommon Common { get; }
+        private IWebHostEnvironment WebHostEnvironment { get; }
+        private IRepository Repository { get; }
+        public OptionsController(IChangeCommon common,
             IWebHostEnvironment webHostEnvironment,
             IRepository repository)
         {
-            BlogOptions = optionsSnapshot.Value;
-            ConfigurationWriter = configurationWriter;
+            Common = common;
             WebHostEnvironment = webHostEnvironment;
             Repository = repository;
         }
@@ -37,15 +33,16 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Main()
         {
-            MainViewModel mainViewModel = (MainViewModel)BlogOptions.WebsiteOptions;
+            MainViewModel mainViewModel = (MainViewModel)Common.Options.WebsiteOptions;
             return View(mainViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Main([FromForm] MainViewModel mainViewModel)
         {
-            mainViewModel.IconPath = BlogOptions.WebsiteOptions.IconPath;
-            mainViewModel.AvatarPath = BlogOptions.WebsiteOptions.StandardAvatarPath;
+            BlogOptions options = Common.Options;
+            mainViewModel.IconPath = options.WebsiteOptions.IconPath;
+            mainViewModel.AvatarPath = options.WebsiteOptions.StandardAvatarPath;
 
             if (!ModelState.IsValid)
                 return View(mainViewModel);
@@ -56,8 +53,8 @@ namespace Web.Controllers
             string avatarPath = await TryChangeImageAsync(mainViewModel.AvatarFile, mainViewModel.AvatarPath);
             mainViewModel.AvatarPath = !string.IsNullOrWhiteSpace(avatarPath) ? avatarPath : mainViewModel.AvatarPath;
 
-            BlogOptions.WebsiteOptions += mainViewModel;
-            await ConfigurationWriter.WriteAsync(BlogOptions);
+            options.WebsiteOptions += mainViewModel;
+            await Common.UpdateOptionsAsync(options);
 
             return RedirectToAction("main");
         }
@@ -124,9 +121,9 @@ namespace Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Discussion()
         {
-            DiscussionViewModel discussionViewModel = new DiscussionViewModel
+            DiscussionViewModel discussionViewModel = new()
             {
-                CommentsOptions = BlogOptions.CommentsOptions,
+                CommentsOptions = Common.Options.CommentsOptions,
                 DiscussionRoles = new List<DiscussionRoles>()
             };
 
@@ -148,11 +145,12 @@ namespace Web.Controllers
             if (!ModelState.IsValid)
                 return View(discussionViewModel);
 
-            discussionViewModel.CommentsOptions.Depth.Available ??= BlogOptions.CommentsOptions.Depth.Available;
-            if (!BlogOptions.CommentsOptions.Equals(discussionViewModel.CommentsOptions))
+            BlogOptions options = Common.Options;
+            discussionViewModel.CommentsOptions.Depth.Available ??= options.CommentsOptions.Depth.Available;
+            if (!options.CommentsOptions.Equals(discussionViewModel.CommentsOptions))
             {
-                BlogOptions.CommentsOptions = discussionViewModel.CommentsOptions;
-                await ConfigurationWriter.WriteAsync(BlogOptions);
+                options.CommentsOptions = discussionViewModel.CommentsOptions;
+                await Common.UpdateOptionsAsync(options);
             }
 
             List<Role> roles = await Repository.Roles.GetAllAsync();
@@ -179,8 +177,8 @@ namespace Web.Controllers
         {
             ReadingViewModel readingViewModel = new ReadingViewModel
             {
-                ListOptions = BlogOptions.ListOptions,
-                WebsiteOptionsPartially = (WebsiteOptionsPartially)BlogOptions.WebsiteOptions
+                ListOptions = Common.Options.ListOptions,
+                WebsiteOptionsPartially = (WebsiteOptionsPartially)Common.Options.WebsiteOptions
             };
             return View(readingViewModel);
         }
@@ -191,12 +189,13 @@ namespace Web.Controllers
             if (!ModelState.IsValid)
                 return View(readingViewModel);
 
-            readingViewModel.ListOptions.ArticlesPerPage.Available ??= BlogOptions.ListOptions.ArticlesPerPage.Available;
-            readingViewModel.ListOptions.WordsPerPreview.Available ??= BlogOptions.ListOptions.WordsPerPreview.Available;
+            BlogOptions options = Common.Options;
+            readingViewModel.ListOptions.ArticlesPerPage.Available ??= options.ListOptions.ArticlesPerPage.Available;
+            readingViewModel.ListOptions.WordsPerPreview.Available ??= options.ListOptions.WordsPerPreview.Available;
 
-            BlogOptions.ListOptions = readingViewModel.ListOptions;
-            BlogOptions.WebsiteOptions += readingViewModel.WebsiteOptionsPartially;
-            await ConfigurationWriter.WriteAsync(BlogOptions);
+            options.ListOptions = readingViewModel.ListOptions;
+            options.WebsiteOptions += readingViewModel.WebsiteOptionsPartially;
+            await Common.UpdateOptionsAsync(options);
 
             return RedirectToAction("reading");
         }
