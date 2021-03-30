@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Repo.Interfaces;
-using System;
+using Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,12 +13,15 @@ namespace Web.Controllers
     public class HomeController : Controller
     {
         public IRepository Repository { get; private set; }
+        public IListCreator ListCreator { get; set; }
         public ICommon Common { get; set; }
 
         public HomeController(IRepository repository,
+            IListCreator listCreator,
             ICommon common)
         {
             Repository = repository;
+            ListCreator = listCreator;
             Common = common;
         }
         public IActionResult Index()
@@ -39,13 +42,13 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Topic([FromQuery] string name, uint page = 1)
+        public async Task<IActionResult> Topic([FromQuery] string name, uint page = 1)
         {
             ListViewModel<Article> listViewModel;
             Topic topic = Repository.Topics.Find(t => t.Name == name && t.Accepted is not false).FirstOrDefault();
             if (topic is null)
                 return NotFound();
-            var articles = Repository.Articles.Find(a => a.Topic?.Name == topic.Name).ToList();
+            var articles = (await ListCreator.FindArticlesAsync(a => a.Topic?.Name == topic.Name)).ToList();
             listViewModel = new(page, articles, Common.Options.ListOptions);
             listViewModel.PageName = "Topic";
             listViewModel.ItemName = topic.Name;
@@ -69,13 +72,13 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult SeriesWith(string name, uint page = 1)
+        public async Task<IActionResult> SeriesWith(string name, uint page = 1)
         {
             ListViewModel<Article> listViewModel;
             Series series = Repository.Series.Find(s => s.Link == name && s.Accepted is not false).FirstOrDefault();
             if (series is null)
                 return NotFound();
-            var articles = Repository.Articles.Find(a => a.Series?.Name == series.Name).ToList();
+            var articles = (await ListCreator.FindArticlesAsync(a => a.Series?.Name == series.Name)).ToList();
             listViewModel = new(page, articles, Common.Options.ListOptions);
             listViewModel.PageName = "Series";
             listViewModel.ItemName = series.Link;
