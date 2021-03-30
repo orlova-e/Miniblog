@@ -21,8 +21,8 @@
                             <div class="uk-navbar-dropdown" uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav">
                                 <div class="uk-grid-small uk-flex-middle" uk-grid>
                                     <div class="uk-width-expand">
-                                        <form class="uk-search uk-search-navbar uk-width-1-1">
-                                            <input class="uk-search-input" type="search" placeholder="Search" autofocus>
+                                        <form asp-action="search" asp-controller="home" method="get" class="uk-search uk-search-navbar uk-width-1-1">
+                                            <input name="query" class="uk-search-input" type="search" placeholder="Search" autofocus>
                                         </form>
                                     </div>
                                     <div class="uk-width-auto">
@@ -53,9 +53,9 @@
                             {
                                 <li class="blog-max-hidden">
                                     <div class="uk-margin">
-                                        <form class="uk-search uk-search-default">
+                                        <form asp-action="search" asp-controller="home" method="get" class="uk-search uk-search-default">
                                             <a href="#" uk-search-icon></a>
-                                            <input class="uk-search-input" type="search" placeholder="Search">
+                                            <input name="query" class="uk-search-input" type="search" placeholder="Search">
                                         </form>
                                     </div>
                                 </li>

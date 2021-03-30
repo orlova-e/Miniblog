@@ -1,0 +1,108 @@
+﻿@using Services.FoundValues
+
+@model ListViewModel<FoundObject>
+
+@{
+    ViewBag.Page = Model.PageName + ": " + Model.ItemName;
+}
+
+<div class="uk-container uk-margin-bottom">
+    <div class="uk-card uk-card-default uk-card-body uk-card-hover">
+        <div uk-grid class="uk-flex uk-flex-center uk-margin uk-width-expand">
+            <div>
+                <h3>Results for:</h3>
+            </div>
+            <div>
+                <form asp-action="search" asp-controller="home" method="get" class="uk-search uk-search-default uk-width-expand">
+                    <span uk-search-icon></span>
+                    <input name="query" class="uk-search-input" type="search" placeholder="Search" value="@Model.ItemName">
+                </form>
+            </div>
+        </div>
+
+        @if (!Model.Entities.Any())
+        {
+            ServerMessage message = new()
+            {
+                MessageText = $"There is no {Model.ItemName?.ToLower() ?? "entries"} yet",
+                ShowSmile = true
+            };
+            await Html.RenderPartialAsync("_MessagePartial", message);
+        }
+        else
+        {
+            <div class="uk-flex uk-flex-center"><hr class="uk-divider-small"></div>
+            <div uk-grid class="uk-flex-center uk-margin-remove-top">
+                <div class="uk-width-3-5" uk-grid>
+                    <div class="uk-width-expand">
+                        <ul class="uk-list uk-list-divider uk-description-list">
+                            @foreach (FoundObject found in Model.Entities)
+                            {
+                                if (found.Entity is Article article)
+                                {
+                                    string[] words = article.Text.Split(new string[] { " ", Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                                    int count = words.Length < 30 ? words.Length : 30;
+                                    string text = string.Join(" ", words, 0, count);
+
+                                    <li>
+                                        <a href="@Url.Action("article", "articles", new { title = article.Link })" class="uk-link uk-link-reset">
+                                            <div class="uk-flex uk-flex-middle">
+                                                <div class="">
+                                                    <h4 class="blog-title uk-margin-remove">
+                                                        <i>Article: </i>@await Component.InvokeAsync("Mark", new { text = article.Header, matches = found.MatchedWords })
+                                                    </h4>
+                                                    <h5 class="uk-margin-remove"><i>Author: </i>@(await Component.InvokeAsync("Mark", new { text = article.User?.Username ?? "", matches = found.MatchedWords }))</h5>
+                                                    <p class="uk-margin-remove">@await Component.InvokeAsync("Mark", new { text = text, matches = found.MatchedWords })</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                                else if (found.Entity is User user)
+                                {
+                                    string[] words = user.Description?.Split(new string[] { " ", Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries) ?? new string[] { };
+                                    int count = words.Length < 30 ? words.Length : 30;
+                                    string text = string.Join(" ", words, 0, count);
+
+                                    <li>
+                                        <a href="@Url.Action(user.Username, "users")" class="uk-link uk-link-reset">
+                                            <div class="uk-flex uk-flex-middle">
+                                                <avatar user="user" classes="uk-border-circle uk-flex-top" px="70">
+                                                <div class="uk-margin-left ">
+                                                    <h4 class="blog-title uk-margin-remove-bottom">@await Component.InvokeAsync("Mark", new { text = user.Username, matches = found.MatchedWords })</h4>
+                                                    <p class="uk-margin-remove">@await Component.InvokeAsync("Mark", new { text = text, matches = found.MatchedWords })</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.HasPrevious || Model.HasNext)
+        {
+            string previous = Url.Action(Model.PageName.ToLower(), "users", new { page = Model.Current - 1 });
+            string next = Url.Action(Model.PageName.ToLower(), "users", new { page = Model.Current + 1 });
+
+            <div class="uk-flex uk-flex-center uk-margin-top"><hr class="uk-divider-small"></div>
+            <div class="uk-flex-center uk-margin uk-margin-remove-top" uk-grid>
+                <div>
+                    <ul class="uk-pagination">
+                        @if (Model.HasPrevious)
+                        {
+                            <li><a href="@previous"><span class="uk-margin-small-right" uk-pagination-previous></span> Previous</a></li>
+                        }
+                        @if (Model.HasNext)
+                        {
+                            <li class="uk-margin-auto-left"><a href="@next">Next <span class="uk-margin-small-left" uk-pagination-next></span></a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</div>
