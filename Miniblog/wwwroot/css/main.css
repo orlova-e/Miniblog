@@ -72,18 +72,10 @@ input[type="radio"]:checked.input-validation-error {
     background-color: #f0506e;
 }
 
-input.valid.show-input-valid
-/* input[type="checkbox"].valid.show-input-valid,
-input[type="radio"].valid.show-input-valid  */
-{
+input.valid.show-input-valid {
     color: #32d296;
     border-color: #32d296;
 }
-
-/* input[type="checkbox"]:checked.valid.show-input-valid,
-input[type="radio"]:checked.valid.show-input-valid {
-    background-color: #32d296;
-} */
 
 .validation-summary-errors {
     color: #f0506e;
@@ -151,4 +143,16 @@ input[type="radio"]:checked.valid.show-input-valid {
 
 .blog-comment.parental-5 {
     width: 70%;
+}
+
+@media only screen and (max-width: 600px) {
+    .blog-min-hidden {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .blog-max-hidden {
+        display: none;
+    }
 }

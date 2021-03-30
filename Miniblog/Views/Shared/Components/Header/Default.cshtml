@@ -15,11 +15,10 @@
             <ul class="uk-navbar-nav">
                 @if (Model.ShowSearch)
                 {
-                    <li>
+                    <li class="blog-min-hidden">
                         <div>
                             <a class="uk-navbar-toggle" href="#" uk-search-icon></a>
                             <div class="uk-navbar-dropdown" uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav">
-
                                 <div class="uk-grid-small uk-flex-middle" uk-grid>
                                     <div class="uk-width-expand">
                                         <form class="uk-search uk-search-navbar uk-width-1-1">
@@ -30,20 +29,19 @@
                                         <a class="uk-navbar-dropdown-close" href="#" uk-close></a>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </li>
                 }
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <li>
+                    <li class="blog-min-hidden">
                         <a href="@Url.Action("Account", "Users", new { username = Model.User.Username })" class="uk-text-middle">@Model.User.Username</a>
                     </li>
                 }
                 else
                 {
-                    <li>
+                    <li class="blog-min-hidden">
                         <a href="@Url.RouteUrl("default", new { controller = "Account", action = "SignIn" })" class="uk-text-middle">Sign in</a>
                     </li>
                 }
@@ -53,7 +51,7 @@
                         <ul class="uk-nav uk-navbar-dropdown-nav">
                             @if (Model.ShowSearch)
                             {
-                                <li>
+                                <li class="blog-max-hidden">
                                     <div class="uk-margin">
                                         <form class="uk-search uk-search-default">
                                             <a href="#" uk-search-icon></a>
@@ -65,13 +63,13 @@
 
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <li><a href="@Url.Action("Account", "Users", new { username = Model.User.Username })" class="uk-text">@Model.User.Username</a></li>
+                                <li class="blog-max-hidden"><a href="@Url.Action("Account", "Users", new { username = Model.User.Username })" class="uk-text">@Model.User.Username</a></li>
                             }
                             else
                             {
-                                <li><a href="@Url.RouteUrl("default", new { controller = "Account", action = "SignIn" })" class="uk-text">Sign in</a></li>
+                                <li class="blog-max-hidden"><a href="@Url.RouteUrl("default", new { controller = "Account", action = "SignIn" })" class="uk-text">Sign in</a></li>
                             }
-                            <li class="uk-nav-divider"></li>
+                            <li class="uk-nav-divider blog-max-hidden"></li>
 
                             @if (Model.Pages is not null)
                             {
