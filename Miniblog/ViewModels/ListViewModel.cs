@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Enums;
+using Services.FoundValues;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using Web.Configuration;
 
 namespace Web.ViewModels
 {
-    public class ListViewModel<T> where T : Entity
+    public class ListViewModel<T>
     {
         public string PageName { get; set; }
         public string ItemName { get; set; }
@@ -42,13 +43,15 @@ namespace Web.ViewModels
             }
             else if (entities.Any())
             {
-                Type type = entities.GetType().DeclaringType;
                 entities = typeof(T).Name switch
                 {
                     nameof(Topic) => (entities as List<Topic>).OrderBy(t => t.Name).ToList() as List<T>,
                     nameof(Series) => (entities as List<Series>).OrderBy(s => s.Name).ToList() as List<T>,
                     nameof(User) => (entities as List<User>).OrderBy(u => u.Username).ToList() as List<T>,
                     nameof(Tag) => (entities as List<Tag>).OrderBy(t => t.Name).ToList() as List<T>,
+                    nameof(FoundObject) => (entities as List<FoundObject>).OrderBy(f => f.TotalRating)
+                        .ThenBy(f => f.MatchedWords.Count)
+                        .ToList() as List<T>,
                     _ => throw new NotImplementedException()
                 };
             }
