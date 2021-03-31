@@ -20,7 +20,7 @@ namespace Services.Implementation
 
         public ArticleExtendedBuilder MenuVisibility(bool visibility)
         {
-            if (visibility && _article.User.Role.Type == RoleType.Administrator)
+            if (visibility && _article.User.Role is ExtendedRole extended && extended.OverrideMenu)
             {
                 _article.MenuVisibility = visibility;
             }
@@ -51,15 +51,12 @@ namespace Services.Implementation
                 return this;
 
             Topic articleTopic = Repository.Topics.Find(t => t.Name == topic).FirstOrDefault();
-            if (articleTopic == null && _article.User.Role.CreateTopics)
+            if (articleTopic is null && _article.User.Role.CreateTopics)
             {
                 articleTopic = new Topic()
                 {
-                    Author = _article.User,
                     Name = topic
                 };
-                //await Repository.Topics.CreateAsync(topicObj);
-                //topic = Repository.Topics.Find(t => t.Name == topic.Name).FirstOrDefault();
             }
 
             _article.Topic = articleTopic;
@@ -71,31 +68,32 @@ namespace Services.Implementation
             if (string.IsNullOrWhiteSpace(series) || series.Equals(_article.Series?.Name))
                 return this;
 
-            Series articleSeries = Repository.Series.Find(s => s.Name == series && s.UserId == _article.User.Id).FirstOrDefault();
-            if (articleSeries is object)
-                return this;
-
             string seriesLink = WebUtility.UrlEncode(series);
-            var otherSeries = Repository.Series.Find(s => s.Link == seriesLink).FirstOrDefault();
-            if (otherSeries is object)
+
+            bool anotherUserSeries(Series s) => s.Link == seriesLink && s.UserId != _article.User.Id;
+            Series otherSeries = Repository.Series.Find(anotherUserSeries).FirstOrDefault();
+
+            int counter = 1;
+            string link = seriesLink;
+            while (otherSeries is not null)
             {
                 string fromName = seriesLink;
-                int counter = 1;
-                while (seriesLink == otherSeries?.Link)
-                {
-                    seriesLink = $"{fromName}-{counter}";
-                    otherSeries = Repository.Series.Find(s => s.Link == seriesLink).FirstOrDefault();
-                    counter++;
-                }
+                seriesLink = $"{link}-{counter}";
+                otherSeries = Repository.Series.Find(anotherUserSeries).FirstOrDefault();
+                counter++;
             }
-            articleSeries = new Series()
+
+            bool userSeries(Series s) => s.Link == seriesLink && s.UserId == _article.User.Id;
+            Series articleSeries = Repository.Series.Find(userSeries).FirstOrDefault();
+            if (articleSeries is null)
             {
-                Name = series,
-                User = _article.User,
-                Link = seriesLink
-            };
-            //await Repository.Series.CreateAsync(articleSeries);
-            //series = Repository.Series.Find(s => s.Link == series.Link).FirstOrDefault();
+                articleSeries = new Series()
+                {
+                    Name = series,
+                    User = _article.User,
+                    Link = seriesLink
+                };
+            }
 
             _article.Series = articleSeries;
             return this;
@@ -103,33 +101,40 @@ namespace Services.Implementation
 
         public ArticleExtendedBuilder Tags(string tags)
         {
-            if (string.IsNullOrWhiteSpace(tags))
+            if (string.IsNullOrWhiteSpace(tags?.Replace(",", "")))
                 return this;
 
-            string[] oldTags = _article.ArticleTags?
-                .Select(t => t.Tag)?
-                .Select(t => t.Name)?
-                .ToArray();
+            IEnumerable<string> _names = tags
+                .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)?
+                .Select(t => t.Trim());
 
-            string[] tagsArray = tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            Array.ForEach(tagsArray, t => { t.Trim(); });
+            IEnumerable<Tag> _tags = _names
+                .Select(t => new Tag
+                {
+                    Name = t.Trim()
+                });
 
-            if (oldTags is object && oldTags.Except(tagsArray).Count() == 0 && tagsArray.Except(oldTags).Count() == 0)
-                return this;
+            IEnumerable<Tag> _exist = Repository.Tags.Find(t => _names.Contains(t.Name));
 
-            List<ArticleTag> articleTags = new List<ArticleTag>(tagsArray.Length);
-            IEnumerable<Tag> tagsCollection = Repository.Tags.Find(t => tagsArray.Contains(t.Name));
-            string[] existingTags = tagsCollection?.Select(t => t.Name)?.ToArray();
-            string[] uncreatedTags = new string[] { };
-            if (existingTags is object)
-                uncreatedTags = tagsArray.Except(existingTags).ToArray();
-            foreach (string uncreated in uncreatedTags)
+            if (_exist?.Any() ?? default)
             {
-                Tag tag = new Tag { Name = uncreated, Author = _article.User };
-                articleTags.Add(new ArticleTag { Tag = tag });
+                _article.ArticleTags = _exist.UnionBy(t => t.Name, _tags)
+                    .Select(t => new ArticleTag
+                    {
+                        Article = _article,
+                        Tag = t,
+                    }).ToList();
+            }
+            else
+            {
+                _article.ArticleTags = _tags
+                    .Select(t => new ArticleTag
+                    {
+                        Article = _article,
+                        Tag = t
+                    }).ToList();
             }
 
-            _article.ArticleTags = articleTags;
             return this;
         }
 
