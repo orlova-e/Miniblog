@@ -68,11 +68,6 @@ namespace Repo.Implementation
             Db.Users.Update(user);
             await Db.SaveChangesAsync();
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="entryId">Comment's id</param>
-        /// <returns></returns>
         public async Task<List<CommentLikes>> GetAsync(Guid entryId)
         {
             Comment comment = await Db.Comments

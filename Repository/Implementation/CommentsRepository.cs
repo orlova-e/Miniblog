@@ -15,7 +15,6 @@ namespace Repo.Implementation
         {
             Db = db;
         }
-        /// <returns>Comment with its author and parent comment.</returns>
         public async Task<Comment> GetByIdAsync(Guid id)
         {
             var comment = await Db.Comments.FindAsync(id);

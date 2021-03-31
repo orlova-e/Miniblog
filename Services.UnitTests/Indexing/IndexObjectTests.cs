@@ -93,32 +93,6 @@ namespace Services.UnitTests.Indexing
             Assert.AreEqual(firstFound, foundAfter);
         }
 
-        //[Test]
-        //public void Index_IndexingUpdatedArticle_ReturnsListOfFoundWordsWithoutOldInfo()
-        //{
-        //    string[] words = new string[] { "first-word", "second_word" };
-        //    Article article = new Article { Id = Guid.NewGuid(), Header = words[0], User = new User() };
-        //    Mock<IRepository> _repository1 = new Mock<IRepository>();
-        //    _repository1.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
-        //        .Returns<IEnumerable<FoundWord>>(null);
-        //    IndexObject indexArticle1 = new IndexObject(_repository1.Object, new ArticleRateStrategy());
-
-        //    List<FoundWord> firstFound = indexArticle1.Index((ArticleIndexedValues)article);
-
-        //    Mock<IRepository> _repository2 = new Mock<IRepository>();
-
-        //    var parameter = It.Is<Func<FoundWord>>((f) => f.Word.Equals(""));
-
-        //    _repository2.Setup(r => r.FoundWords.Find(It.IsAny<Func<FoundWord, bool>>()))
-        //        .Returns(firstFound);
-        //    IndexObject indexArticle2 = new IndexObject(_repository2.Object, new ArticleRateStrategy());
-        //    article.Header = words[1];
-
-        //    List<FoundWord> foundAfter = indexArticle2.Index((ArticleIndexedValues)article);
-
-        //    Assert.AreNotEqual(firstFound, foundAfter);
-        //}
-
         [Test]
         public void Index_IndexingArticleWhenThereIsNothingToIndex_ReturnsEmptyListOfFoundWords()
         {

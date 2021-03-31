@@ -66,7 +66,6 @@ namespace Web
                 {
                     options.LoginPath = new PathString("/Account/SignIn");
                     options.AccessDeniedPath = new PathString("/Account/SignIn");
-                    //options.AccessDeniedPath = "/Account/Forbidden/";
                 });
 
             services.AddAuthorization();
@@ -86,7 +85,6 @@ namespace Web
             }
             else
             {
-                //app.UseExceptionHandler("/errors");
                 app.UseHsts();
             }
 

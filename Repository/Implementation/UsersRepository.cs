@@ -15,7 +15,7 @@ namespace Repo.Implementation
         {
             Db = db;
         }
-        /// <returns>User with role.</returns>
+
         public async Task<User> GetByIdAsync(Guid id)
         {
             var user = await Db.Users.FindAsync(id);

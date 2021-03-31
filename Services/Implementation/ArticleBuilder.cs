@@ -70,7 +70,7 @@ namespace Services.Implementation
                 int counter = 1;
                 link = WebUtility.UrlDecode(link);
                 string fromHeader = link;
-                while (link == otherArticle?.Link) // substitute NULL
+                while (link == otherArticle?.Link)
                 {
                     link = $"{fromHeader}-{counter}";
                     link = WebUtility.UrlEncode(link);
