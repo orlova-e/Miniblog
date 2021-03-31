@@ -13,8 +13,6 @@ namespace Domain.Entities
         public string Discriminator { get; }
         public bool WriteArticles { get; set; }
         public bool WriteComments { get; set; }
-        public bool WriteMessages { get; set; }
-        //public bool ReadComments { get; set; }
         public bool OverrideOwnArticle { get; set; }
         public bool CreateTopics { get; set; }
         public bool CreateTags { get; set; }
