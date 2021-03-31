@@ -1,6 +1,6 @@
 ﻿namespace Web.ViewModels
 {
-    public class ServerMessage
+    public class MessageModel
     {
         public bool ShowSmile { get; set; }
         public int StatusCode { get; set; }

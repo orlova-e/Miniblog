@@ -22,7 +22,7 @@
 
         @if (!Model.Entities.Any())
         {
-            ServerMessage message = new()
+            MessageModel message = new()
             {
                 MessageText = $"There is no {Model.ItemName?.ToLower() ?? "entries"} yet",
                 ShowSmile = true

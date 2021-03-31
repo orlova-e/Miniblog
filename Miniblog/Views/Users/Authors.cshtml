@@ -41,7 +41,7 @@
 
         @if (!Model.Entities.Any())
         {
-            ServerMessage message = new()
+            MessageModel message = new()
             {
                 MessageText = $"There is no {Model.PageName.ToLower()} yet",
                 ShowSmile = true
