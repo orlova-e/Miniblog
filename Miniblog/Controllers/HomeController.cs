@@ -11,6 +11,8 @@ using Web.App.Interfaces;
 using Web.ViewModels;
 using System.Net;
 using Domain.Entities.Enums;
+using System;
+using System.Security.Claims;
 
 namespace Web.Controllers
 {
@@ -34,9 +36,42 @@ namespace Web.Controllers
             UsersSearch = usersSearch;
             Common = common;
         }
-        public IActionResult Index()
+
+        [HttpGet]
+        public async Task<IActionResult> Index(string listName = "default", uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
         {
-            return RedirectToAction("Lists", "Articles");
+            List<Article> articles = new();
+
+            try
+            {
+                Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
+                articles = listName.ToLower() switch
+                {
+                    "default" => await ListCreator.FindArticlesAsync(a => true),
+                    "pages" => ListCreator.FindEntries(a => a.EntryType is EntryType.Page),
+                    "favourites" => await ListCreator.GetFavouritesAsync(userId),
+                    "bookmarks" => await ListCreator.GetBookmarkedAsync(userId),
+                    "commented" => await ListCreator.GetCommentedAsync(userId),
+                    "drafts" => ListCreator.FindDrafts(userId),
+                    _ => throw new ArgumentException("Undefined list", nameof(listName))
+                };
+            }
+            catch (ArgumentNullException)
+            {
+                return NotFound();
+            }
+            catch (ArgumentException)
+            {
+                return NotFound();
+            }
+
+            ListViewModel<Article> listViewModel = new(page, articles, Common.Options.ListOptions, sortBy);
+            listViewModel.PageName = listName;
+            if (page > 1 && !listViewModel.Entities.Any())
+                return NotFound();
+            if (listName is "default" or "pages")
+                return View("Lists", listViewModel);
+            return View("Saved", listViewModel);
         }
 
         public async Task<IActionResult> Search(string query, uint page = 1)

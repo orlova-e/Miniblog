@@ -3,10 +3,6 @@ using Domain.Entities.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Web.App.Interfaces;
 using Web.Configuration;
@@ -78,45 +74,6 @@ namespace Web.Controllers
             ViewBag.CommentsViewModel = commentsViewModel;
 
             return View();
-        }
-
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("[controller]/[action]/{listName=default}")]
-        public async Task<IActionResult> Lists(string listName, uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
-        {
-            List<Article> articles = new();
-
-            try
-            {
-                Guid.TryParse(User.FindFirstValue("Id"), out Guid userId);
-                articles = listName.ToLower() switch
-                {
-                    "default" => await ListCreator.FindArticlesAsync(a => true),
-                    "pages" => ListCreator.FindEntries(a => a.EntryType is EntryType.Page),
-                    "favourites" => await ListCreator.GetFavouritesAsync(userId),
-                    "bookmarks" => await ListCreator.GetBookmarkedAsync(userId),
-                    "commented" => await ListCreator.GetCommentedAsync(userId),
-                    "drafts" => ListCreator.FindDrafts(userId),
-                    _ => throw new ArgumentException("Undefined list", nameof(listName))
-                };
-            }
-            catch (ArgumentNullException)
-            {
-                return NotFound();
-            }
-            catch (ArgumentException)
-            {
-                return NotFound();
-            }
-
-            ListViewModel<Article> listViewModel = new(page, articles, Common.Options.ListOptions, sortBy);
-            listViewModel.PageName = listName;
-            if (page > 1 && !listViewModel.Entities.Any())
-                return NotFound();
-            if (listName is "default" or "pages")
-                return View(listViewModel);
-            return View("~/Views/Articles/Saved.cshtml", listViewModel);
         }
 
         [HttpGet]

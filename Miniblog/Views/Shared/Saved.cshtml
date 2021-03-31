@@ -18,7 +18,7 @@
                         }
                         else
                         {
-                            <li class="@activePage"><a href="@Url.Action("lists", "articles", new { listName = listName})">@listName</a></li>
+                            <li class="@activePage"><a href="@Url.Action("index", "home", new { listName = listName})">@listName</a></li>
                         }
                     }
                 }
@@ -44,5 +44,5 @@ else
         ShowSmile = true,
         MessageText = "No articles here"
     };
-    await Html.RenderPartialAsync("~/Views/Shared/_MessagePartial.cshtml", serverMessage);
+    await Html.RenderPartialAsync("_MessagePartial", serverMessage);
 }

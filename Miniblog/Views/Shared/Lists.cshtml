@@ -35,7 +35,7 @@
             "account" => Url.Action("account", "users", new { username = Model.ItemName, page = page, sortby = sortBy }),
             "series" => Url.Action("serieswith", "home", new { name = Model.ItemName, page = page, sortBy = sortBy }),
             "topic" => Url.Action(pageName, "home", new { name = Model.ItemName, page = page, sortBy = sortBy }),
-            _ => Url.Action("lists", "articles", new { listName = pageName, page = page, sortby = sortBy })
+            _ => Url.Action("index", "home", new { listName = pageName, page = page, sortby = sortBy })
         };
     }
 }
@@ -57,13 +57,13 @@
 }
 else
 {
-    await Html.RenderPartialAsync("~/Views/Articles/_ListParametersPartial.cshtml", Model);
+    await Html.RenderPartialAsync("_ListParametersPartial", Model);
 
     <div class="uk-container uk-margin">
         <div id="articlesContainer" uk-grid="masonry: true" class="uk-grid-medium uk-child-width-1-1@m">
             @foreach (Article article in Model.Entities)
             {
-                await Html.RenderPartialAsync("~/Views/Articles/_PreviewArticlePartial.cshtml", article);
+                await Html.RenderPartialAsync("_PreviewArticlePartial", article);
             }
         </div>
     </div>

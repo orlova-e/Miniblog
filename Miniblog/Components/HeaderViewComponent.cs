@@ -52,7 +52,7 @@ namespace Web.Components
 
             if (displayOptions.ShowListOfPopularAndRecent)
             {
-                pages.Add("Popular", Url.Action("lists", "articles", new { listName = "default", page = 1, sortBy = ListSorting.MostLiked }));
+                pages.Add("Popular", Url.Action("index", "home", new { listName = "default", page = 1, sortBy = ListSorting.MostLiked }));
             }
             if (displayOptions.ShowAuthors)
             {
@@ -73,7 +73,7 @@ namespace Web.Components
 
             if (User.Identity.IsAuthenticated)
             {
-                pages.Add("Favourites", Url.Action("lists", "articles", new { listName = "favourites" }));
+                pages.Add("Favourites", Url.Action("index", "home", new { listName = "favourites" }));
                 pages.Add("Account settings", Url.Action("settings", "account"));
                 if (role.Type is RoleType.Administrator)
                 {

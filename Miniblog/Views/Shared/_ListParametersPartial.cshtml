@@ -17,7 +17,7 @@
             "account" => Url.Action("account", "users", new { username = Model.ItemName, page = Model.Current, sortby = type }),
             "series" => Url.Action("serieswith", "home", new { name = Model.ItemName, page = Model.Current, sortby = type }),
             "topic" => Url.Action(pageName, "home", new { name = Model.ItemName, page = Model.Current, sortby = type }),
-            _ => Url.Action("lists", "articles", new { listName = pageName, page = Model.Current, sortby = type })
+            _ => Url.Action("index", "home", new { listName = pageName, page = Model.Current, sortby = type })
         };
     }
 }
