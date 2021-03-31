@@ -4,6 +4,7 @@
 
 @{
     ListLayoutType layoutType = common.Options.ListOptions.LayoutDefaultType;
+    string pageName = Model.PageName.ToLower();
 }
 
 @functions {
@@ -14,7 +15,8 @@
         return pageName switch
         {
             "account" => Url.Action("account", "users", new { username = Model.ItemName, page = Model.Current, sortby = type }),
-            "topic" or "series" => Url.Action(pageName, "home", new { name = Model.ItemName, page = Model.Current }),
+            "series" => Url.Action("serieswith", "home", new { name = Model.ItemName, page = Model.Current, sortby = type }),
+            "topic" => Url.Action(pageName, "home", new { name = Model.ItemName, page = Model.Current, sortby = type }),
             _ => Url.Action("lists", "articles", new { listName = pageName, page = Model.Current, sortby = type })
         };
     }

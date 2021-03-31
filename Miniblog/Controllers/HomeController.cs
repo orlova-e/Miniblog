@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Web.App.Interfaces;
 using Web.ViewModels;
+using System.Net;
+using Domain.Entities.Enums;
 
 namespace Web.Controllers
 {
@@ -68,14 +70,14 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Topic([FromQuery] string name, uint page = 1)
+        public async Task<IActionResult> Topic([FromQuery] string name, uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
         {
             ListViewModel<Article> listViewModel;
             Topic topic = Repository.Topics.Find(t => t.Name == name && t.Accepted is not false).FirstOrDefault();
             if (topic is null)
                 return NotFound();
             var articles = (await ListCreator.FindArticlesAsync(a => a.Topic?.Name == topic.Name)).ToList();
-            listViewModel = new(page, articles, Common.Options.ListOptions);
+            listViewModel = new(page, articles, Common.Options.ListOptions, sortBy);
             listViewModel.PageName = "Topic";
             listViewModel.ItemName = topic.Name;
             if (page > 1 && !listViewModel.Entities.Any())
@@ -98,16 +100,17 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SeriesWith([FromQuery] string name, uint page = 1)
+        public async Task<IActionResult> SeriesWith([FromQuery] string name, uint page = 1, ListSorting sortBy = ListSorting.NewFirst)
         {
             ListViewModel<Article> listViewModel;
+            name = WebUtility.UrlEncode(name);
             Series series = Repository.Series.Find(s => s.Link == name && s.Accepted is not false).FirstOrDefault();
             if (series is null)
                 return NotFound();
             var articles = (await ListCreator.FindArticlesAsync(a => a.Series?.Name == series.Name)).ToList();
-            listViewModel = new(page, articles, Common.Options.ListOptions);
+            listViewModel = new(page, articles, Common.Options.ListOptions, sortBy);
             listViewModel.PageName = "Series";
-            listViewModel.ItemName = series.Link;
+            listViewModel.ItemName = WebUtility.UrlDecode(name);
             if (page > 1 && !listViewModel.Entities.Any())
                 return NotFound();
 
