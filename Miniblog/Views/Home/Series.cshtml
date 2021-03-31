@@ -32,8 +32,11 @@
                     <dl class="uk-description-list ">
                         @foreach (Series series in Model.Entities)
                         {
-                            <dt><a class="uk-link-reset" href="@Url.Action("serieswith", "home", new { name = series.Link })">@series.Name</a></dt>
-                            <dd>Author: @series.User.Username</dd>
+                            <dt><a class="uk-link-reset" href="@Url.Action("serieswith", "home", new { name = series.Name })">@series.Name</a></dt>
+                            @if(series.User is not null)
+                            {
+                                <dd>Author: @series.User.Username</dd>
+                            }
                         }
                     </dl>
                 </div>
