@@ -27,7 +27,7 @@
                                 <p>@author.City</p>
                             }
                             <p class="blog-author-articles-number">
-                                <b>@listViewModel.Entities.Count</b>
+                                <b>@author.Articles.Where(a => a.Visibility && a.EntryType is EntryType.Article && a.Accepted is not false).Count()</b>
                                 @{ 
                                     string articles = "articles";
                                     if ((author.Articles.Count is 1))
