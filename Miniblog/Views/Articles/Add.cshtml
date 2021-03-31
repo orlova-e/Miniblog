@@ -22,46 +22,46 @@
 
                         <div class="uk-margin uk-form-controls">
                             <label asp-for="@Model.Header" class="uk-text-muted blog-label-hidden"></label>
-                            <input autofocus asp-for="@Model.Header" class="uk-input uk-form-blank" placeholder="Header">
+                            <input oninput="showLabel(this)" autofocus asp-for="@Model.Header" class="uk-input uk-form-blank" placeholder="Header">
                             <span asp-validation-for="@Model.Header" class="blog-field-validation"></span>
                         </div>
 
                         <div class="uk-margin">
                             <label asp-for="@Model.Text" class="uk-text-muted blog-label-hidden"></label>
-                            <textarea asp-for="@Model.Text" class="uk-textarea uk-form-blank" rows="12" placeholder="Text"></textarea>
+                            <textarea oninput="showLabel(this)" asp-for="@Model.Text" class="uk-textarea uk-form-blank" rows="12" placeholder="Text"></textarea>
                             <span asp-validation-for="@Model.Text" class="blog-field-validation"></span>
                         </div>
 
                         @if (role.CreateTopics)
                         {
                             <div class="uk-margin uk-form-controls">
-                                <label class="uk-text-muted blog-label-hidden">Topic</label>
-                                <input class="uk-input uk-form-blank" type="text" placeholder="Topic">
+                                <label asp-for="Topic" class="uk-text-muted blog-label-hidden"></label>
+                                <input oninput="showLabel(this)" asp-for="Topic" class="uk-input uk-form-blank" type="text" placeholder="Topic">
                             </div>
                         } 
 
                         <div class="uk-margin uk-form-controls">
-                            <label class="uk-text-muted blog-label-hidden">Series</label>
-                            <input class="uk-input uk-form-blank" type="text" placeholder="Series">
+                            <label asp-for="Series" class="uk-text-muted blog-label-hidden"></label>
+                            <input oninput="showLabel(this)" asp-for="Series" class="uk-input uk-form-blank" type="text" placeholder="Series">
                         </div>
 
                         @if (role.CreateTags)
                         {
                             <div class="uk-margin uk-form-controls">
-                                <label class="uk-text-muted blog-label-hidden">Tags</label>
-                                <input class="uk-input uk-form-blank" type="text" placeholder="Tags">
+                                <label asp-for="Tags" class="uk-text-muted blog-label-hidden"></label>
+                                <input oninput="showLabel(this)" asp-for="Tags" class="uk-input uk-form-blank" type="text" placeholder="Tags">
                             </div>
                         } 
                     </fieldset>
 
                     @if (role.OverrideOwnArticle)
                     {
-                        <button data-target-id="displayOptions" class="uk-button uk-margin" type="button">
+                        <button onclick="hideOptions(this)" data-target-id="displayOptions" class="uk-button uk-margin" type="button">
                             <span class="uk-text-middle">Options</span>
                             <span id="stateIcon" class="uk-text-middle" uk-icon="icon: chevron-up"></span>
                         </button>
 
-                        <fieldset id="displayOptions" class="uk-fieldset uk-form-horizontal">
+                        <fieldset id="displayOptions" style="display: none;" class="uk-fieldset uk-form-horizontal">
                             <legend class="uk-legend">Display options</legend>
 
                             @if (role is ExtendedRole extended && extended.OverrideMenu)
@@ -131,9 +131,14 @@
                         </fieldset>
                     }
 
-                    <button class="uk-button uk-button-secondary" type="submit">Add</button>
+                    <br><button class="uk-button uk-button-secondary" type="submit">Add</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts{ 
+    <script src="~/js/add/showlabel.js"></script>
+    <script src="~/js/add/hideoptions.js"></script>
+} 
