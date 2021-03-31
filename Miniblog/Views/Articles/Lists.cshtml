@@ -10,6 +10,7 @@
     {
         "default" => string.Empty,
         "account" => Model.ItemName,
+        "series" => Model.ItemName,
         "topic" => Model.PageName + ": " + Model.ItemName,
         _ => Model.PageName
     };
@@ -32,7 +33,8 @@
         return pageName switch
         {
             "account" => Url.Action("account", "users", new { username = Model.ItemName, page = page, sortby = sortBy }),
-            "topic" or "series" => Url.Action(pageName, "home", new { name = Model.ItemName, page = page }),
+            "series" => Url.Action("serieswith", "home", new { name = Model.ItemName, page = page, sortBy = sortBy }),
+            "topic" => Url.Action(pageName, "home", new { name = Model.ItemName, page = page, sortBy = sortBy }),
             _ => Url.Action("lists", "articles", new { listName = pageName, page = page, sortby = sortBy })
         };
     }
