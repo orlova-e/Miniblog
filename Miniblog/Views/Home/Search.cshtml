@@ -65,7 +65,7 @@
                                     string text = string.Join(" ", words, 0, count);
 
                                     <li>
-                                        <a href="@Url.Action(user.Username, "users")" class="uk-link uk-link-reset">
+                                        <a href="@Url.Action("account", "users", user.Username)" class="uk-link uk-link-reset">
                                             <div class="uk-flex uk-flex-middle">
                                                 <avatar user="user" classes="uk-border-circle uk-flex-top" px="70">
                                                 <div class="uk-margin-left ">
