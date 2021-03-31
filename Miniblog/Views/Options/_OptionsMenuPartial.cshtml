@@ -25,15 +25,15 @@
         {
             <li><a href="@Url.Action("Add", "Articles")">Add new</a></li>
         }
-        @if (role.ModerateArticles)
+        @if (role.CheckArticles)
         {
             <li><a href="@Url.Action("list", "verification", new { queueList = "articles" })">Queue</a></li>
         }
-        @if (role.ModerateTopics)
+        @if (role.CheckTopics)
         {
             <li><a href="@Url.Action("list", "verification", new { queueList = "topics" })">Topics</a></li>
         }
-        @if (role.ModerateTags)
+        @if (role.CheckTags)
         {
             <li><a href="@Url.Action("list", "verification", new { queueList = "tags" })">Tags</a></li>
         }
@@ -51,7 +51,7 @@
 
         <li class="uk-nav-header">Other</li>
         <li><a href="@Url.Action("list", "verification", new { queueList = "users" })">Users</a></li>
-        @if (role.ModerateComments)
+        @if (role.CheckComments)
         {
             <li><a href="@Url.Action("list", "verification", new { queueList = "comments" })">Comments</a></li>
         }

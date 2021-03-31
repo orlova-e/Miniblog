@@ -54,14 +54,14 @@
                         </div>
 
                         <div class="uk-margin">
-                            <label class="uk-form-label">Who can moderate comments</label>
+                            <label class="uk-form-label">Who can check comments</label>
                             <div class="uk-form-controls">
                                 @for (int i = 0; i < Model.DiscussionRoles.Count; i++)
                                 {
                                     if (Model.DiscussionRoles[i].Discriminator.Equals("Role"))
                                         continue;
 
-                                    <input asp-for="DiscussionRoles[i].ModerateComments" type="checkbox" class="uk-checkbox">
+                                    <input asp-for="DiscussionRoles[i].CheckComments" type="checkbox" class="uk-checkbox">
                                     <label>@Model.DiscussionRoles[i].Type</label>
                                     <br>
                                 }

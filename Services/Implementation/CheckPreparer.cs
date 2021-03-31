@@ -165,11 +165,11 @@ namespace Services.Implementation
 
             bool hasAccess = queueList switch
             {
-                "articles" => role.ModerateArticles,
+                "articles" => role.CheckArticles,
                 "pages" => role.Type is RoleType.Administrator,
-                "topics" => role.ModerateTopics,
-                "tags" => role.ModerateTags,
-                "comments" => role.ModerateComments,
+                "topics" => role.CheckTopics,
+                "tags" => role.CheckTags,
+                "comments" => role.CheckComments,
                 _ => true,
             };
 

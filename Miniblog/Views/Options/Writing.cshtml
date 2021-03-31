@@ -42,14 +42,14 @@
                         </div>
 
                         <div class="uk-margin">
-                            <label class="uk-form-label">Who can moderate articles</label>
+                            <label class="uk-form-label">Who can check articles</label>
                             <div class="uk-form-controls">
                                 @for (int i = 0; i < Model.Count; i++)
                                 {
                                     if (Model[i].Discriminator.Equals("Role"))
                                         continue;
 
-                                    <input asp-for="@Model[i].ModerateArticles" type="checkbox" class="uk-checkbox">
+                                    <input asp-for="@Model[i].CheckArticles" type="checkbox" class="uk-checkbox">
                                     <label>@Model[i].Type</label>
                                     <br>
                                 }
@@ -69,14 +69,14 @@
                         </div>
 
                         <div class="uk-margin">
-                            <label class="uk-form-label">Who can moderate topics</label>
+                            <label class="uk-form-label">Who can check topics</label>
                             <div class="uk-form-controls">
                                 @for (int i = 0; i < Model.Count; i++)
                                 {
                                     if (Model[i].Discriminator.Equals("Role"))
                                         continue;
 
-                                    <input asp-for="@Model[i].ModerateTopics" type="checkbox" class="uk-checkbox">
+                                    <input asp-for="@Model[i].CheckTopics" type="checkbox" class="uk-checkbox">
                                     <label>@Model[i].Type</label>
                                     <br>
                                 }
@@ -96,14 +96,14 @@
                         </div>
 
                         <div class="uk-margin">
-                            <label class="uk-form-label">Who can moderate tags</label>
+                            <label class="uk-form-label">Who can check tags</label>
                             <div class="uk-form-controls">
                                 @for (int i = 0; i < Model.Count; i++)
                                 {
                                     if (Model[i].Discriminator.Equals("Role"))
                                         continue;
 
-                                    <input asp-for="@Model[i].ModerateTags" type="checkbox" class="uk-checkbox">
+                                    <input asp-for="@Model[i].CheckTags" type="checkbox" class="uk-checkbox">
                                     <label>@Model[i].Type</label>
                                     <br>
                                 }

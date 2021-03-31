@@ -101,7 +101,7 @@ namespace Services.Implementation
         {
             User user = Repository.Users.Find(u => u.Username == username).FirstOrDefault();
             Comment comment = await Repository.Comments.GetByIdAsync(commentId);
-            if (!((user.Role as ExtendedRole)?.ModerateComments ?? false) && comment?.AuthorId != user?.Id || comment.IsDeleted)
+            if (!((user.Role as ExtendedRole)?.CheckComments ?? false) && comment?.AuthorId != user?.Id || comment.IsDeleted)
             {
                 throw new InvalidOperationException();
             }
@@ -113,7 +113,7 @@ namespace Services.Implementation
         {
             Comment comment = await Repository.Comments.GetByIdAsync(commentId);
 
-            if (comment is null || !extendedRole.ModerateComments || comment.IsDeleted)
+            if (comment is null || !extendedRole.CheckComments || comment.IsDeleted)
             {
                 throw new InvalidOperationException();
             }

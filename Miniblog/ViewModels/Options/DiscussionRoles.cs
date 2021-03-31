@@ -12,7 +12,7 @@ namespace Web.ViewModels.Options
         [Required]
         public string Discriminator { get; set; }
         public bool WriteComments { get; set; }
-        public bool ModerateComments { get; set; }
+        public bool CheckComments { get; set; }
 
         public static explicit operator DiscussionRoles(Role role)
             => new DiscussionRoles
@@ -20,7 +20,7 @@ namespace Web.ViewModels.Options
                 Type = role.Type,
                 Discriminator = role.Discriminator,
                 WriteComments = role.WriteComments,
-                ModerateComments = false
+                CheckComments = false
             };
 
         public static explicit operator DiscussionRoles(ExtendedRole extendedRole)
@@ -29,7 +29,7 @@ namespace Web.ViewModels.Options
                 Type = extendedRole.Type,
                 Discriminator = extendedRole.Discriminator,
                 WriteComments = extendedRole.WriteComments,
-                ModerateComments = extendedRole.ModerateComments
+                CheckComments = extendedRole.CheckComments
             };
 
         public static Role operator +(Role role, DiscussionRoles discussionRoles)
@@ -52,7 +52,7 @@ namespace Web.ViewModels.Options
                 throw new ArgumentException();
 
             extendedRole.WriteComments = discussionRoles.WriteComments;
-            extendedRole.ModerateComments = discussionRoles.ModerateComments;
+            extendedRole.CheckComments = discussionRoles.CheckComments;
 
             return extendedRole;
         }

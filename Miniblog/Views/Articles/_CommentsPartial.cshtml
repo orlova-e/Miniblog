@@ -60,7 +60,7 @@
                                                     <span uk-icon="icon: pencil"></span>
                                                 </button>
                                             }
-                                            @if (allowEditing || ((Model.User.Role as ExtendedRole)?.ModerateComments ?? default))
+                                            @if (allowEditing || ((Model.User.Role as ExtendedRole)?.CheckComments ?? default))
                                             {
                                                 <button class="comment-change-delete reply-button blog-btn" onclick="deleteActions(this)" type="button">
                                                     <span uk-icon="icon: close"></span>
