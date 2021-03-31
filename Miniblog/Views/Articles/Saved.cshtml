@@ -31,7 +31,7 @@
 
 @if (Model.Entities.Any())
 {
-    await Html.RenderPartialAsync("~/Views/Articles/Lists.cshtml", Model);
+    await Html.RenderPartialAsync("Lists", Model);
 
     @section Scripts {
         <script src="~/js/list/articlesLayout.js"></script>

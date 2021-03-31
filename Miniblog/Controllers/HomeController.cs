@@ -83,7 +83,7 @@ namespace Web.Controllers
             if (page > 1 && !listViewModel.Entities.Any())
                 return NotFound();
 
-            return View("~/Views/Articles/Lists.cshtml", listViewModel);
+            return View("Lists", listViewModel);
         }
 
         [HttpGet]
@@ -114,7 +114,7 @@ namespace Web.Controllers
             if (page > 1 && !listViewModel.Entities.Any())
                 return NotFound();
 
-            return View("~/Views/Articles/Lists.cshtml", listViewModel);
+            return View("Lists", listViewModel);
         }
     }
 }

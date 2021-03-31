@@ -73,7 +73,7 @@
 
 @if (listViewModel.Entities.Any())
 {
-    await Html.RenderPartialAsync("~/Views/Articles/Lists.cshtml", listViewModel);
+    await Html.RenderPartialAsync("Lists", listViewModel);
 
     @section Scripts {
         <script src="~/js/list/articlesLayout.js"></script>
