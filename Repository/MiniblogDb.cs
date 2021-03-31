@@ -155,12 +155,6 @@ namespace Repo
                 .WithOne(ar => ar.DisplayOptions)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ArticleOptions>()
-                .Property(e => e.ColorTheme)
-                .HasConversion(
-                v => v.ToString(),
-                v => (ColorTheme)Enum.Parse(typeof(ColorTheme), v));
-
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Role)
                 .WithMany(r => r.Users)

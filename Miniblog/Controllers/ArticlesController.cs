@@ -44,7 +44,6 @@ namespace Web.Controllers
             if (!listOptions.OverrideForUserArticle)
             {
                 article.DisplayOptions = (ArticleOptions)listOptions;
-                article.DisplayOptions.ColorTheme = Common.Options.WebsiteOptions.ColorTheme;
             }
 
             User user = null;

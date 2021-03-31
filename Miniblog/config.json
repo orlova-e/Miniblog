@@ -2,14 +2,12 @@
   "WebsiteOptions": {
     "Name": "Miniblog",
     "Subtitle": null,
-    "IconPath": "\\img\\icon.png",
+    "IconPath": "\\img\\favicon.png",
     "StandardAvatarPath": "\\img\\ico\\user.png",
-    "HomePage": "/articles/list",
     "ShowListOfPopularAndRecent": true,
     "ShowAuthors": true,
     "ShowTopics": true,
-    "ShowSearchOption": true,
-    "ColorTheme": 2
+    "ShowSearchOption": true
   },
   "ListOptions": {
     "OverrideForUserArticle": true,

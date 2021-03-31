@@ -1,5 +1,4 @@
-﻿using Domain.Entities.Enums;
-using System;
+﻿using System;
 
 namespace Domain.Entities
 {
@@ -7,6 +6,5 @@ namespace Domain.Entities
     {
         public Guid ArticleId { get; set; }
         public Article Article { get; set; }
-        public ColorTheme ColorTheme { get; set; }
     }
 }
