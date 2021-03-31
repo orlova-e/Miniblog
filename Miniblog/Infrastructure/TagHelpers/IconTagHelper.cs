@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Options;
 using System.IO;
-using Web.Configuration;
+using Web.App.Interfaces;
 
 namespace Web.Infrastructure.TagHelpers
 {
@@ -10,9 +9,9 @@ namespace Web.Infrastructure.TagHelpers
     {
         [HtmlAttributeNotBound]
         public string IconPath { get; set; }
-        public IconTagHelper(IOptionsSnapshot<BlogOptions> optionsSnapshot)
+        public IconTagHelper(ICommon common)
         {
-            IconPath = optionsSnapshot.Value.WebsiteOptions.IconPath;
+            IconPath = common.Options.WebsiteOptions.IconPath;
         }
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
