@@ -1,10 +1,10 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Repo.Interfaces;
 using Services.Interfaces;
 using System.Collections.Generic;
+using Web.App.Interfaces;
 using Web.Configuration;
 using Web.ViewModels;
 
@@ -19,9 +19,9 @@ namespace Web.Components
         public HeaderViewComponent(IRepository repository,
             IUserService userService,
             IListCreator listCreator,
-            IOptionsSnapshot<BlogOptions> optionsSnapshot)
+            ICommon common)
         {
-            BlogOptions = optionsSnapshot.Value;
+            BlogOptions = common.Options;
             UserService = userService;
             ListCreator = listCreator;
             Repository = repository;
@@ -46,21 +46,21 @@ namespace Web.Components
                 role = user.Role;
                 if (role.WriteArticles)
                 {
-                    pages.Add("Add", Url.Action("Add", "Articles"));
+                    pages.Add("Add", Url.Action("add", "articles"));
                 }
             }
 
             if (displayOptions.ShowListOfPopularAndRecent)
             {
-                pages.Add("Popular", Url.Action("Lists", "Articles", new { listName = "Popular" }));
+                pages.Add("Popular", Url.Action("lists", "articles", new { listName = "default", page = 1, sortBy = ListSorting.MostLiked }));
             }
             if (displayOptions.ShowAuthors)
             {
-                pages.Add("Authors", Url.Action("Lists", "Articles", new { name = "Authors" }));
+                pages.Add("Authors", Url.Action("authors", "users"));
             }
             if (displayOptions.ShowTopics)
             {
-                pages.Add("Topics", Url.Action("Topics", "Home"));
+                pages.Add("Topics", Url.Action("topics", "home"));
             }
 
             List<Article> pagesDb = ListCreator
@@ -68,20 +68,20 @@ namespace Web.Components
 
             foreach (Article page in pagesDb)
             {
-                pages.Add(page.Header, Url.Action("Article", "Articles", new { link = page.Link }));
+                pages.Add(page.Header, Url.Action("article", "articles", new { link = page.Link }));
             }
 
             if (User.Identity.IsAuthenticated)
             {
-                pages.Add("Favourites", Url.Action("Lists", "Articles", new { listName = "Favourites"}));
-                pages.Add("Account settings", Url.Action("Settings", "Account"));
+                pages.Add("Favourites", Url.Action("lists", "articles", new { listName = "favourites" }));
+                pages.Add("Account settings", Url.Action("settings", "account"));
                 if (role.Type is RoleType.Administrator)
                 {
-                    pages.Add("Options", Url.Action("Main", "Options"));
+                    pages.Add("Options", Url.Action("main", "options"));
                 }
                 else if (role.Type is RoleType.Editor)
                 {
-                    pages.Add("Verification list", Url.Action("List", "Verification", new { queueList = "users" }));
+                    pages.Add("Verification list", Url.Action("list", "verification", new { queueList = "users" }));
                 }
                 pages.Add("Sign Out", Url.Action("signout", "account"));
             }
