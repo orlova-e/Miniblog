@@ -67,9 +67,7 @@ namespace Web.Controllers
                 filePath = await formFile.TryUpdateFileAsync(filePath);
                 if (System.IO.File.Exists(filePath))
                 {
-                    filePath = filePath.Replace(WebHostEnvironment.WebRootPath, "");
-                    string newPath = filePath;
-                    return newPath;
+                    return filePath.Replace(WebHostEnvironment.WebRootPath, "");
                 }
             }
 
